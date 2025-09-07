@@ -90,8 +90,6 @@ body {
     position: relative;
     background-color: var(--md-background);
 }
-/* Далі йде решта твого коду без змін... */
-/* (Я його не вставляю, щоб не захаращувати повідомлення, просто скопіюй його зі свого файлу після цього блоку) */
 
 
 /* === SCREEN TRANSITIONS === */
@@ -191,20 +189,22 @@ footer {
 /* --- Стилі для СВІТЛОЇ теми --- */
 body.light-theme .btn-main,
 body.light-theme .menu-item {
-    background: #e8e8e8;
-    color: #212121;
+    background: #212121; /* <<== Змінили фон на темний */
+    color: #e8e8e8;      /* <<== Змінили текст на світлий */
+    border-color: #212121; /* Рамка теж темна */
 }
 
 body.light-theme .btn-main::before,
 body.light-theme .menu-item::before {
-    background-color: #212121;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background-color: #e8e8e8; /* Анімація тепер світла */
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     height: 0; width: 0;
 }
 
 body.light-theme .btn-main:hover,
 body.light-theme .menu-item:hover {
-    color: #e8e8e8;
+    color: #212121; /* При наведенні текст стає темним */
     box-shadow: var(--elevation-3);
 }
 
@@ -212,6 +212,7 @@ body.light-theme .btn-main:hover::before,
 body.light-theme .menu-item:hover::before {
     height: 100%; width: 100%;
 }
+
 
 
 /* --- Стилі для ТЕМНОЇ теми --- */
