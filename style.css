@@ -429,10 +429,8 @@ h3 {
 
 /* --- Specific Component Styles --- */
 .btn-telegram-login {
-    width: auto; /* <<== ЗМІНА: дозволяємо кнопці самій визначати ширину */
-    padding: 50px 30px; /* Додаємо трохи горизонтального відступу для балансу */
-    /* ...інші стилі... */
-}
+    width: auto; /* Дозволяємо кнопці самій визначати ширину */
+    padding: 16px 24px; /* Збалансовані відступи */
     border-radius: var(--md-radius-large);
     border: none;
     background-color: #0088cc;
@@ -452,6 +450,7 @@ h3 {
     box-shadow: var(--elevation-4);
     transform: translateY(-1px);
 }
+
 
 .profile-badge {
     display: flex;
