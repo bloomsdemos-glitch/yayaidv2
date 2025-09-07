@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>яЇду: Валки</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div id="app-container">
+
+        <!-- Home screen -->
+        <div id="home-screen" class="screen active">
+            <main class="content-center">
+                <h1 class="logo">яЇду 🚕</h1>
+                <div class="button-group">
+                    <button id="show-driver-login" class="btn-main">
+                        <i class="fa-solid fa-car-side"></i> Я водій
+                    </button>
+                    <button id="show-passenger-login" class="btn-main">
+                        <i class="fa-solid fa-user"></i> Я пасажир
+                    </button>
+                </div>
+            </main>
+            <footer>
+                <p>яЇду: Валки © 2025</p>
+            </footer>
+        </div>
+
+        <!-- Login driver -->
+        <div id="login-screen-driver" class="screen hidden">
+            <header>
+                <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Вхід для водія</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="content-center">
+                <button class="btn-telegram-login">
+                    <i class="fa-brands fa-telegram"></i> Увійти через Telegram
+                </button>
+            </main>
+        </div>
+
+        <!-- Login passenger -->
+        <div id="login-screen-passenger" class="screen hidden">
+            <header>
+                <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Вхід для пасажира</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="content-center">
+                <button class="btn-telegram-login">
+                    <i class="fa-brands fa-telegram"></i> Увійти через Telegram
+                </button>
+            </main>
+        </div>
+
+        <!-- Driver dashboard -->
+        <div id="driver-dashboard" class="screen hidden">
+            <header>
+                <div class="profile-badge">
+                    <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
+                    <h3>Сергій</h3>
+                </div>
+                <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+            </header>
+            <main>
+                <nav class="main-menu">
+                    <button class="menu-item" id="show-driver-orders-btn">
+                        <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="menu-item" id="show-find-passengers-btn">
+                        <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
+                        <span class="badge">8</span>
+                    </button>
+                    <button class="menu-item">
+                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                    </button>
+                    <button class="menu-item">
+                        <span><i class="fa-solid fa-star"></i> Мій рейтинг</span>
+                    </button>
+                    <button class="menu-item">
+                        <span><i class="fa-solid fa-gear"></i> Налаштування</span>
+                    </button>
+                </nav>
+            </main>
+        </div>
+
+        <!-- Passenger dashboard -->
+        <div id="passenger-dashboard" class="screen hidden">
+            <header>
+                <div class="profile-badge">
+                    <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                    <h3>Віта</h3>
+                </div>
+                <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+            </header>
+            <main>
+                <nav class="main-menu">
+                    <button class="menu-item" id="show-my-orders-btn">
+                        <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
+                        <span class="badge">1</span>
+                    </button>
+                    <button class="menu-item" id="show-quick-order-btn">
+                        <span><i class="fa-solid fa-bolt"></i> Швидке замовлення</span>
+                    </button>
+                    <button class="menu-item" id="find-driver-btn">
+                        <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
+                        <span class="badge online">5</span>
+                    </button>
+                    <button class="menu-item" id="show-help-btn">
+                        <span><i class="fa-solid fa-circle-question"></i> Нічо не розумію</span>
+                    </button>
+                </nav>
+            </main>
+        </div>
+
+    <div id="passenger-orders-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Мої поїздки</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+
+
+<div class="order-card active">
+    <div class="card-content-wrapper">
+        <div class="order-header">
+            <h3 class="order-title">Активне замовлення #1247</h3>
+            <p class="order-timestamp">29.08.25 • 14:22</p>
+        </div>
+        <div class="order-status-visual">
+            <i id="status-icon" class="fa-solid fa-spinner fa-spin"></i>
+            <p id="status-text">Водій прямує до вас</p>
+        </div>
+        <div class="progress-tracker">
+            <i class="fa-solid fa-circle-dot progress-start-point"></i>
+            <div class="track-line">
+                <div class="dots-container"></div>
+                <i id="car-icon" class="fa-solid fa-car-side"></i>
+            </div>
+            <i id="progress-end-point" class="fa-solid fa-circle-dot progress-end-point"></i>
+        </div>
+        <div class="order-details-grid">
+            <div class="driver-info">
+                <span><strong>Водій:</strong> Андрій</span>
+                <span><i class="fa-solid fa-car"></i> Skoda Octavia, сірий</span>
+            </div>
+        </div>
+        <div class="route-separator"><i class="fa-solid fa-route"></i></div>
+        <div class="route-addresses">
+            <div class="address-line">
+                <i class="fa-solid fa-circle start-address-icon"></i>
+                <span>вул. Зоряна, 31</span>
+            </div>
+            <div class="address-line">
+                <i class="fa-solid fa-location-dot end-address-icon"></i>
+                <span>Залізничний вокзал</span>
+            </div>
+        </div>
+        <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+    </div>
+</div>
+
+        <div class="archive-separator">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Архів поїздок</span>
+        </div>
+
+        <ul class="order-list passenger">
+            <li class="order-card archived">
+                <div class="archived-info">
+                    <span class="archived-date">25.08.2025</span>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle"></i> вул. Весняна, 15</span>
+                        <span><i class="fa-solid fa-location-dot"></i> вул. Музейна, 4</span>
+                    </div>
+                    <div class="driver-details">Водій: Ігор</div>
+                </div>
+                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+            </li>
+        </ul>
+    </main>
+</div>
+
+
+        <!-- Passenger order details screen -->
+        <div id="passenger-order-details-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Деталі поїздки</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="main-content-wrapper">
+                <div class="top-content">
+                    <div class="map-placeholder"><p>Тут буде карта з трекером водія</p></div>
+                    <!-- ETA -->
+                    <div class="eta-block glass-card">
+                        <i class="fa-solid fa-clock eta-icon"></i>
+                        <span>Прибуде приблизно через 4 хвилини. Очікуйте.</span>
+                    </div>
+                    <div class="details-card">
+                        <div class="driver-card-full">
+                            <div class="avatar-convex"><i class="fa-solid fa-steering-wheel"></i></div>
+                            <div class="driver-info">
+                                <h4>Андрій</h4>
+                                <span>Skoda Octavia, сірий</span>
+                            </div>
+                            <div class="driver-rating">5.0 <i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <div class="trip-summary">
+                            <div class="summary-item">
+                                <i class="fa-solid fa-road"></i>
+                                <span>~ 5.1 км</span>
+                            </div>
+                            <div class="summary-item">
+                                <i class="fa-solid fa-hryvnia-sign"></i>
+                                <span>~ 117 грн</span>
+                            </div>
+                            <div class="summary-item">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                                <span>Картка</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Action buttons -->
+                <div class="passenger-actions">
+                    <button class="driver-call-btn glass-card">
+                        <i class="fa-solid fa-phone"></i>
+                    </button>
+                    <button class="im-waiting-btn glass-card">
+                        <i class="fa-solid fa-hand-paper"></i>
+                        <span>Я вже чекаю</span>
+                    </button>
+                    <div class="waiting-note">
+                        <small>Натискайте цю кнопку лише у крайніх випадках — наприклад, коли водій запізнюється більше, ніж на 5 хвилин.</small>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="passenger-find-driver-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Вільні водії</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p class="list-header-note">Оберіть водія</p>
+                <ul class="driver-list">
+                    <li class="driver-card online">
+                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="driver-info">
+                            <h4>Максим Шевченко</h4>
+                            <span>4.9 <i class="fa-solid fa-star"></i></span>
+                            <small class="status-available">Доступний</small>
+                        </div>
+                        <div class="status-dot online"></div>
+                    </li>
+                    <li class="driver-card online">
+                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="driver-info">
+                            <h4>Олена Петренко</h4>
+                            <span>5.0 <i class="fa-solid fa-star"></i></span>
+                            <small class="status-available">Доступний</small>
+                        </div>
+                        <div class="status-dot online"></div>
+                    </li>
+                    <li class="driver-card busy">
+                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="driver-info">
+                            <h4>Ігор Коваленко</h4>
+                            <span>4.7 <i class="fa-solid fa-star"></i></span>
+                            <small>буде вільним через 5 хв.</small>
+                        </div>
+                        <div class="status-dot busy"></div>
+                    </li>
+                </ul>
+            </main>
+        </div>
+
+        <!-- Driver find passengers -->
+   <div id="driver-find-passengers-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Шукають водія</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+        <ul class="order-list">
+            <li class="order-card new">
+                <div class="order-info">
+                    <div class="passenger-details">
+                        <i class="fa-solid fa-user-circle"></i> Олена
+                    </div>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle start-point-icon"></i> вул. Весняна, 15</span>
+                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> вул. Музейна, 4</span>
+                    </div>
+                </div>
+                <div class="order-time">
+                    <div class="status-dot online"></div>
+                    Зараз
+                </div>
+            </li>
+            <li class="order-card new">
+                <div class="order-info">
+                    <div class="passenger-details">
+                        <i class="fa-solid fa-user-circle"></i> Андрій
+                    </div>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle start-point-icon"></i> вул. Зоряна, 31</span>
+                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> Залізничний вокзал</span>
+                    </div>
+                </div>
+                <div class="order-time">
+                    <div class="status-dot online"></div>
+                    Зараз
+                </div>
+            </li>
+            <li class="order-card">
+                <div class="order-info">
+                    <div class="passenger-details">
+                        <i class="fa-solid fa-user-circle"></i> Ірина
+                    </div>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle start-point-icon"></i> вул. Стадіонна, 8</span>
+                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> вул. Харківська, 102</span>
+                    </div>
+                </div>
+                <div class="order-time">
+                    <i class="fa-solid fa-clock"></i>
+                    14:30
+                </div>
+            </li>
+            <li class="order-card">
+                <div class="order-info">
+                    <div class="passenger-details">
+                        <i class="fa-solid fa-user-circle"></i> Олег
+                    </div>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle start-point-icon"></i> лікарня</span>
+                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> Центр</span>
+                    </div>
+                </div>
+                <div class="order-time">
+                    <i class="fa-solid fa-clock"></i>
+                    15:00
+                </div>
+            </li>
+        </ul>
+    </main>
+</div>
+
+
+        <!-- Driver order details screen -->
+<div id="quick-order-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Створення замовлення</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+<form id="quick-order-form" class="order-form">
+    <div class="form-group">
+        <label for="from-address" class="address-label"><i class="fa-solid fa-circle-dot from-icon"></i> Звідки</label>
+        <div class="animation-wrapper">
+            <div class="input-with-icon">
+                <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу" required>
+                <i class="fa-solid fa-location-crosshairs input-icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="to-address" class="address-label"><i class="fa-solid fa-location-dot to-icon"></i> Куди</label>
+        <div class="animation-wrapper">
+            <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення" required>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="section-label"><i class="fa-solid fa-clock when-icon"></i> Коли</label>
+        <div class="button-group-horizontal">
+            <button type="button" class="btn-segment active" data-time-option="now"><i class="fa-solid fa-bolt"></i> Зараз</button>
+            <button type="button" class="btn-segment" data-time-option="later"><i class="fa-solid fa-hourglass"></i> На інший час</button>
+        </div>
+    </div>
+
+    <div id="time-details-container">
+        <div id="now-time-block" class="time-picker-container">
+            <div class="time-display-wrapper">
+                <div class="time-display-content">
+                    <span id="time-display-hours">--</span>
+                    <span class="time-separator">:</span>
+                    <span id="time-display-minutes">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="schedule-confirm-block" class="schedule-confirm hidden">
+            <span id="schedule-result-text">1 вересня • 16:25</span>
+            <i class="fa-solid fa-circle-check confirm-checkmark"></i>
+        </div>
+
+<div id="later-options-container" class="later-options-wrapper hidden">
+    <div class="date-tiles-container">
+        <button type="button" class="date-tile" data-schedule="today">
+            <i class="fa-solid fa-circle"></i>
+            <span>Сьогодні</span>
+        </button>
+        <button type="button" class="date-tile" data-schedule="date">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Дата</span>
+        </button>
+    </div>
+</div>
+
+
+    <div class="form-group">
+        <label for="comment">Коментар (необов'язково)</label>
+        <div class="animation-wrapper">
+            <textarea id="comment" class="form-input" rows="3" placeholder="Наприклад: 'буду з дитиною', 'буду з собакою' або 'можна не передзвонювати'"></textarea>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <div class="animation-wrapper">
+            <button type="button" id="select-driver-btn" class="btn-icon-action" aria-label="Вибрати водія">
+                <i class="fa-solid fa-user-check"></i>
+            </button>
+        </div>
+        <div class="animation-wrapper">
+            <button type="submit" id="submit-order-btn" class="btn-main-action disabled">Відправити замовлення</button>
+        </div>
+    </div>
+</form>
+
+
+    </main>
+</div>
+
+<div id="order-confirmation-screen" class="screen hidden">
+    <main class="content-center">
+        <div class="confirmation-card">
+            <h3 class="conf-title">Замовлення #4273</h3>
+            <p class="conf-text">⚡️ Прийнято! Вже шукаємо для вас вільних водіїв! Очікуйте на сповіщення від водія про прийняття вашого замовлення.</p>
+            <div class="spinner"></div>
+            <p class="conf-note"><i class="fa-solid fa-circle-info"></i> Ви можете відслідковувати і скасувати поточне замовлення в розділі «Мої поїздки».</p>
+            <button id="go-to-my-orders-btn" class="btn-main">Мої поїздки</button>
+        </div>
+    </main>
+</div>
+
+
+
+
+        <!-- Help screen -->
+        <div id="help-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Довідка</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="help-content">
+                <h3>Шо це таке?</h3>
+                <p>яЇду — це локальний сервіс для пошуку попутників та виклику таксі.</p>
+                <h3>Як це працює?</h3>
+                <p><strong>⚡️ Швидке замовлення</strong></p>
+                <p><strong>🔍 Знайти водія</strong></p>
+                <h3>А шо з оплатою?</h3>
+                <p>Поки що всі розрахунки відбуваються напряму з водієм.</p>
+            </main>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="script.js"></script>
+</body>
+</html>
