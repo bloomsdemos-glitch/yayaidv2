@@ -429,8 +429,10 @@ h3 {
 
 /* --- Specific Component Styles --- */
 .btn-telegram-login {
-    width: 100%;
-    padding: 16px;
+    width: auto; /* <<== ЗМІНА: дозволяємо кнопці самій визначати ширину */
+    padding: 16px 24px; /* Додаємо трохи горизонтального відступу для балансу */
+    /* ...інші стилі... */
+}
     border-radius: var(--md-radius-large);
     border: none;
     background-color: #0088cc;
