@@ -161,7 +161,7 @@ footer {
     font-weight: 800;
     font-size: 17px;
     box-shadow: var(--elevation-2);
-    transition: all 250ms;
+    transition: all 400ms;
     overflow: hidden;
     cursor: pointer;
     text-align: center;
@@ -176,7 +176,7 @@ footer {
     content: "";
     position: absolute;
     z-index: -1;
-    transition: all 250ms;
+    transition: all 400ms;
     border-radius: 15px;
 }
 
