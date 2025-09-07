@@ -595,6 +595,111 @@ h3 {
     font-weight: var(--font-weight-medium);
 }
 
-/* Прибрано весь glassmorphism  */
-/* МІНУС --glass-bg, --glass-stroke, --glass-blur, --glass-shadow */
-/* МІНУС backdrop-filter и -webkit-backdrop-filter */
+/* === СТИЛІ ДЛЯ ОНОВЛЕНОЇ КАРТКИ ЗАМОВЛЕННЯ === */
+
+#passenger-orders-screen .order-card.active {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-header, .card-body, .card-footer {
+    width: 100%;
+}
+
+.card-header {
+    text-align: center;
+    border-bottom: 1px solid var(--md-outline);
+    padding-bottom: 12px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.order-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-surface);
+}
+
+.md-progress-linear {
+    width: 100%;
+    height: 4px;
+    background-color: var(--md-surface-variant);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.md-progress-bar {
+    width: 30%; /* Початковий прогрес */
+    height: 100%;
+    background-color: var(--md-primary);
+    border-radius: 2px;
+    transition: width 1s linear;
+}
+
+.route-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+}
+
+.address-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.address-line i {
+    color: var(--md-on-surface-variant);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--md-outline);
+    padding-top: 12px;
+}
+
+.driver-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.driver-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 14px;
+}
+
+.driver-details span {
+    color: var(--md-on-surface-variant);
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--md-primary);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--md-radius-small);
+    transition: background-color 0.3s ease;
+}
+
+.btn-text:hover {
+    background-color: rgba(25, 118, 210, 0.08);
+}
