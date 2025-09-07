@@ -175,7 +175,7 @@ footer {
     content: "";
     position: absolute;
     z-index: -1;
-    transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
     border-radius: var(--md-radius-large);
 }
 
