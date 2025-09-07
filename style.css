@@ -147,70 +147,97 @@ footer {
     font-size: 14px;
     font-weight: var(--font-weight-regular);
 }
-
 /* === MATERIAL DESIGN COMPONENTS === */
 
-/* --- Buttons --- */
-.btn-main {
-    padding: 16px 24px;
-    border-radius: var(--md-radius-large);
-    border: none;
-    background-color: var(--md-primary);
-    color: var(--md-on-primary);
-    font-size: 16px;
-    font-weight: var(--font-weight-medium);
+/* === 5. КАСТОМНІ КНОПКИ (РЕДИЗАЙН) === */
+
+/* --- Загальний "скелет" для всіх головних кнопок --- */
+.btn-main, .menu-item {
+    padding: 15px 25px;
+    border: unset;
+    border-radius: 15px;
+    z-index: 1;
+    position: relative;
+    font-weight: 800;
+    font-size: 17px;
+    box-shadow: var(--elevation-2);
+    transition: all 250ms;
+    overflow: hidden;
     cursor: pointer;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    box-shadow: var(--elevation-2);
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    gap: 12px;
 }
 
-.btn-main:hover {
-    box-shadow: var(--elevation-4);
-    transform: translateY(-1px);
+/* --- Загальний "скелет" для анімації --- */
+.btn-main::before, .menu-item::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    transition: all 250ms;
+    border-radius: 15px;
 }
 
-.btn-main:active {
-    transform: translateY(0);
-    box-shadow: var(--elevation-1);
+/* --- Стилі для СВІТЛОЇ теми --- */
+body.light-theme .btn-main,
+body.light-theme .menu-item {
+    background: #e8e8e8;
+    color: #212121;
 }
 
-/* --- Menu Items (Material Cards) --- */
+body.light-theme .btn-main::before,
+body.light-theme .menu-item::before {
+    background-color: #212121;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 0;
+    width: 0;
+}
+
+body.light-theme .btn-main:hover,
+body.light-theme .menu-item:hover {
+    color: #e8e8e8;
+}
+
+body.light-theme .btn-main:hover::before,
+body.light-theme .menu-item:hover::before {
+    height: 100%;
+    width: 100%;
+}
+
+
+/* --- Стилі для ТЕМНОЇ теми --- */
+body.dark-theme .btn-main,
+body.dark-theme .menu-item {
+    background: #212121;
+    color: #e8e8e8;
+}
+
+body.dark-theme .btn-main::before,
+body.dark-theme .menu-item::before {
+    background-color: #e8e8e8;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+}
+
+body.dark-theme .btn-main:hover,
+body.dark-theme .menu-item:hover {
+    color: #212121;
+}
+
+body.dark-theme .btn-main:hover::before,
+body.dark-theme .menu-item:hover::before {
+    width: 100%;
+}
+
+/* --- Специфічні налаштування для menu-item --- */
 .menu-item {
-    padding: 16px;
-    border-radius: var(--md-radius-large);
-    border: none;
-    background-color: var(--md-surface);
-    color: var(--md-on-surface);
-    font-size: 16px;
-    font-weight: var(--font-weight-regular);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-    box-shadow: var(--elevation-1);
-    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-.menu-item:hover {
-    background-color: var(--md-surface-variant);
-    box-shadow: var(--elevation-2);
-}
-
-.menu-item:active {
-    transform: scale(0.98);
-}
-
-.menu-item span > i {
-    margin-right: 16px;
-    width: 24px;
-    color: var(--md-primary);
+    justify-content: space-between; /* Повертаємо, щоб бейджі були справа */
 }
 
 /* --- Cards --- */
@@ -304,6 +331,7 @@ footer {
 .badge.online {
     background-color: var(--md-success);
 }
+
 
 /* --- Status Dots --- */
 .status-dot {
