@@ -53,16 +53,17 @@ body.dark-theme {
 }
 
 body.light-theme {
-    --md-background: #efede3;
-    --md-surface: #FFFFFF;
-    --md-surface-variant: #F5F5F5;
+    --md-background: #F5F5F7; /* <<== Чистий, ледь холодний "технологічний" білий */
+    --md-surface: #FFFFFF; /* Картки і елементи будуть чисто білими для контрасту */
+    --md-surface-variant: #F0F0F2; /* Трохи темніший відтінок для ховерів */
     --md-on-primary: #FFFFFF;
-    --md-on-background: #302f2c;
-    --md-on-surface: #302f2c;
+    --md-on-background: #1d1d1f; /* Глибокий, майже чорний текст Apple */
+    --md-on-surface: #1d1d1f;
     --md-on-surface-variant: #5c5b58;
-    --md-outline: #CCCCCC;
-    --shadow-color: rgba(0,0,0,0.1);
+    --md-outline: #E0E0E0; /* Ледь помітна сіра рамка */
+    --shadow-color: rgba(0,0,0,0.08); /* Робимо тіні значно світлішими і м'якшими */
 }
+
 
 /* === БАЗОВІ СТИЛІ === */
 * {
