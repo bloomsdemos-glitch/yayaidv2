@@ -30,6 +30,7 @@
     --elevation-1: 0px 2px 1px -1px var(--shadow-color), 0px 1px 1px 0px var(--shadow-color), 0px 1px 3px 0px var(--shadow-color);
     --elevation-2: 0px 3px 1px -2px var(--shadow-color), 0px 2px 2px 0px var(--shadow-color), 0px 1px 5px 0px var(--shadow-color);
     --elevation-3: 0px 3px 3px -2px var(--shadow-color), 0px 3px 4px 0px var(--shadow-color), 0px 1px 8px 0px var(--shadow-color);
+    --shadow-soft: 4px 8px 19px -3px var(--shadow-color);
     
     /* -- Радіуси -- */
     --md-radius-small: 4px;
@@ -160,14 +161,13 @@ footer {
     position: relative;
     font-weight: 800;
     font-size: 17px;
-    box-shadow: var(--elevation-2);
-    transition: all 0.8s;
+    box-shadow: var(--shadow-soft); /* <<== ВИКОРИСТОВУЄМО НОВУ ТІНЬ */
+    /* Визначаємо, ЯКІ САМЕ властивості анімувати */
+    transition: color 0.4s ease-in-out, transform 0.2s ease;
     overflow: hidden;
     cursor: pointer;
-    text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 12px;
 }
 
@@ -176,7 +176,8 @@ footer {
     content: "";
     position: absolute;
     z-index: -1;
-    transition: all 0.6s;
+    /* Анімуємо тільки ширину або висоту */
+    transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
     border-radius: 15px;
 }
 
@@ -190,11 +191,9 @@ body.light-theme .menu-item {
 body.light-theme .btn-main::before,
 body.light-theme .menu-item::before {
     background-color: #212121;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    height: 0;
-    width: 0;
+    height: 0; width: 0;
 }
 
 body.light-theme .btn-main:hover,
@@ -204,10 +203,8 @@ body.light-theme .menu-item:hover {
 
 body.light-theme .btn-main:hover::before,
 body.light-theme .menu-item:hover::before {
-    height: 100%;
-    width: 100%;
+    height: 100%; width: 100%;
 }
-
 
 /* --- Стилі для ТЕМНОЇ теми --- */
 body.dark-theme .btn-main,
@@ -219,10 +216,8 @@ body.dark-theme .menu-item {
 body.dark-theme .btn-main::before,
 body.dark-theme .menu-item::before {
     background-color: #e8e8e8;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0;
+    top: 0; left: 0;
+    height: 100%; width: 0;
 }
 
 body.dark-theme .btn-main:hover,
@@ -237,8 +232,9 @@ body.dark-theme .menu-item:hover::before {
 
 /* --- Специфічні налаштування для menu-item --- */
 .menu-item {
-    justify-content: space-between; /* Повертаємо, щоб бейджі були справа */
+    justify-content: space-between;
 }
+
 
 /* --- Cards --- */
 .order-card, .driver-card, .details-card {
@@ -801,4 +797,16 @@ h3 {
 .toggle-checkbox:checked + .toggle-container > .toggle-button {
   left: 42px;
   background-color: var(--moon-color); /* Місяць */
+}
+/* === СТИЛІ ДЛЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
+
+/* Збільшуємо відстань між кнопками */
+#home-screen .button-group {
+    gap: 25px; 
+}
+
+/* Вирівнюємо кнопки по ширині і контент всередині */
+#home-screen .btn-main {
+    min-width: 220px; /* Задаємо мінімальну ширину для обох кнопок */
+    justify-content: flex-start; /* Вирівнюємо контент (іконка + текст) по лівому краю */
 }
