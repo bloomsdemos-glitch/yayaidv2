@@ -1,0 +1,573 @@
+:root {
+    /* -- Material Design Typography -- */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    --font-weight-heavy: 900;
+    --font-weight-bold: 700;
+    --font-weight-medium: 500;
+    --font-weight-regular: 400;
+    --font-weight-light: 300;
+
+    /* -- Material Design Colors -- */
+    --md-primary: #1976D2;
+    --md-primary-variant: #1565C0;
+    --md-secondary: #03DAC6;
+    --md-background: #121212;
+    --md-surface: #1E1E1E;
+    --md-surface-variant: #2C2C2C;
+    --md-on-primary: #FFFFFF;
+    --md-on-background: #FFFFFF;
+    --md-on-surface: #FFFFFF;
+    --md-on-surface-variant: #AAAAAA;
+    --md-outline: #737373;
+    
+    /* -- Status Colors -- */
+    --md-success: #4CAF50;
+    --md-warning: #FF9800;
+    --md-error: #F44336;
+    
+    /* -- Elevation Shadows (Material) -- */
+    --elevation-1: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+    --elevation-2: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    --elevation-3: 0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12);
+    --elevation-4: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    --elevation-6: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12);
+    
+    /* -- Border Radius -- */
+    --md-radius-small: 4px;
+    --md-radius-medium: 8px;
+    --md-radius-large: 12px;
+    --md-radius-extra-large: 16px;
+}
+
+/* === BASE STYLES === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-family);
+    min-height: 100vh;
+    color: var(--md-on-background);
+    background-color: var(--md-background);
+    overscroll-behavior: none;
+    /* Видаляємо glassmorphism фон */
+}
+
+#app-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    margin: 0 auto;
+    position: relative;
+    background-color: var(--md-background);
+}
+
+/* === SCREEN TRANSITIONS === */
+.screen {
+    width: 100%;
+    min-height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--md-background);
+    transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+/* === LAYOUT === */
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 24px;
+    min-height: 56px;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-center {
+    justify-content: center;
+    align-items: center;
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 16px 0;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    font-weight: var(--font-weight-regular);
+}
+
+/* === MATERIAL DESIGN COMPONENTS === */
+
+/* --- Buttons --- */
+.btn-main {
+    padding: 16px 24px;
+    border-radius: var(--md-radius-large);
+    border: none;
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-main:hover {
+    box-shadow: var(--elevation-4);
+    transform: translateY(-1px);
+}
+
+.btn-main:active {
+    transform: translateY(0);
+    box-shadow: var(--elevation-1);
+}
+
+/* --- Menu Items (Material Cards) --- */
+.menu-item {
+    padding: 16px;
+    border-radius: var(--md-radius-large);
+    border: none;
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 16px;
+    font-weight: var(--font-weight-regular);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    box-shadow: var(--elevation-1);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.menu-item:hover {
+    background-color: var(--md-surface-variant);
+    box-shadow: var(--elevation-2);
+}
+
+.menu-item:active {
+    transform: scale(0.98);
+}
+
+.menu-item span > i {
+    margin-right: 16px;
+    width: 24px;
+    color: var(--md-primary);
+}
+
+/* --- Cards --- */
+.order-card, .driver-card, .details-card {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-large);
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    border: none;
+}
+
+.order-card:hover, .driver-card:hover {
+    box-shadow: var(--elevation-4);
+    transform: translateY(-2px);
+}
+
+.order-card:active, .driver-card:active {
+    transform: translateY(0);
+    box-shadow: var(--elevation-1);
+}
+
+/* --- Form Inputs --- */
+.form-input {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--md-radius-medium);
+    border: 1px solid var(--md-outline);
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 16px;
+    font-family: var(--font-family);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--md-primary);
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+}
+
+.form-input::placeholder {
+    color: var(--md-on-surface-variant);
+}
+
+/* --- Segmented Buttons --- */
+.btn-segment {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--md-outline);
+    background-color: var(--md-surface);
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-segment:first-child {
+    border-radius: var(--md-radius-medium) 0 0 var(--md-radius-medium);
+    border-right: none;
+}
+
+.btn-segment:last-child {
+    border-radius: 0 var(--md-radius-medium) var(--md-radius-medium) 0;
+}
+
+.btn-segment.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    border-color: var(--md-primary);
+}
+
+/* --- Badges --- */
+.badge {
+    background-color: var(--md-error);
+    color: var(--md-on-primary);
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: var(--font-weight-medium);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 6px;
+}
+
+.badge.online {
+    background-color: var(--md-success);
+}
+
+/* --- Status Dots --- */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.online {
+    background-color: var(--md-success);
+    box-shadow: 0 0 4px var(--md-success);
+}
+
+.status-dot.busy {
+    background-color: var(--md-warning);
+}
+
+/* --- Avatars --- */
+.avatar, .avatar-convex {
+    background-color: var(--md-surface-variant);
+    color: var(--md-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--elevation-1);
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+}
+
+.avatar-convex {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+}
+
+/* --- Typography --- */
+.logo {
+    font-size: 48px;
+    font-weight: var(--font-weight-heavy);
+    color: var(--md-on-background);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-background);
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-surface);
+}
+
+/* --- Lists --- */
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.driver-list, .order-list {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.driver-card, .order-card {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    align-items: center;
+}
+
+.order-card {
+    justify-content: space-between;
+}
+
+/* --- Specific Component Styles --- */
+.btn-telegram-login {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--md-radius-large);
+    border: none;
+    background-color: #0088cc;
+    color: white;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.btn-telegram-login:hover {
+    box-shadow: var(--elevation-4);
+    transform: translateY(-1px);
+}
+
+.profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-icon, .btn-back {
+    background: none;
+    border: none;
+    color: var(--md-on-surface-variant);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.btn-icon:hover, .btn-back:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* --- Map and Special Components --- */
+.map-placeholder {
+    width: 100%;
+    height: 200px;
+    border-radius: var(--md-radius-large);
+    background-color: var(--md-surface);
+    border: 2px dashed var(--md-outline);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--md-on-surface-variant);
+    margin-bottom: 16px;
+}
+
+/* === ANIMATIONS === */
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 480px) {
+    .screen {
+        padding: 16px;
+    }
+    
+    .logo {
+        font-size: 40px;
+    }
+}
+
+/* === СПЕЦИАЛЬНЫЕ СТИЛИ ДЛЯ КОНКРЕТНЫХ ЕКРАНІВ === */
+
+/* --- Passenger Orders Screen --- */
+#passenger-orders-screen .order-card.active {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-extra-large);
+    box-shadow: var(--elevation-3);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+#passenger-orders-screen .order-title {
+    color: var(--md-success);
+    font-size: 18px;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+/* --- Quick Order Screen --- */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.btn-main-action {
+    flex: 1;
+    padding: 16px 24px;
+    border: none;
+    border-radius: var(--md-radius-large);
+    background-color: var(--md-success);
+    color: var(--md-on-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: 16px;
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-main-action.disabled {
+    background-color: var(--md-surface-variant);
+    color: var(--md-on-surface-variant);
+    pointer-events: none;
+}
+
+.btn-icon-action {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--md-surface);
+    border: 1px solid var(--md-outline);
+    color: var(--md-on-surface-variant);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--elevation-1);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.btn-icon-action:hover {
+    background-color: var(--md-surface-variant);
+    box-shadow: var(--elevation-2);
+}
+
+/* --- Date Tiles --- */
+.date-tiles-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.date-tile {
+    aspect-ratio: 1 / 1;
+    padding: 16px;
+    border-radius: var(--md-radius-extra-large);
+    background-color: var(--md-surface);
+    border: 1px solid var(--md-outline);
+    color: var(--md-on-surface-variant);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: var(--elevation-1);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.date-tile:hover {
+    background-color: var(--md-surface-variant);
+    box-shadow: var(--elevation-2);
+}
+
+.date-tile.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    border-color: var(--md-primary);
+    box-shadow: var(--elevation-3);
+    transform: scale(1.02);
+}
+
+.date-tile i {
+    font-size: 24px;
+}
+
+.date-tile span {
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+}
+
+/* Убираем все старые glassmorphism стили */
+/* Удаляем переменные --glass-bg, --glass-stroke, --glass-blur, --glass-shadow */
+/* Удаляем backdrop-filter и -webkit-backdrop-filter из всех элементов */
