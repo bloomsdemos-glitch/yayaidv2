@@ -747,7 +747,7 @@ h3 {
 
 #theme-toggle {
   margin: 0 auto 20px auto; /* Центруємо і додаємо відступ знизу */
-  transform: scale(0.8); /* Робимо трохи меншим */
+  transform: scale(0.5); /* Робимо трохи меншим */
 }
 
 .toggle-wrapper {
