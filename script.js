@@ -299,3 +299,26 @@ document.addEventListener('DOMContentLoaded', () => {
     showScreen('home-screen');
     
 });
+// === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
+const themeToggle = document.getElementById('theme-toggle');
+const themeCheckbox = themeToggle?.querySelector('.toggle-checkbox');
+const body = document.body;
+
+// Функція для зміни теми
+function switchTheme(e) {
+    if (e.target.checked) {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+    } else {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+    }
+}
+
+// Встановлюємо початковий стан чекбоксу
+if (body.classList.contains('dark-theme')) {
+    themeCheckbox.checked = true;
+}
+
+// Додаємо обробник події
+themeCheckbox?.addEventListener('change', switchTheme);
