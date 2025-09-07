@@ -186,117 +186,67 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // == 5. ГОЛОВНІ ОБРОБНИКИ ПОДІЙ ==
-    showDriverLoginBtn?.addEventListener('click', () => showScreen('login-screen-driver'));
-    showPassengerLoginBtn?.addEventListener('click', () => showScreen('login-screen-passenger'));
-    driverTelegramLoginBtn?.addEventListener('click', () => showScreen('driver-dashboard'));
-    passengerTelegramLoginBtn?.addEventListener('click', () => showScreen('passenger-dashboard'));
+// == 5. ГОЛОВНІ ОБРОБНИКИ ПОДІЙ ==
 
-    showMyOrdersBtn?.addEventListener('click', () => {
+// Універсальна функція для плавного переходу
+function navigateTo(screenId) {
+    setTimeout(() => {
+        showScreen(screenId);
+    }, 250); // Чекаємо 250 мілісекунд (0.25с) перед переходом
+}
+
+showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
+showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
+driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
+passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
+
+showMyOrdersBtn?.addEventListener('click', () => {
+    // Для цього екрану симуляція має запускатись ПІСЛЯ переходу
+    setTimeout(() => {
         showScreen('passenger-orders-screen');
         runActiveTripSimulation();
         updatePassengerOrderCardListeners();
-    });
+    }, 250);
+});
 
-    function updateDriverOrderCardListeners() {
-        document.querySelectorAll('#driver-find-passengers-screen .order-card').forEach(card => {
-            card.addEventListener('click', () => {
-                calculateAndDisplayTripDetails();
-                showScreen('driver-order-details-screen');
-            });
-        });
-    }
-
-    function calculateAndDisplayTripDetails() {
-        const BASE_FARE = 40;
-        const PRICE_PER_KM = 15;
-        const PAYMENT_OPTIONS = ['Готівка', 'Картка'];
-        if (!tripDistanceEl || !tripFareEl || !paymentMethodEl) return;
-        const distance = (Math.random() * (10 - 1.5) + 1.5).toFixed(1);
-        const fare = Math.round(BASE_FARE + (distance * PRICE_PER_KM));
-        const paymentMethod = PAYMENT_OPTIONS[Math.floor(Math.random() * PAYMENT_OPTIONS.length)];
-        tripDistanceEl.textContent = `~ ${distance} км`;
-        tripFareEl.textContent = `~ ${fare} грн`;
-        paymentMethodEl.textContent = paymentMethod;
-    }
-
-    function setupActiveRide() {
-        rideState = 'driving_to_client';
-        updateRideScreenUI();
-    }
-
-    function handleRideAction() {
-        switch (rideState) {
-            case 'driving_to_client':
-                alert('Пасажиру надіслано сповіщення, що ви на місці!');
-                rideState = 'waiting_for_client';
-                break;
-            case 'waiting_for_client':
-                rideState = 'in_progress';
-                break;
-            case 'in_progress':
-                alert('Поїздку завершено!');
-                rideState = 'idle';
-                showScreen('driver-dashboard');
-                break;
-        }
-        updateRideScreenUI();
-    }
-
-    function updateRideScreenUI() {
-        if (!rideActionBtn) return;
-        rideActionBtn.classList.remove('start-ride', 'end-ride');
-        switch (rideState) {
-            case 'driving_to_client':
-                if(rideStatusHeader) rideStatusHeader.textContent = 'Поїздка до пасажира';
-                if (rideMapPlaceholder) rideMapPlaceholder.textContent = 'Їдьте до пасажира';
-                if (rideAddressDetails) rideAddressDetails.innerHTML = '<span><strong>Адреса:</strong> вул. Весняна, 15</span>';
-                rideActionBtn.innerHTML = '✅ Я на місці';
-                break;
-            case 'waiting_for_client':
-                if(rideStatusHeader) rideStatusHeader.textContent = 'Очікування пасажира';
-                rideActionBtn.innerHTML = '🚀 Почати поїздку';
-                rideActionBtn.classList.add('start-ride');
-                break;
-            case 'in_progress':
-                if(rideStatusHeader) rideStatusHeader.textContent = 'В дорозі';
-                if (rideMapPlaceholder) rideMapPlaceholder.textContent = 'Їдьте до точки призначення';
-                if (rideAddressDetails) rideAddressDetails.innerHTML = '<span><strong>Пункт призначення:</strong> вул. Музейна, 4</span>';
-                rideActionBtn.innerHTML = '🏁 Завершити поїздку';
-                rideActionBtn.classList.add('end-ride');
-                break;
-        }
-    }
-    
-    showQuickOrderBtn?.addEventListener('click', () => {
+showQuickOrderBtn?.addEventListener('click', () => {
+    setTimeout(() => {
         showScreen('quick-order-screen');
         initQuickOrderScreen();
-    });
-    
-    findDriverBtn?.addEventListener('click', () => showScreen('passenger-find-driver-screen'));
-    showHelpBtn?.addEventListener('click', () => showScreen('help-screen'));
-    showFindPassengersBtn?.addEventListener('click', () => showScreen('driver-find-passengers-screen'));
-    showDriverOrdersBtn?.addEventListener('click', () => alert('Цей екран ще в розробці :)'));
-    acceptOrderBtn?.addEventListener('click', () => {
+    }, 250);
+});
+
+findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
+showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
+
+// Для неробочих кнопок залишаємо alert, він не потребує затримки
+showDriverOrdersBtn?.addEventListener('click', () => alert('Цей екран ще в розробці :)'));
+
+acceptOrderBtn?.addEventListener('click', () => {
+    setTimeout(() => {
         setupActiveRide();
         showScreen('driver-active-ride-screen');
-    });
-    cancelRideBtn?.addEventListener('click', () => {
-        if (confirm('Скасувати поїздку? Це може вплинути на ваш рейтинг.')) {
-            rideState = 'idle';
-            showScreen('driver-dashboard');
-        }
-    });
-    rideActionBtn?.addEventListener('click', handleRideAction);
+    }, 250);
+});
 
-    goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
-    
-    backButtons.forEach(button => {
-        button.addEventListener('click', () => showScreen(button.dataset.target || 'home-screen'));
-    });
+cancelRideBtn?.addEventListener('click', () => {
+    if (confirm('Скасувати поїздку? Це може вплинути на ваш рейтинг.')) {
+        navigateTo('driver-dashboard');
+    }
+});
 
-    // == 6. ІНІЦІАЛІЗАЦІЯ ДОДАТКУ ==
-    showScreen('home-screen');
+rideActionBtn?.addEventListener('click', handleRideAction);
+
+goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
+
+backButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Кнопка "назад" має працювати миттєво, без затримки
+        showScreen(button.dataset.target || 'home-screen');
+    });
+});
+
     
 });
 // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
