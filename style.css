@@ -20,6 +20,7 @@
 
     /* -- Статичні системні кольори -- */
     --md-primary: #1976D2;
+    --md-primary-variant: #1565C0;
     --md-secondary: #03DAC6;
     --md-success: #4CAF50;
     --md-warning: #FF9800;
@@ -29,42 +30,41 @@
     --elevation-1: 0px 2px 1px -1px var(--shadow-color), 0px 1px 1px 0px var(--shadow-color), 0px 1px 3px 0px var(--shadow-color);
     --elevation-2: 0px 3px 1px -2px var(--shadow-color), 0px 2px 2px 0px var(--shadow-color), 0px 1px 5px 0px var(--shadow-color);
     --elevation-3: 0px 3px 3px -2px var(--shadow-color), 0px 3px 4px 0px var(--shadow-color), 0px 1px 8px 0px var(--shadow-color);
+    --shadow-soft: 4px 8px 19px -3px var(--shadow-color);
     
     /* -- Радіуси -- */
     --md-radius-small: 4px;
     --md-radius-medium: 8px;
     --md-radius-large: 12px;
     --md-radius-extra-large: 16px;
-    
-    /* -- Кольори для перемикача тем -- */
-    --sun-color: #f3b519;
-    --moon-color: #d3d3d3;
 }
 
 /* === СИСТЕМА ПЕРЕМИКАННЯ ТЕМ === */
 body.dark-theme {
-    --md-background: #121212;
-    --md-surface: #1E1E1E;
-    --md-surface-variant: #2C2C2C;
+    --md-background: #121212; /* Дуже темний, майже чорний фон */
+    --md-surface: #1e1e1e; /* Темніший колір для карток та елементів */
+    --md-surface-variant: #3a3a3a; /* Ще темніший відтінок для ховерів */
     --md-on-primary: #FFFFFF;
-    --md-on-background: #FFFFFF;
-    --md-on-surface: #FFFFFF;
-    --md-on-surface-variant: #AAAAAA;
-    --md-outline: #4d4d4d;
-    --shadow-color: rgba(0,0,0,0.4);
+    --md-on-background: #FFFFFF; /* Білий текст на темному фоні */
+    --md-on-surface: #FFFFFF; /* Білий текст на темних елементах */
+    --md-on-surface-variant: #bbbbbb; /* Світліший сірий для додаткового тексту */
+    --md-outline: #4d4d4d; /* Світла сіра рамка для контрасту */
+    --shadow-color: rgba(0,0,0,0.4); /* Більш виразні тіні на темному */
 }
 
+
 body.light-theme {
-    --md-background: #F5F5F7;
-    --md-surface: #FFFFFF;
-    --md-surface-variant: #F0F0F2;
+    --md-background: #F5F5F7; /* <<== Чистий, ледь холодний "технологічний" білий */
+    --md-surface: #FFFFFF; /* Картки і елементи будуть чисто білими для контрасту */
+    --md-surface-variant: #F0F0F2; /* Трохи темніший відтінок для ховерів */
     --md-on-primary: #FFFFFF;
-    --md-on-background: #1d1d1f;
+    --md-on-background: #1d1d1f; /* Глибокий, майже чорний текст Apple */
     --md-on-surface: #1d1d1f;
     --md-on-surface-variant: #5c5b58;
-    --md-outline: #E0E0E0;
-    --shadow-color: rgba(0,0,0,0.08);
+    --md-outline: #E0E0E0; /* Ледь помітна сіра рамка */
+    --shadow-color: rgba(0,0,0,0.08); /* Робимо тіні значно світлішими і м'якшими */
 }
+
 
 /* === БАЗОВІ СТИЛІ === */
 * {
@@ -92,7 +92,8 @@ body {
     background-color: var(--md-background);
 }
 
-/* === ЕКРАНИ === */
+
+/* === SCREEN TRANSITIONS === */
 .screen {
     width: 100%;
     min-height: 100vh;
@@ -103,12 +104,22 @@ body {
     display: flex;
     flex-direction: column;
     background-color: var(--md-background);
-    transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
-.screen.hidden { opacity: 0; pointer-events: none; }
-.screen.active { opacity: 1; pointer-events: all; }
 
-/* === ЛЕЯУТ === */
+.screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+/* === LAYOUT === */
 header {
     width: 100%;
     display: flex;
@@ -117,131 +128,700 @@ header {
     padding-bottom: 24px;
     min-height: 56px;
 }
-main { flex-grow: 1; display: flex; flex-direction: column; }
-.content-center { justify-content: center; align-items: center; }
-footer { width: 100%; text-align: center; padding: 16px 0; color: var(--md-on-surface-variant); font-size: 14px; }
-.logo { font-size: 48px; font-weight: var(--font-weight-heavy); color: var(--md-on-background); text-align: center; }
 
-/* === ГОЛОВНІ КНОПКИ (Я водій / Я пасажир) === */
-.button-group { display: flex; flex-direction: column; align-items: center; }
-#home-screen .btn-main {
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    text-transform: none;
-    transition: all 0.3s;
-    min-width: 240px;
-    justify-content: center;
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
-body.light-theme #home-screen .btn-main { border: 2px solid #000; background: #fff; color: #000; }
-body.light-theme #home-screen .btn-main.btn-solid { background: #000; color: #fff; }
-body.light-theme #home-screen .btn-main:hover { background: #000; color: #fff; }
-body.light-theme #home-screen .btn-main.btn-solid:hover { background: #fff; color: #000; }
-body.dark-theme #home-screen .btn-main { border: 2px solid #fff; background: transparent; color: #fff; }
-body.dark-theme #home-screen .btn-main.btn-solid { background: #fff; color: #000; }
-body.dark-theme #home-screen .btn-main:hover { background: #fff; color: #000; }
-body.dark-theme #home-screen .btn-main.btn-solid:hover { background: transparent; color: #fff; }
 
-/* === ІНШІ КОМПОНЕНТИ (меню, картки і т.д.) === */
-.menu-item {
+.content-center {
+    justify-content: center;
+    align-items: center;
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 16px 0;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    font-weight: var(--font-weight-regular);
+}
+/* === MATERIAL DESIGN COMPONENTS === */
+
+/* === 5. КАСТОМНІ КНОПКИ (РЕДИЗАЙН v4: RIPPLE EFFECT) === */
+
+/* --- Загальний "скелет" для всіх головних кнопок --- */
+.btn-main, .menu-item {
     padding: 15px 25px;
     border: 1px solid var(--md-outline);
     border-radius: var(--md-radius-large); 
-    position: relative;
+    z-index: 1;
+    position: relative; /* ВАЖЛИВО для Ripple-ефекту */
     font-weight: var(--font-weight-medium);
     font-size: 16px;
     box-shadow: var(--elevation-2);
     transition: all 250ms;
-    overflow: hidden;
+    overflow: hidden; /* ВАЖЛИВО для Ripple-ефекту */
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* --- Ефект при натисканні (:active) для мобільних --- */
+.btn-main:active, .menu-item:active {
+    transform: scale(0.98);
+    box-shadow: var(--elevation-1);
+}
+
+
+/* --- Стилі для СВІТЛОЇ теми --- */
+body.light-theme .btn-main,
+body.light-theme .menu-item {
+    background: #212121;
+    color: #e8e8e8;
+    border-color: #212121;
+}
+
+/* --- Стилі для ТЕМНОЇ теми --- */
+body.dark-theme .btn-main,
+body.dark-theme .menu-item {
+    background: #e0e0e0; /* <<== Змінили фон на світлий */
+    color: #212121;      /* <<== Змінили текст на темний */
+    border-color: #e0e0e0; /* Рамка теж світла */
+}
+
+
+/* --- Специфічні налаштування для menu-item --- */
+.menu-item {
+    justify-content: space-between;
+}
+
+/* --- Анімація Ripple Effect --- */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4); /* Напівпрозора біла хвиля */
+    transform: scale(0);
+    animation: ripple-effect 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+
+/* --- Cards --- */
+.order-card, .driver-card, .details-card {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-large);
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    border: none;
+}
+
+.order-card:hover, .driver-card:hover {
+    box-shadow: var(--elevation-4);
+    transform: translateY(-2px);
+}
+
+.order-card:active, .driver-card:active {
+    transform: translateY(0);
+    box-shadow: var(--elevation-1);
+}
+
+/* --- Form Inputs --- */
+.form-input {
+    width: 100%;
+    padding: 16px;
+    border-radius: var(--md-radius-medium);
+    border: 1px solid var(--md-outline);
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 16px;
+    font-family: var(--font-family);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--md-primary);
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+}
+
+.form-input::placeholder {
+    color: var(--md-on-surface-variant);
+}
+
+/* --- Segmented Buttons --- */
+.btn-segment {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--md-outline);
+    background-color: var(--md-surface);
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-segment:first-child {
+    border-radius: var(--md-radius-medium) 0 0 var(--md-radius-medium);
+    border-right: none;
+}
+
+.btn-segment:last-child {
+    border-radius: 0 var(--md-radius-medium) var(--md-radius-medium) 0;
+}
+
+.btn-segment.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    border-color: var(--md-primary);
+}
+
+/* --- Badges --- */
+.badge {
+    background-color: var(--md-error);
+    color: var(--md-on-primary);
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: var(--font-weight-medium);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 6px;
+}
+
+.badge.online {
+    background-color: var(--md-success);
+}
+
+
+/* --- Status Dots --- */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-dot.online {
+    background-color: var(--md-success);
+    box-shadow: 0 0 4px var(--md-success);
+}
+
+.status-dot.busy {
+    background-color: var(--md-warning);
+}
+
+/* --- Avatars --- */
+.avatar, .avatar-convex {
+    background-color: var(--md-surface-variant);
+    color: var(--md-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--elevation-1);
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+}
+
+.avatar-convex {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+}
+
+/* --- Typography --- */
+.logo {
+    font-size: 48px;
+    font-weight: var(--font-weight-heavy);
+    color: var(--md-on-background);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-background);
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-surface);
+}
+
+/* --- Lists --- */
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Видаляємо width і додаємо align-items, щоб центрувати кнопки */
+    align-items: center;
+}
+
+
+.driver-list, .order-list {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.driver-card, .order-card {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    align-items: center;
+}
+
+.order-card {
+    justify-content: space-between;
+}
+
+/* --- Specific Component Styles --- */
+.btn-telegram-login {
+    width: auto; /* Дозволяємо кнопці самій визначати ширину */
+    padding: 16px 24px; /* Збалансовані відступи */
+    border-radius: var(--md-radius-large);
+    border: none;
+    background-color: #0088cc;
+    color: white;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.btn-telegram-login:hover {
+    box-shadow: var(--elevation-4);
+    transform: translateY(-1px);
+}
+
+
+.profile-badge {
+    display: flex;
+    align-items: center;
     gap: 12px;
 }
-body.light-theme .menu-item { background: #fff; color: #000; }
-body.dark-theme .menu-item { background: var(--md-surface); color: var(--md-on-surface); }
-.menu-item:active { transform: scale(0.98); box-shadow: var(--elevation-1); }
 
-/* === АНІМАЦІЯ МАРШРУТУ === */
-.route-animation { width: 50%; max-width: 150px; opacity: 0.5; }
-.route-animation svg { width: 100%; height: auto; overflow: visible; }
-.route-path { stroke-width: 3; stroke: var(--md-on-background); stroke-linecap: round; fill: none; stroke-dasharray: 2 8; animation: march 1.5s linear infinite; }
-.pin path { fill: var(--md-on-background); filter: drop-shadow(0px 2px 2px var(--shadow-color)); }
-@keyframes march { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
-
-/* === ПЕРЕМИКАЧ ТЕМ === */
-#theme-toggle { margin: 0 auto; transform: scale(0.8); }
-.toggle-wrapper { display: flex; justify-content: center; align-items: center; position: relative; border-radius: 50px; background-color: var(--md-surface-variant); box-shadow: var(--elevation-1); padding: 5px; }
-.toggle-checkbox { appearance: none; position: absolute; z-index: 1; border-radius: inherit; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-.toggle-container { display: flex; align-items: center; position: relative; border-radius: 50px; width: 80px; height: 40px; background-color: var(--md-primary); box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2); transition: background-color 0.4s ease; }
-.toggle-checkbox:checked + .toggle-container { background-color: var(--md-surface); border: 1px solid var(--md-outline); }
-.toggle-button { display: flex; justify-content: center; align-items: center; position: absolute; left: 2px; border-radius: 50%; width: 36px; height: 36px; background-color: var(--sun-color); box-shadow: var(--elevation-2); transition: all 0.4s ease; }
-.toggle-checkbox:checked + .toggle-container > .toggle-button { left: 42px; background-color: var(--moon-color); }
-
-/* === ГОЛОВНИЙ ЕКРАН: ЛЕЯУТ + КНОПКИ (ФІНАЛ) === */
-
-#home-screen {
-    display: flex;
-    flex-direction: column;
+.btn-icon, .btn-back {
+    background: none;
+    border: none;
+    color: var(--md-on-surface-variant);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-#home-screen > main {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px 0;
+.btn-icon:hover, .btn-back:hover {
+    background-color: rgba(255, 255, 255, 0.08);
 }
 
-.hero-section {
-    flex-shrink: 0;
-    margin-top: 15vh;
-}
-
-#home-screen .route-animation {
-    margin-top: 25px;
-    margin-bottom: 35px;
-}
-
-#home-screen .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* --- Map and Special Components --- */
+.map-placeholder {
     width: 100%;
+    height: 200px;
+    border-radius: var(--md-radius-large);
+    background-color: var(--md-surface);
+    border: 2px dashed var(--md-outline);
+    display: flex;
+    justify-content: center;
     align-items: center;
+    color: var(--md-on-surface-variant);
+    margin-bottom: 16px;
 }
 
-/* Притискаємо перемикач і футер до низу */
-#home-screen #theme-toggle {
-    margin-top: auto;
-    margin-bottom: 10px;
+/* === ANIMATIONS === */
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
-#home-screen footer {
-    padding: 0;
-    margin-bottom: 10px;
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 480px) {
+    .screen {
+        padding: 16px;
+    }
+    
+    .logo {
+        font-size: 40px;
+    }
 }
 
-/* --- СТИЛІ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ --- */
+/* === СПЕЦИАЛЬНЫЕ СТИЛИ ДЛЯ КОНКРЕТНЫХ ЕКРАНІВ === */
+
+/* --- Passenger Orders Screen --- */
+#passenger-orders-screen .order-card.active {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-extra-large);
+    box-shadow: var(--elevation-3);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+#passenger-orders-screen .order-title {
+    color: var(--md-success);
+    font-size: 18px;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+/* --- Quick Order Screen --- */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.btn-main-action {
+    flex: 1;
+    padding: 16px 24px;
+    border: none;
+    border-radius: var(--md-radius-large);
+    background-color: var(--md-success);
+    color: var(--md-on-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: 16px;
+    box-shadow: var(--elevation-2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-main-action.disabled {
+    background-color: var(--md-surface-variant);
+    color: var(--md-on-surface-variant);
+    pointer-events: none;
+}
+
+.btn-icon-action {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--md-surface);
+    border: 1px solid var(--md-outline);
+    color: var(--md-on-surface-variant);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--elevation-1);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.btn-icon-action:hover {
+    background-color: var(--md-surface-variant);
+    box-shadow: var(--elevation-2);
+}
+
+/* --- Date Tiles --- */
+.date-tiles-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.date-tile {
+    aspect-ratio: 1 / 1;
+    padding: 16px;
+    border-radius: var(--md-radius-extra-large);
+    background-color: var(--md-surface);
+    border: 1px solid var(--md-outline);
+    color: var(--md-on-surface-variant);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: var(--elevation-1);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.date-tile:hover {
+    background-color: var(--md-surface-variant);
+    box-shadow: var(--elevation-2);
+}
+
+.date-tile.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    border-color: var(--md-primary);
+    box-shadow: var(--elevation-3);
+    transform: scale(1.02);
+}
+
+.date-tile i {
+    font-size: 24px;
+}
+
+.date-tile span {
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+}
+
+/* === СТИЛІ ДЛЯ ОНОВЛЕНОЇ КАРТКИ ЗАМОВЛЕННЯ === */
+
+#passenger-orders-screen .order-card.active {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-header, .card-body, .card-footer {
+    width: 100%;
+}
+
+.card-header {
+    text-align: center;
+    border-bottom: 1px solid var(--md-outline);
+    padding-bottom: 12px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.order-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-surface);
+}
+
+.md-progress-linear {
+    width: 100%;
+    height: 4px;
+    background-color: var(--md-surface-variant);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.md-progress-bar {
+    width: 30%; /* Початковий прогрес */
+    height: 100%;
+    background-color: var(--md-primary);
+    border-radius: 2px;
+    transition: width 1s linear;
+}
+
+.route-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
+}
+
+.address-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.address-line i {
+    color: var(--md-on-surface-variant);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--md-outline);
+    padding-top: 12px;
+}
+
+.driver-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.driver-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 14px;
+}
+
+.driver-details span {
+    color: var(--md-on-surface-variant);
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--md-primary);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--md-radius-small);
+    transition: background-color 0.3s ease;
+}
+
+.btn-text:hover {
+    background-color: rgba(25, 118, 210, 0.08);
+}
+/* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
+:root {
+    --sun-color: #f3b519;
+    --moon-color: #d3d3d3;
+}
+
+#theme-toggle {
+  margin: 0 auto 20px auto; /* Центруємо і додаємо відступ знизу */
+  transform: scale(0.5); /* Робимо трохи меншим */
+}
+
+.toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 50px;
+  background-color: var(--md-surface-variant);
+  box-shadow: var(--elevation-1);
+  padding: 5px;
+}
+
+.toggle-checkbox {
+  appearance: none;
+  position: absolute;
+  z-index: 1;
+  border-radius: inherit;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 50px;
+  width: 80px;
+  height: 40px;
+  background-color: var(--md-primary); /* Синій для дня */
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.4s ease;
+}
+
+.toggle-checkbox:checked + .toggle-container {
+  background-color: var(--md-background); /* Темний для ночі */
+  border: 1px solid var(--md-outline);
+}
+
+.toggle-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 2px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  background-color: var(--sun-color); /* Сонце */
+  box-shadow: var(--elevation-2);
+  transition: all 0.4s ease;
+}
+
+.toggle-checkbox:checked + .toggle-container > .toggle-button {
+  left: 42px;
+  background-color: var(--moon-color); /* Місяць */
+}
+
+/* === АЛЬТЕРНАТИВА: ТЕКСТУРНИЙ ФОН === */
+#home-screen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/noise.png'); /* Потрібно завантажити картинку 'noise.png' в папку assets */
+    opacity: 0.04; /* Робимо текстуру ДУЖЕ прозорою */
+    pointer-events: none; /* Щоб не заважала клікам */
+}
+/* === ПОЗИЦІОНУВАННЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
+
+#home-screen main {
+    justify-content: flex-end; /* Опускаємо весь контент вниз */
+    padding-bottom: 40px; /* Додаємо відступ від нижнього краю */
+}
+
+#home-screen .btn-main {
+    justify-content: center; /* Повертаємо центрування тексту всередині */
+    padding: 14px 20px; /* Робимо кнопки трохи меншими */
+}
+/* === НОВИЙ ДИЗАЙН КНОПОК НА ГОЛОВНОМУ ЕКРАНІ (Outline + Solid) === */
+
+/* Загальний стиль для обох кнопок */
 #home-screen .btn-main {
     border-radius: 12px;
     font-weight: 700;
     font-size: 16px;
-    text-transform: none;
+    text-transform: none; /* Прибираємо uppercase, щоб було як у тебе в дизайні */
     transition: all 0.3s;
-    min-width: 240px;
-    justify-content: center;
-    padding: 14px 20px;
+    min-width: 240px; /* Однаковий розмір */
+    justify-content: center; /* Центруємо текст */
 }
 
-/* Світла тема */
+/* --- СТИЛІ ДЛЯ СВІТЛОЇ ТЕМИ --- */
 body.light-theme #home-screen .btn-main {
     border: 2px solid #000;
     background: #fff;
     color: #000;
-    box-shadow: none;
 }
 
 body.light-theme #home-screen .btn-main.btn-solid {
@@ -249,6 +829,7 @@ body.light-theme #home-screen .btn-main.btn-solid {
     color: #fff;
 }
 
+/* Ховери для світлої теми */
 body.light-theme #home-screen .btn-main:hover {
     background: #000;
     color: #fff;
@@ -259,12 +840,11 @@ body.light-theme #home-screen .btn-main.btn-solid:hover {
     color: #000;
 }
 
-/* Темна тема */
+/* --- СТИЛІ ДЛЯ ТЕМНОЇ ТЕМИ --- */
 body.dark-theme #home-screen .btn-main {
     border: 2px solid #fff;
-    background: transparent;
+    background: #000;
     color: #fff;
-    box-shadow: none;
 }
 
 body.dark-theme #home-screen .btn-main.btn-solid {
@@ -272,12 +852,13 @@ body.dark-theme #home-screen .btn-main.btn-solid {
     color: #000;
 }
 
+/* Ховери для темної теми */
 body.dark-theme #home-screen .btn-main:hover {
     background: #fff;
     color: #000;
 }
 
 body.dark-theme #home-screen .btn-main.btn-solid:hover {
-    background: transparent;
+    background: #000;
     color: #fff;
 }
