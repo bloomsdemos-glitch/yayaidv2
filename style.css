@@ -795,11 +795,6 @@ h3 {
 }
 /* === ПОЗИЦІОНУВАННЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
 
-#home-screen main {
-    justify-content: flex-end; /* Опускаємо весь контент вниз */
-    padding-bottom: 40px; /* Додаємо відступ від нижнього краю */
-}
-
 #home-screen .btn-main {
     justify-content: center; /* Повертаємо центрування тексту всередині */
     padding: 14px 20px; /* Робимо кнопки трохи меншими */
@@ -1009,3 +1004,11 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     transition: font-size 0.3s ease; /* Додаємо плавність */
 }
 
+/* === СПЕЙСЕР І ВІДСТУПИ ДЛЯ ГОЛОВНОГО ЕКРАНУ === */
+.spacer {
+    flex-grow: 1; /* Цей рядок змушує його розтягуватись і розштовхувати контент */
+}
+
+#home-screen main {
+    padding-bottom: 60px; /* А цей - створює відступ знизу, піднімаючи кнопки */
+}
