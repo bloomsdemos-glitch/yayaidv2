@@ -179,66 +179,105 @@ body.dark-theme .menu-item { background: var(--md-surface); color: var(--md-on-s
 .toggle-button { display: flex; justify-content: center; align-items: center; position: absolute; left: 2px; border-radius: 50%; width: 36px; height: 36px; background-color: var(--sun-color); box-shadow: var(--elevation-2); transition: all 0.4s ease; }
 .toggle-checkbox:checked + .toggle-container > .toggle-button { left: 42px; background-color: var(--moon-color); }
 
-/* === ФІНАЛЬНЕ ПОЗИЦІОНУВАННЯ НА ГОЛОВНОМУ ЕКРАНІ === */
+/* === ГОЛОВНИЙ ЕКРАН: ЛЕЯУТ + КНОПКИ (ФІНАЛ) === */
+
+#home-screen {
+    display: flex;
+    flex-direction: column;
+}
+
 #home-screen > main {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    flex-grow: 1;
+    text-align: center;
+    padding: 20px 0;
 }
+
 .hero-section {
     flex-shrink: 0;
-    text-align: center;
-    margin-top: 20vh; /* <<== Відступ зверху, щоб опустити логотип */
+    margin-top: 15vh;
 }
+
+#home-screen .route-animation {
+    margin-top: 25px;
+    margin-bottom: 35px;
+}
+
 #home-screen .button-group {
-    margin-top: 40px; /* Відступ між анімацією і кнопками */
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-#home-screen .route-animation {
-    margin: 25px auto;
-}
-#home-screen footer, #home-screen #theme-toggle {
-    margin-top: auto; /* <<== Притискає футер і перемикач до низу */
-    padding-bottom: 20px;
-}
-/* === ФІНАЛЬНЕ ПОЗИЦІОНУВАННЯ НА ГОЛОВНОМУ ЕКРАНІ === */
-#home-screen {
-    /* Дозволяємо flex-дітям рости і займати весь простір */
-    display: flex;
-    flex-direction: column;
-}
-
-#home-screen > main {
-    display: flex;
-    flex-direction: column;
+    width: 100%;
     align-items: center;
-    flex-grow: 1; /* Змушуємо main розтягнутись на весь доступний простір */
-    justify-content: center; /* Центруємо весь вміст по вертикалі */
 }
 
-.hero-section {
-    text-align: center;
-}
-
-#home-screen .button-group {
-    margin-top: 40px; /* Відстань між анімацією і кнопками */
-}
-
-#home-screen .route-animation {
-    margin-top: 30px; /* Відстань між логотипом і анімацією */
-    margin-bottom: 10px;
-}
-
-/* Притискаємо футер і перемикач до низу */
+/* Притискаємо перемикач і футер до низу */
 #home-screen #theme-toggle {
     margin-top: auto;
     margin-bottom: 10px;
 }
 
 #home-screen footer {
-    padding-bottom: 20px;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+/* --- СТИЛІ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ --- */
+#home-screen .btn-main {
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: none;
+    transition: all 0.3s;
+    min-width: 240px;
+    justify-content: center;
+    padding: 14px 20px;
+}
+
+/* Світла тема */
+body.light-theme #home-screen .btn-main {
+    border: 2px solid #000;
+    background: #fff;
+    color: #000;
+    box-shadow: none;
+}
+
+body.light-theme #home-screen .btn-main.btn-solid {
+    background: #000;
+    color: #fff;
+}
+
+body.light-theme #home-screen .btn-main:hover {
+    background: #000;
+    color: #fff;
+}
+
+body.light-theme #home-screen .btn-main.btn-solid:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Темна тема */
+body.dark-theme #home-screen .btn-main {
+    border: 2px solid #fff;
+    background: transparent;
+    color: #fff;
+    box-shadow: none;
+}
+
+body.dark-theme #home-screen .btn-main.btn-solid {
+    background: #fff;
+    color: #000;
+}
+
+body.dark-theme #home-screen .btn-main:hover {
+    background: #fff;
+    color: #000;
+}
+
+body.dark-theme #home-screen .btn-main.btn-solid:hover {
+    background: transparent;
+    color: #fff;
 }
