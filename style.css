@@ -1008,7 +1008,6 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 .spacer {
     flex-grow: 1; /* Цей рядок змушує його розтягуватись і розштовхувати контент */
 }
-
 #home-screen main {
     padding-bottom: 60px; /* А цей - створює відступ знизу, піднімаючи кнопки */
 }
