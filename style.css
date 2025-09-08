@@ -149,20 +149,20 @@ footer {
 }
 /* === MATERIAL DESIGN COMPONENTS === */
 
-/* === 5. КАСТОМНІ КНОПКИ (РЕДИЗАЙН v3: ЧІТКІСТЬ + ПРАВИЛЬНИЙ ДОТИК) === */
+/* === 5. КАСТОМНІ КНОПКИ (РЕДИЗАЙН v4: RIPPLE EFFECT) === */
 
 /* --- Загальний "скелет" для всіх головних кнопок --- */
 .btn-main, .menu-item {
     padding: 15px 25px;
-    border: 1px solid var(--md-outline); /* <<== 1. ДОДАЄМО ЧІТКУ РАМКУ */
+    border: 1px solid var(--md-outline);
     border-radius: var(--md-radius-large); 
     z-index: 1;
-    position: relative;
+    position: relative; /* ВАЖЛИВО для Ripple-ефекту */
     font-weight: var(--font-weight-medium);
     font-size: 16px;
     box-shadow: var(--elevation-2);
     transition: all 250ms;
-    overflow: hidden;
+    overflow: hidden; /* ВАЖЛИВО для Ripple-ефекту */
     cursor: pointer;
     text-align: center;
     display: flex;
@@ -170,50 +170,20 @@ footer {
     gap: 12px;
 }
 
-/* --- Загальний "скелет" для анімації (для :hover) --- */
-.btn-main::before, .menu-item::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    transition: all 0.4s ease-in-out;
-    border-radius: var(--md-radius-large);
-}
-
-/* --- 2. ЕФЕКТ ПРИ НАТИСКАННІ (:active) ДЛЯ МОБІЛЬНИХ --- */
+/* --- Ефект при натисканні (:active) для мобільних --- */
 .btn-main:active, .menu-item:active {
-    transform: scale(0.98); /* Ледь помітне "втискання" */
-    box-shadow: var(--elevation-1); /* Тінь стає меншою, ніби кнопка ближче до екрану */
+    transform: scale(0.98);
+    box-shadow: var(--elevation-1);
 }
 
 
 /* --- Стилі для СВІТЛОЇ теми --- */
 body.light-theme .btn-main,
 body.light-theme .menu-item {
-    background: #212121; /* <<== Змінили фон на темний */
-    color: #e8e8e8;      /* <<== Змінили текст на світлий */
-    border-color: #212121; /* Рамка теж темна */
+    background: #212121;
+    color: #e8e8e8;
+    border-color: #212121;
 }
-
-body.light-theme .btn-main::before,
-body.light-theme .menu-item::before {
-    background-color: #e8e8e8; /* Анімація тепер світла */
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    height: 0; width: 0;
-}
-
-body.light-theme .btn-main:hover,
-body.light-theme .menu-item:hover {
-    color: #212121; /* При наведенні текст стає темним */
-    box-shadow: var(--elevation-3);
-}
-
-body.light-theme .btn-main:hover::before,
-body.light-theme .menu-item:hover::before {
-    height: 100%; width: 100%;
-}
-
-
 
 /* --- Стилі для ТЕМНОЇ теми --- */
 body.dark-theme .btn-main,
@@ -222,29 +192,27 @@ body.dark-theme .menu-item {
     color: #e8e8e8;
 }
 
-body.dark-theme .btn-main::before,
-body.dark-theme .menu-item::before {
-    background-color: #e8e8e8;
-    top: 0; left: 0;
-    height: 100%; width: 0;
-}
-
-body.dark-theme .btn-main:hover,
-body.dark-theme .menu-item:hover {
-    color: #212121;
-    box-shadow: var(--elevation-3);
-}
-
-body.dark-theme .btn-main:hover::before,
-body.dark-theme .menu-item:hover::before {
-    width: 100%;
-}
-
 /* --- Специфічні налаштування для menu-item --- */
 .menu-item {
     justify-content: space-between;
 }
 
+/* --- Анімація Ripple Effect --- */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4); /* Напівпрозора біла хвиля */
+    transform: scale(0);
+    animation: ripple-effect 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
 
 
 /* --- Cards --- */
