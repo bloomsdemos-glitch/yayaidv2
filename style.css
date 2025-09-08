@@ -780,18 +780,7 @@ h3 {
   left: 42px;
   background-color: var(--moon-color); /* Місяць */
 }
-/* === СТИЛІ ДЛЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
 
-/* Збільшуємо відстань між кнопками */
-#home-screen .button-group {
-    gap: 25px; 
-}
-
-/* Вирівнюємо кнопки по ширині і контент всередині */
-#home-screen .btn-main {
-    min-width: 220px; /* Задаємо мінімальну ширину для обох кнопок */
-    justify-content: flex-start; /* Вирівнюємо контент (іконка + текст) по лівому краю */
-}
 /* === АЛЬТЕРНАТИВА: ТЕКСТУРНИЙ ФОН === */
 #home-screen::before {
     content: "";
@@ -803,4 +792,73 @@ h3 {
     background-image: url('assets/noise.png'); /* Потрібно завантажити картинку 'noise.png' в папку assets */
     opacity: 0.04; /* Робимо текстуру ДУЖЕ прозорою */
     pointer-events: none; /* Щоб не заважала клікам */
+}
+/* === ПОЗИЦІОНУВАННЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
+
+#home-screen main {
+    justify-content: flex-end; /* Опускаємо весь контент вниз */
+    padding-bottom: 40px; /* Додаємо відступ від нижнього краю */
+}
+
+#home-screen .btn-main {
+    justify-content: center; /* Повертаємо центрування тексту всередині */
+    padding: 14px 20px; /* Робимо кнопки трохи меншими */
+}
+/* === НОВИЙ ДИЗАЙН КНОПОК НА ГОЛОВНОМУ ЕКРАНІ (Outline + Solid) === */
+
+/* Загальний стиль для обох кнопок */
+#home-screen .btn-main {
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: none; /* Прибираємо uppercase, щоб було як у тебе в дизайні */
+    transition: all 0.3s;
+    min-width: 240px; /* Однаковий розмір */
+    justify-content: center; /* Центруємо текст */
+}
+
+/* --- СТИЛІ ДЛЯ СВІТЛОЇ ТЕМИ --- */
+body.light-theme #home-screen .btn-main {
+    border: 2px solid #000;
+    background: #fff;
+    color: #000;
+}
+
+body.light-theme #home-screen .btn-main.btn-solid {
+    background: #000;
+    color: #fff;
+}
+
+/* Ховери для світлої теми */
+body.light-theme #home-screen .btn-main:hover {
+    background: #000;
+    color: #fff;
+}
+
+body.light-theme #home-screen .btn-main.btn-solid:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* --- СТИЛІ ДЛЯ ТЕМНОЇ ТЕМИ --- */
+body.dark-theme #home-screen .btn-main {
+    border: 2px solid #fff;
+    background: #000;
+    color: #fff;
+}
+
+body.dark-theme #home-screen .btn-main.btn-solid {
+    background: #fff;
+    color: #000;
+}
+
+/* Ховери для темної теми */
+body.dark-theme #home-screen .btn-main:hover {
+    background: #fff;
+    color: #000;
+}
+
+body.dark-theme #home-screen .btn-main.btn-solid:hover {
+    background: #000;
+    color: #fff;
 }
