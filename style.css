@@ -1019,3 +1019,15 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
   /* Дозволяємо цьому елементу зайняти весь вільний простір по вертикалі */
   flex-grow: 1;
 }
+/* === Фінальне центрування для головного екрану === */
+
+#home-screen {
+    display: flex;
+    flex-direction: column;
+}
+
+#home-screen > main {
+    flex-grow: 1; /* Дозволяє main зайняти весь доступний простір */
+    display: flex;
+    flex-direction: column;
+}
