@@ -1004,20 +1004,27 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     transition: font-size 0.3s ease; /* Додаємо плавність */
 }
 
-/* === ФІНАЛЬНИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
+/* === ЗАЛІЗОБЕТОННИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
 
 #home-screen {
-  /* Говоримо екрану бути гнучкою колонкою */
-  display: flex;
-  flex-direction: column;
+  /* Робимо екран контекстом для позиціонування */
+  position: relative;
+  /* Прибираємо flex, щоб нічого не конфліктувало */
+  display: block;
 }
 
-#home-screen .spacer {
-  /* Говоримо розпірці зайняти весь вільний простір */
-  flex-grow: 1;
+#home-screen .route-container {
+  /* Приклеюємо анімацію до верху */
+  position: absolute;
+  top: 5%; /* Можна регулювати */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-#home-screen .button-group {
-    /* Додаємо відступ знизу до кнопок, щоб вони не прилипали */
-    margin-bottom: 20px;
+#home-screen .home-bottom-content {
+  /* Приклеюємо весь нижній блок до низу */
+  position: absolute;
+  bottom: 20px; /* Відступ від самого низу */
+  width: 100%;
+  left: 0;
 }
