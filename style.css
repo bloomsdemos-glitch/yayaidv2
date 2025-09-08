@@ -41,16 +41,17 @@
 
 /* === СИСТЕМА ПЕРЕМИКАННЯ ТЕМ === */
 body.dark-theme {
-    --md-background: #121212;
-    --md-surface: #1E1E1E;
-    --md-surface-variant: #2C2C2C;
+    --md-background: #121212; /* Дуже темний, майже чорний фон */
+    --md-surface: #1e1e1e; /* Темніший колір для карток та елементів */
+    --md-surface-variant: #3a3a3a; /* Ще темніший відтінок для ховерів */
     --md-on-primary: #FFFFFF;
-    --md-on-background: #FFFFFF;
-    --md-on-surface: #FFFFFF;
-    --md-on-surface-variant: #AAAAAA;
-    --md-outline: #737373;
-    --shadow-color: rgba(0,0,0,0.4);
+    --md-on-background: #FFFFFF; /* Білий текст на темному фоні */
+    --md-on-surface: #FFFFFF; /* Білий текст на темних елементах */
+    --md-on-surface-variant: #bbbbbb; /* Світліший сірий для додаткового тексту */
+    --md-outline: #4d4d4d; /* Світла сіра рамка для контрасту */
+    --shadow-color: rgba(0,0,0,0.4); /* Більш виразні тіні на темному */
 }
+
 
 body.light-theme {
     --md-background: #F5F5F7; /* <<== Чистий, ледь холодний "технологічний" білий */
@@ -188,9 +189,11 @@ body.light-theme .menu-item {
 /* --- Стилі для ТЕМНОЇ теми --- */
 body.dark-theme .btn-main,
 body.dark-theme .menu-item {
-    background: #212121;
-    color: #e8e8e8;
+    background: #e0e0e0; /* <<== Змінили фон на світлий */
+    color: #212121;      /* <<== Змінили текст на темний */
+    border-color: #e0e0e0; /* Рамка теж світла */
 }
+
 
 /* --- Специфічні налаштування для menu-item --- */
 .menu-item {
