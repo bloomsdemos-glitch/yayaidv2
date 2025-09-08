@@ -272,3 +272,29 @@ if (body.classList.contains('dark-theme')) {
 
 // Додаємо обробник події
 themeCheckbox?.addEventListener('change', switchTheme);
+// === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
+function createRipple(event) {
+    const button = event.currentTarget;
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+
+    // Видаляємо старі "хвилі", якщо вони є
+    const existingRipple = button.getElementsByClassName("ripple")[0];
+    if (existingRipple) {
+        existingRipple.remove();
+    }
+    
+    // Налаштовуємо і додаємо нову
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${event.clientX - (button.getBoundingClientRect().left + radius)}px`;
+    circle.style.top = `${event.clientY - (button.getBoundingClientRect().top + radius)}px`;
+    circle.classList.add("ripple");
+    
+    button.appendChild(circle);
+}
+
+const buttonsWithRipple = document.querySelectorAll(".btn-main, .menu-item");
+buttonsWithRipple.forEach(button => {
+    button.addEventListener("click", createRipple);
+});
