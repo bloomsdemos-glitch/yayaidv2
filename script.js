@@ -297,4 +297,38 @@ function createRipple(event) {
 const buttonsWithRipple = document.querySelectorAll(".btn-main, .menu-item");
 buttonsWithRipple.forEach(button => {
     button.addEventListener("click", createRipple);
+
+    // === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
+    const pin1 = document.getElementById('pin1');
+    const pin2 = document.getElementById('pin2');
+    const pathDots = document.querySelector('.path-dots');
+
+    // Функція, яка міняє іконки місцями
+    function swapPinIcons() {
+        // Перевіряємо, чи є у першого піна клас "крапки"
+        const isPin1Dot = pin1.classList.contains('fa-circle-dot');
+
+        if (isPin1Dot) {
+            // Якщо так, міняємо його на повний пін, а другий - на крапку
+            pin1.classList.remove('fa-circle-dot');
+            pin1.classList.add('fa-location-dot');
+            
+            pin2.classList.remove('fa-location-dot');
+            pin2.classList.add('fa-circle-dot');
+        } else {
+            // Якщо ні, робимо все навпаки
+            pin1.classList.remove('fa-location-dot');
+            pin1.classList.add('fa-circle-dot');
+
+            pin2.classList.remove('fa-circle-dot');
+            pin2.classList.add('fa-location-dot');
+        }
+    }
+
+    // "Слухаємо" анімацію доріжки. Коли вона закінчує одне коло (animationiteration),
+    // викликаємо нашу функцію
+    if (pathDots) {
+        pathDots.addEventListener('animationiteration', swapPinIcons);
+    }
+
 });
