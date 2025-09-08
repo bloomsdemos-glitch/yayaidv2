@@ -16,20 +16,29 @@
 
     <div id="app-container">
 
-        <!-- Home screen -->
-        <div id="home-screen" class="screen active">
-            <main class="content-center">
-                <h1 class="logo">яЇду 🚕</h1>
-                <div class="button-group">
-                    <button id="show-driver-login" class="btn-main">
-                        <i class="fa-solid fa-car-side"></i> Я водій
-                    </button>
-                    <button id="show-passenger-login" class="btn-main">
-                        <i class="fa-solid fa-user"></i> Я пасажир
-                    </button>
-                </div>
-            </main>
-                </main>
+<div id="home-screen" class="screen active">
+    <main class="content-center">
+        
+        <div class="route-animation">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                <path d="M20,30 C40,10 60,50 80,30" stroke-linecap="round" stroke-dasharray="4 8" class="route-path"></path>
+                
+                <path d="M20,30 C10,15 30,15 20,30 Z M20,22.5 A2.5,2.5 0 0,1 17.5,20 A2.5,2.5 0 0,1 20,17.5 A2.5,2.5 0 0,1 22.5,20 A2.5,2.5 0 0,1 20,22.5 Z" class="route-pin" id="pin-start"></path>
+                
+                <path d="M80,30 C70,15 90,15 80,30 Z M80,22.5 A2.5,2.5 0 0,1 77.5,20 A2.5,2.5 0 0,1 80,17.5 A2.5,2.5 0 0,1 82.5,20 A2.5,2.5 0 0,1 80,22.5 Z" class="route-pin" id="pin-end"></path>
+            </svg>
+        </div>
+
+        <h1 class="logo">яЇду 🚕</h1>
+        <div class="button-group">
+            <button id="show-driver-login" class="btn-main">
+                <i class="fa-solid fa-car-side"></i> Я водій
+            </button>
+            <button id="show-passenger-login" class="btn-main">
+                <i class="fa-solid fa-user"></i> Я пасажир
+            </button>
+        </div>
+    </main>
 
     <div id="theme-toggle" class="toggle-wrapper">
       <input class="toggle-checkbox" type="checkbox">
@@ -44,10 +53,6 @@
     </footer>
 </div>
 
-            <footer>
-                <p>яЇду: Валки © 2025</p>
-            </footer>
-        </div>
 
         <!-- Login driver -->
         <div id="login-screen-driver" class="screen hidden">
