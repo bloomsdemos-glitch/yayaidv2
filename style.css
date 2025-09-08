@@ -1003,4 +1003,9 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     40%  { color: var(--md-outline); transform: scale(1); }
     100% { color: var(--md-outline); }
 }
+/* --- Робимо іконку-крапку значно меншою --- */
+.pin.fa-circle-dot {
+    font-size: 14px; /* <--- Можеш погратись з цим значенням */
+    transition: font-size 0.3s ease; /* Додаємо плавність */
+}
 
