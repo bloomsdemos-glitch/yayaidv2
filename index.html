@@ -19,23 +19,24 @@
 <div id="home-screen" class="screen active">
     <main class="content-center">
         
-        <div class="route-animation">
-    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-        <path d="M20,20 C30,5 70,60 80,40" class="route-path"></path>
+        <!-- ANIMATED ROUTE (v5.0 - Font Awesome Edition) -->
+        <div class="route-container">
+            <!-- Піни -->
+            <i class="fa-solid fa-location-dot pin" id="pin1"></i>
+            <i class="fa-solid fa-location-dot pin" id="pin2"></i>
         
-        <g class="route-pin" id="pin-start">
-            <path d="M20 20 C 10 5, 30 5, 20 20 Z"></path>
-            <circle cx="20" cy="12.5" r="3.5" class="pin-inner-circle"></circle>
-        </g>
-        
-        <g class="route-pin" id="pin-end">
-            <path d="M80 40 C 70 25, 90 25, 80 40 Z"></path>
-            <circle cx="80" cy="32.5" r="3.5" class="pin-inner-circle"></circle>
-        </g>
-    </svg>
-</div>
-
-
+            <!-- Доріжка з точок -->
+            <div class="path-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
 
         <h1 class="logo">яЇду 🚕</h1>
         <div class="button-group">
@@ -60,6 +61,7 @@
         <p>яЇду: Валки © 2025</p>
     </footer>
 </div>
+
 
 
         <!-- Login driver -->
