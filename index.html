@@ -1,42 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>яЇду: Валки</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body class="light-theme">
+
+    <div id="app-container">
+
+        <!-- Home screen -->
         <div id="home-screen" class="screen active">
-            <main>
-    <div class="hero-section">
-        <h1 class="logo">яЇду 🚕</h1>
-        <div class="route-animation">
-            <svg viewBox="0 0 100 50" preserveAspectRatio="xMidYMid meet">
-                <path class="route-path" d="M15,25 C40,5 60,45 85,25" />
-                <g class="pin" transform="translate(15, 25)">
-                    <path d="M0-10C-5.52,0-10,4.48-10,10C-10,16.63,0,25,0,25S10,16.63,10,10C10,4.48,5.52,0,0-10z M0-2.5c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5S2.76-2.5,0-2.5z" />
-                </g>
-                <g class="pin" transform="translate(85, 25)">
-                     <path d="M0-10C-5.52,0-10,4.48-10,10C-10,16.63,0,25,0,25S10,16.63,10,10C10,4.48,5.52,0,0-10z M0-2.5c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5S2.76-2.5,0-2.5z" />
-                </g>
-            </svg>
+            <main class="content-center">
+                <h1 class="logo">яЇду 🚕</h1>
+                <div class="button-group">
+                    <button id="show-driver-login" class="btn-main">
+                        <i class="fa-solid fa-car-side"></i> Я водій
+                    </button>
+                    <button id="show-passenger-login" class="btn-main">
+                        <i class="fa-solid fa-user"></i> Я пасажир
+                    </button>
+                </div>
+            </main>
+                </main>
+
+    <div id="theme-toggle" class="toggle-wrapper">
+      <input class="toggle-checkbox" type="checkbox">
+      <div class="toggle-container">
+        <div class="toggle-button">
         </div>
+      </div>
     </div>
 
-    <div class="button-group">
-        <button id="show-driver-login" class="btn-main">
-            <i class="fa-solid fa-car-side"></i> Я водій
-        </button>
-        <button id="show-passenger-login" class="btn-main btn-solid">
-            <i class="fa-solid fa-user"></i> Я пасажир
-        </button>
-    </div>
-</main>
-
-<div id="theme-toggle" class="toggle-wrapper">
-  <input class="toggle-checkbox" type="checkbox">
-  <div class="toggle-container">
-    <div class="toggle-button">
-    </div>
-  </div>
+    <footer>
+        <p>яЇду: Валки © 2025</p>
+    </footer>
 </div>
 
-<footer>
-    <p>яЇду: Валки © 2025</p>
-</footer>
+            <footer>
+                <p>яЇду: Валки © 2025</p>
+            </footer>
+        </div>
 
+        <!-- Login driver -->
+        <div id="login-screen-driver" class="screen hidden">
+            <header>
+                <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Вхід для водія</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="content-center">
+                <button class="btn-telegram-login">
+                    <i class="fa-brands fa-telegram"></i> Увійти через Telegram
+                </button>
+            </main>
+        </div>
+
+        <!-- Login passenger -->
+        <div id="login-screen-passenger" class="screen hidden">
+            <header>
+                <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Вхід для пасажира</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="content-center">
+                <button class="btn-telegram-login">
+                    <i class="fa-brands fa-telegram"></i> Увійти через Telegram
+                </button>
+            </main>
+        </div>
 
         <!-- Driver dashboard -->
         <div id="driver-dashboard" class="screen hidden">
