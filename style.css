@@ -1028,3 +1028,7 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
   width: 100%;
   left: 0;
 }
+/* Фікс для розпірки на головному екрані */
+.home-spacer {
+    flex-grow: 1;
+}
