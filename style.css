@@ -1004,30 +1004,20 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     transition: font-size 0.3s ease; /* Додаємо плавність */
 }
 
-/* === РОЗТАШУВАННЯ ЕЛЕМЕНТІВ НА ГОЛОВНОМУ ЕКРАНІ (v.Final) === */
-
-#home-screen main {
-  /* Вказуємо, що це гнучкий контейнер, орієнтований в колонку */
-  display: flex;
-  flex-direction: column;
-  
-  /* Додаємо відступ знизу, щоб підняти кнопки */
-  padding-bottom: 60px; 
-}
-
-.spacer {
-  /* Дозволяємо цьому елементу зайняти весь вільний простір по вертикалі */
-  flex-grow: 1;
-}
-/* === Фінальне центрування для головного екрану === */
+/* === ФІНАЛЬНИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
 
 #home-screen {
-    display: flex;
-    flex-direction: column;
+  /* Говоримо екрану бути гнучкою колонкою */
+  display: flex;
+  flex-direction: column;
 }
 
-#home-screen > main {
-    flex-grow: 1; /* Дозволяє main зайняти весь доступний простір */
-    display: flex;
-    flex-direction: column;
+#home-screen .spacer {
+  /* Говоримо розпірці зайняти весь вільний простір */
+  flex-grow: 1;
+}
+
+#home-screen .button-group {
+    /* Додаємо відступ знизу до кнопок, щоб вони не прилипали */
+    margin-bottom: 20px;
 }
