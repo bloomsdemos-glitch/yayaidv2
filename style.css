@@ -205,3 +205,40 @@ body.dark-theme .menu-item { background: var(--md-surface); color: var(--md-on-s
     margin-top: auto; /* <<== Притискає футер і перемикач до низу */
     padding-bottom: 20px;
 }
+/* === ФІНАЛЬНЕ ПОЗИЦІОНУВАННЯ НА ГОЛОВНОМУ ЕКРАНІ === */
+#home-screen {
+    /* Дозволяємо flex-дітям рости і займати весь простір */
+    display: flex;
+    flex-direction: column;
+}
+
+#home-screen > main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1; /* Змушуємо main розтягнутись на весь доступний простір */
+    justify-content: center; /* Центруємо весь вміст по вертикалі */
+}
+
+.hero-section {
+    text-align: center;
+}
+
+#home-screen .button-group {
+    margin-top: 40px; /* Відстань між анімацією і кнопками */
+}
+
+#home-screen .route-animation {
+    margin-top: 30px; /* Відстань між логотипом і анімацією */
+    margin-bottom: 10px;
+}
+
+/* Притискаємо футер і перемикач до низу */
+#home-screen #theme-toggle {
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+#home-screen footer {
+    padding-bottom: 20px;
+}
