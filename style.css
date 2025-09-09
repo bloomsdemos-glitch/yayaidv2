@@ -1034,26 +1034,43 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     margin-left: 5px;
 }
 /* === ФІНАЛЬНИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
-
 #home-screen {
-    /* Це вже є в класі .screen, але для надійності вкажемо ще раз */
     display: flex;
     flex-direction: column;
-    /* Вирівнюємо все по центру горизонтально */
-    align-items: center; 
+    align-items: center;
+    min-height: 100vh; /* Важливо для футера в низу */
 }
 
+/* ТЕПЕР МОЖЕТЕ КЕРУВАТИ КОЖНИМ ЕЛЕМЕНТОМ ОКРЕМО: */
+
+/* 1. Анімація маршруту */
+#home-screen .route-container {
+    margin-top: 8vh; /* <-- Змінюйте відступ від верху */
+}
+
+/* 2. Лого */
+#home-screen .home-logo {
+    margin-top: 2vh;    /* <-- Відступ від анімації */
+    margin-bottom: 1vh; /* <-- Відступ до кнопок */
+}
+
+/* 3. Розпірка - заповнює весь вільний простір */
 .home-spacer {
-    /* Наказуємо розпірці зайняти весь вільний простір */
     flex-grow: 1;
 }
 
-/* І тепер просто додаємо відступи для краси */
-#home-screen .route-container {
-    margin-top: 10vh; /* Відступ анімації від верху */
+/* 4. Кнопки */
+#home-screen .button-group {
+    margin-bottom: 2vh; /* <-- Відступ до тогглера */
 }
 
-#home-screen .home-bottom-content {
-    padding-bottom: 5vh; /* Відступ нижнього блоку від низу */
+/* 5. Тогглер теми */
+#home-screen .toggle-wrapper {
+    margin-bottom: 3vh; /* <-- Відступ до футера */
 }
 
+/* 6. Футер - завжди в самому низу */
+.home-footer {
+    margin-top: auto; /* Притискає до низу */
+    padding-bottom: 2vh; /* Відступ від краю екрану */
+}
