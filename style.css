@@ -1045,12 +1045,12 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 
 /* 1. Анімація маршруту */
 #home-screen .route-container {
-    margin-top: 8vh; /* <-- Змінюйте відступ від верху */
+    margin-top: 21vh; /* <-- Змінюйте відступ від верху */
 }
 
 /* 2. Лого */
 #home-screen .home-logo {
-    margin-top: 2vh;    /* <-- Відступ від анімації */
+    margin-top: 17vh;    /* <-- Відступ від анімації */
     margin-bottom: 1vh; /* <-- Відступ до кнопок */
 }
 
