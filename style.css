@@ -1014,29 +1014,22 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
   display: block;
 }
 
-#home-screen .route-container {
-  /* Приклеюємо анімацію до верху */
-  position: absolute;
-  top: 10%; /* Можна регулювати */
-  left: 50%;
-  transform: translateX(-50%);
+
+#home-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
-/* Нове незалежне позиціонування для лого і кнопок */
-
 .home-logo {
-  position: absolute;
-  bottom: 160px; /* <--- Грайся з цією цифрою для ЛОГО */
-  width: 100%;
-  left: 0;
-  margin-bottom: 0 !important;
-  z-index: 2; /* Скидаємо старий відступ */
+  position: static; /* Прибираємо absolute */
+  margin-bottom: 40px;
+  z-index: auto;
 }
 
 .home-actions {
-  position: absolute;
-  bottom: 40px;   /* <--- А з цією - для КНОПОК */
+  position: static; /* Прибираємо absolute */
   width: 100%;
-  left: 0;
 }
-
