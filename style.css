@@ -1029,7 +1029,7 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
   bottom: 160px; /* <--- Грайся з цією цифрою для ЛОГО */
   width: 100%;
   left: 0;
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
   z-index: 2; /* Скидаємо старий відступ */
 }
 
