@@ -18,6 +18,7 @@
 
       <div id="home-screen" class="screen active">
 
+    <!-- 1. Анімація маршруту - окремо -->
     <div class="route-container">
         <i class="fa-solid fa-circle-dot pin" id="pin1"></i>
         <i class="fa-solid fa-location-dot pin" id="pin2"></i>
@@ -26,38 +27,45 @@
         </div>
     </div>
 
+    <!-- 2. Лого - окремо -->
+    <h1 class="logo home-logo">
+        яЇду 
+        <lottie-player 
+            src="assets/taxi-animation.json"  
+            background="transparent"  
+            speed="1"
+            class="logo-taxi"
+            loop  
+            autoplay>
+        </lottie-player>
+    </h1>
+
+    <!-- 3. Розпірка для заповнення простору -->
     <div class="home-spacer"></div>
 
-    <div class="home-bottom-content">
-        <h1 class="logo home-logo">
-            яЇду 
-            <lottie-player 
-                src="assets/taxi-animation.json"  
-                background="transparent"  
-                speed="1"
-                class="logo-taxi"
-                loop  
-                autoplay>
-            </lottie-player>
-        </h1>
-        <div class="button-group">
-            <button id="show-driver-login" class="btn-main">
-                <i class="fa-solid fa-car-side"></i> Я водій
-            </button>
-            <button id="show-passenger-login" class="btn-main">
-                <i class="fa-solid fa-user"></i> Я пасажир
-            </button>
-        </div>
-        <div id="theme-toggle" class="toggle-wrapper">
-          <input class="toggle-checkbox" type="checkbox">
-          <div class="toggle-container"><div class="toggle-button"></div></div>
-        </div>
-        <footer>
-            <p>яЇду: Валки © 2025</p>
-        </footer>
+    <!-- 4. Кнопки - окремо -->
+    <div class="button-group">
+        <button id="show-driver-login" class="btn-main">
+            <i class="fa-solid fa-car-side"></i> Я водій
+        </button>
+        <button id="show-passenger-login" class="btn-main">
+            <i class="fa-solid fa-user"></i> Я пасажир
+        </button>
     </div>
-    
+
+    <!-- 5. Тогглер теми - окремо -->
+    <div id="theme-toggle" class="toggle-wrapper">
+        <input class="toggle-checkbox" type="checkbox">
+        <div class="toggle-container"><div class="toggle-button"></div></div>
+    </div>
+
+    <!-- 6. Футер - окремо в самий низ -->
+    <footer class="home-footer">
+        <p>яЇду: Валки © 2025</p>
+    </footer>
+
 </div>
+    
 
         </div> <!-- <-- ОСЬ ТУТ ГОЛОВНА ПРАВКА: головний екран закінчився -->
 
