@@ -52,7 +52,6 @@ body.dark-theme {
     --shadow-color: rgba(0,0,0,0.4); /* Більш виразні тіні на темному */
 }
 
-
 body.light-theme {
     --md-background: #F5F5F7; /* <<== Чистий, ледь холодний "технологічний" білий */
     --md-surface: #FFFFFF; /* Картки і елементи будуть чисто білими для контрасту */
@@ -64,7 +63,6 @@ body.light-theme {
     --md-outline: #E0E0E0; /* Ледь помітна сіра рамка */
     --shadow-color: rgba(0,0,0,0.08); /* Робимо тіні значно світлішими і м'якшими */
 }
-
 
 /* === БАЗОВІ СТИЛІ === */
 * {
@@ -91,7 +89,6 @@ body {
     position: relative;
     background-color: var(--md-background);
 }
-
 
 /* === SCREEN TRANSITIONS === */
 .screen {
@@ -148,6 +145,7 @@ footer {
     font-size: 14px;
     font-weight: var(--font-weight-regular);
 }
+
 /* === MATERIAL DESIGN COMPONENTS === */
 
 /* === 5. КАСТОМНІ КНОПКИ (РЕДИЗАЙН v4: RIPPLE EFFECT) === */
@@ -177,7 +175,6 @@ footer {
     box-shadow: var(--elevation-1);
 }
 
-
 /* --- Стилі для СВІТЛОЇ теми --- */
 body.light-theme .btn-main,
 body.light-theme .menu-item {
@@ -193,7 +190,6 @@ body.dark-theme .menu-item {
     color: #212121;      /* <<== Змінили текст на темний */
     border-color: #e0e0e0; /* Рамка теж світла */
 }
-
 
 /* --- Специфічні налаштування для menu-item --- */
 .menu-item {
@@ -216,7 +212,6 @@ body.dark-theme .menu-item {
     opacity: 0;
   }
 }
-
 
 /* --- Cards --- */
 .order-card, .driver-card, .details-card {
@@ -310,7 +305,6 @@ body.dark-theme .menu-item {
     background-color: var(--md-success);
 }
 
-
 /* --- Status Dots --- */
 .status-dot {
     width: 8px;
@@ -385,7 +379,6 @@ h3 {
     align-items: center;
 }
 
-
 .driver-list, .order-list {
     list-style: none;
     width: 100%;
@@ -428,7 +421,6 @@ h3 {
     box-shadow: var(--elevation-4);
     transform: translateY(-1px);
 }
-
 
 .profile-badge {
     display: flex;
@@ -712,6 +704,7 @@ h3 {
 .btn-text:hover {
     background-color: rgba(25, 118, 210, 0.08);
 }
+
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
     --sun-color: #f3b519;
@@ -733,7 +726,6 @@ h3 {
   box-shadow: none;
   padding: 0;
 }
-
 
 .toggle-checkbox {
   appearance: none;
@@ -782,82 +774,6 @@ h3 {
   background-color: var(--moon-color); /* Місяць */
 }
 
-/* === АЛЬТЕРНАТИВА: ТЕКСТУРНИЙ ФОН === */
-#home-screen::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('assets/noise.png'); /* Потрібно завантажити картинку 'noise.png' в папку assets */
-    opacity: 0.04; /* Робимо текстуру ДУЖЕ прозорою */
-    pointer-events: none; /* Щоб не заважала клікам */
-}
-/* === ПОЗИЦІОНУВАННЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
-
-#home-screen .btn-main {
-    justify-content: center; /* Повертаємо центрування тексту всередині */
-    padding: 14px 20px; /* Робимо кнопки трохи меншими */
-}
-/* === НОВИЙ ДИЗАЙН КНОПОК НА ГОЛОВНОМУ ЕКРАНІ (Outline + Solid) === */
-
-/* Загальний стиль для обох кнопок */
-#home-screen .btn-main {
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    text-transform: none; /* Прибираємо uppercase, щоб було як у тебе в дизайні */
-    transition: all 0.3s;
-    min-width: 240px; /* Однаковий розмір */
-    justify-content: center; /* Центруємо текст */
-}
-
-/* --- СТИЛІ ДЛЯ СВІТЛОЇ ТЕМИ --- */
-body.light-theme #home-screen .btn-main {
-    border: 2px solid #000;
-    background: #fff;
-    color: #000;
-}
-
-body.light-theme #home-screen .btn-main.btn-solid {
-    background: #000;
-    color: #fff;
-}
-
-/* Ховери для світлої теми */
-body.light-theme #home-screen .btn-main:hover {
-    background: #000;
-    color: #fff;
-}
-
-body.light-theme #home-screen .btn-main.btn-solid:hover {
-    background: #fff;
-    color: #000;
-}
-
-/* --- СТИЛІ ДЛЯ ТЕМНОЇ ТЕМИ --- */
-body.dark-theme #home-screen .btn-main {
-    border: 2px solid #fff;
-    background: #000;
-    color: #fff;
-}
-
-body.dark-theme #home-screen .btn-main.btn-solid {
-    background: #fff;
-    color: #000;
-}
-
-/* Ховери для темної теми */
-body.dark-theme #home-screen .btn-main:hover {
-    background: #fff;
-    color: #000;
-}
-
-body.dark-theme #home-screen .btn-main.btn-solid:hover {
-    background: #000;
-    color: #fff;
-}
 /* === АНІМАЦІЯ МАРШРУТУ НА ГОЛОВНОМУ ЕКРАНІ (v4.0) === */
 
 .route-animation {
@@ -907,6 +823,7 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     from { transform: scale(1); transform-origin: center bottom; }
     to { transform: scale(1.2); transform-origin: center bottom; }
 }
+
 /* === АНІМАЦІЯ МАРШРУТУ (v5.0 - Font Awesome Edition) === */
 
 .route-container {
@@ -972,7 +889,6 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 .dot:nth-child(7) { top: 35px; left: 165px; }
 .dot:nth-child(8) { top: 25px; left: 175px; }
 
-
 /* ГОЛОВНИЙ ТРЮК: задаємо затримку анімації для кожної точки */
 .dot:nth-child(1) { animation-delay: 0s; }
 .dot:nth-child(2) { animation-delay: 0.1s; }
@@ -992,57 +908,15 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     }
 }
 
-
 @keyframes wave {
     0%   { color: var(--md-outline); }
     20%  { color: var(--md-on-background); transform: scale(1.5); }
     40%  { color: var(--md-outline); transform: scale(1); }
     100% { color: var(--md-outline); }
 }
+
 /* --- Робимо іконку-крапку значно меншою --- */
 .pin.fa-circle-dot {
     font-size: 14px; /* <--- Можеш погратись з цим значенням */
     transition: font-size 0.3s ease; /* Додаємо плавність */
-}
-
-#home-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 60px; /* <--- ОСЬ ТУТ РЕГУЛЮЙ ВІДСТУП */
-  box-sizing: border-box;
-  min-height: 100vh;
-}
-
-
-/* Створюємо відступи вручну */
-#home-screen .route-container {
-    margin-top: 10vh; /* Відступ зверху */
-    margin-bottom: 5vh; 
-}
-
-#home-screen .logo {
-    margin-bottom: 30px; 
-}
-
-#home-screen .button-group {
-    margin-bottom: 40px; /* Зменшив, бо тепер працюватиме */
-}
-
-#home-screen .home-actions {
-    margin-top: auto; /* Це штовхне footer в самий низ */
-}
-.home-logo {
-  font-size: 3rem;
-}
-.logo-taxi {
-    display: inline-block;
-    width: 1.3em; /* Розмір відносно тексту */
-    height: 1.3em;
-    vertical-align: -0.2em; /* Трохи опускаємо, щоб було по центру */
-    margin-left: 5px;
 }
