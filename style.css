@@ -1005,31 +1005,28 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     transition: font-size 0.3s ease; /* Додаємо плавність */
 }
 
-/* === ЗАЛІЗОБЕТОННИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
-
-#home-screen {
-  /* Робимо екран контекстом для позиціонування */
-  position: relative;
-  /* Прибираємо flex, щоб нічого не конфліктувало */
-  display: block;
-}
-
+/* === Просте налаштування відступів на головному екрані === */
 
 #home-screen {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center; /* <-- ГРУПУЄМО ВСЕ В ЦЕНТРІ */
   align-items: center;
-  position: relative;
+  padding: 20px;
+  box-sizing: border-box; 
 }
 
-.home-logo {
-  position: static; /* Прибираємо absolute */
-  margin-bottom: 40px;
-  z-index: auto;
+/* 1. ВІДСТУП ПІСЛЯ АНІМАЦІЇ */
+#home-screen .route-container {
+    margin-bottom: 5vh; 
 }
 
-.home-actions {
-  position: static; /* Прибираємо absolute */
-  width: 100%;
+/* 2. ВІДСТУП ПІСЛЯ ЛОГО */
+#home-screen .logo {
+    margin-bottom: 30px; 
+}
+
+/* 3. ВІДСТУП ПІСЛЯ КНОПОК */
+#home-screen .button-group {
+    margin-bottom: 40px; 
 }
