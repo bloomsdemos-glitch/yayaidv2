@@ -1008,12 +1008,16 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 #home-screen {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Замість center */
+  justify-content: flex-start;
   align-items: center;
-  padding: 20px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 80px; /* <--- ОСЬ ТУТ РЕГУЛЮЙ ВІДСТУП */
   box-sizing: border-box;
-  min-height: 100vh; /* Щоб екран займав всю висоту */
+  min-height: 100vh;
 }
+
 
 /* Створюємо відступи вручну */
 #home-screen .route-container {
