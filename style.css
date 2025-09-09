@@ -154,22 +154,22 @@ footer {
 
 /* --- Загальний "скелет" для всіх головних кнопок --- */
 .btn-main, .menu-item {
-    padding: 15px 25px;
-    border: 1px solid var(--md-outline);
-    border-radius: var(--md-radius-large); 
-    z-index: 1;
-    position: relative; /* ВАЖЛИВО для Ripple-ефекту */
-    font-weight: var(--font-weight-medium);
+    border-radius: 12px;
+    font-weight: 700;
     font-size: 16px;
-    box-shadow: var(--elevation-2);
-    transition: all 250ms;
-    overflow: hidden; /* ВАЖЛИВО для Ripple-ефекту */
+    text-transform: none;
+    transition: all 0.3s;
+    justify-content: center;
+    padding: 15px 25px; /* Залишив, щоб розмір був адекватним */
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
     cursor: pointer;
-    text-align: center;
     display: flex;
     align-items: center;
     gap: 12px;
 }
+
 
 /* --- Ефект при натисканні (:active) для мобільних --- */
 .btn-main:active, .menu-item:active {
@@ -177,22 +177,6 @@ footer {
     box-shadow: var(--elevation-1);
 }
 
-
-/* --- Стилі для СВІТЛОЇ теми --- */
-body.light-theme .btn-main,
-body.light-theme .menu-item {
-    background: #212121;
-    color: #e8e8e8;
-    border-color: #212121;
-}
-
-/* --- Стилі для ТЕМНОЇ теми --- */
-body.dark-theme .btn-main,
-body.dark-theme .menu-item {
-    background: #e0e0e0; /* <<== Змінили фон на світлий */
-    color: #212121;      /* <<== Змінили текст на темний */
-    border-color: #e0e0e0; /* Рамка теж світла */
-}
 
 
 /* --- Специфічні налаштування для menu-item --- */
@@ -800,64 +784,67 @@ h3 {
     justify-content: center; /* Повертаємо центрування тексту всередині */
     padding: 14px 20px; /* Робимо кнопки трохи меншими */
 }
-/* === НОВИЙ ДИЗАЙН КНОПОК НА ГОЛОВНОМУ ЕКРАНІ (Outline + Solid) === */
+/* === НОВИЙ ГЛОБАЛЬНИЙ ДИЗАЙН КНОПОК (Outline + Solid) === */
 
 /* Загальний стиль для обох кнопок */
-#home-screen .btn-main {
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 16px;
-    text-transform: none; /* Прибираємо uppercase, щоб було як у тебе в дизайні */
-    transition: all 0.3s;
-    min-width: 240px; /* Однаковий розмір */
-    justify-content: center; /* Центруємо текст */
+.btn-main, .menu-item {
+    min-width: 240px;
 }
 
 /* --- СТИЛІ ДЛЯ СВІТЛОЇ ТЕМИ --- */
-body.light-theme #home-screen .btn-main {
+body.light-theme .btn-main,
+body.light-theme .menu-item {
     border: 2px solid #000;
     background: #fff;
     color: #000;
 }
 
-body.light-theme #home-screen .btn-main.btn-solid {
+body.light-theme .btn-main.btn-solid,
+body.light-theme .menu-item.btn-solid {
     background: #000;
     color: #fff;
 }
 
 /* Ховери для світлої теми */
-body.light-theme #home-screen .btn-main:hover {
+body.light-theme .btn-main:hover,
+body.light-theme .menu-item:hover {
     background: #000;
     color: #fff;
 }
 
-body.light-theme #home-screen .btn-main.btn-solid:hover {
+body.light-theme .btn-main.btn-solid:hover,
+body.light-theme .menu-item.btn-solid:hover {
     background: #fff;
     color: #000;
 }
 
 /* --- СТИЛІ ДЛЯ ТЕМНОЇ ТЕМИ --- */
-body.dark-theme #home-screen .btn-main {
+body.dark-theme .btn-main,
+body.dark-theme .menu-item {
     border: 2px solid #fff;
     background: #000;
     color: #fff;
 }
 
-body.dark-theme #home-screen .btn-main.btn-solid {
+body.dark-theme .btn-main.btn-solid,
+body.dark-theme .menu-item.btn-solid {
     background: #fff;
     color: #000;
 }
 
 /* Ховери для темної теми */
-body.dark-theme #home-screen .btn-main:hover {
+body.dark-theme .btn-main:hover,
+body.dark-theme .menu-item:hover {
     background: #fff;
     color: #000;
 }
 
-body.dark-theme #home-screen .btn-main.btn-solid:hover {
+body.dark-theme .btn-main.btn-solid:hover,
+body.dark-theme .menu-item.btn-solid:hover {
     background: #000;
     color: #fff;
 }
+
 /* === АНІМАЦІЯ МАРШРУТУ НА ГОЛОВНОМУ ЕКРАНІ (v4.0) === */
 
 .route-animation {
