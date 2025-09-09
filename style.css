@@ -729,9 +729,11 @@ h3 {
   align-items: center;
   position: relative;
   border-radius: 50px;
-  background-color: var(--md-surface-variant);
-  padding: 5px;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
 }
+
 
 .toggle-checkbox {
   appearance: none;
