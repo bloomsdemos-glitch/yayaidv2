@@ -1026,7 +1026,7 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 
 .home-logo {
   position: absolute;
-  bottom: 220px; /* <--- Грайся з цією цифрою для ЛОГО */
+  bottom: 160px; /* <--- Грайся з цією цифрою для ЛОГО */
   width: 100%;
   left: 0;
   margin-bottom: 0;
