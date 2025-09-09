@@ -1022,14 +1022,20 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
   transform: translateX(-50%);
 }
 
-#home-screen .home-bottom-content {
-  /* Приклеюємо весь нижній блок до низу */
+/* Нове незалежне позиціонування для лого і кнопок */
+
+.home-logo {
   position: absolute;
-  bottom: 20px; /* Відступ від самого низу */
+  bottom: 220px; /* <--- Грайся з цією цифрою для ЛОГО */
+  width: 100%;
+  left: 0;
+  margin-bottom: 0; /* Скидаємо старий відступ */
+}
+
+.home-actions {
+  position: absolute;
+  bottom: 40px;   /* <--- А з цією - для КНОПОК */
   width: 100%;
   left: 0;
 }
-/* Фікс для розпірки на головному екрані */
-.home-spacer {
-    flex-grow: 1;
-}
+
