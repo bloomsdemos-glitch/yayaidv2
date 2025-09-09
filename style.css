@@ -1005,28 +1005,30 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     transition: font-size 0.3s ease; /* Додаємо плавність */
 }
 
-/* === Просте налаштування відступів на головному екрані === */
-
 #home-screen {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* <-- ГРУПУЄМО ВСЕ В ЦЕНТРІ */
+  justify-content: flex-start; /* Замість center */
   align-items: center;
   padding: 20px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  min-height: 100vh; /* Щоб екран займав всю висоту */
 }
 
-/* 1. ВІДСТУП ПІСЛЯ АНІМАЦІЇ */
+/* Створюємо відступи вручну */
 #home-screen .route-container {
+    margin-top: 10vh; /* Відступ зверху */
     margin-bottom: 5vh; 
 }
 
-/* 2. ВІДСТУП ПІСЛЯ ЛОГО */
 #home-screen .logo {
     margin-bottom: 30px; 
 }
 
-/* 3. ВІДСТУП ПІСЛЯ КНОПОК */
 #home-screen .button-group {
-    margin-bottom: 90px; 
+    margin-bottom: 40px; /* Зменшив, бо тепер працюватиме */
+}
+
+#home-screen .home-actions {
+    margin-top: auto; /* Це штовхне footer в самий низ */
 }
