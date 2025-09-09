@@ -1016,7 +1016,7 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 #home-screen .route-container {
   /* Приклеюємо анімацію до верху */
   position: absolute;
-  top: 40%; /* Можна регулювати */
+  top: 30%; /* Можна регулювати */
   left: 50%;
   transform: translateX(-50%);
 }
