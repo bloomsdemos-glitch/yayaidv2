@@ -1049,3 +1049,27 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     vertical-align: -0.2em; /* Трохи опускаємо, щоб було по центру */
     margin-left: 5px;
 }
+/* === ФІНАЛЬНИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
+
+#home-screen {
+    /* Це вже є в класі .screen, але для надійності вкажемо ще раз */
+    display: flex;
+    flex-direction: column;
+    /* Вирівнюємо все по центру горизонтально */
+    align-items: center; 
+}
+
+.home-spacer {
+    /* Наказуємо розпірці зайняти весь вільний простір */
+    flex-grow: 1;
+}
+
+/* І тепер просто додаємо відступи для краси */
+#home-screen .route-container {
+    margin-top: 10vh; /* Відступ анімації від верху */
+}
+
+#home-screen .home-bottom-content {
+    padding-bottom: 5vh; /* Відступ нижнього блоку від низу */
+}
+
