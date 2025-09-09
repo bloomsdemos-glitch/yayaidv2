@@ -1032,3 +1032,6 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 #home-screen .home-actions {
     margin-top: auto; /* Це штовхне footer в самий низ */
 }
+.home-logo {
+  font-size: 3rem;
+}
