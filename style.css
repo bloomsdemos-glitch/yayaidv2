@@ -1061,3 +1061,29 @@ body.dark-theme .menu-item.btn-solid:hover {
     margin-top: auto; /* Притискає до низу */
     padding-bottom: 2vh; /* Відступ від краю екрану */
 }
+/* === РОБИМО ДИЗАЙН ВНУТРІШНІХ СТОРІНОК БІЛЬШ "ДОРОСЛИМ" === */
+
+/* Ми не чіпаємо #home-screen, а змінюємо всі інші екрани */
+.screen:not(#home-screen) .menu-item {
+    
+    /* 1. Робимо рамку менш контрастною (не чисто чорною, а темно-сірою) */
+    border-color: #333; /* Для світлої теми */
+    
+    /* 2. Робимо шрифт трохи тоншим і менш "кричущим" */
+    font-weight: 500; /* Замість 700 */
+
+    /* 3. Вирівнюємо контент по лівому краю, а не по центру */
+    justify-content: flex-start;
+}
+
+/* 4. Робимо іконки трохи меншими і акуратнішими */
+.screen:not(#home-screen) .menu-item i {
+    font-size: 18px;
+    width: 24px; /* Задаємо фіксовану ширину для іконки */
+    text-align: center;
+}
+
+/* --- Правки для темної теми --- */
+body.dark-theme .screen:not(#home-screen) .menu-item {
+    border-color: #ccc; /* Робимо рамку світло-сірою, а не чисто білою */
+}
