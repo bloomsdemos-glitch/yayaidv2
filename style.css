@@ -1035,3 +1035,10 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
 .home-logo {
   font-size: 3rem;
 }
+.logo-taxi {
+    display: inline-block;
+    width: 1.1em; /* Розмір відносно тексту */
+    height: 1.1em;
+    vertical-align: -0.1em; /* Трохи опускаємо, щоб було по центру */
+    margin-left: 5px;
+}
