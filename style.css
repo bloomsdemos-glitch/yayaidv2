@@ -1005,22 +1005,6 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
     transition: font-size 0.3s ease; /* Додаємо плавність */
 }
 
-/* === УЛЬТИМАТИВНИЙ ФІКС ПОЗИЦІОНУВАННЯ v2 === */
-
-#home-screen {
-  /* Робимо екран "полотном" для позиціонування */
-  position: relative;
-}
-
-#home-screen .route-container,
-#home-screen .home-logo,
-#home-screen .home-actions {
-  /* Розміщуємо всі три блоки відносно центру по горизонталі */
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%; /* Додаємо ширину для стабільності */
-}
 
 /* --- ТВОЇ РУЧКИ КЕРУВАННЯ --- */
 
