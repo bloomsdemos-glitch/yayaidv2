@@ -1029,7 +1029,8 @@ body.dark-theme #home-screen .btn-main.btn-solid:hover {
   bottom: 220px; /* <--- Грайся з цією цифрою для ЛОГО */
   width: 100%;
   left: 0;
-  margin-bottom: 0; /* Скидаємо старий відступ */
+  margin-bottom: 0;
+  z-index: 2; /* Скидаємо старий відступ */
 }
 
 .home-actions {
