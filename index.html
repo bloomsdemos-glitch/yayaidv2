@@ -134,7 +134,7 @@
                 <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
             </header>
             <main>
-                <nav class="main-menu">
+                               <nav class="main-menu">
                     <button class="menu-item" id="show-my-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
                         <span class="badge">1</span>
@@ -146,17 +146,19 @@
                         <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
                         <span class="badge online">5</span>
                     </button>
-                    
-                    <button class="menu-item">
-                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                    <button class="menu-item" id="show-passenger-valky-kharkiv-btn"> <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
                     </button>
-                    <button class="menu-item">
-                        <span><i class="fa-solid fa-star"></i> Мій профіль</span>
+                    <button class="menu-item" id="show-passenger-bus-schedule-btn"> <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
+                    </button>
+                    <button class="menu-item" id="show-passenger-profile-btn"> <span><i class="fa-solid fa-star"></i> Мій профіль</span>
+                    </button>
+                    <button class="menu-item" id="show-passenger-settings-btn"> <span><i class="fa-solid fa-gear"></i> Налаштування</span>
                     </button>
                     <button class="menu-item" id="show-help-btn">
                         <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
                     </button>                   
                 </nav>
+
             </main>
         </div>
 
@@ -555,6 +557,49 @@
                 <p><strong>🔍 Знайти водія</strong></p>
                 <h3>А шо з оплатою?</h3>
                 <p>Поки що всі розрахунки відбуваються напряму з водієм.</p>
+            </main>
+        </div>
+        <div id="passenger-valky-kharkiv-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Валки-Харків</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут буде форма для створення поїздки за маршрутом Валки-Харків.</p>
+            </main>
+        </div>
+
+        <div id="passenger-bus-schedule-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Розклад автобусів</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут буде актуальний розклад автобусів.</p>
+            </main>
+        </div>
+
+        <div id="passenger-profile-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Мій профіль</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут пасажир зможе побачити свій профіль так, як його бачать водії.</p>
+            </main>
+        </div>
+
+        <div id="passenger-settings-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Налаштування</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут буде меню з усіма налаштуваннями профілю пасажира.</p>
             </main>
         </div>
 
