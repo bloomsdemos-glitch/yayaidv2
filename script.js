@@ -216,13 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-// == 5. ГОЛОВНІ ОБРОБНИКИ ПОДІЙ ==
-
-// Універсальна функція для плавного переходу
+// == 4. ОБРОБНИКИ ПОДІЙ ==
 function navigateTo(screenId) {
-    setTimeout(() => {
-        showScreen(screenId);
-    }, 250); // Чекаємо 250 мілісекунд (0.25с) перед переходом
+    setTimeout(() => showScreen(screenId), 250);
 }
 
 // --- Навігація з головного екрану та екранів входу ---
@@ -232,32 +228,23 @@ driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashb
 passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
 
 // --- Навігація з меню ПАСАЖИРА ---
-showMyOrdersBtn?.addEventListener('click', () => {
-    // Для цього екрану симуляція має запускатись ПІСЛЯ переходу
-    setTimeout(() => {
-        showScreen('passenger-orders-screen');
-        runActiveTripSimulation();
-        updatePassengerOrderCardListeners();
-    }, 250);
-});
-showQuickOrderBtn?.addEventListener('click', () => {
-    setTimeout(() => {
-        showScreen('quick-order-screen');
-        initQuickOrderScreen();
-    }, 250);
-});
+showMyOrdersBtn?.addEventListener('click', () => navigateTo('passenger-orders-screen'));
+showQuickOrderBtn?.addEventListener('click', () => navigateTo('quick-order-screen'));
 findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
-showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
 showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
+showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-settings-support-screen')); // Тимчасово веде на стару заглушку
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 
 // --- Навігація з меню ВОДІЯ ---
-showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
 showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
 showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
-showDriverRatingBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
+showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen')); // Використовує стару ID екрану
+showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-settings-help-screen')); // Використовує стару ID екрану
+showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-settings-support-screen')); // Використовує стару ID екрану
 showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
 
 // --- Навігація з екрану налаштувань ВОДІЯ ---
@@ -265,46 +252,26 @@ showDriverSettingsPhotoBtn?.addEventListener('click', () => navigateTo('driver-s
 showDriverSettingsBioBtn?.addEventListener('click', () => navigateTo('driver-settings-bio-screen'));
 showDriverSettingsTariffBtn?.addEventListener('click', () => navigateTo('driver-settings-tariff-screen'));
 showDriverSettingsPaymentBtn?.addEventListener('click', () => navigateTo('driver-settings-payment-screen'));
-showDriverSettingsHistoryBtn?.addEventListener('click', () => navigateTo('driver-settings-history-screen'));
 showDriverSettingsPhoneBtn?.addEventListener('click', () => navigateTo('driver-settings-phone-screen'));
-showDriverSettingsHelpBtn?.addEventListener('click', () => navigateTo('driver-settings-help-screen'));
-showDriverSettingsSupportBtn?.addEventListener('click', () => navigateTo('driver-settings-support-screen'));
+showDriverSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen')); // Використовує пасажирську заглушку
+showDriverSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen')); // Використовує пасажирську заглушку
 showDriverSettingsDeleteBtn?.addEventListener('click', () => navigateTo('driver-settings-delete-screen'));
 
 // --- Навігація з екрану налаштувань ПАСАЖИРА ---
 showPassengerSettingsPhotoBtn?.addEventListener('click', () => navigateTo('passenger-settings-photo-screen'));
 showPassengerSettingsBioBtn?.addEventListener('click', () => navigateTo('passenger-settings-bio-screen'));
 showPassengerSettingsPaymentBtn?.addEventListener('click', () => navigateTo('passenger-settings-payment-screen'));
-showPassengerSettingsHistoryBtn?.addEventListener('click', () => navigateTo('passenger-settings-history-screen'));
 showPassengerSettingsPhoneBtn?.addEventListener('click', () => navigateTo('passenger-settings-phone-screen'));
 showPassengerSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen'));
 showPassengerSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen'));
-showPassengerSettingsSupportBtn?.addEventListener('click', () => navigateTo('passenger-settings-support-screen'));
 showPassengerSettingsDeleteBtn?.addEventListener('click', () => navigateTo('passenger-settings-delete-screen'));
-
-
-// --- Інші обробники ---
-acceptOrderBtn?.addEventListener('click', () => {
-    setTimeout(() => {
-        setupActiveRide();
-        showScreen('driver-active-ride-screen');
-    }, 250);
-});
-cancelRideBtn?.addEventListener('click', () => {
-    if (confirm('Скасувати поїздку? Це може вплинути на ваш рейтинг.')) {
-        navigateTo('driver-dashboard');
-    }
-});
-rideActionBtn?.addEventListener('click', handleRideAction);
-goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
 
 // --- Універсальна кнопка "Назад" ---
 backButtons.forEach(button => {
     button.addEventListener('click', () => {
-        // Кнопка "назад" має працювати миттєво, без затримки
         showScreen(button.dataset.target || 'home-screen');
     });
-}); // <--- ОСЬ ТУТ ДОДАНО ВІДСУТНЄ ЗАКРИТТЯ
+});
 
 // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
 const themeToggle = document.getElementById('theme-toggle');
