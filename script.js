@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Елементи водія
     const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
+    const showDriverValkyKharkivBtn = document.getElementById('show-driver-valky-kharkiv-btn');
+    const showDriverRatingBtn = document.getElementById('show-driver-rating-btn');
+    const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const tripDistanceEl = document.getElementById('trip-distance');
     const tripFareEl = document.getElementById('trip-fare');
@@ -195,11 +198,13 @@ function navigateTo(screenId) {
     }, 250); // Чекаємо 250 мілісекунд (0.25с) перед переходом
 }
 
+// --- Навігація з головного екрану та екранів входу ---
 showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
 showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
 driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
 passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
 
+// --- Навігація з меню ПАСАЖИРА ---
 showMyOrdersBtn?.addEventListener('click', () => {
     // Для цього екрану симуляція має запускатись ПІСЛЯ переходу
     setTimeout(() => {
@@ -208,38 +213,38 @@ showMyOrdersBtn?.addEventListener('click', () => {
         updatePassengerOrderCardListeners();
     }, 250);
 });
-
 showQuickOrderBtn?.addEventListener('click', () => {
     setTimeout(() => {
         showScreen('quick-order-screen');
         initQuickOrderScreen();
     }, 250);
 });
-
 findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
 showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+
+// --- Навігація з меню ВОДІЯ ---
 showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
+showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
+showDriverRatingBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
+showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
 
-// Для неробочих кнопок залишаємо alert, він не потребує затримки
-showDriverOrdersBtn?.addEventListener('click', () => alert('Цей екран ще в розробці :)'));
-
+// --- Інші обробники ---
 acceptOrderBtn?.addEventListener('click', () => {
     setTimeout(() => {
         setupActiveRide();
         showScreen('driver-active-ride-screen');
     }, 250);
 });
-
 cancelRideBtn?.addEventListener('click', () => {
     if (confirm('Скасувати поїздку? Це може вплинути на ваш рейтинг.')) {
         navigateTo('driver-dashboard');
     }
 });
-
 rideActionBtn?.addEventListener('click', handleRideAction);
-
 goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
 
+// --- Універсальна кнопка "Назад" ---
 backButtons.forEach(button => {
     button.addEventListener('click', () => {
         // Кнопка "назад" має працювати миттєво, без затримки
@@ -249,6 +254,7 @@ backButtons.forEach(button => {
 
     
 });
+
 // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
 const themeToggle = document.getElementById('theme-toggle');
 const themeCheckbox = themeToggle?.querySelector('.toggle-checkbox');
