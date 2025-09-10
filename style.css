@@ -703,8 +703,8 @@ h3 {
 }
 
 #theme-toggle {
-  margin: 0 auto 20px auto; /* Центруємо і додаємо відступ знизу */
-  transform: scale(0.5); /* Робимо трохи меншим */
+  margin: 0 auto 20px auto;
+  transform: scale(0.5);
 }
 
 .toggle-wrapper {
@@ -717,7 +717,6 @@ h3 {
   box-shadow: none;
   padding: 0;
 }
-
 
 .toggle-checkbox {
   appearance: none;
@@ -737,13 +736,13 @@ h3 {
   border-radius: 50px;
   width: 80px;
   height: 40px;
-  background-color: var(--md-primary); /* Синій для дня */
+  background-color: var(--md-primary);
   box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.4s ease;
 }
 
 .toggle-checkbox:checked + .toggle-container {
-  background-color: var(--md-background); /* Темний для ночі */
+  background-color: var(--md-background);
   border: 1px solid var(--md-outline);
 }
 
@@ -756,17 +755,17 @@ h3 {
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  background-color: var(--sun-color); /* Сонце */
+  background-color: var(--sun-color);
   box-shadow: var(--elevation-2);
   transition: all 0.4s ease;
 }
 
 .toggle-checkbox:checked + .toggle-container > .toggle-button {
   left: 42px;
-  background-color: var(--moon-color); /* Місяць */
+  background-color: var(--moon-color);
 }
 
-/* === АЛЬТЕРНАТИВА: ТЕКСТУРНИЙ ФОН === */
+/* === ТЕКСТУРНИЙ ФОН ДЛЯ ГОЛОВНОГО ЕКРАНУ === */
 #home-screen::before {
     content: "";
     position: absolute;
@@ -774,127 +773,12 @@ h3 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('assets/noise.png'); /* Потрібно завантажити картинку 'noise.png' в папку assets */
-    opacity: 0.04; /* Робимо текстуру ДУЖЕ прозорою */
-    pointer-events: none; /* Щоб не заважала клікам */
-}
-/* === ПОЗИЦІОНУВАННЯ КНОПОК НА ГОЛОВНОМУ ЕКРАНІ === */
-
-#home-screen .btn-main {
-    justify-content: center; /* Повертаємо центрування тексту всередині */
-    padding: 14px 20px; /* Робимо кнопки трохи меншими */
-}
-/* === НОВИЙ ГЛОБАЛЬНИЙ ДИЗАЙН КНОПОК (Outline + Solid) === */
-
-/* Загальний стиль для обох кнопок */
-.btn-main, .menu-item {
+    background-image: url('assets/noise.png');
+    opacity: 0.04;
+    pointer-events: none;
 }
 
-/* --- СТИЛІ ДЛЯ СВІТЛОЇ ТЕМИ --- */
-body.light-theme .btn-main,
-body.light-theme .menu-item {
-    border: 2px solid #000;
-    background: #fff;
-    color: #000;
-}
-
-body.light-theme .btn-main.btn-solid,
-body.light-theme .menu-item.btn-solid {
-    background: #000;
-    color: #fff;
-}
-
-/* Ховери для світлої теми */
-body.light-theme .btn-main:hover,
-body.light-theme .menu-item:hover {
-    background: #000;
-    color: #fff;
-}
-
-body.light-theme .btn-main.btn-solid:hover,
-body.light-theme .menu-item.btn-solid:hover {
-    background: #fff;
-    color: #000;
-}
-
-/* --- СТИЛІ ДЛЯ ТЕМНОЇ ТЕМИ --- */
-body.dark-theme .btn-main,
-body.dark-theme .menu-item {
-    border: 2px solid #fff;
-    background: #000;
-    color: #fff;
-}
-
-body.dark-theme .btn-main.btn-solid,
-body.dark-theme .menu-item.btn-solid {
-    background: #fff;
-    color: #000;
-}
-
-/* Ховери для темної теми */
-body.dark-theme .btn-main:hover,
-body.dark-theme .menu-item:hover {
-    background: #fff;
-    color: #000;
-}
-
-body.dark-theme .btn-main.btn-solid:hover,
-body.dark-theme .menu-item.btn-solid:hover {
-    background: #000;
-    color: #fff;
-}
-
-/* === АНІМАЦІЯ МАРШРУТУ НА ГОЛОВНОМУ ЕКРАНІ (v4.0) === */
-
-.route-animation {
-    width: 150px;
-    margin: -20px auto 20px auto; /* Підняв трохи вище, щоб доріжка могла опускатись */
-}
-
-/* Стиль доріжки */
-.route-path {
-    stroke: var(--md-on-background);
-    stroke-width: 2.5;
-    fill: none;
-    stroke-dasharray: 4 8; /* Прямокутні рисочки */
-    animation: move-dashes 20s linear infinite;
-}
-
-/* Стиль для групи пінів (контур + коло) */
-.route-pin {
-    animation: pulse 2s ease-in-out infinite alternate;
-}
-
-/* Стиль для контуру піна */
-.route-pin path {
-    stroke: var(--md-on-background);
-    stroke-width: 2.5;
-    fill: none; /* Контур прозорий всередині */
-}
-
-/* Стиль для внутрішнього кола - воно буде кольору фону, щоб створити "дірку" */
-.route-pin .pin-inner-circle {
-    fill: var(--md-background); /* <- ОСЬ ТУТ "ДІРКА" */
-    stroke: none; /* Без власного контуру */
-}
-
-/* Другий пін пульсує із затримкою */
-#pin-end {
-    animation-delay: 1s;
-}
-
-/* Анімації */
-@keyframes move-dashes {
-    from { stroke-dashoffset: 1000; }
-    to { stroke-dashoffset: 0; }
-}
-
-@keyframes pulse {
-    from { transform: scale(1); transform-origin: center bottom; }
-    to { transform: scale(1.2); transform-origin: center bottom; }
-}
 /* === АНІМАЦІЯ МАРШРУТУ (v5.0 - Font Awesome Edition) === */
-
 .route-container {
   position: relative;
   width: 220px;
@@ -902,12 +786,10 @@ body.dark-theme .menu-item.btn-solid:hover {
   margin: -20px auto 20px auto;
 }
 
-/* --- Стилі для пінів --- */
 .pin {
   position: absolute;
   color: var(--md-on-background);
-  font-size: 30px; /* Трохи збільшив для акценту */
-  /* Анімація пульсації */
+  font-size: 30px;
   animation: pulse 2s ease-in-out infinite alternate;
 }
 
@@ -919,14 +801,9 @@ body.dark-theme .menu-item.btn-solid:hover {
 #pin2 {
   top: 0px;
   left: 180px;
-}
-
-/* Затримка для другого піна, щоб вони пульсували по черзі */
-#pin2 {
   animation-delay: 1s;
 }
 
-/* --- Стилі для доріжки з точок --- */
 .path-dots {
     position: absolute;
     width: 100%;
@@ -935,49 +812,30 @@ body.dark-theme .menu-item.btn-solid:hover {
 
 .dot {
   position: absolute;
-  color: var(--md-outline); /* Початковий колір - світло-сірий */
+  color: var(--md-outline);
   font-size: 6px;
-  /* Анімація "хвилі" */
   animation: wave 2.5s linear infinite;
 }
 
-/* Використовуємо ::before, як ти і запропонував */
 .dot::before {
-  content: "\f111"; /* Font Awesome solid circle icon */
+  content: "\f111";
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
 }
 
-/* Розставляємо кожну точку по координатах */
-.dot:nth-child(1) { top: 55px; left: 45px; }
-.dot:nth-child(2) { top: 45px; left: 65px; }
-.dot:nth-child(3) { top: 48px; left: 85px; }
-.dot:nth-child(4) { top: 55px; left: 105px; }
-.dot:nth-child(5) { top: 52px; left: 125px; }
-.dot:nth-child(6) { top: 45px; left: 145px; }
-.dot:nth-child(7) { top: 35px; left: 165px; }
-.dot:nth-child(8) { top: 25px; left: 175px; }
-
-
-/* ГОЛОВНИЙ ТРЮК: задаємо затримку анімації для кожної точки */
-.dot:nth-child(1) { animation-delay: 0s; }
-.dot:nth-child(2) { animation-delay: 0.1s; }
-.dot:nth-child(3) { animation-delay: 0.2s; }
-.dot:nth-child(4) { animation-delay: 0.3s; }
-.dot:nth-child(5) { animation-delay: 0.4s; }
-.dot:nth-child(6) { animation-delay: 0.5s; }
-.dot:nth-child(7) { animation-delay: 0.6s; }
-.dot:nth-child(8) { animation-delay: 0.7s; }
+.dot:nth-child(1) { top: 55px; left: 45px; animation-delay: 0s; }
+.dot:nth-child(2) { top: 45px; left: 65px; animation-delay: 0.1s; }
+.dot:nth-child(3) { top: 48px; left: 85px; animation-delay: 0.2s; }
+.dot:nth-child(4) { top: 55px; left: 105px; animation-delay: 0.3s; }
+.dot:nth-child(5) { top: 52px; left: 125px; animation-delay: 0.4s; }
+.dot:nth-child(6) { top: 45px; left: 145px; animation-delay: 0.5s; }
+.dot:nth-child(7) { top: 35px; left: 165px; animation-delay: 0.6s; }
+.dot:nth-child(8) { top: 25px; left: 175px; animation-delay: 0.7s; }
 
 @keyframes pulse {
-    from { 
-        transform: scale(1); 
-    }
-    to { 
-        transform: scale(1.3); /* <--- Збільшив з 1.15 до 1.3 */
-    }
+    from { transform: scale(1); }
+    to { transform: scale(1.3); }
 }
-
 
 @keyframes wave {
     0%   { color: var(--md-outline); }
@@ -985,144 +843,90 @@ body.dark-theme .menu-item.btn-solid:hover {
     40%  { color: var(--md-outline); transform: scale(1); }
     100% { color: var(--md-outline); }
 }
-/* --- Робимо іконку-крапку значно меншою --- */
+
 .pin.fa-circle-dot {
-    font-size: 14px; /* <--- Можеш погратись з цим значенням */
-    transition: font-size 0.3s ease; /* Додаємо плавність */
+    font-size: 14px;
+    transition: font-size 0.3s ease;
 }
 
-
-/* --- ТВОЇ РУЧКИ КЕРУВАННЯ --- */
-
-#home-screen .route-container {
-  top: 8vh;       /* <--- Відстань анімації від ВЕРХНЬОГО краю */
-}
-
-#home-screen .home-logo {
-  bottom: 250px;  /* <--- Відстань лого від НИЖНЬОГО краю */
-}
-
-#home-screen .home-actions {
-  bottom: 50px;   /* <--- Відстань кнопок/тогглера від НИЖНЬОГО краю */
-}
-
-/*ТУТ розмір шрифту лого*/
-.home-logo {
-  font-size: 3rem;
-}
-
-/*ТУТ анімоване ТАКСІ ЛОГО*/
-.logo-taxi {
-    display: inline-block;
-    width: 1.3em; /* Розмір відносно тексту */
-    height: 1.3em;
-    vertical-align: -0.2em; /* Трохи опускаємо, щоб було по центру */
-    margin-left: 5px;
-}
-/* === ФІНАЛЬНИЙ ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
+/* === ЛЕЙАУТ ГОЛОВНОГО ЕКРАНУ === */
 #home-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh; /* Важливо для футера в низу */
+    min-height: 100vh;
 }
 
-/* ТЕПЕР МОЖЕТЕ КЕРУВАТИ КОЖНИМ ЕЛЕМЕНТОМ ОКРЕМО: */
-
-/* 1. Анімація маршруту */
 #home-screen .route-container {
-    margin-top: 21vh; /* <-- Змінюйте відступ від верху */
+    margin-top: 21vh;
 }
 
-/* 2. Лого */
-#home-screen .home-logo {
-    margin-top: 17vh;    /* <-- Відступ від анімації */
-    margin-bottom: 1vh; /* <-- Відступ до кнопок */
+.home-logo {
+  font-size: 3rem;
+  margin-top: 17vh;
+  margin-bottom: 1vh;
 }
 
-/* 3. Розпірка - заповнює весь вільний простір */
+.logo-taxi {
+    display: inline-block;
+    width: 1.3em;
+    height: 1.3em;
+    vertical-align: -0.2em;
+    margin-left: 5px;
+}
+
 .home-spacer {
     flex-grow: 1;
 }
 
-/* 4. Кнопки */
 #home-screen .button-group {
-    margin-bottom: 2vh; /* <-- Відступ до тогглера */
+    margin-bottom: 2vh;
 }
 
-/* 5. Тогглер теми */
+#home-screen .btn-main {
+    justify-content: center;
+    padding: 14px 20px;
+}
+
 #home-screen .toggle-wrapper {
-    margin-bottom: 3vh; /* <-- Відступ до футера */
+    margin-bottom: 3vh;
 }
 
-/* 6. Футер - завжди в самому низу */
 .home-footer {
-    margin-top: auto; /* Притискає до низу */
-    padding-bottom: 2vh; /* Відступ від краю екрану */
-}
-/* === РОБИМО ДИЗАЙН ВНУТРІШНІХ СТОРІНОК БІЛЬШ "ДОРОСЛИМ" === */
-
-/* Ми не чіпаємо #home-screen, а змінюємо всі інші екрани */
-.screen:not(#home-screen) .menu-item {
-    
-    /* 1. Робимо рамку менш контрастною (не чисто чорною, а темно-сірою) */
-    border-color: #333; /* Для світлої теми */
-    
-    /* 2. Робимо шрифт трохи тоншим і менш "кричущим" */
-    font-weight: 500; /* Замість 700 */
-
-    /* 3. Вирівнюємо контент по лівому краю, а не по центру */
-    justify-content: flex-start;
+    margin-top: auto;
+    padding-bottom: 2vh;
 }
 
-/* 4. Робимо іконки трохи меншими і акуратнішими */
-.screen:not(#home-screen) .menu-item i {
-    font-size: 18px;
-    width: 24px; /* Задаємо фіксовану ширину для іконки */
-    text-align: center;
-}
-
-/* --- Правки для темної теми --- */
-body.dark-theme .screen:not(#home-screen) .menu-item {
-    border-color: #ccc; /* Робимо рамку світло-сірою, а не чисто білою */
-}
-/* === ДИЗАЙН ВНУТРІШНІХ МЕНЮ: СУЧАСНІ КАРТКИ === */
-
-.screen:not(#home-screen) .menu-item {
+/* === ДИЗАЙН ВНУТРІШНІХ МЕНЮ: СУЧАСНІ КАРТКИ (v2.0 - ЄДИНИЙ ПРАВИЛЬНИЙ) === */
+.screen:not(#home-screen) .main-menu .menu-item {
     background-color: var(--md-surface);
+    color: var(--md-on-surface);
     border: 1px solid var(--md-outline);
     box-shadow: var(--shadow-soft);
-    color: var(--md-on-surface);
     justify-content: space-between;
     font-weight: 500;
-    width: 100%; 
+    width: 100%;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease;
 }
 
+/* Однаковий вигляд карток і для світлої, і для темної теми */
+body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
+    background-color: var(--md-surface); /* Це #1e1e1e, а не чорний */
+    color: var(--md-on-surface);
+    border: 1px solid var(--md-outline);
+}
 
 /* Ефект при наведенні або натисканні */
-.screen:not(#home-screen) .menu-item:hover {
-    /* Фон не міняється на чорний, а лише ледь темніє */
+.screen:not(#home-screen) .main-menu .menu-item:hover {
     background-color: var(--md-surface-variant);
     color: var(--md-on-surface);
-    /* Додаємо приємний ефект "підняття" картки */
     transform: translateY(-2px);
 }
 
-/* Специфічні правки для темної теми (щоб ховер працював коректно) */
-body.dark-theme .screen:not(#home-screen) .menu-item:hover {
-    background-color: var(--md-surface-variant);
-    color: var(--md-on-surface);
+/* Стиль іконок всередині кнопок-карток */
+.screen:not(#home-screen) .main-menu .menu-item i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
 }
 
-/* === ФІКС ДЛЯ КАРТОК В ТЕМНІЙ ТЕМІ === */
-
-body.dark-theme .screen:not(#home-screen) .menu-item {
-    /* Кажемо, що фон картки має бути темно-сірим, а не чорним */
-    background-color: var(--md-surface);
-    
-    /* Рамка має бути ледь помітною, а не чисто білою */
-    border: 1px solid var(--md-outline);
-
-    /* Колір тексту - білий */
-    color: var(--md-on-surface);
-}
