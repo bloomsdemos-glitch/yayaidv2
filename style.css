@@ -1087,3 +1087,43 @@ body.dark-theme .menu-item.btn-solid:hover {
 body.dark-theme .screen:not(#home-screen) .menu-item {
     border-color: #ccc; /* Робимо рамку світло-сірою, а не чисто білою */
 }
+/* === ДИЗАЙН ВНУТРІШНІХ МЕНЮ: СУЧАСНІ КАРТКИ === */
+
+/* Цей хитрий селектор :not(#home-screen) означає:
+   "застосувати ці стилі до всіх .menu-item'ів,
+   які знаходяться на будь-якому екрані, ОКРІМ головного" */
+.screen:not(#home-screen) .menu-item {
+    /* Робимо фон картки білим (у світлій темі) або темно-сірим (у темній) */
+    background-color: var(--md-surface);
+    
+    /* Додаємо ледь помітну рамку для чіткості */
+    border: 1px solid var(--md-outline);
+
+    /* Та сама "м'яка тінь" для об'єму і відчуття глибини */
+    box-shadow: var(--shadow-soft);
+    
+    /* Повертаємо колір тексту до стандартного */
+    color: var(--md-on-surface);
+
+    /* Розносимо текст і бейдж по різних краях, що виглядає дуже охайно */
+    justify-content: space-between;
+    
+    /* Робимо шрифт трохи менш жирним, ніж на головному екрані */
+    font-weight: 500;
+}
+
+/* Ефект при наведенні або натисканні */
+.screen:not(#home-screen) .menu-item:hover {
+    /* Фон не міняється на чорний, а лише ледь темніє */
+    background-color: var(--md-surface-variant);
+    color: var(--md-on-surface);
+    /* Додаємо приємний ефект "підняття" картки */
+    transform: translateY(-2px);
+}
+
+/* Специфічні правки для темної теми (щоб ховер працював коректно) */
+body.dark-theme .screen:not(#home-screen) .menu-item:hover {
+    background-color: var(--md-surface-variant);
+    color: var(--md-on-surface);
+}
+
