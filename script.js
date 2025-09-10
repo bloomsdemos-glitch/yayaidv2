@@ -364,5 +364,5 @@ buttonsWithRipple.forEach(button => {
     if (pathDots) {
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
-
+});
 });
