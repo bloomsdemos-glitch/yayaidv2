@@ -282,7 +282,6 @@ backButtons.forEach(button => {
         showScreen(button.dataset.target || 'home-screen');
     });
     
-});
 
 // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
 const themeToggle = document.getElementById('theme-toggle');
