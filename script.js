@@ -37,6 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const rideMapPlaceholder = document.getElementById('ride-map-placeholder')?.querySelector('p');
     const rideAddressDetails = document.getElementById('ride-address-details');
 
+    // -- Елементи екрану налаштувань водія --
+    const showDriverSettingsPhotoBtn = document.getElementById('show-driver-settings-photo-btn');
+    const showDriverSettingsBioBtn = document.getElementById('show-driver-settings-bio-btn');
+    const showDriverSettingsTariffBtn = document.getElementById('show-driver-settings-tariff-btn');
+    const showDriverSettingsPaymentBtn = document.getElementById('show-driver-settings-payment-btn');
+    const showDriverSettingsHistoryBtn = document.getElementById('show-driver-settings-history-btn');
+    const showDriverSettingsPhoneBtn = document.getElementById('show-driver-settings-phone-btn');
+    const showDriverSettingsHelpBtn = document.getElementById('show-driver-settings-help-btn');
+    const showDriverSettingsSupportBtn = document.getElementById('show-driver-settings-support-btn');
+    const showDriverSettingsDeleteBtn = document.getElementById('show-driver-settings-delete-btn');
+
+
     // == 3. ОСНОВНІ ФУНКЦІЇ ==
 
     function showScreen(screenId) {
@@ -230,14 +242,23 @@ showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passeng
 showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
 
-
-
 // --- Навігація з меню ВОДІЯ ---
 showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
 showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
 showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
 showDriverRatingBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
 showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+
+// --- Навігація з екрану налаштувань ВОДІЯ ---
+showDriverSettingsPhotoBtn?.addEventListener('click', () => navigateTo('driver-settings-photo-screen'));
+showDriverSettingsBioBtn?.addEventListener('click', () => navigateTo('driver-settings-bio-screen'));
+showDriverSettingsTariffBtn?.addEventListener('click', () => navigateTo('driver-settings-tariff-screen'));
+showDriverSettingsPaymentBtn?.addEventListener('click', () => navigateTo('driver-settings-payment-screen'));
+showDriverSettingsHistoryBtn?.addEventListener('click', () => navigateTo('driver-settings-history-screen'));
+showDriverSettingsPhoneBtn?.addEventListener('click', () => navigateTo('driver-settings-phone-screen'));
+showDriverSettingsHelpBtn?.addEventListener('click', () => navigateTo('driver-settings-help-screen'));
+showDriverSettingsSupportBtn?.addEventListener('click', () => navigateTo('driver-settings-support-screen'));
+showDriverSettingsDeleteBtn?.addEventListener('click', () => navigateTo('driver-settings-delete-screen'));
 
 // --- Інші обробники ---
 acceptOrderBtn?.addEventListener('click', () => {
@@ -261,6 +282,9 @@ backButtons.forEach(button => {
         showScreen(button.dataset.target || 'home-screen');
     });
 });
+
+});
+
 
     
 });
