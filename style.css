@@ -140,6 +140,8 @@ main {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .content-center {
@@ -160,7 +162,7 @@ footer {
 /* === 5. КАСТОМНІ КНОПКИ (РЕДИЗАЙН v4: RIPPLE EFFECT) === */
 
 /* --- Загальний "скелет" для всіх головних кнопок --- */
-.btn-main, .menu-item {
+.btn-main {
     border-radius: 12px;
     font-weight: 700;
     font-size: 16px;
