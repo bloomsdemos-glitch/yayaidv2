@@ -125,8 +125,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 24px;
+    padding-bottom: 16px; /* Трохи зменшив відступ */
     min-height: 56px;
+    border-bottom: 1px solid var(--md-outline); /* <--- ДОДАЙ ЦЕЙ РЯДОК */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* <--- І ЦЕЙ */
+}
+
+/* Для темної теми тінь буде іншою */
+body.dark-theme header {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
 main {
@@ -314,13 +321,14 @@ footer {
 /* --- Avatars --- */
 .avatar, .avatar-convex {
     background-color: var(--md-surface-variant);
-    color: var(--md-primary);
+    color: var(--md-on-surface);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: var(--elevation-1);
 }
+
 
 .avatar {
     width: 48px;
