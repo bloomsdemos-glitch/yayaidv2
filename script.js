@@ -48,6 +48,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const showDriverSettingsSupportBtn = document.getElementById('show-driver-settings-support-btn');
     const showDriverSettingsDeleteBtn = document.getElementById('show-driver-settings-delete-btn');
 
+    // -- Елементи налаштувань пасажира --
+    const showPassengerSettingsPhotoBtn = document.getElementById('show-passenger-settings-photo-btn');
+    const showPassengerSettingsBioBtn = document.getElementById('show-passenger-settings-bio-btn');
+    const showPassengerSettingsPaymentBtn = document.getElementById('show-passenger-settings-payment-btn');
+    const showPassengerSettingsHistoryBtn = document.getElementById('show-passenger-settings-history-btn');
+    const showPassengerSettingsPhoneBtn = document.getElementById('show-passenger-settings-phone-btn');
+    const showPassengerSettingsStatusBtn = document.getElementById('show-passenger-settings-status-btn');
+    const showPassengerSettingsPrivacyBtn = document.getElementById('show-passenger-settings-privacy-btn');
+    const showPassengerSettingsSupportBtn = document.getElementById('show-passenger-settings-support-btn');
+    const showPassengerSettingsDeleteBtn = document.getElementById('show-passenger-settings-delete-btn');
+
 
     // == 3. ОСНОВНІ ФУНКЦІЇ ==
 
@@ -259,6 +270,18 @@ showDriverSettingsPhoneBtn?.addEventListener('click', () => navigateTo('driver-s
 showDriverSettingsHelpBtn?.addEventListener('click', () => navigateTo('driver-settings-help-screen'));
 showDriverSettingsSupportBtn?.addEventListener('click', () => navigateTo('driver-settings-support-screen'));
 showDriverSettingsDeleteBtn?.addEventListener('click', () => navigateTo('driver-settings-delete-screen'));
+
+// --- Навігація з екрану налаштувань ПАСАЖИРА ---
+showPassengerSettingsPhotoBtn?.addEventListener('click', () => navigateTo('passenger-settings-photo-screen'));
+showPassengerSettingsBioBtn?.addEventListener('click', () => navigateTo('passenger-settings-bio-screen'));
+showPassengerSettingsPaymentBtn?.addEventListener('click', () => navigateTo('passenger-settings-payment-screen'));
+showPassengerSettingsHistoryBtn?.addEventListener('click', () => navigateTo('passenger-settings-history-screen'));
+showPassengerSettingsPhoneBtn?.addEventListener('click', () => navigateTo('passenger-settings-phone-screen'));
+showPassengerSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen'));
+showPassengerSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen'));
+showPassengerSettingsSupportBtn?.addEventListener('click', () => navigateTo('passenger-settings-support-screen'));
+showPassengerSettingsDeleteBtn?.addEventListener('click', () => navigateTo('passenger-settings-delete-screen'));
+
 
 // --- Інші обробники ---
 acceptOrderBtn?.addEventListener('click', () => {
