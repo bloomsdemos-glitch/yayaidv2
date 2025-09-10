@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const findDriverBtn = document.getElementById('find-driver-btn');
     const showQuickOrderBtn = document.getElementById('show-quick-order-btn');
     const showHelpBtn = document.getElementById('show-help-btn');
+    const showPassengerValkyKharkivBtn = document.getElementById('show-passenger-valky-kharkiv-btn');
+    const showPassengerBusScheduleBtn = document.getElementById('show-passenger-bus-schedule-btn');
+    const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
+    const showPassengerSettingsBtn = document.getElementById('show-passenger-settings-btn');
     const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
     const showFindPassengersBtn = document.getElementById('show-find-passengers-btn');
     const driverTelegramLoginBtn = document.querySelector('#login-screen-driver .btn-telegram-login');
@@ -221,6 +225,12 @@ showQuickOrderBtn?.addEventListener('click', () => {
 });
 findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
 showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
+showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
+showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
+showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+
+
 
 // --- Навігація з меню ВОДІЯ ---
 showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
