@@ -886,6 +886,10 @@ h3 {
 #home-screen .btn-main {
     justify-content: center;
     padding: 14px 20px;
+    width: 220px; /* <--- ЗАДАЄМО ФІКСОВАНУ ШИРИНУ */
+    background: var(--md-on-background); /* <--- РОБИМО ЧОРНИМ/БІЛИМ */
+    color: var(--md-background); /* <--- КОЛІР ТЕКСТУ РОБИМО КОЛЬОРОМ ФОНУ */
+    border: none;
 }
 
 #home-screen .toggle-wrapper {
