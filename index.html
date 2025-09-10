@@ -105,7 +105,7 @@
                 <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
             </header>
             <main>
-                <nav class="main-menu">
+                                <nav class="main-menu">
                     <button class="menu-item" id="show-driver-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
                         <span class="badge">3</span>
@@ -114,16 +114,14 @@
                         <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
                         <span class="badge">8</span>
                     </button>
-                    <button class="menu-item">
-                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                    <button class="menu-item" id="show-driver-valky-kharkiv-btn"> <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
                     </button>
-                    <button class="menu-item">
-                        <span><i class="fa-solid fa-star"></i> Мій рейтинг</span>
+                    <button class="menu-item" id="show-driver-rating-btn"> <span><i class="fa-solid fa-star"></i> Мій рейтинг</span>
                     </button>
-                    <button class="menu-item">
-                        <span><i class="fa-solid fa-gear"></i> Налаштування</span>
+                    <button class="menu-item" id="show-driver-settings-btn"> <span><i class="fa-solid fa-gear"></i> Налаштування</span>
                     </button>
                 </nav>
+
             </main>
         </div>
 
@@ -398,6 +396,49 @@
     </main>
 </div>
 
+        <div id="driver-orders-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Мої замовлення</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут буде активне замовлення та архів поїздок.</p>
+            </main>
+        </div>
+
+        <div id="driver-valky-kharkiv-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Валки-Харків</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут буде список пасажирів, які шукають поїздку за маршрутом Валки-Харків.</p>
+            </main>
+        </div>
+
+        <div id="driver-rating-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Мій рейтинг</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут водій зможе побачити свій профіль так, як його бачать пасажири.</p>
+            </main>
+        </div>
+
+        <div id="driver-settings-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Налаштування</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <p>Тут буде меню з усіма налаштуваннями профілю водія.</p>
+            </main>
+        </div>
 
         <div id="quick-order-screen" class="screen hidden">
     <header>
