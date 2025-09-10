@@ -100,8 +100,8 @@
                 </div>
                 <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
             </header>
-            <main>
-                                <nav class="main-menu">
+                        <main>
+                <nav class="main-menu">
                     <button class="menu-item" id="show-driver-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
                         <span class="badge">3</span>
@@ -110,15 +110,21 @@
                         <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
                         <span class="badge">8</span>
                     </button>
-                    <button class="menu-item" id="show-driver-valky-kharkiv-btn"> <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                    <button class="menu-item" id="show-driver-valky-kharkiv-btn">
+                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
                     </button>
-                    <button class="menu-item" id="show-driver-rating-btn"> <span><i class="fa-solid fa-star"></i> Мій рейтинг</span>
+                    <button class="menu-item" id="show-driver-profile-btn"> <span><i class="fa-solid fa-star"></i> Мій профіль</span>
                     </button>
-                    <button class="menu-item" id="show-driver-settings-btn"> <span><i class="fa-solid fa-gear"></i> Налаштування</span>
+                    <button class="menu-item" id="show-driver-help-btn"> <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-support-btn"> <span><i class="fa-solid fa-headset"></i> Підтримка</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-btn">
+                        <span><i class="fa-solid fa-gear"></i> Налаштування</span>
                     </button>
                 </nav>
-
             </main>
+
         </div>
 
         <div id="passenger-dashboard" class="screen hidden">
@@ -129,8 +135,8 @@
                 </div>
                 <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
             </header>
-            <main>
-                               <nav class="main-menu">
+                        <main>
+                <nav class="main-menu">
                     <button class="menu-item" id="show-my-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
                         <span class="badge">1</span>
@@ -142,20 +148,26 @@
                         <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
                         <span class="badge online">5</span>
                     </button>
-                    <button class="menu-item" id="show-passenger-valky-kharkiv-btn"> <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                    <button class="menu-item" id="show-passenger-valky-kharkiv-btn">
+                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
                     </button>
-                    <button class="menu-item" id="show-passenger-bus-schedule-btn"> <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
+                    <button class="menu-item" id="show-passenger-bus-schedule-btn">
+                        <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
                     </button>
-                    <button class="menu-item" id="show-passenger-profile-btn"> <span><i class="fa-solid fa-star"></i> Мій профіль</span>
+                    <button class="menu-item" id="show-passenger-profile-btn">
+                        <span><i class="fa-solid fa-star"></i> Мій профіль</span>
                     </button>
-                    <button class="menu-item" id="show-passenger-settings-btn"> <span><i class="fa-solid fa-gear"></i> Налаштування</span>
+                    <button class="menu-item" id="show-passenger-support-btn"> <span><i class="fa-solid fa-headset"></i> Підтримка</span>
+                    </button>
+                    <button class="menu-item" id="show-passenger-settings-btn">
+                        <span><i class="fa-solid fa-gear"></i> Налаштування</span>
                     </button>
                     <button class="menu-item" id="show-help-btn">
                         <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
                     </button>                   
                 </nav>
-
             </main>
+
         </div>
 
     <div id="passenger-orders-screen" class="screen hidden">
@@ -433,7 +445,7 @@
                 <h2>Налаштування</h2>
                 <div class="header-placeholder"></div>
             </header>
-                        <main>
+                                    <main>
                 <nav class="main-menu">
                     <button class="menu-item" id="show-driver-settings-photo-btn">
                         <span><i class="fa-solid fa-camera-retro"></i> Змінити фото</span>
@@ -447,23 +459,19 @@
                     <button class="menu-item" id="show-driver-settings-payment-btn">
                         <span><i class="fa-solid fa-credit-card"></i> Онлайн-платежі</span>
                     </button>
-                    <button class="menu-item" id="show-driver-settings-history-btn">
-                        <span><i class="fa-solid fa-clock-rotate-left"></i> Історія поїздок</span>
-                    </button>
                     <button class="menu-item" id="show-driver-settings-phone-btn">
                         <span><i class="fa-solid fa-mobile-screen-button"></i> Змінити номер</span>
                     </button>
-                    <button class="menu-item" id="show-driver-settings-help-btn">
-                        <span><i class="fa-solid fa-circle-question"></i> Довідка</span>
+                    <button class="menu-item" id="show-driver-settings-status-btn"> <span><i class="fa-solid fa-retweet"></i> Змінити статус</span>
                     </button>
-                    <button class="menu-item" id="show-driver-settings-support-btn">
-                        <span><i class="fa-solid fa-headset"></i> Підтримка</span>
+                    <button class="menu-item" id="show-driver-settings-privacy-btn"> <span><i class="fa-solid fa-user-shield"></i> Конфіденційність</span>
                     </button>
                     <button class="menu-item" id="show-driver-settings-delete-btn" style="color: var(--md-error);">
                         <span><i class="fa-solid fa-trash-can"></i> Видалити профіль</span>
                     </button>
                 </nav>
             </main>
+
 
         </div>
         <div id="driver-settings-photo-screen" class="screen hidden">
@@ -721,7 +729,7 @@
                 <h2>Налаштування</h2>
                 <div class="header-placeholder"></div>
             </header>
-                        <main>
+                                    <main>
                 <nav class="main-menu">
                     <button class="menu-item" id="show-passenger-settings-photo-btn">
                         <span><i class="fa-solid fa-camera-retro"></i> Змінити фото</span>
@@ -732,9 +740,6 @@
                     <button class="menu-item" id="show-passenger-settings-payment-btn">
                         <span><i class="fa-solid fa-credit-card"></i> Онлайн-платежі</span>
                     </button>
-                    <button class="menu-item" id="show-passenger-settings-history-btn">
-                        <span><i class="fa-solid fa-clock-rotate-left"></i> Історія поїздок</span>
-                    </button>
                     <button class="menu-item" id="show-passenger-settings-phone-btn">
                         <span><i class="fa-solid fa-mobile-screen-button"></i> Змінити номер</span>
                     </button>
@@ -744,14 +749,12 @@
                     <button class="menu-item" id="show-passenger-settings-privacy-btn">
                         <span><i class="fa-solid fa-user-shield"></i> Конфіденційність</span>
                     </button>
-                    <button class="menu-item" id="show-passenger-settings-support-btn">
-                        <span><i class="fa-solid fa-headset"></i> Підтримка</span>
-                    </button>
                     <button class="menu-item" id="show-passenger-settings-delete-btn" style="color: var(--md-error);">
                         <span><i class="fa-solid fa-trash-can"></i> Видалити профіль</span>
                     </button>
                 </nav>
             </main>
+
 
         </div>
         <div id="passenger-settings-photo-screen" class="screen hidden">
