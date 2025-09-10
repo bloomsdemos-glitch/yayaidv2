@@ -788,7 +788,6 @@ h3 {
 
 /* Загальний стиль для обох кнопок */
 .btn-main, .menu-item {
-    min-width: 240px;
 }
 
 /* --- СТИЛІ ДЛЯ СВІТЛОЇ ТЕМИ --- */
@@ -1115,3 +1114,15 @@ body.dark-theme .screen:not(#home-screen) .menu-item:hover {
     color: var(--md-on-surface);
 }
 
+/* === ФІКС ДЛЯ КАРТОК В ТЕМНІЙ ТЕМІ === */
+
+body.dark-theme .screen:not(#home-screen) .menu-item {
+    /* Кажемо, що фон картки має бути темно-сірим, а не чорним */
+    background-color: var(--md-surface);
+    
+    /* Рамка має бути ледь помітною, а не чисто білою */
+    border: 1px solid var(--md-outline);
+
+    /* Колір тексту - білий */
+    color: var(--md-on-surface);
+}
