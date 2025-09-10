@@ -100,7 +100,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 20px;
     display: flex;
     flex-direction: column;
     background-color: var(--md-background);
@@ -125,10 +124,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 16px; /* Трохи зменшив відступ */
+    padding: 0 20px; /* <--- ДОДАЙ ВІДСТУПИ ПО ГОРИЗОНТАЛІ */
     min-height: 56px;
-    border-bottom: 1px solid var(--md-outline); /* <--- ДОДАЙ ЦЕЙ РЯДОК */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* <--- І ЦЕЙ */
+    border-bottom: 1px solid var(--md-outline);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 /* Для темної теми тінь буде іншою */
@@ -140,6 +139,7 @@ main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
 
 .content-center {
