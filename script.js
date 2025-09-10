@@ -281,11 +281,6 @@ backButtons.forEach(button => {
         // Кнопка "назад" має працювати миттєво, без затримки
         showScreen(button.dataset.target || 'home-screen');
     });
-});
-
-});
-
-
     
 });
 
