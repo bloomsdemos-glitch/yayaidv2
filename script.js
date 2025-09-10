@@ -281,31 +281,30 @@ backButtons.forEach(button => {
         // Кнопка "назад" має працювати миттєво, без затримки
         showScreen(button.dataset.target || 'home-screen');
     });
-    
+}); // <--- ОСЬ ТУТ ДОДАНО ВІДСУТНЄ ЗАКРИТТЯ
 
 // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
 const themeToggle = document.getElementById('theme-toggle');
-const themeCheckbox = themeToggle?.querySelector('.toggle-checkbox');
-const body = document.body;
+if (themeToggle) {
+    const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
+    const body = document.body;
 
-// Функція для зміни теми
-function switchTheme(e) {
-    if (e.target.checked) {
-        body.classList.remove('light-theme');
-        body.classList.add('dark-theme');
-    } else {
-        body.classList.remove('dark-theme');
-        body.classList.add('light-theme');
+    function switchTheme(e) {
+        if (e.target.checked) {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+        }
     }
+
+    if (body.classList.contains('dark-theme')) {
+        themeCheckbox.checked = true;
+    }
+    themeCheckbox.addEventListener('change', switchTheme);
 }
 
-// Встановлюємо початковий стан чекбоксу
-if (body.classList.contains('dark-theme')) {
-    themeCheckbox.checked = true;
-}
-
-// Додаємо обробник події
-themeCheckbox?.addEventListener('change', switchTheme);
 // === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
 function createRipple(event) {
     const button = event.currentTarget;
@@ -313,13 +312,11 @@ function createRipple(event) {
     const diameter = Math.max(button.clientWidth, button.clientHeight);
     const radius = diameter / 2;
 
-    // Видаляємо старі "хвилі", якщо вони є
-    const existingRipple = button.getElementsByClassName("ripple")[0];
+    const existingRipple = button.querySelector(".ripple");
     if (existingRipple) {
         existingRipple.remove();
     }
     
-    // Налаштовуємо і додаємо нову
     circle.style.width = circle.style.height = `${diameter}px`;
     circle.style.left = `${event.clientX - (button.getBoundingClientRect().left + radius)}px`;
     circle.style.top = `${event.clientY - (button.getBoundingClientRect().top + radius)}px`;
@@ -331,38 +328,29 @@ function createRipple(event) {
 const buttonsWithRipple = document.querySelectorAll(".btn-main, .menu-item");
 buttonsWithRipple.forEach(button => {
     button.addEventListener("click", createRipple);
+}); // <--- ЦИКЛ ДЛЯ КНОПОК ТЕПЕР ЗАКРИВАЄТЬСЯ ТУТ
 
-    // === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
-    const pin1 = document.getElementById('pin1');
-    const pin2 = document.getElementById('pin2');
-    const pathDots = document.querySelector('.path-dots');
+// === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ (винесена назовні) ===
+const pin1 = document.getElementById('pin1');
+const pin2 = document.getElementById('pin2');
+const pathDots = document.querySelector('.path-dots');
 
-    // Функція, яка міняє іконки місцями
+if (pin1 && pin2 && pathDots) {
     function swapPinIcons() {
-        // Перевіряємо, чи є у першого піна клас "крапки"
         const isPin1Dot = pin1.classList.contains('fa-circle-dot');
-
         if (isPin1Dot) {
-            // Якщо так, міняємо його на повний пін, а другий - на крапку
             pin1.classList.remove('fa-circle-dot');
             pin1.classList.add('fa-location-dot');
-            
             pin2.classList.remove('fa-location-dot');
             pin2.classList.add('fa-circle-dot');
         } else {
-            // Якщо ні, робимо все навпаки
             pin1.classList.remove('fa-location-dot');
             pin1.classList.add('fa-circle-dot');
-
             pin2.classList.remove('fa-circle-dot');
             pin2.classList.add('fa-location-dot');
         }
     }
+    pathDots.addEventListener('animationiteration', swapPinIcons);
+}
 
-    // "Слухаємо" анімацію доріжки. Коли вона закінчує одне коло (animationiteration),
-    // викликаємо нашу функцію
-    if (pathDots) {
-        pathDots.addEventListener('animationiteration', swapPinIcons);
-    }
-});
-});
+}); // <--- А ЦЕЙ РЯДОК ЗАКРИВАЄ ГОЛОВНИЙ DOMContentLoaded
