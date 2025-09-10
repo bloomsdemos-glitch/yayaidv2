@@ -909,21 +909,34 @@ h3 {
     padding-bottom: 2vh;
 }
 
-/* === ДИЗАЙН ВНУТРІШНІХ МЕНЮ: СУЧАСНІ КАРТКИ (v2.0 - ЄДИНИЙ ПРАВИЛЬНИЙ) === */
+/* === ДИЗАЙН ВНУТРІШНІХ МЕНЮ: СУЧАСНІ КАРТКИ (v2.1 - ЗАЛІЗОБЕТОННИЙ ФІКС) === */
 .screen:not(#home-screen) .main-menu .menu-item {
+    all: unset; /* Скидаємо ВСІ старі стилі до біса */
+    display: flex; /* Повертаємо потрібні нам властивості */
+    align-items: center;
+    cursor: pointer;
     background-color: var(--md-surface);
     color: var(--md-on-surface);
     border: 1px solid var(--md-outline);
     box-shadow: var(--shadow-soft);
     justify-content: space-between;
     font-weight: 500;
+    font-size: 16px; /* Повертаємо розмір шрифту */
     width: 100%;
+    padding: 15px 25px; /* Повертаємо внутрішні відступи */
+    border-radius: 12px; /* Повертаємо заокруглення */
+    box-sizing: border-box; /* Важливо для правильних розмірів */
     transition: transform 0.2s ease-in-out, background-color 0.2s ease;
+    
+    /* Для Ripple ефекту */
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
 /* Однаковий вигляд карток і для світлої, і для темної теми */
 body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
-    background-color: var(--md-surface); /* Це #1e1e1e, а не чорний */
+    background-color: var(--md-surface);
     color: var(--md-on-surface);
     border: 1px solid var(--md-outline);
 }
@@ -941,4 +954,5 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     width: 24px;
     text-align: center;
 }
+
 
