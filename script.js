@@ -300,7 +300,7 @@ function displayDriverOrders() {
 
 
 // -- 3. Обробники подій --
-showQuickOrderBtn?.addEventListener('click', resetQuickOrder);
+
 
 // ЛОГІКА КРОКУ 1: АДРЕСА v2.0
 settlementButtons.forEach(button => {
@@ -472,8 +472,11 @@ declineOrderBtn?.addEventListener('click', () => {
     passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
 
     // --- Навігація з меню ПАСАЖИРА ---
-    showMyOrdersBtn?.addEventListener('click', () => {
-    navigateTo('passenger-orders-screen');
+    showQuickOrderBtn?.addEventListener('click', () => {
+    navigateTo('quick-order-screen');
+    resetQuickOrder();
+});
+
     
     const searchingCard = document.getElementById('searching-card');
     const activeTripCard = document.getElementById('active-trip-card');
@@ -489,12 +492,6 @@ declineOrderBtn?.addEventListener('click', () => {
     }
 });
 
-    
-    // Показуємо картку активної поїздки і запускаємо симуляцію
-    document.getElementById('searching-card').style.display = 'none';
-    document.getElementById('active-trip-card').style.display = 'block';
-    runActiveTripSimulation();
-});
 
     showQuickOrderBtn?.addEventListener('click', () => navigateTo('quick-order-screen'));
     findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
