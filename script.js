@@ -202,6 +202,73 @@ function runActiveTripSimulation() {
     }, 500);
 }
 
+// == ЛОГІКА ДЛЯ ЕКРАНУ "ШУКАЮТЬ ВОДІЯ" ==
+
+// 1. Фейкові дані (ніби прийшли з сервера)
+const fakeDriverOrders = [
+    { passengerName: "Олена", rating: 4.9, from: "вул. Зоряна, 31", to: "Залізничний вокзал", price: 115, time: "Зараз" },
+    { passengerName: "Максим", rating: 4.7, from: "с. Ков'яги, вул. Центральна, 5", to: "вул. Музейна, 4", price: 210, time: "14:30" },
+    { passengerName: "Ірина", rating: 5.0, from: "лікарня", to: "Центр", price: 85, time: "Зараз" },
+    { passengerName: "Сергій", rating: 4.8, from: "вул. Стадіонна, 8", to: "с. Сніжків", price: 180, time: "17:00" },
+    { passengerName: "Юлія", rating: 4.9, from: "Посад", to: "Нова пошта", price: 75, time: "Зараз" }
+];
+
+// 2. Функція, що створює HTML-код однієї картки замовлення
+function createDriverOrderCard(order) {
+    const li = document.createElement('li');
+    li.className = 'order-card driver-view';
+
+    // Визначаємо іконку для часу
+    const timeIcon = order.time === 'Зараз' 
+        ? '<div class="status-dot online"></div>' 
+        : '<i class="fa-solid fa-clock"></i>';
+
+    li.innerHTML = `
+        <div class="order-main-info">
+            <div class="passenger-info">
+                <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                <div class="passenger-details">
+                    <strong>${order.passengerName}</strong>
+                    <span>${order.rating} <i class="fa-solid fa-star"></i></span>
+                </div>
+            </div>
+            <div class="price-info">
+                <span class="price-amount">~ ${order.price} грн</span>
+                <span class="price-label">Ваш дохід</span>
+            </div>
+        </div>
+        <div class="order-route-info">
+            <div class="address-line">
+                <i class="fa-solid fa-circle start-address-icon"></i>
+                <span>${order.from}</span>
+            </div>
+            <div class="address-line">
+                <i class="fa-solid fa-location-dot end-address-icon"></i>
+                <span>${order.to}</span>
+            </div>
+        </div>
+        <div class="order-time-info">
+            ${timeIcon}
+            <span>${order.time}</span>
+        </div>
+    `;
+    return li;
+}
+
+// 3. Головна функція, що відображає всі замовлення
+function displayDriverOrders() {
+    const orderList = document.getElementById('driver-order-list');
+    if (!orderList) return;
+
+    orderList.innerHTML = ''; // Очищуємо старий приклад з Оленою
+
+    fakeDriverOrders.forEach(order => {
+        const cardElement = createDriverOrderCard(order);
+        orderList.appendChild(cardElement);
+    });
+}
+
+
 // -- 3. Обробники подій --
 showQuickOrderBtn?.addEventListener('click', resetQuickOrder);
 
@@ -366,13 +433,16 @@ submitOrderBtn.addEventListener('click', () => {
     showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 
     // --- Навігація з меню ВОДІЯ ---
-    showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
-    showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
-    showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
-    showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
-    showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
-    showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
-    showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+showFindPassengersBtn?.addEventListener('click', () => {
+    navigateTo('driver-find-passengers-screen');
+    displayDriverOrders();
+});
+showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
+showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
+showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
+showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
+showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
 
     // --- Навігація з екрану налаштувань ВОДІЯ ---
     showDriverSettingsPhotoBtn?.addEventListener('click', () => navigateTo('driver-settings-photo-screen'));
