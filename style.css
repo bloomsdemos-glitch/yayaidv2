@@ -1007,3 +1007,53 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* === ФІКСИ ВЕРСТКИ ДЛЯ "ШВИДКОГО ЗАМОВЛЕННЯ" v4.0 === */
+
+.step-container {
+    display: none; /* За замовчуванням кроки приховані */
+    flex-direction: column;
+    gap: 20px; /* Відстань між елементами всередині кроку */
+    width: 100%;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.step-container.active {
+    display: flex; /* Показуємо тільки активний крок */
+}
+
+/* Наводимо порядок на другому кроці */
+#time-step {
+    align-items: center; /* Центруємо все по горизонталі */
+}
+
+#time-step .button-group-vertical {
+    width: 100%; /* Розтягуємо контейнер кнопок на всю ширину */
+}
+
+/* Робимо кнопки часу великими і кожну в окремому рядку */
+#time-step .btn-segment {
+    width: 100%; 
+    padding: 16px;
+    font-size: 16px;
+    text-transform: none;
+    border-radius: var(--md-radius-medium); /* Робимо кожну кнопку окремо заокругленою */
+    border: 1px solid var(--md-outline);
+}
+
+/* Скидаємо специфічні стилі для сегментованих кнопок, бо тут вони поодинокі */
+#time-step .btn-segment:first-child,
+#time-step .btn-segment:last-child {
+    border-radius: var(--md-radius-medium);
+    border-right: 1px solid var(--md-outline); 
+}
+
+#time-step .form-group {
+    width: 100%; /* Поле для коментаря теж на всю ширину */
+}
+
+#time-step #submit-order-btn {
+    width: 100%; /* Кнопка "Відправити" теж на всю ширину */
+    margin-top: 12px; /* Додамо невеликий відступ зверху */
+    background-color: var(--md-on-background); /* Повертаємо їй чорний/білий колір */
+    color: var(--md-background);
+}
