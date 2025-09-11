@@ -101,17 +101,34 @@ function checkAddressFields() {
     }
 }
 
-// Слідкуємо за полями вводу адреси, щоб активувати/деактивувати кнопку "Далі"
+// Ініціалізуємо календар flatpickr ОДИН РАЗ, коли скрипт завантажується
+const pickerInput = document.getElementById('datetime-picker');
+const fp = flatpickr(pickerInput, {
+    enableTime: true,
+    dateFormat: "d.m.Y H:i",
+    minDate: "today",
+    time_24hr: true,
+    // Тепер переходимо на наступний крок, коли дата ЗМІНИЛАСЬ, а не коли календар закрився
+    onChange: function(selectedDates, dateStr, instance) {
+        if (dateStr) {
+            orderDetails.time = dateStr;
+            goToStep('step-details');
+        }
+    }
+});
+
+
+// Слідкуємо за полями вводу адреси
 fromAddressInput?.addEventListener('input', checkAddressFields);
 toAddressInput?.addEventListener('input', checkAddressFields);
 
 // Обробник для першої кнопки "Далі"
 btnAddressNext?.addEventListener('click', () => {
-    // Перевіряємо, чи кнопка не заблокована, і переходимо до наступного кроку
     if (!btnAddressNext.classList.contains('disabled')) {
         goToStep('step-time');
     }
 });
+
 // Обробники для кнопок вибору часу
 timeOptionButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -119,31 +136,17 @@ timeOptionButtons.forEach(button => {
 
         if (option === 'now') {
             orderDetails.time = 'Зараз';
-            // Переходимо одразу до наступного кроку
             goToStep('step-details');
         } else if (option === 'later') {
             // Показуємо поле для вибору дати/часу
             const pickerContainer = document.getElementById('later-time-picker');
             pickerContainer.classList.remove('hidden');
-            
-            // Ініціалізуємо календар flatpickr
-            const pickerInput = document.getElementById('datetime-picker');
-            flatpickr(pickerInput, {
-                enableTime: true,
-                dateFormat: "d.m.Y H:i",
-                minDate: "today",
-                time_24hr: true,
-                // Коли користувач обрав дату, записуємо її і переходимо далі
-                onClose: function(selectedDates, dateStr, instance) {
-                    if (dateStr) {
-                        orderDetails.time = dateStr;
-                        goToStep('step-details');
-                    }
-                }
-            }).open(); // Одразу відкриваємо календар
+            // І відкриваємо вже існуючий календар
+            fp.open();
         }
     });
 });
+
 
 
     // == 4. ОБРОБНИКИ ПОДІЙ ==
