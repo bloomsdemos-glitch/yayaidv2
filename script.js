@@ -160,23 +160,22 @@ function resetQuickOrder() {
 // -- 3. Обробники подій --
 showQuickOrderBtn?.addEventListener('click', resetQuickOrder);
 
-// ЛОГІКА КРОКУ 1: АДРЕСА
+// ЛОГІКА КРОКУ 1: АДРЕСА v2.0
 settlementButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const group = button.dataset.group;
-        const type = button.dataset.type;
+        const group = button.dataset.group; // 'from' or 'to'
+        const type = button.dataset.type; // 'valky' or 'village'
 
         document.querySelectorAll(`.btn-settlement[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
 
+        // Тепер ми НЕ ховаємо текстове поле, а просто показуємо/ховаємо список сіл
         if (group === 'from') {
-            fromAddressContainer.style.display = type === 'valky' ? 'block' : 'none';
             fromVillageContainer.style.display = type === 'village' ? 'block' : 'none';
-        } else {
-            toAddressContainer.style.display = type === 'valky' ? 'block' : 'none';
+        } else { // group === 'to'
             toVillageContainer.style.display = type === 'village' ? 'block' : 'none';
         }
-        checkAddressInputs();
+        checkAddressInputs(); // Перевіряємо заповненість полів
     });
 });
 
@@ -184,6 +183,7 @@ function checkAddressInputs() {
     const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
     const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
 
+    // Тепер для села ми перевіряємо тільки вибір зі списку, вулиця - опціональна
     const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') || (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
     const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') || (toType === 'village' && toVillageSelect.selectedIndex > 0);
 
@@ -204,12 +204,31 @@ addressNextBtn.addEventListener('click', () => {
     const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
     const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
 
-    orderData.from = fromType === 'valky' ? fromAddressInput.value.trim() : fromVillageSelect.value;
-    orderData.to = toType === 'valky' ? toAddressInput.value.trim() : toVillageSelect.value;
+    // "Склеюємо" адресу, якщо обрано село і введена вулиця
+    if (fromType === 'village') {
+        let fromAddress = fromVillageSelect.value;
+        if (fromAddressInput.value.trim() !== '') {
+            fromAddress += `, ${fromAddressInput.value.trim()}`;
+        }
+        orderData.from = fromAddress;
+    } else {
+        orderData.from = fromAddressInput.value.trim();
+    }
+
+    if (toType === 'village') {
+        let toAddress = toVillageSelect.value;
+        if (toAddressInput.value.trim() !== '') {
+            toAddress += `, ${toAddressInput.value.trim()}`;
+        }
+        orderData.to = toAddress;
+    } else {
+        orderData.to = toAddressInput.value.trim();
+    }
     
     updateSummary();
     goToStep('time');
 });
+
 
 // ЛОГІКА КРОКУ 2: ЧАС
 function showTimeResult(text) {
