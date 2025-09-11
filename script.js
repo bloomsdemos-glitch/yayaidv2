@@ -17,15 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const showPassengerBusScheduleBtn = document.getElementById('show-passenger-bus-schedule-btn');
     const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
     const showPassengerSettingsBtn = document.getElementById('show-passenger-settings-btn');
+    const showPassengerSupportBtn = document.getElementById('show-passenger-support-btn'); // <-- ДОДАЙ ЦЕ
     const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
     const showFindPassengersBtn = document.getElementById('show-find-passengers-btn');
     const driverTelegramLoginBtn = document.querySelector('#login-screen-driver .btn-telegram-login');
     const passengerTelegramLoginBtn = document.querySelector('#login-screen-passenger .btn-telegram-login');
 
     // Елементи водія
+    // Елементи водія
     const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
     const showDriverValkyKharkivBtn = document.getElementById('show-driver-valky-kharkiv-btn');
-    const showDriverRatingBtn = document.getElementById('show-driver-rating-btn');
+    const showDriverProfileBtn = document.getElementById('show-driver-profile-btn'); // <-- ВИПРАВЛЕНО
+    const showDriverHelpBtn = document.getElementById('show-driver-help-btn');       // <-- ДОДАНО
+    const showDriverSupportBtn = document.getElementById('show-driver-support-btn');   // <-- ДОДАНО
     const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const tripDistanceEl = document.getElementById('trip-distance');
@@ -234,7 +238,7 @@ findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver
 showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
 showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
-showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-settings-support-screen')); // Тимчасово веде на стару заглушку
+showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen')); // ВИПРАВЛЕНО
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
 showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 
@@ -242,9 +246,9 @@ showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
 showFindPassengersBtn?.addEventListener('click', () => navigateTo('driver-find-passengers-screen'));
 showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
-showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen')); // Використовує стару ID екрану
-showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-settings-help-screen')); // Використовує стару ID екрану
-showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-settings-support-screen')); // Використовує стару ID екрану
+showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen')); // ВИПРАВЛЕНО
+showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));       // ВИПРАВЛЕНО
+showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));   // ВИПРАВЛЕНО
 showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
 
 // --- Навігація з екрану налаштувань ВОДІЯ ---
@@ -253,8 +257,8 @@ showDriverSettingsBioBtn?.addEventListener('click', () => navigateTo('driver-set
 showDriverSettingsTariffBtn?.addEventListener('click', () => navigateTo('driver-settings-tariff-screen'));
 showDriverSettingsPaymentBtn?.addEventListener('click', () => navigateTo('driver-settings-payment-screen'));
 showDriverSettingsPhoneBtn?.addEventListener('click', () => navigateTo('driver-settings-phone-screen'));
-showDriverSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen')); // Використовує пасажирську заглушку
-showDriverSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen')); // Використовує пасажирську заглушку
+showDriverSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen')); 
+showDriverSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen')); 
 showDriverSettingsDeleteBtn?.addEventListener('click', () => navigateTo('driver-settings-delete-screen'));
 
 // --- Навігація з екрану налаштувань ПАСАЖИРА ---
