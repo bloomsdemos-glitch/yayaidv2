@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // == 1. ОСНОВНІ НАЛАШТУВАННЯ ==
     let rideState = 'idle';
-
+    let orderDetails = {};
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
     const backButtons = document.querySelectorAll('.btn-back');
@@ -111,6 +111,38 @@ btnAddressNext?.addEventListener('click', () => {
     if (!btnAddressNext.classList.contains('disabled')) {
         goToStep('step-time');
     }
+});
+// Обробники для кнопок вибору часу
+timeOptionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const option = button.dataset.timeOption;
+
+        if (option === 'now') {
+            orderDetails.time = 'Зараз';
+            // Переходимо одразу до наступного кроку
+            goToStep('step-details');
+        } else if (option === 'later') {
+            // Показуємо поле для вибору дати/часу
+            const pickerContainer = document.getElementById('later-time-picker');
+            pickerContainer.classList.remove('hidden');
+            
+            // Ініціалізуємо календар flatpickr
+            const pickerInput = document.getElementById('datetime-picker');
+            flatpickr(pickerInput, {
+                enableTime: true,
+                dateFormat: "d.m.Y H:i",
+                minDate: "today",
+                time_24hr: true,
+                // Коли користувач обрав дату, записуємо її і переходимо далі
+                onClose: function(selectedDates, dateStr, instance) {
+                    if (dateStr) {
+                        orderDetails.time = dateStr;
+                        goToStep('step-details');
+                    }
+                }
+            }).open(); // Одразу відкриваємо календар
+        }
+    });
 });
 
 
