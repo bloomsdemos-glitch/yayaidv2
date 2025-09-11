@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const findDriverBtn = document.getElementById('find-driver-btn');
     const showQuickOrderBtn = document.getElementById('show-quick-order-btn');
     const showHelpBtn = document.getElementById('show-help-btn');
-    const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
     const showPassengerValkyKharkivBtn = document.getElementById('show-passenger-valky-kharkiv-btn');
     const showPassengerBusScheduleBtn = document.getElementById('show-passenger-bus-schedule-btn');
     const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
@@ -98,7 +97,6 @@ const btnDetailsNext = document.getElementById('btn-details-next');
 const finalSubmitOrderBtn = document.getElementById('submit-order-btn');
 
 // -- 2. Сховище даних та функції-хелпери --
-let orderDetails = {};
 let datePickerHasSelected = false; // Прапорець для боротьби з багом календаря
 
 function goToQuizStep(targetStepId) {
@@ -273,7 +271,6 @@ showQuickOrderBtn?.addEventListener('click', () => {
     showPassengerSettingsPhotoBtn?.addEventListener('click', () => navigateTo('passenger-settings-photo-screen'));
     showPassengerSettingsBioBtn?.addEventListener('click', () => navigateTo('passenger-settings-bio-screen'));
     showPassengerSettingsPaymentBtn?.addEventListener('click', () => navigateTo('passenger-settings-payment-screen'));
-    showPassengerSettingsHistoryBtn?.addEventListener('click', () => navigateTo('passenger-settings-history-screen')); // Примітка: цей елемент видалено з HTML, але залишаю, щоб не було помилок
     showPassengerSettingsPhoneBtn?.addEventListener('click', () => navigateTo('passenger-settings-phone-screen'));
     showPassengerSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen'));
     showPassengerSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen'));
