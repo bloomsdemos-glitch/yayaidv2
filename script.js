@@ -90,7 +90,6 @@ const summaryTime = document.getElementById('summary-time');
 const quizSteps = document.querySelectorAll('#quiz-container .order-step');
 const fromAddressInput_quiz = document.getElementById('from-address');
 const toAddressInput_quiz = document.getElementById('to-address');
-const btnAddressNext = document.getElementById('btn-address-next');
 const timeChoiceButtons_quiz = document.querySelectorAll('[data-time-choice]');
 const pickerInput = document.getElementById('datetime-picker');
 const btnDetailsNext = document.getElementById('btn-details-next');
