@@ -380,6 +380,59 @@
     </main>
 </div>
 
+<div id="driver-order-details-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-find-passengers-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Деталі замовлення</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+        <div class="map-placeholder"><p>Тут буде карта маршруту</p></div>
+        
+        <div class="details-card driver">
+            <div class="passenger-info">
+                <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                <div class="passenger-details">
+                    <strong id="details-passenger-name">Олена</strong>
+                    <span id="details-passenger-rating">4.9 <i class="fa-solid fa-star"></i> • 15 поїздок</span>
+                </div>
+            </div>
+            <div class="order-route-info">
+                <div class="address-line">
+                    <i class="fa-solid fa-circle start-address-icon"></i>
+                    <span id="details-from-address">вул. Зоряна, 31</span>
+                </div>
+                <div class="address-line">
+                    <i class="fa-solid fa-location-dot end-address-icon"></i>
+                    <span id="details-to-address">Залізничний вокзал</span>
+                </div>
+            </div>
+            <div id="details-comment-container" class="comment-block">
+                <strong>Коментар пасажира:</strong>
+                <p id="details-comment-text">Буду з дитиною 6 років.</p>
+            </div>
+            <div class="price-details-block">
+                <div class="price-item">
+                    <span>Вартість поїздки:</span>
+                    <strong id="details-total-price">135 грн</strong>
+                </div>
+                <div class="price-item">
+                    <span>Комісія сервісу (5%):</span>
+                    <span id="details-commission">- 7 грн</span>
+                </div>
+                <div class="price-item total">
+                    <span>Ваш дохід:</span>
+                    <strong id="details-driver-earning">~ 128 грн</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-actions">
+            <button id="decline-order-btn" class="btn-main-action decline">Відхилити</button>
+            <button id="accept-order-btn" class="btn-main-action accept">Прийняти замовлення</button>
+        </div>
+    </main>
+</div>
 <div id="driver-orders-screen" class="screen hidden">
     <header>
         <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
@@ -390,6 +443,7 @@
         <p>Тут буде активне замовлення та архів поїздок.</p>
     </main>
 </div>
+
 
 <div id="driver-valky-kharkiv-screen" class="screen hidden">
     <header>
