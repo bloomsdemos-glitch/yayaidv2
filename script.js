@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
     const backButtons = document.querySelectorAll('.btn-back');
-    
+    const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
+
     // -- Навігація --
     const showDriverLoginBtn = document.getElementById('show-driver-login');
     const showPassengerLoginBtn = document.getElementById('show-passenger-login');
@@ -76,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(screenId) {
         setTimeout(() => showScreen(screenId), 250);
     }
-// == НОВА ЛОГІКА ДЛЯ КВІЗУ "ШВИДКЕ ЗАМОВЛЕННЯ" v2.0 ==
+// == НОВА ЛОГІКА ДЛЯ КВІЗУ "ШВИДКЕ ЗАМОВЛЕННЯ" v3.0 ==
 
 // -- 1. Збір елементів DOM для квізу --
 const quickOrderSummaryCard = document.getElementById('quick-order-summary-card');
@@ -90,23 +91,26 @@ const summaryTime = document.getElementById('summary-time');
 const quizSteps = document.querySelectorAll('#quiz-container .order-step');
 const fromAddressInput_quiz = document.getElementById('from-address');
 const toAddressInput_quiz = document.getElementById('to-address');
+const btnAddressNext = document.getElementById('btn-address-next');
 const timeChoiceButtons_quiz = document.querySelectorAll('[data-time-choice]');
-const btnNowConfirm = document.getElementById('btn-now-confirm');
-const laterChoiceButtons = document.querySelectorAll('[data-later-choice]');
 const pickerInput = document.getElementById('datetime-picker');
 const btnDetailsNext = document.getElementById('btn-details-next');
 const finalSubmitOrderBtn = document.getElementById('submit-order-btn');
 
-// -- 2. Головна функція для навігації по кроках --
+// -- 2. Сховище даних та функції-хелпери --
+let orderDetails = {};
+let datePickerHasSelected = false; // Прапорець для боротьби з багом календаря
+
 function goToQuizStep(targetStepId) {
-    quizSteps.forEach(step => step.classList.remove('active'));
+    quizSteps.forEach(step => {
+        step.classList.remove('active');
+    });
     const targetStep = document.getElementById(targetStepId);
     if (targetStep) {
         targetStep.classList.add('active');
     }
 }
 
-// -- 3. Функція для оновлення інфо-картки --
 function updateSummaryCard() {
     if (orderDetails.from || orderDetails.to || orderDetails.time) {
         quickOrderSummaryCard.classList.remove('hidden');
@@ -125,79 +129,6 @@ function updateSummaryCard() {
     }
 }
 
-// -- 4. Логіка для кроків --
-
-// КРОК 1: Адреса
-function handleAddressInput() {
-    const fromValue = fromAddressInput_quiz.value.trim();
-    const toValue = toAddressInput_quiz.value.trim();
-    if (fromValue !== '' && toValue !== '') {
-        orderDetails.from = fromValue;
-        orderDetails.to = toValue;
-        updateSummaryCard();
-        goToQuizStep('step-time-choice');
-    }
-}
-fromAddressInput_quiz?.addEventListener('input', handleAddressInput);
-toAddressInput_quiz?.addEventListener('input', handleAddressInput);
-
-// КРОК 2: Вибір часу ("Зараз" або "На інший час")
-timeChoiceButtons_quiz.forEach(button => {
-    button.addEventListener('click', () => {
-        const choice = button.dataset.timeChoice;
-        if (choice === 'now') {
-            goToQuizStep('step-now-confirm');
-        } else if (choice === 'later') {
-            goToQuizStep('step-later-choice');
-        }
-    });
-});
-
-// Проміжний крок: підтвердження вибору "Зараз"
-btnNowConfirm?.addEventListener('click', () => {
-    orderDetails.time = 'Зараз';
-    updateSummaryCard();
-    goToQuizStep('step-details');
-});
-
-// КРОК 3 (варіант Б): Логіка для "Пізніше сьогодні" / "Обрати дату"
-laterChoiceButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const choice = button.dataset.laterChoice;
-        let pickerOptions = {
-            enableTime: true, minDate: "today", time_24hr: true, dateFormat: "d.m.Y H:i",
-            onClose: function(selectedDates, dateStr) {
-                if (dateStr) {
-                    orderDetails.time = dateStr;
-                    updateSummaryCard();
-                    goToQuizStep('step-details');
-                }
-            }
-        };
-        if (choice === 'today') {
-            pickerOptions.noCalendar = true;
-            pickerOptions.dateFormat = "H:i";
-            orderDetails.timePrefix = "Сьогодні, "; // Зберігаємо префікс для відображення
-        } else {
-             orderDetails.timePrefix = "";
-        }
-        flatpickr(pickerInput, pickerOptions).open();
-    });
-});
-
-// КРОК 4: Деталі (коментар)
-btnDetailsNext?.addEventListener('click', () => {
-    orderDetails.comment = document.getElementById('comment').value.trim();
-    goToQuizStep('step-final-confirm');
-});
-
-// КРОК 5: Фінальне підтвердження
-finalSubmitOrderBtn?.addEventListener('click', () => {
-    console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderDetails);
-    showScreen('order-confirmation-screen');
-});
-
-// Функція для скидання форми до початкового стану при відкритті екрану
 function resetQuiz() {
     orderDetails = {};
     fromAddressInput_quiz.value = '';
@@ -207,14 +138,94 @@ function resetQuiz() {
     summaryFromContainer.style.display = 'none';
     summaryToContainer.style.display = 'none';
     summaryTimeContainer.style.display = 'none';
+    btnAddressNext.classList.add('disabled');
     goToQuizStep('step-address');
 }
 
-// Тепер кнопка "Швидке замовлення" не просто показує екран, а й запускає/скидає квіз
+// -- 3. Логіка для кроків --
+
+// КРОК 1: Адреса
+function checkAddressFields() {
+    const fromValue = fromAddressInput_quiz.value.trim();
+    const toValue = toAddressInput_quiz.value.trim();
+    if (fromValue !== '' && toValue !== '') {
+        btnAddressNext.classList.remove('disabled');
+    } else {
+        btnAddressNext.classList.add('disabled');
+    }
+}
+fromAddressInput_quiz?.addEventListener('input', checkAddressFields);
+toAddressInput_quiz?.addEventListener('input', checkAddressFields);
+
+btnAddressNext?.addEventListener('click', () => {
+    if (!btnAddressNext.classList.contains('disabled')) {
+        orderDetails.from = fromAddressInput_quiz.value.trim();
+        orderDetails.to = toAddressInput_quiz.value.trim();
+        updateSummaryCard();
+        goToQuizStep('step-time-choice');
+    }
+});
+
+// КРОК 2: Вибір часу (нова логіка з 3 кнопками)
+timeChoiceButtons_quiz.forEach(button => {
+    button.addEventListener('click', () => {
+        const choice = button.dataset.timeChoice;
+        datePickerHasSelected = false; 
+
+        if (choice === 'now') {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+            orderDetails.time = `Зараз (${timeString})`;
+            updateSummaryCard();
+            goToQuizStep('step-details');
+            return;
+        }
+        
+        let pickerOptions = {
+            enableTime: true, minDate: "today", time_24hr: true,
+            onChange: function(selectedDates, dateStr) {
+                datePickerHasSelected = true;
+            },
+            onClose: function(selectedDates, dateStr) {
+                if (datePickerHasSelected) {
+                    orderDetails.time = dateStr;
+                    updateSummaryCard();
+                    document.getElementById('later-time-picker').classList.add('hidden');
+                    goToQuizStep('step-details');
+                }
+            }
+        };
+
+        if (choice === 'today') {
+            pickerOptions.noCalendar = true;
+            pickerOptions.dateFormat = "H:i";
+        } else { // choice === 'date'
+            pickerOptions.dateFormat = "d.m.Y H:i";
+        }
+        
+        document.getElementById('later-time-picker').classList.remove('hidden');
+        flatpickr(pickerInput, pickerOptions).open();
+    });
+});
+
+// КРОК 3: Деталі
+btnDetailsNext?.addEventListener('click', () => {
+    orderDetails.comment = document.getElementById('comment').value.trim();
+    goToQuizStep('step-final-confirm');
+});
+
+// КРОК 4: Фінальне підтвердження
+finalSubmitOrderBtn?.addEventListener('click', () => {
+    console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderDetails);
+    showScreen('order-confirmation-screen');
+});
+
+// Запуск/скидання квізу при відкритті екрану
 showQuickOrderBtn?.addEventListener('click', () => {
     showScreen('quick-order-screen');
     resetQuiz();
 });
+
 
 
 
@@ -267,6 +278,8 @@ showQuickOrderBtn?.addEventListener('click', () => {
     showPassengerSettingsStatusBtn?.addEventListener('click', () => navigateTo('passenger-settings-status-screen'));
     showPassengerSettingsPrivacyBtn?.addEventListener('click', () => navigateTo('passenger-settings-privacy-screen'));
     showPassengerSettingsDeleteBtn?.addEventListener('click', () => navigateTo('passenger-settings-delete-screen'));
+    goToMyOrdersBtn?.addEventListener('click', () => navigateTo('passenger-orders-screen'));
+
 
     // --- Універсальна кнопка "Назад" ---
     backButtons.forEach(button => {
