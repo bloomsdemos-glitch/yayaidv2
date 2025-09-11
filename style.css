@@ -1338,3 +1338,73 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     color: var(--md-on-surface-variant);
     align-self: flex-end;
 }
+/* === СТИЛІ ДЛЯ ЕКРАНУ "ДЕТАЛІ ЗАМОВЛЕННЯ" (ДЛЯ ВОДІЯ) === */
+
+.details-card.driver {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    margin-top: 16px;
+}
+
+.avatar-convex.large {
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+}
+
+.details-card .passenger-info .passenger-details strong {
+    font-size: 20px;
+}
+
+.comment-block {
+    background-color: var(--md-surface-variant);
+    padding: 12px;
+    border-radius: var(--md-radius-medium);
+    font-size: 14px;
+}
+
+.comment-block p {
+    color: var(--md-on-surface-variant);
+    padding-top: 4px;
+}
+
+.price-details-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+    border-top: 1px solid var(--md-outline);
+    border-bottom: 1px solid var(--md-outline);
+}
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+.price-item.total {
+    margin-top: 8px;
+    font-size: 18px;
+}
+
+.price-item.total strong {
+    color: var(--md-success);
+}
+
+.order-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto; /* Притискає кнопки до низу */
+    padding: 20px;
+}
+
+.btn-main-action.decline {
+    background-color: var(--md-error);
+}
+
+.btn-main-action.accept {
+    background-color: var(--md-success);
+}
