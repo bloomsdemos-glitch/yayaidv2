@@ -597,19 +597,31 @@
         </div>
 
         <div id="address-step" class="step-container active">
-            <div class="form-group">
-                <label for="from-address">Звідки</label>
-                <div class="input-with-icon">
-                     <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
-                     <i class="fa-solid fa-location-crosshairs input-icon"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="to-address">Куди</label>
-                <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
-            </div>
-            <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
+    <div class="settlement-choice">
+        <button class="btn-settlement active" data-type="valky">Валки</button>
+        <button class="btn-settlement" data-type="village">Інший н.п.</button>
+    </div>
+    <div id="village-select-container" class="form-group" style="display: none;">
+        <label for="village-select">Оберіть населений пункт</label>
+        <select id="village-select" class="form-input">
+            <option>Ков'яги</option>
+            <option>Сидоренкове</option>
+            <option>Сніжків</option>
+            </select>
+    </div>
+    <div class="form-group">
+        <label for="from-address">Звідки</label>
+        <div class="input-with-icon">
+             <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
+             <i class="fa-solid fa-location-crosshairs input-icon"></i>
         </div>
+    </div>
+    <div class="form-group">
+        <label for="to-address">Куди</label>
+        <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
+    </div>
+    <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
+</div>
 
         <div id="time-step" class="step-container">
             <label class="section-label">Коли?</label>
