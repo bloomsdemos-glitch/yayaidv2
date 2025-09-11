@@ -1057,3 +1057,29 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     background-color: var(--md-on-background); /* Повертаємо їй чорний/білий колір */
     color: var(--md-background);
 }
+/* === СТИЛІ ДЛЯ ВИБОРУ НАСЕЛЕНОГО ПУНКТУ === */
+.settlement-choice {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--md-outline);
+    border-radius: var(--md-radius-medium);
+    overflow: hidden;
+}
+.btn-settlement {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background-color: var(--md-surface);
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+.btn-settlement.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+}
+.btn-settlement:first-child {
+    border-right: 1px solid var(--md-outline);
+}
