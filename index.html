@@ -597,47 +597,50 @@
         </div>
 
         <div id="address-step" class="step-container active">
-    <div class="settlement-choice">
-        <button class="btn-settlement active" data-type="valky">Валки</button>
-        <button class="btn-settlement" data-type="village">Інший н.п.</button>
-    </div>
-    <div id="village-select-container" class="form-group" style="display: none;">
-        <label for="village-select">Оберіть населений пункт</label>
-        <select id="village-select" class="form-input">
-            <option>Ков'яги</option>
-            <option>Сидоренкове</option>
-            <option>Сніжків</option>
-            </select>
-    </div>
-    <div class="form-group">
-        <label for="from-address">Звідки</label>
-        <div class="input-with-icon">
-             <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
-             <i class="fa-solid fa-location-crosshairs input-icon"></i>
+            <div class="settlement-choice">
+                <button class="btn-settlement active" data-type="valky">Валки</button>
+                <button class="btn-settlement" data-type="village">Інший н.п.</button>
+            </div>
+            <div id="village-select-container" class="form-group" style="display: none;">
+                <label for="village-select">Оберіть населений пункт</label>
+                <select id="village-select" class="form-input">
+                    <option>Ков'яги</option>
+                    <option>Сидоренкове</option>
+                    <option>Сніжків</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="from-address">Звідки</label>
+                <div class="input-with-icon">
+                     <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
+                     <i class="fa-solid fa-location-crosshairs input-icon"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="to-address">Куди</label>
+                <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
+            </div>
+            <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="to-address">Куди</label>
-        <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
-    </div>
-    <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
-</div>
 
         <div id="time-step" class="step-container">
-    <label class="section-label">Коли?</label>
-    <div class="button-group-vertical">
-        <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
-        <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
-        <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
-    </div>
-    <input type="text" id="datetime-picker" class="form-input" style="display: none;">
-
-    <div class="form-group">
-        <label for="comment">Коментар (необов'язково)</label>
-        <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
-    </div>
-    <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
-</div>
+            <label class="section-label">Коли?</label>
+            <div id="time-choice-container" class="button-group-vertical">
+                <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
+                <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
+                <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
+            </div>
+            <div id="time-result-container" class="time-result" style="display: none;">
+                <span id="time-result-text"></span>
+                <button id="edit-time-btn" class="btn-icon-action"><i class="fa-solid fa-pen-to-square"></i></button>
+            </div>
+            <input type="text" id="datetime-picker" class="form-input" style="display: none;">
+            <div class="form-group">
+                <label for="comment">Коментар (необов'язково)</label>
+                <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
+            </div>
+            <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
+        </div>
     </main>
 </div>
 <div id="order-confirmation-screen" class="screen hidden">
