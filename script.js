@@ -71,27 +71,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(screenId) {
         setTimeout(() => showScreen(screenId), 250);
     }
-// == ЛОГІКА "ШВИДКЕ ЗАМОВЛЕННЯ" v4.1 (зникаючі кнопки) ==
+// == ЛОГІКА "ШВИДКЕ ЗАМОВЛЕННЯ" v5.0 (чистий UX вибору часу) ==
 
 // -- 1. Збір елементів DOM --
 const quickOrderScreen = document.getElementById('quick-order-screen');
-const quickOrderBackButton = quickOrderScreen.querySelector('.btn-back');
 const quickOrderSummaryCard = document.getElementById('quick-order-summary-card');
-const summaryFromContainer = document.getElementById('summary-from-container');
-const summaryToContainer = document.getElementById('summary-to-container');
-const summaryTimeContainer = document.getElementById('summary-time-container');
 const summaryFrom = document.getElementById('summary-from');
 const summaryTo = document.getElementById('summary-to');
 const summaryTime = document.getElementById('summary-time');
-
-// Елементи кроків
+const summaryFromContainer = document.getElementById('summary-from-container');
+const summaryToContainer = document.getElementById('summary-to-container');
+const summaryTimeContainer = document.getElementById('summary-time-container');
 const addressStep = document.getElementById('address-step');
 const timeStep = document.getElementById('time-step');
 const fromAddressInput = document.getElementById('from-address');
 const toAddressInput = document.getElementById('to-address');
 const addressNextBtn = document.getElementById('address-next-btn');
-const timeChoiceButtonsContainer = timeStep.querySelector('.button-group-vertical');
+
+// Оновлені елементи для вибору часу
+const timeChoiceContainer = document.getElementById('time-choice-container');
 const timeChoiceButtons = document.querySelectorAll('[data-time-choice]');
+const timeResultContainer = document.getElementById('time-result-container');
+const timeResultText = document.getElementById('time-result-text');
+const editTimeBtn = document.getElementById('edit-time-btn');
 const pickerInput = document.getElementById('datetime-picker');
 const submitOrderBtn = document.getElementById('submit-order-btn');
 
@@ -110,11 +112,9 @@ function goToStep(stepToShow) {
     if (stepToShow === 'address') {
         addressStep.style.display = 'flex';
         timeStep.style.display = 'none';
-        quickOrderBackButton.dataset.target = 'passenger-dashboard';
     } else if (stepToShow === 'time') {
         addressStep.style.display = 'none';
         timeStep.style.display = 'flex';
-        quickOrderBackButton.dataset.target = 'address-step';
     }
 }
 
@@ -128,14 +128,16 @@ function resetQuickOrder() {
     summaryToContainer.style.display = 'none';
     summaryTimeContainer.style.display = 'none';
     addressNextBtn.classList.add('disabled');
-    timeChoiceButtons.forEach(btn => btn.style.display = 'block');
+    
+    timeChoiceContainer.style.display = 'flex';
+    timeResultContainer.style.display = 'none';
     pickerInput.style.display = 'none';
+    
     goToStep('address');
 }
 
 // -- 3. Обробники подій --
 showQuickOrderBtn?.addEventListener('click', resetQuickOrder);
-
 function checkAddressInputs() {
     if (fromAddressInput.value.trim() !== '' && toAddressInput.value.trim() !== '') {
         addressNextBtn.classList.remove('disabled');
@@ -155,35 +157,46 @@ addressNextBtn.addEventListener('click', () => {
 });
 
 // **ОНОВЛЕНА ЛОГІКА КРОКУ 2: ЧАС**
+
+// Показуємо результат, ховаємо вибір
+function showTimeResult(text) {
+    orderData.time = text;
+    timeResultText.textContent = text;
+    timeChoiceContainer.style.display = 'none';
+    timeResultContainer.style.display = 'flex';
+    updateSummary();
+}
+
+// Повертаємо до початкового вибору часу
+editTimeBtn.addEventListener('click', () => {
+    orderData.time = null;
+    timeChoiceContainer.style.display = 'flex';
+    timeResultContainer.style.display = 'none';
+    pickerInput.style.display = 'none';
+    updateSummary();
+});
+
+
 timeChoiceButtons.forEach(button => {
     button.addEventListener('click', (e) => {
-        const currentChoiceButton = e.currentTarget;
-        const choice = currentChoiceButton.dataset.timeChoice;
-
-        timeChoiceButtons.forEach(btn => {
-            if (btn !== currentChoiceButton) {
-                btn.style.display = 'none';
-            }
-        });
+        const choice = e.currentTarget.dataset.timeChoice;
         
-        orderData.time = null;
-        updateSummary();
-        pickerInput.style.display = 'none';
+        timeChoiceContainer.style.display = 'none'; // Ховаємо кнопки
 
         if (choice === 'now') {
             const now = new Date();
             const timeString = now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
-            orderData.time = `Зараз (${timeString})`;
-            updateSummary();
+            showTimeResult(`Зараз (${timeString})`);
         } else {
+            pickerInput.style.display = 'block';
+            
             let pickerOptions = {
                 enableTime: true, minDate: "today", time_24hr: true,
                 onClose: function(selectedDates, dateStr) {
                     if (selectedDates.length > 0) {
-                        orderData.time = dateStr;
-                        updateSummary();
+                        showTimeResult(dateStr);
                     } else {
-                        timeChoiceButtons.forEach(btn => btn.style.display = 'block');
+                        editTimeBtn.click();
                     }
                     pickerInput.style.display = 'none';
                 }
@@ -192,24 +205,16 @@ timeChoiceButtons.forEach(button => {
                 pickerOptions.noCalendar = true;
                 pickerOptions.defaultDate = new Date();
                 pickerOptions.dateFormat = "H:i";
+                timeResultText.textContent = "Оберіть час на сьогодні...";
             } else {
                 pickerOptions.dateFormat = "d.m.Y H:i";
+                timeResultText.textContent = "Оберіть дату та час...";
             }
-            pickerInput.style.display = 'block';
+            timeResultContainer.style.display = 'flex';
+            
             flatpickr(pickerInput, pickerOptions).open();
         }
     });
-});
-
-// Оновлена логіка для кнопки "Назад"
-quickOrderBackButton.addEventListener('click', (e) => {
-    const target = e.currentTarget.dataset.target;
-    if (target === 'address-step') {
-        e.stopPropagation();
-        timeChoiceButtons.forEach(btn => btn.style.display = 'block');
-        pickerInput.style.display = 'none';
-        goToStep('address');
-    }
 });
 
 submitOrderBtn.addEventListener('click', () => {
@@ -221,7 +226,6 @@ submitOrderBtn.addEventListener('click', () => {
     console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderData);
     showScreen('order-confirmation-screen');
 });
-
     // == 4. ОБРОБНИКИ ПОДІЙ ==
 
     // --- Навігація з головного екрану та екранів входу ---
@@ -271,11 +275,22 @@ submitOrderBtn.addEventListener('click', () => {
     goToMyOrdersBtn?.addEventListener('click', () => navigateTo('passenger-orders-screen'));
 
 
-    // --- Універсальна кнопка "Назад" ---
-    backButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            showScreen(button.dataset.target || 'home-screen');
-        });
+    // --- Універсальна і розумна кнопка "Назад" ---
+backButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const target = button.dataset.target;
+
+        // Кастомна логіка для екрану швидкого замовлення
+        if (button.closest('#quick-order-screen') && target === 'address-step') {
+            // Повертаємо кнопки часу і ховаємо результат
+            timeChoiceButtons.forEach(btn => btn.style.display = 'block');
+            document.getElementById('time-result-container').style.display = 'none';
+            pickerInput.style.display = 'none';
+            goToStep('address');
+        } else {
+            // Стандартна логіка для всіх інших кнопок "Назад"
+            showScreen(target || 'home-screen');
+        }
     });
 });
 
