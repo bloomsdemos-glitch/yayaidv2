@@ -944,4 +944,38 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     text-align: center;
 }
 
+/* === СТИЛІ ДЛЯ ПОКРОКОВОЇ ФОРМИ ЗАМОВЛЕННЯ === */
+.order-step {
+    display: none; /* Ховаємо всі кроки за замовчуванням */
+    flex-direction: column;
+    gap: 20px; /* Відстань між елементами всередині кроку */
+    width: 100%;
+}
+
+.order-step.active {
+    display: flex; /* Показуємо тільки активний крок */
+}
+
+/* Стилі для фінальної картки з підтвердженням */
+.order-summary-card {
+    background-color: var(--md-surface-variant);
+    padding: 16px;
+    border-radius: var(--md-radius-large);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-item span {
+    color: var(--md-on-surface-variant);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
