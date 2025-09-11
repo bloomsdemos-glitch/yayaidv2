@@ -24,7 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
     const showPassengerSupportBtn = document.getElementById('show-passenger-support-btn');
     const showPassengerSettingsBtn = document.getElementById('show-passenger-settings-btn');
-    
+        // -- Елементи екрану "Швидке замовлення" --
+    const fromAddressInput = document.getElementById('from-address');
+    const toAddressInput = document.getElementById('to-address');
+    const btnAddressNext = document.getElementById('btn-address-next');
+    const quickOrderSteps = document.querySelectorAll('.order-step');
+    const timeOptionButtons = document.querySelectorAll('[data-time-option]');
+
     // -- Елементи водія --
     const showFindPassengersBtn = document.getElementById('show-find-passengers-btn');
     const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
@@ -70,6 +76,43 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(screenId) {
         setTimeout(() => showScreen(screenId), 250);
     }
+// == НОВА ЛОГІКА ДЛЯ ЕКРАНУ "ШВИДКЕ ЗАМОВЛЕННЯ" ==
+
+function goToStep(targetStepId) {
+    // Ховаємо всі кроки
+    quickOrderSteps.forEach(step => {
+        step.classList.remove('active');
+    });
+    // Показуємо потрібний крок
+    const targetStep = document.getElementById(targetStepId);
+    if (targetStep) {
+        targetStep.classList.add('active');
+    }
+}
+
+function checkAddressFields() {
+    const fromValue = fromAddressInput.value.trim();
+    const toValue = toAddressInput.value.trim();
+
+    if (fromValue !== '' && toValue !== '') {
+        btnAddressNext.classList.remove('disabled');
+    } else {
+        btnAddressNext.classList.add('disabled');
+    }
+}
+
+// Слідкуємо за полями вводу адреси, щоб активувати/деактивувати кнопку "Далі"
+fromAddressInput?.addEventListener('input', checkAddressFields);
+toAddressInput?.addEventListener('input', checkAddressFields);
+
+// Обробник для першої кнопки "Далі"
+btnAddressNext?.addEventListener('click', () => {
+    // Перевіряємо, чи кнопка не заблокована, і переходимо до наступного кроку
+    if (!btnAddressNext.classList.contains('disabled')) {
+        goToStep('step-time');
+    }
+});
+
 
     // == 4. ОБРОБНИКИ ПОДІЙ ==
 
