@@ -275,24 +275,31 @@ submitOrderBtn.addEventListener('click', () => {
     goToMyOrdersBtn?.addEventListener('click', () => navigateTo('passenger-orders-screen'));
 
 
-    // --- Універсальна і розумна кнопка "Назад" ---
+    // --- Універсальна і розумна кнопка "Назад" v2.0 ---
 backButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const target = button.dataset.target;
+    button.addEventListener('click', () => {
+        const isQuickOrderScreen = button.closest('#quick-order-screen');
 
-        // Кастомна логіка для екрану швидкого замовлення
-        if (button.closest('#quick-order-screen') && target === 'address-step') {
-            // Повертаємо кнопки часу і ховаємо результат
-            timeChoiceButtons.forEach(btn => btn.style.display = 'block');
-            document.getElementById('time-result-container').style.display = 'none';
-            pickerInput.style.display = 'none';
-            goToStep('address');
+        if (isQuickOrderScreen) {
+            const isOnTimeStep = timeStep.style.display === 'flex';
+            
+            if (isOnTimeStep) {
+                // Якщо ми на кроці вибору ЧАСУ, повертаємось до АДРЕСИ
+                editTimeBtn.click(); // Скидаємо вибір часу, повертаючи початкові кнопки
+                goToStep('address');
+            } else {
+                // Ми на кроці вибору АДРЕСИ. Питаємо підтвердження перед виходом.
+                if (confirm('Скасувати оформлення замовлення? Всі дані буде втрачено.')) {
+                    showScreen('passenger-dashboard');
+                }
+            }
         } else {
-            // Стандартна логіка для всіх інших кнопок "Назад"
-            showScreen(target || 'home-screen');
+            // Стандартна логіка для всіх інших кнопок "Назад" в додатку
+            showScreen(button.dataset.target || 'home-screen');
         }
     });
 });
+
 
 
 // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
