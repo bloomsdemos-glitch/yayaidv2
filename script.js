@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // == 1. ОСНОВНІ НАЛАШТУВАННЯ ==
     let rideState = 'idle';
     let orderDetails = {};
+    let globalOrderStatus = 'searching'; // 'searching', 'trip_active'
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
     const backButtons = document.querySelectorAll('.btn-back');
@@ -445,6 +446,22 @@ const detailsTotalPrice = document.getElementById('details-total-price');
 const detailsCommission = document.getElementById('details-commission');
 const detailsDriverEarning = document.getElementById('details-driver-earning');
 
+// Обробники кнопок "Прийняти" / "Відхилити"
+const acceptOrderBtn = document.getElementById('accept-order-btn');
+const declineOrderBtn = document.getElementById('decline-order-btn');
+
+acceptOrderBtn?.addEventListener('click', () => {
+    // Змінюємо глобальний статус замовлення
+    globalOrderStatus = 'trip_active'; 
+    // "Відправляємо" водія на екран його активних замовлень (поки що заглушка)
+    navigateTo('driver-orders-screen'); 
+    alert('Замовлення прийнято!'); // Тимчасове сповіщення
+});
+
+declineOrderBtn?.addEventListener('click', () => {
+    // Просто повертаємо водія до списку
+    navigateTo('driver-find-passengers-screen');
+});
 
     // == 4. ОБРОБНИКИ ПОДІЙ ==
 
@@ -457,6 +474,21 @@ const detailsDriverEarning = document.getElementById('details-driver-earning');
     // --- Навігація з меню ПАСАЖИРА ---
     showMyOrdersBtn?.addEventListener('click', () => {
     navigateTo('passenger-orders-screen');
+    
+    const searchingCard = document.getElementById('searching-card');
+    const activeTripCard = document.getElementById('active-trip-card');
+
+    // Перевіряємо глобальний статус і показуємо відповідну картку
+    if (globalOrderStatus === 'searching') {
+        searchingCard.style.display = 'block';
+        activeTripCard.style.display = 'none';
+    } else { // globalOrderStatus === 'trip_active'
+        searchingCard.style.display = 'none';
+        activeTripCard.style.display = 'block';
+        runActiveTripSimulation(); // Запускаємо анімацію тільки якщо поїздка активна
+    }
+});
+
     
     // Показуємо картку активної поїздки і запускаємо симуляцію
     document.getElementById('searching-card').style.display = 'none';
