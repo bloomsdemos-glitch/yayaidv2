@@ -76,76 +76,133 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(screenId) {
         setTimeout(() => showScreen(screenId), 250);
     }
-// == НОВА ЛОГІКА ДЛЯ ЕКРАНУ "ШВИДКЕ ЗАМОВЛЕННЯ" ==
+// == НОВА ЛОГІКА ДЛЯ КВІЗУ "ШВИДКЕ ЗАМОВЛЕННЯ" ==
 
-function goToStep(targetStepId) {
-    // Ховаємо всі кроки
-    quickOrderSteps.forEach(step => {
-        step.classList.remove('active');
-    });
-    // Показуємо потрібний крок
+// -- 1. Збір елементів DOM для квізу --
+const quickOrderSummaryCard = document.getElementById('quick-order-summary-card');
+const summaryFromContainer = document.getElementById('summary-from-container');
+const summaryToContainer = document.getElementById('summary-to-container');
+const summaryTimeContainer = document.getElementById('summary-time-container');
+const summaryFrom = document.getElementById('summary-from');
+const summaryTo = document.getElementById('summary-to');
+const summaryTime = document.getElementById('summary-time');
+
+const quizSteps = document.querySelectorAll('#quiz-container .order-step');
+const fromAddressInput_quiz = document.getElementById('from-address');
+const toAddressInput_quiz = document.getElementById('to-address');
+const timeChoiceButtons_quiz = document.querySelectorAll('[data-time-choice]');
+const btnNowConfirm = document.getElementById('btn-now-confirm');
+const btnDetailsNext = document.getElementById('btn-details-next');
+const finalSubmitOrderBtn = document.getElementById('submit-order-btn');
+
+// -- 2. Головна функція для навігації по кроках --
+function goToQuizStep(targetStepId) {
+    quizSteps.forEach(step => step.classList.remove('active'));
     const targetStep = document.getElementById(targetStepId);
     if (targetStep) {
         targetStep.classList.add('active');
     }
 }
 
-function checkAddressFields() {
-    const fromValue = fromAddressInput.value.trim();
-    const toValue = toAddressInput.value.trim();
+// -- 3. Функція для оновлення інфо-картки --
+function updateSummaryCard() {
+    if (orderDetails.from || orderDetails.to || orderDetails.time) {
+        quickOrderSummaryCard.classList.remove('hidden');
+    }
 
-    if (fromValue !== '' && toValue !== '') {
-        btnAddressNext.classList.remove('disabled');
-    } else {
-        btnAddressNext.classList.add('disabled');
+    if (orderDetails.from) {
+        summaryFrom.textContent = orderDetails.from;
+        summaryFromContainer.style.display = 'flex';
+    }
+    if (orderDetails.to) {
+        summaryTo.textContent = orderDetails.to;
+        summaryToContainer.style.display = 'flex';
+    }
+    if (orderDetails.time) {
+        summaryTime.textContent = orderDetails.time;
+        summaryTimeContainer.style.display = 'flex';
     }
 }
 
-// Ініціалізуємо календар flatpickr ОДИН РАЗ, коли скрипт завантажується
-const pickerInput = document.getElementById('datetime-picker');
-const fp = flatpickr(pickerInput, {
-    enableTime: true,
-    dateFormat: "d.m.Y H:i",
-    minDate: "today",
-    time_24hr: true,
-    // Тепер переходимо на наступний крок, коли дата ЗМІНИЛАСЬ, а не коли календар закрився
-    onChange: function(selectedDates, dateStr, instance) {
-        if (dateStr) {
-            orderDetails.time = dateStr;
-            goToStep('step-details');
-        }
+// -- 4. Логіка для кроків --
+
+// КРОК 1: Адреса. Автоматично переходить до наступного кроку, коли обидва поля заповнені.
+function handleAddressInput() {
+    const fromValue = fromAddressInput_quiz.value.trim();
+    const toValue = toAddressInput_quiz.value.trim();
+
+    if (fromValue !== '' && toValue !== '') {
+        orderDetails.from = fromValue;
+        orderDetails.to = toValue;
+        updateSummaryCard();
+        goToQuizStep('step-time-choice');
     }
-});
+}
+fromAddressInput_quiz?.addEventListener('input', handleAddressInput);
+toAddressInput_quiz?.addEventListener('input', handleAddressInput);
 
-
-// Слідкуємо за полями вводу адреси
-fromAddressInput?.addEventListener('input', checkAddressFields);
-toAddressInput?.addEventListener('input', checkAddressFields);
-
-// Обробник для першої кнопки "Далі"
-btnAddressNext?.addEventListener('click', () => {
-    if (!btnAddressNext.classList.contains('disabled')) {
-        goToStep('step-time');
-    }
-});
-
-// Обробники для кнопок вибору часу
-timeOptionButtons.forEach(button => {
+// КРОК 2: Вибір часу ("Зараз" або "На інший час")
+timeChoiceButtons_quiz.forEach(button => {
     button.addEventListener('click', () => {
-        const option = button.dataset.timeOption;
-
-        if (option === 'now') {
-            orderDetails.time = 'Зараз';
-            goToStep('step-details');
-        } else if (option === 'later') {
-            // Показуємо поле для вибору дати/часу
-            const pickerContainer = document.getElementById('later-time-picker');
-            pickerContainer.classList.remove('hidden');
-            // І відкриваємо вже існуючий календар
-            fp.open();
+        const choice = button.dataset.timeChoice;
+        if (choice === 'now') {
+            // Для "Зараз" показуємо проміжний крок підтвердження, як ти і хотів
+            goToQuizStep('step-now-confirm');
+        } else {
+            // Для "На інший час" поки що просто переходимо до деталей
+            // Логіку календаря додамо наступним кроком, щоб не ускладнювати
+            orderDetails.time = 'На інший час';
+            updateSummaryCard();
+            goToQuizStep('step-details');
         }
     });
 });
+
+// Проміжний крок: підтвердження вибору "Зараз"
+btnNowConfirm?.addEventListener('click', () => {
+    orderDetails.time = 'Зараз';
+    updateSummaryCard();
+    goToQuizStep('step-details');
+});
+
+// КРОК 3: Деталі (коментар)
+btnDetailsNext?.addEventListener('click', () => {
+    orderDetails.comment = document.getElementById('comment').value.trim();
+    goToQuizStep('step-final-confirm');
+});
+
+// КРОК 4: Фінальне підтвердження
+finalSubmitOrderBtn?.addEventListener('click', () => {
+    console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderDetails);
+    // Переходимо на екран "очікування водія"
+    showScreen('order-confirmation-screen');
+});
+
+// Функція для скидання форми до початкового стану при відкритті екрану
+function resetQuiz() {
+    orderDetails = {}; // Очищуємо дані
+    
+    // Очищуємо поля вводу
+    fromAddressInput_quiz.value = '';
+    toAddressInput_quiz.value = '';
+    document.getElementById('comment').value = '';
+    
+    // Ховаємо інфо-картку і її поля
+    quickOrderSummaryCard.classList.add('hidden');
+    summaryFromContainer.style.display = 'none';
+    summaryToContainer.style.display = 'none';
+    summaryTimeContainer.style.display = 'none';
+
+    // Встановлюємо перший крок як активний
+    goToQuizStep('step-address');
+}
+
+// Тепер кнопка "Швидке замовлення" не просто показує екран, а й запускає/скидає квіз
+showQuickOrderBtn?.addEventListener('click', () => {
+    showScreen('quick-order-screen');
+    resetQuiz();
+});
+
 
 
 
