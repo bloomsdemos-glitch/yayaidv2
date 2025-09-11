@@ -579,83 +579,63 @@
         <h2>Створення замовлення</h2>
         <div class="header-placeholder"></div>
     </header>
-                            <main>
-    <div id="quick-order-summary-card" class="order-summary-card hidden">
-        <h4>Ваше замовлення:</h4>
-        <div class="summary-item" id="summary-from-container" style="display: none;">
-            <span><i class="fa-solid fa-circle-dot from-icon"></i> Звідки:</span>
-            <strong id="summary-from"></strong>
-        </div>
-        <div class="summary-item" id="summary-to-container" style="display: none;">
-            <span><i class="fa-solid fa-location-dot to-icon"></i> Куди:</span>
-            <strong id="summary-to"></strong>
-        </div>
-        <div class="summary-item" id="summary-time-container" style="display: none;">
-            <span><i class="fa-solid fa-clock when-icon"></i> Коли:</span>
-            <strong id="summary-time"></strong>
-        </div>
-    </div>
+                    <main>
+                <div id="quick-order-summary-card" class="order-summary-card hidden">
+                    <h4>Ваше замовлення:</h4>
+                    <div class="summary-item" id="summary-from-container" style="display: none;">
+                        <span><i class="fa-solid fa-circle-dot from-icon"></i> Звідки:</span>
+                        <strong id="summary-from"></strong>
+                    </div>
+                    <div class="summary-item" id="summary-to-container" style="display: none;">
+                        <span><i class="fa-solid fa-location-dot to-icon"></i> Куди:</span>
+                        <strong id="summary-to"></strong>
+                    </div>
+                    <div class="summary-item" id="summary-time-container" style="display: none;">
+                        <span><i class="fa-solid fa-clock when-icon"></i> Коли:</span>
+                        <strong id="summary-time"></strong>
+                    </div>
+                </div>
 
-    <div id="quiz-container">
-        <div id="step-address" class="order-step active">
-            <div class="form-group">
-                <label for="from-address">Звідки</label>
-                <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
-            </div>
-            <div class="form-group">
-                <label for="to-address">Куди</label>
-                <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
-            </div>
-        </div>
+                <div id="quiz-container">
+                    <div id="step-address" class="order-step active">
+                        <div class="form-group">
+                            <label for="from-address">Звідки</label>
+                            <div class="input-with-icon"> <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
+                                <i class="fa-solid fa-location-crosshairs input-icon"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="to-address">Куди</label>
+                            <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
+                        </div>
+                        <button id="btn-address-next" class="btn-main-action disabled">Далі</button> </div>
 
-        <div id="step-time-choice" class="order-step">
-            <label class="section-label">Коли?</label>
-            <div class="button-group-horizontal">
-                <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
-                <button type="button" class="btn-segment" data-time-choice="later">На інший час</button>
-            </div>
-        </div>
-        
-        <div id="step-now-confirm" class="order-step">
-            <p class="info-text">Замовлення буде відправлено зараз. Водію знадобиться час, щоб доїхати до вас.</p>
-            <div class="button-group-horizontal">
-                <button type="button" class="btn-secondary">Скасувати</button>
-                <button type="button" id="btn-now-confirm" class="btn-main-action">Продовжити</button>
-            </div>
-        </div>
+                    <div id="step-time-choice" class="order-step">
+                        <label class="section-label">Коли?</label>
+                        <div class="button-group-vertical">
+                            <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
+                            <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
+                            <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
+                        </div>
+                        <div id="later-time-picker" class="hidden">
+                            <input type="text" id="datetime-picker" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div id="step-details" class="order-step">
+                        <div class="form-group">
+                            <label for="comment">Коментар (необов'язково)</label>
+                            <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
+                        </div>
+                        <button type="button" id="btn-details-next" class="btn-main-action">Далі</button>
+                    </div>
 
-        <div id="step-later-choice" class="order-step">
-             <label class="section-label">Оберіть опцію:</label>
-             <div class="button-group-vertical">
-                <button type="button" class="btn-segment" data-later-choice="today">Пізніше сьогодні</button>
-                <button type="button" class="btn-segment" data-later-choice="date">Обрати дату</button>
-             </div>
-             <div id="later-time-picker" class="hidden">
-                <input type="text" id="datetime-picker" class="form-input">
-             </div>
-        </div>
-        
-        <div id="step-details" class="order-step">
-            <div class="form-group">
-                <label for="comment">Коментар (необов'язково)</label>
-                <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
-            </div>
-             <div class="form-group">
-                <label>Обрати конкретного водія? (необов'язково)</label>
-                <button type="button" class="btn-secondary">Список водіїв</button>
-            </div>
-            <button type="button" id="btn-details-next" class="btn-main-action">Далі</button>
-        </div>
-
-        <div id="step-final-confirm" class="order-step">
-             <p>Перевірте, будь ласка, деталі замовлення.</p>
-             <div class="button-group-horizontal">
-                <button type="button" class="btn-secondary">Скасувати</button>
-                <button type="submit" id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
-            </div>
-         </div>
-    </div>
-</main>
+                    <div id="step-final-confirm" class="order-step">
+                         <p>Перевірте, будь ласка, деталі замовлення.</p>
+                         <button type="submit" id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
+                     </div>
+                </div>
+            </main>
 
 
 
