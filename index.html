@@ -339,99 +339,69 @@
             </main>
         </div>
 
-        <div id="driver-find-passengers-screen" class="screen hidden">
+     <div id="driver-find-passengers-screen" class="screen hidden">
     <header>
         <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
         <h2>Шукають водія</h2>
         <div class="header-placeholder"></div>
     </header>
     <main>
-        <ul class="order-list">
-            <li class="order-card new">
-                <div class="order-info">
-                    <div class="passenger-details">
-                        <i class="fa-solid fa-user-circle"></i> Олена
+        <ul id="driver-order-list" class="order-list driver">
+            <li class="order-card driver-view">
+                <div class="order-main-info">
+                    <div class="passenger-info">
+                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong>Олена</strong>
+                            <span>4.9 <i class="fa-solid fa-star"></i></span>
+                        </div>
                     </div>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle start-point-icon"></i> вул. Весняна, 15</span>
-                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> вул. Музейна, 4</span>
-                    </div>
-                </div>
-                <div class="order-time">
-                    <div class="status-dot online"></div>
-                    Зараз
-                </div>
-            </li>
-            <li class="order-card new">
-                <div class="order-info">
-                    <div class="passenger-details">
-                        <i class="fa-solid fa-user-circle"></i> Андрій
-                    </div>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle start-point-icon"></i> вул. Зоряна, 31</span>
-                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> Залізничний вокзал</span>
+                    <div class="price-info">
+                        <span class="price-amount">~ 115 грн</span>
+                        <span class="price-label">Ваш дохід</span>
                     </div>
                 </div>
-                <div class="order-time">
-                    <div class="status-dot online"></div>
-                    Зараз
-                </div>
-            </li>
-            <li class="order-card">
-                <div class="order-info">
-                    <div class="passenger-details">
-                        <i class="fa-solid fa-user-circle"></i> Ірина
+                <div class="order-route-info">
+                    <div class="address-line">
+                        <i class="fa-solid fa-circle start-address-icon"></i>
+                        <span>вул. Зоряна, 31</span>
                     </div>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle start-point-icon"></i> вул. Стадіонна, 8</span>
-                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> вул. Харківська, 102</span>
+                    <div class="address-line">
+                        <i class="fa-solid fa-location-dot end-address-icon"></i>
+                        <span>Залізничний вокзал</span>
                     </div>
                 </div>
-                <div class="order-time">
+                <div class="order-time-info">
                     <i class="fa-solid fa-clock"></i>
-                    14:30
+                    <span>Зараз</span>
                 </div>
             </li>
-            <li class="order-card">
-                <div class="order-info">
-                    <div class="passenger-details">
-                        <i class="fa-solid fa-user-circle"></i> Олег
-                    </div>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle start-point-icon"></i> лікарня</span>
-                        <span><i class="fa-solid fa-location-dot end-point-icon"></i> Центр</span>
-                    </div>
-                </div>
-                <div class="order-time">
-                    <i class="fa-solid fa-clock"></i>
-                    15:00
-                </div>
-            </li>
-        </ul>
+            </ul>
     </main>
 </div>
 
-        <div id="driver-orders-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Мої замовлення</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде активне замовлення та архів поїздок.</p>
-            </main>
-        </div>
+<div id="driver-orders-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Мої замовлення</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+        <p>Тут буде активне замовлення та архів поїздок.</p>
+    </main>
+</div>
 
-        <div id="driver-valky-kharkiv-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Валки-Харків</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде список пасажирів, які шукають поїздку за маршрутом Валки-Харків.</p>
-            </main>
-        </div>
+<div id="driver-valky-kharkiv-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Валки-Харків</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+        <p>Тут буде список пасажирів, які шукають поїздку за маршрутом Валки-Харків.</p>
+    </main>
+</div>
+
 
         <div id="driver-rating-screen" class="screen hidden">
             <header>
