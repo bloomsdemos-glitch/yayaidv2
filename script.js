@@ -71,90 +71,115 @@ document.addEventListener('DOMContentLoaded', () => {
     function navigateTo(screenId) {
         setTimeout(() => showScreen(screenId), 250);
     }
-// == ЛОГІКА "ШВИДКЕ ЗАМОВЛЕННЯ" v5.0 (чистий UX вибору часу) ==
+// == ЛОГІКА "ШВИДКЕ ЗАМОВЛЕННЯ" v6.0 (з вибором н.п.) ==
 
 // -- 1. Збір елементів DOM --
+// ... (основні елементи без змін)
 const quickOrderScreen = document.getElementById('quick-order-screen');
-const quickOrderSummaryCard = document.getElementById('quick-order-summary-card');
-const summaryFrom = document.getElementById('summary-from');
-const summaryTo = document.getElementById('summary-to');
-const summaryTime = document.getElementById('summary-time');
-const summaryFromContainer = document.getElementById('summary-from-container');
-const summaryToContainer = document.getElementById('summary-to-container');
-const summaryTimeContainer = document.getElementById('summary-time-container');
+// ... (всі summary елементи)
+
+// Елементи кроків
 const addressStep = document.getElementById('address-step');
 const timeStep = document.getElementById('time-step');
 const fromAddressInput = document.getElementById('from-address');
 const toAddressInput = document.getElementById('to-address');
 const addressNextBtn = document.getElementById('address-next-btn');
+// ... (всі елементи часу)
 
-// Оновлені елементи для вибору часу
-const timeChoiceContainer = document.getElementById('time-choice-container');
-const timeChoiceButtons = document.querySelectorAll('[data-time-choice]');
-const timeResultContainer = document.getElementById('time-result-container');
-const timeResultText = document.getElementById('time-result-text');
-const editTimeBtn = document.getElementById('edit-time-btn');
-const pickerInput = document.getElementById('datetime-picker');
-const submitOrderBtn = document.getElementById('submit-order-btn');
+// Нові елементи для вибору населеного пункту
+const settlementButtons = document.querySelectorAll('.btn-settlement');
+const fromVillageContainer = document.getElementById('from-village-container');
+const toVillageContainer = document.getElementById('to-village-container');
+const fromAddressContainer = document.getElementById('from-address-container');
+const toAddressContainer = document.getElementById('to-address-container');
+const fromVillageSelect = document.getElementById('from-village-select');
+const toVillageSelect = document.getElementById('to-village-select');
 
 let orderData = {};
 
 // -- 2. Функції-хелпери --
-function updateSummary() {
-    if (orderData.from || orderData.to) { quickOrderSummaryCard.classList.remove('hidden'); }
-    if (orderData.from) { summaryFrom.textContent = orderData.from; summaryFromContainer.style.display = 'flex'; }
-    if (orderData.to) { summaryTo.textContent = orderData.to; summaryToContainer.style.display = 'flex'; }
-    if (orderData.time) { summaryTime.textContent = orderData.time; summaryTimeContainer.style.display = 'flex'; } 
-    else { summaryTimeContainer.style.display = 'none'; }
-}
-
-function goToStep(stepToShow) {
-    if (stepToShow === 'address') {
-        addressStep.style.display = 'flex';
-        timeStep.style.display = 'none';
-    } else if (stepToShow === 'time') {
-        addressStep.style.display = 'none';
-        timeStep.style.display = 'flex';
-    }
-}
+// ... (updateSummary, goToStep - без змін)
 
 function resetQuickOrder() {
-    orderData = {};
-    fromAddressInput.value = '';
-    toAddressInput.value = '';
-    document.getElementById('comment').value = '';
-    quickOrderSummaryCard.classList.add('hidden');
-    summaryFromContainer.style.display = 'none';
-    summaryToContainer.style.display = 'none';
-    summaryTimeContainer.style.display = 'none';
-    addressNextBtn.classList.add('disabled');
+    // ... (стандартне скидання)
     
-    timeChoiceContainer.style.display = 'flex';
-    timeResultContainer.style.display = 'none';
-    pickerInput.style.display = 'none';
+    // Скидаємо вибір населених пунктів до дефолтного стану
+    fromAddressContainer.style.display = 'block';
+    fromVillageContainer.style.display = 'none';
+    toAddressContainer.style.display = 'block';
+    toVillageContainer.style.display = 'none';
+    fromVillageSelect.selectedIndex = 0;
+    toVillageSelect.selectedIndex = 0;
     
+    // Скидаємо активні кнопки
+    settlementButtons.forEach(btn => {
+        if (btn.dataset.type === 'valky') btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+
     goToStep('address');
 }
 
 // -- 3. Обробники подій --
 showQuickOrderBtn?.addEventListener('click', resetQuickOrder);
+
+// **НОВА ЛОГІКА ПЕРЕМИКАЧІВ Н.П.**
+settlementButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const group = button.dataset.group; // 'from' or 'to'
+        const type = button.dataset.type; // 'valky' or 'village'
+
+        // Оновлюємо активну кнопку в групі
+        document.querySelectorAll(`.btn-settlement[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Показуємо/ховаємо відповідні поля
+        if (group === 'from') {
+            fromAddressContainer.style.display = type === 'valky' ? 'block' : 'none';
+            fromVillageContainer.style.display = type === 'village' ? 'block' : 'none';
+        } else { // group === 'to'
+            toAddressContainer.style.display = type === 'valky' ? 'block' : 'none';
+            toVillageContainer.style.display = type === 'village' ? 'block' : 'none';
+        }
+        checkAddressInputs(); // Перевіряємо заповненість полів
+    });
+});
+
+// **ОНОВЛЕНА ЛОГІКА ПЕРЕВІРКИ АДРЕСИ**
 function checkAddressInputs() {
-    if (fromAddressInput.value.trim() !== '' && toAddressInput.value.trim() !== '') {
+    const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
+    const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
+
+    const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') || (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
+    const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') || (toType === 'village' && toVillageSelect.selectedIndex > 0);
+
+    if (isFromValid && isToValid) {
         addressNextBtn.classList.remove('disabled');
     } else {
         addressNextBtn.classList.add('disabled');
     }
 }
+// Вішаємо слухачі на всі поля, що впливають на валідність
 fromAddressInput.addEventListener('input', checkAddressInputs);
 toAddressInput.addEventListener('input', checkAddressInputs);
+fromVillageSelect.addEventListener('change', checkAddressInputs);
+toVillageSelect.addEventListener('change', checkAddressInputs);
 
+// **ОНОВЛЕНА ЛОГІКА КНОПКИ "ДАЛІ"**
 addressNextBtn.addEventListener('click', () => {
     if (addressNextBtn.classList.contains('disabled')) return;
-    orderData.from = fromAddressInput.value.trim();
-    orderData.to = toAddressInput.value.trim();
+    
+    const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
+    const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
+
+    orderData.from = fromType === 'valky' ? fromAddressInput.value.trim() : fromVillageSelect.value;
+    orderData.to = toType === 'valky' ? toAddressInput.value.trim() : toVillageSelect.value;
+    
     updateSummary();
     goToStep('time');
 });
+
+// ... (вся логіка для КРОКУ 2: ЧАС залишається без змін)
 
 // **ОНОВЛЕНА ЛОГІКА КРОКУ 2: ЧАС**
 
