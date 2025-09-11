@@ -1266,3 +1266,75 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     cursor: pointer;
     padding: 5px;
 }
+/* === СТИЛІ ДЛЯ КАРТКИ ЗАМОВЛЕННЯ (ДЛЯ ВОДІЯ) === */
+
+.order-card.driver-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.order-main-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.passenger-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.passenger-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.passenger-details strong {
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+}
+
+.passenger-details span {
+    font-size: 14px;
+    color: var(--md-on-surface-variant);
+}
+
+.price-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.price-amount {
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    color: var(--md-success);
+}
+
+.price-label {
+    font-size: 12px;
+    color: var(--md-on-surface-variant);
+}
+
+.order-route-info {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--md-outline);
+    border-radius: var(--md-radius-medium);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-time-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--md-on-surface-variant);
+    align-self: flex-end;
+}
