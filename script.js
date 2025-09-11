@@ -260,13 +260,42 @@ function displayDriverOrders() {
     const orderList = document.getElementById('driver-order-list');
     if (!orderList) return;
 
-    orderList.innerHTML = ''; // Очищуємо старий приклад з Оленою
+    orderList.innerHTML = ''; // Очищуємо старі замовлення
 
     fakeDriverOrders.forEach(order => {
         const cardElement = createDriverOrderCard(order);
+        
+        // !!! НОВА ЛОГІКА: Робимо картку клікабельною !!!
+        cardElement.addEventListener('click', () => {
+            // Заповнюємо екран "Деталі" даними з обраного замовлення
+            detailsPassengerName.textContent = order.passengerName;
+            detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`; // Рандомна к-сть поїздок
+            detailsFromAddress.textContent = order.from;
+            detailsToAddress.textContent = order.to;
+            
+            // Розрахунок цін (поки фейковий)
+            const commission = Math.round(order.price * 0.05);
+            detailsTotalPrice.textContent = `${order.price} грн`;
+            detailsCommission.textContent = `- ${commission} грн`;
+            detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
+            
+            // Показуємо/ховаємо блок з коментарем
+            const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
+            if (Math.random() > 0.5) { // Показуємо коментар у 50% випадків
+                detailsCommentText.textContent = randomComment;
+                detailsCommentContainer.style.display = 'block';
+            } else {
+                detailsCommentContainer.style.display = 'none';
+            }
+            
+            // Переходимо на екран деталей
+            navigateTo('driver-order-details-screen');
+        });
+        
         orderList.appendChild(cardElement);
     });
 }
+
 
 
 // -- 3. Обробники подій --
@@ -404,6 +433,18 @@ submitOrderBtn.addEventListener('click', () => {
     console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderData);
     showScreen('order-confirmation-screen');
 });
+
+// == ЛОГІКА ДЛЯ ЕКРАНУ "ДЕТАЛІ ЗАМОВЛЕННЯ" (ВОДІЙ) ==
+const detailsPassengerName = document.getElementById('details-passenger-name');
+const detailsPassengerRating = document.getElementById('details-passenger-rating');
+const detailsFromAddress = document.getElementById('details-from-address');
+const detailsToAddress = document.getElementById('details-to-address');
+const detailsCommentContainer = document.getElementById('details-comment-container');
+const detailsCommentText = document.getElementById('details-comment-text');
+const detailsTotalPrice = document.getElementById('details-total-price');
+const detailsCommission = document.getElementById('details-commission');
+const detailsDriverEarning = document.getElementById('details-driver-earning');
+
 
     // == 4. ОБРОБНИКИ ПОДІЙ ==
 
