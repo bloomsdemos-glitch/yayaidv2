@@ -157,6 +157,51 @@ function resetQuickOrder() {
     goToStep('address');
 }
 
+// Функція для симуляції поїздки
+function runActiveTripSimulation() {
+    if (window.tripInterval) clearInterval(window.tripInterval);
+
+    const activeCard = document.querySelector('#active-trip-card');
+    if (!activeCard || activeCard.style.display === 'none') return;
+
+    const statusIcon = activeCard.querySelector('#status-icon');
+    const statusText = activeCard.querySelector('#status-text');
+    const carIcon = activeCard.querySelector('#car-icon');
+    const dotsContainer = activeCard.querySelector('.dots-container');
+    const endPoint = activeCard.querySelector('#progress-end-point');
+    
+    const totalDurationSeconds = 15;
+    let progress = 0;
+
+    // Скидання до початкового стану
+    statusIcon.className = 'fa-solid fa-spinner fa-spin';
+    statusText.textContent = 'Водій прямує до вас';
+    endPoint.classList.remove('arrived');
+    carIcon.style.left = '0%';
+    dotsContainer.innerHTML = ''; // Очищуємо старі точки
+
+    // Створюємо нові точки
+    for (let i = 0; i < 18; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dotsContainer.appendChild(dot);
+    }
+    
+    window.tripInterval = setInterval(() => {
+        progress += (100 / (totalDurationSeconds * 4)); // Зробимо анімацію трохи повільнішою
+        
+        if (progress >= 100) {
+            clearInterval(window.tripInterval);
+            carIcon.style.left = '100%';
+            statusIcon.className = 'fa-solid fa-circle-check';
+            statusText.textContent = 'Водій прибув';
+            endPoint.classList.add('arrived');
+            return;
+        }
+        carIcon.style.left = `${progress}%`;
+    }, 500);
+}
+
 // -- 3. Обробники подій --
 showQuickOrderBtn?.addEventListener('click', resetQuickOrder);
 
@@ -302,7 +347,15 @@ submitOrderBtn.addEventListener('click', () => {
     passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
 
     // --- Навігація з меню ПАСАЖИРА ---
-    showMyOrdersBtn?.addEventListener('click', () => navigateTo('passenger-orders-screen'));
+    showMyOrdersBtn?.addEventListener('click', () => {
+    navigateTo('passenger-orders-screen');
+    
+    // Показуємо картку активної поїздки і запускаємо симуляцію
+    document.getElementById('searching-card').style.display = 'none';
+    document.getElementById('active-trip-card').style.display = 'block';
+    runActiveTripSimulation();
+});
+
     showQuickOrderBtn?.addEventListener('click', () => navigateTo('quick-order-screen'));
     findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
     showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
