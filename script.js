@@ -364,3 +364,4 @@ if (pin1 && pin2 && pathDots) {
     }
     pathDots.addEventListener('animationiteration', swapPinIcons);
 }
+});
