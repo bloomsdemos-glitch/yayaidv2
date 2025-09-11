@@ -94,6 +94,14 @@ const fromAddressContainer = document.getElementById('from-address-container');
 const toAddressContainer = document.getElementById('to-address-container');
 const fromVillageSelect = document.getElementById('from-village-select');
 const toVillageSelect = document.getElementById('to-village-select');
+// Елементи для вибору часу, яких не вистачало
+const timeChoiceContainer = document.getElementById('time-choice-container');
+const timeChoiceButtons = document.querySelectorAll('[data-time-choice]');
+const timeResultContainer = document.getElementById('time-result-container');
+const timeResultText = document.getElementById('time-result-text');
+const editTimeBtn = document.getElementById('edit-time-btn');
+const pickerInput = document.getElementById('datetime-picker');
+const submitOrderBtn = document.getElementById('submit-order-btn');
 
 let orderData = {};
 
