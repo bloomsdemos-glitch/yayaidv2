@@ -1105,3 +1105,164 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     border-radius: var(--md-radius-large);
     border: 1px solid var(--md-outline);
 }
+/* === СТИЛІ ДЛЯ ЕКРАНУ "МОЇ ПОЇЗДКИ" v2.0 === */
+
+.order-card-container {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.order-card {
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-extra-large);
+    box-shadow: var(--elevation-3);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative; /* Для кнопки "Детальніше" */
+}
+
+.order-header {
+    text-align: center;
+    border-bottom: 1px solid var(--md-outline);
+    padding-bottom: 12px;
+}
+
+.order-title {
+    font-size: 18px;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 4px;
+}
+
+.order-timestamp {
+    font-size: 13px;
+    color: var(--md-on-surface-variant);
+}
+
+.order-status-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    padding: 8px 0;
+}
+
+.route-addresses {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 15px;
+    width: 100%;
+}
+
+.address-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.address-line i {
+    width: 16px;
+    text-align: center;
+    color: var(--md-on-surface-variant);
+}
+
+.start-address-icon {
+    color: var(--md-primary) !important;
+}
+
+.end-address-icon {
+    color: var(--md-success) !important;
+}
+
+
+/* === СТИЛІ ДЛЯ ПРОГРЕС-ТРЕКЕРА === */
+
+.progress-tracker {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.progress-start-point,
+.progress-end-point {
+    font-size: 14px;
+    flex-shrink: 0;
+    color: var(--md-on-surface-variant);
+}
+
+.progress-end-point.arrived {
+    color: var(--md-success);
+    transform: scale(1.2);
+}
+
+.track-line {
+    flex-grow: 1;
+    height: 2px;
+    margin: 0 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--md-outline);
+    border-radius: 1px;
+}
+
+.dots-container {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dot {
+    width: 4px; 
+    height: 4px;
+    background-color: var(--md-background);
+    border-radius: 50%;
+}
+
+#car-icon {
+    position: absolute;
+    top: 50%; 
+    left: 0%; /* Початкова позиція */
+    transform: translate(-50%, -50%);
+    color: var(--md-on-background);
+    background-color: var(--md-background);
+    padding: 2px;
+    font-size: 20px;
+    transition: left 0.5s linear;
+}
+
+.driver-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 14px;
+    align-items: flex-start;
+}
+
+.driver-info span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.driver-info strong {
+    font-weight: var(--font-weight-medium);
+}
+
+.details-btn-arrow {
+    position: absolute;
+    bottom: 15px; 
+    right: 15px;
+    background: none; 
+    border: none;
+    color: var(--md-on-surface-variant);
+    font-size: 28px;
+    cursor: pointer;
+    padding: 5px;
+}
