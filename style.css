@@ -944,38 +944,66 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     text-align: center;
 }
 
-/* === СТИЛІ ДЛЯ ПОКРОКОВОЇ ФОРМИ ЗАМОВЛЕННЯ === */
+/* === НОВІ СТИЛІ ДЛЯ КВІЗУ "ШВИДКЕ ЗАМОВЛЕННЯ" === */
+
+#quick-order-screen main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Відстань між інфо-карткою і блоком квізу */
+}
+
+#quiz-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .order-step {
     display: none; /* Ховаємо всі кроки за замовчуванням */
     flex-direction: column;
-    gap: 20px; /* Відстань між елементами всередині кроку */
+    gap: 16px; /* Відступи між елементами всередині кроку */
     width: 100%;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
 .order-step.active {
     display: flex; /* Показуємо тільки активний крок */
 }
 
-/* Стилі для фінальної картки з підтвердженням */
-.order-summary-card {
+#quick-order-summary-card {
     background-color: var(--md-surface-variant);
     padding: 16px;
     border-radius: var(--md-radius-large);
     display: flex;
     flex-direction: column;
     gap: 12px;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-.summary-item {
+#quick-order-summary-card.hidden {
+    display: none;
+}
+
+.section-label {
+    font-weight: var(--font-weight-medium);
+    font-size: 16px;
+    margin-bottom: -8px;
+}
+
+.button-group-vertical {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.summary-item span {
+.info-text {
     color: var(--md-on-surface-variant);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 14px;
+    text-align: center;
+    padding: 8px;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
