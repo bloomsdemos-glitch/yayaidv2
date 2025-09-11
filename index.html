@@ -597,31 +597,50 @@
         </div>
 
         <div id="address-step" class="step-container active">
-            <div class="settlement-choice">
-                <button class="btn-settlement active" data-type="valky">Валки</button>
-                <button class="btn-settlement" data-type="village">Інший н.п.</button>
-            </div>
-            <div id="village-select-container" class="form-group" style="display: none;">
-                <label for="village-select">Оберіть населений пункт</label>
-                <select id="village-select" class="form-input">
-                    <option>Ков'яги</option>
-                    <option>Сидоренкове</option>
-                    <option>Сніжків</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="from-address">Звідки</label>
-                <div class="input-with-icon">
-                     <input type="text" id="from-address" class="form-input" placeholder="Введіть вашу адресу">
-                     <i class="fa-solid fa-location-crosshairs input-icon"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="to-address">Куди</label>
-                <input type="text" id="to-address" class="form-input" placeholder="Введіть адресу призначення">
-            </div>
-            <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
+
+    <div class="address-block">
+        <label class="section-label">Звідки</label>
+        <div class="settlement-choice">
+            <button class="btn-settlement active" data-group="from" data-type="valky">Валки</button>
+            <button class="btn-settlement" data-group="from" data-type="village">Інший н.п.</button>
         </div>
+        <div id="from-village-container" class="form-group" style="display: none;">
+            <select id="from-village-select" class="form-input">
+                <option selected disabled>Оберіть село...</option>
+                <option>Ков'яги</option>
+                <option>Сидоренкове</option>
+                <option>Сніжків</option>
+            </select>
+        </div>
+        <div id="from-address-container" class="form-group">
+            <div class="input-with-icon">
+                 <input type="text" id="from-address" class="form-input" placeholder="Введіть вулицю або місце">
+                 <i class="fa-solid fa-location-crosshairs input-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="address-block">
+        <label class="section-label">Куди</label>
+        <div class="settlement-choice">
+            <button class="btn-settlement active" data-group="to" data-type="valky">Валки</button>
+            <button class="btn-settlement" data-group="to" data-type="village">Інший н.п.</button>
+        </div>
+        <div id="to-village-container" class="form-group" style="display: none;">
+            <select id="to-village-select" class="form-input">
+                <option selected disabled>Оберіть село...</option>
+                <option>Ков'яги</option>
+                <option>Сидоренкове</option>
+                <option>Сніжків</option>
+            </select>
+        </div>
+        <div id="to-address-container" class="form-group">
+            <input type="text" id="to-address" class="form-input" placeholder="Введіть вулицю або місце">
+        </div>
+    </div>
+    
+    <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
+</div>
 
         <div id="time-step" class="step-container">
             <label class="section-label">Коли?</label>
