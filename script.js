@@ -471,12 +471,9 @@ declineOrderBtn?.addEventListener('click', () => {
     driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
     passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
 
-    // --- Навігація з меню ПАСАЖИРА ---
-    showQuickOrderBtn?.addEventListener('click', () => {
-    navigateTo('quick-order-screen');
-    resetQuickOrder();
-});
-
+   // --- Навігація з меню ПАСАЖИРА ---
+showMyOrdersBtn?.addEventListener('click', () => {
+    navigateTo('passenger-orders-screen');
     
     const searchingCard = document.getElementById('searching-card');
     const activeTripCard = document.getElementById('active-trip-card');
@@ -492,16 +489,18 @@ declineOrderBtn?.addEventListener('click', () => {
     }
 });
 
+showQuickOrderBtn?.addEventListener('click', () => {
+    navigateTo('quick-order-screen');
+    resetQuickOrder();
+});
 
-    showQuickOrderBtn?.addEventListener('click', () => navigateTo('quick-order-screen'));
-    findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
-    showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
-    showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
-    showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
-    showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
-    showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
-    showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
-
+findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
+showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
+showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
+showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
+showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
+showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
     // --- Навігація з меню ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
 showFindPassengersBtn?.addEventListener('click', () => {
