@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
     showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
     driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
+    goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
     passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
     showMyOrdersBtn?.addEventListener('click', () => {
         navigateTo('passenger-orders-screen');
