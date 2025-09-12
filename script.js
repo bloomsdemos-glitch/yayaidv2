@@ -33,6 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const showDriverHelpBtn = document.getElementById('show-driver-help-btn');
     const showDriverSupportBtn = document.getElementById('show-driver-support-btn');
     const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
+        // == ТИМЧАСОВА ЛОГІКА ДЛЯ ПЕРЕМИКАННЯ РОЛЕЙ ==
+    const passengerProfileBadge = document.querySelector('#passenger-dashboard .profile-badge');
+    const driverProfileBadge = document.querySelector('#driver-dashboard .profile-badge');
+
+    passengerProfileBadge?.addEventListener('click', () => {
+        alert('Тимчасовий перехід: Пасажир -> Водій');
+        showScreen('driver-dashboard');
+    });
+
+    driverProfileBadge?.addEventListener('click', () => {
+        alert('Тимчасовий перехід: Водій -> Пасажир');
+        showScreen('passenger-dashboard');
+    });
+
     
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
     function showScreen(screenId) {
