@@ -285,8 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
     showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
     showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
-    showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen');
-    
+    showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));    
     // --- Обробники кнопок "Прийняти" / "Відхилити" ---
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const declineOrderBtn = document.getElementById('decline-order-btn');
