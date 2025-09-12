@@ -130,7 +130,17 @@ document.addEventListener('DOMContentLoaded', () => {
         timeResultContainer.style.display = 'flex';
         updateSummary();
     }
-    
+    function checkAddressInputs() {
+        const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
+        const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
+        const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') || (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
+        const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') || (toType === 'village' && toVillageSelect.selectedIndex > 0);
+        if (isFromValid && isToValid) {
+            addressNextBtn.classList.remove('disabled');
+        } else {
+            addressNextBtn.classList.add('disabled');
+        }
+    }
     // == ЛОГІКА ДЛЯ ЕКРАНУ "МОЇ ПОЇЗДКИ" (ПАСАЖИР) ==
     function runActiveTripSimulation() {
         if (window.tripInterval) clearInterval(window.tripInterval);
