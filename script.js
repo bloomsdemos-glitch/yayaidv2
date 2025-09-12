@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const passengerTelegramLoginBtn = document.querySelector('#login-screen-passenger .btn-telegram-login');
     
     // -- Елементи пасажира --
-    const showMyOrdersBtn = document.getElementById('show-my-orders-btn');
-    const findDriverBtn = document.getElementById('find-driver-btn');
-    const showQuickOrderBtn = document.getElementById('show-quick-order-btn');
-    const showHelpBtn = document.getElementById('show-help-btn');
-    const showPassengerValkyKharkivBtn = document.getElementById('show-passenger-valky-kharkiv-btn');
-    const showPassengerBusScheduleBtn = document.getElementById('show-passenger-bus-schedule-btn');
-    const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
-    const showPassengerSupportBtn = document.getElementById('show-passenger-support-btn');
-    const showPassengerSettingsBtn = document.getElementById('show-passenger-settings-btn');
+const showMyOrdersBtn = document.getElementById('show-my-orders-btn');
+const findDriverBtn = document.getElementById('find-driver-btn');
+const showQuickOrderBtn = document.getElementById('show-quick-order-btn');
+const showHelpBtn = document.getElementById('show-help-btn');
+const showPassengerValkyKharkivBtn = document.getElementById('show-passenger-valky-kharkiv-btn');
+const showPassengerBusScheduleBtn = document.getElementById('show-passenger-bus-schedule-btn');
+const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
+const showPassengerSupportBtn = document.getElementById('show-passenger-support-btn');
+const showPassengerSettingsBtn = document.getElementById('show-passenger-settings-btn');
        
 
     // -- Елементи водія --
