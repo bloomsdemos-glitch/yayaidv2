@@ -34,10 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const showDriverSupportBtn = document.getElementById('show-driver-support-btn');
     const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
     
-    // -- Елементи налаштувань (можна буде доповнити) --
-    const showDriverSettingsPhotoBtn = document.getElementById('show-driver-settings-photo-btn');
-    const showPassengerSettingsPhotoBtn = document.getElementById('show-passenger-settings-photo-btn');
-    
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
     function showScreen(screenId) {
         screens.forEach(screen => {
@@ -72,8 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const settlementButtons = document.querySelectorAll('.btn-settlement');
     const fromVillageContainer = document.getElementById('from-village-container');
     const toVillageContainer = document.getElementById('to-village-container');
-    const fromAddressContainer = document.getElementById('from-address-container');
-    const toAddressContainer = document.getElementById('to-address-container');
     const fromVillageSelect = document.getElementById('from-village-select');
     const toVillageSelect = document.getElementById('to-village-select');
     const timeChoiceContainer = document.getElementById('time-choice-container');
@@ -113,9 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
         summaryToContainer.style.display = 'none';
         summaryTimeContainer.style.display = 'none';
         addressNextBtn.classList.add('disabled');
-        fromAddressContainer.style.display = 'block';
+        document.getElementById('from-address-container').style.display = 'block';
         fromVillageContainer.style.display = 'none';
-        toAddressContainer.style.display = 'block';
+        document.getElementById('to-address-container').style.display = 'block';
         toVillageContainer.style.display = 'none';
         fromVillageSelect.selectedIndex = 0;
         toVillageSelect.selectedIndex = 0;
@@ -136,19 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timeResultContainer.style.display = 'flex';
         updateSummary();
     }
-
-    function checkAddressInputs() {
-        const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
-        const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
-        const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') || (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
-        const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') || (toType === 'village' && toVillageSelect.selectedIndex > 0);
-        if (isFromValid && isToValid) {
-            addressNextBtn.classList.remove('disabled');
-        } else {
-            addressNextBtn.classList.add('disabled');
-        }
-    }
-
+    
     // == ЛОГІКА ДЛЯ ЕКРАНУ "МОЇ ПОЇЗДКИ" (ПАСАЖИР) ==
     function runActiveTripSimulation() {
         if (window.tripInterval) clearInterval(window.tripInterval);
@@ -285,7 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
     showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
     showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
-    showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));    
+    showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+    
     // --- Обробники кнопок "Прийняти" / "Відхилити" ---
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const declineOrderBtn = document.getElementById('decline-order-btn');
@@ -298,7 +281,23 @@ document.addEventListener('DOMContentLoaded', () => {
         navigateTo('driver-find-passengers-screen');
     });
 
-    // --- Обробники для полів вводу "Швидкого замовлення" ---
+    // --- Обробники логіки "Швидкого замовлення" ---
+    
+    // КРОК 1: АДРЕСА
+    settlementButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const group = button.dataset.group;
+            const type = button.dataset.type;
+            document.querySelectorAll(`.btn-settlement[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            if (group === 'from') {
+                fromVillageContainer.style.display = type === 'village' ? 'block' : 'none';
+            } else {
+                toVillageContainer.style.display = type === 'village' ? 'block' : 'none';
+            }
+            checkAddressInputs();
+        });
+    });
     fromAddressInput.addEventListener('input', checkAddressInputs);
     toAddressInput.addEventListener('input', checkAddressInputs);
     fromVillageSelect.addEventListener('change', checkAddressInputs);
@@ -320,6 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSummary();
         goToStep('time');
     });
+
+    // КРОК 2: ЧАС
     editTimeBtn.addEventListener('click', () => {
         orderData.time = null;
         timeChoiceContainer.style.display = 'flex';
