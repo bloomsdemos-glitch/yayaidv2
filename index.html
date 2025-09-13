@@ -690,23 +690,40 @@
 </div>
 
         <div id="time-step" class="step-container">
-            <label class="section-label">Коли?</label>
-            <div id="time-choice-container" class="button-group-vertical">
-                <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
-                <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
-                <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
-            </div>
-            <div id="time-result-container" class="time-result" style="display: none;">
-                <span id="time-result-text"></span>
-                <button id="edit-time-btn" class="btn-icon-action"><i class="fa-solid fa-pen-to-square"></i></button>
-            </div>
-            <input type="text" id="datetime-picker" class="form-input" style="display: none;">
-            <div class="form-group">
-                <label for="comment">Коментар (необов'язково)</label>
-                <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
-            </div>
-            <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
-        </div>
+    <label class="section-label">Коли?</label>
+    <div id="time-choice-container" class="button-group-vertical">
+        <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
+        <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
+        <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
+    </div>
+    <div id="time-result-container" class="time-result" style="display: none;">
+        <span id="time-result-text"></span>
+        <button id="edit-time-btn" class="btn-icon-action"><i class="fa-solid fa-pen-to-square"></i></button>
+    </div>
+    <input type="text" id="datetime-picker" class="form-input" style="display: none;">
+    <div class="form-group">
+        <label for="comment">Коментар (необов'язково)</label>
+        <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
+    </div>
+    <button id="time-next-btn" class="btn-main-action">Далі</button>
+</div>
+
+<div id="payment-step" class="step-container">
+    <label class="section-label">Спосіб оплати</label>
+    <div class="button-group-vertical">
+        <button type="button" id="payment-cash-btn" class="btn-segment" data-payment-choice="cash">
+            <i class="fa-solid fa-money-bill-wave"></i> Готівка
+        </button>
+        <button type="button" id="payment-card-btn" class="btn-segment" data-payment-choice="card">
+            <i class="fa-solid fa-credit-card"></i> Картка
+        </button>
+    </div>
+    <div id="card-payment-note" style="display: none; font-size: 13px; text-align: center; color: var(--md-on-surface-variant);">
+         <i class="fa-solid fa-circle-info"></i> Оплата буде списана з вашої картки після завершення поїздки.
+    </div>
+    <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
+</div>
+
     </main>
 </div>
 <div id="order-confirmation-screen" class="screen hidden">
