@@ -1408,3 +1408,9 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 .btn-main-action.accept {
     background-color: var(--md-success);
 }
+/* Стиль для активної кнопки вибору оплати */
+#payment-step .btn-segment.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    border-color: var(--md-primary);
+}
