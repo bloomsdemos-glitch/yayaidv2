@@ -1420,3 +1420,26 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     cursor: not-allowed;
     opacity: 0.7;
 }
+.order-card.disabled-for-driver {
+    filter: blur(3px);
+    opacity: 0.6;
+    pointer-events: none; /* Робить картку неклікабельною */
+    position: relative;
+    user-select: none;
+}
+
+.order-card.disabled-for-driver::before {
+    content: 'Це замовлення з онлайн-оплатою';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 8px 12px;
+    border-radius: var(--md-radius-medium);
+    font-size: 13px;
+    text-align: center;
+    z-index: 2;
+    width: 80%;
+}
