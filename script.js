@@ -91,6 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const editTimeBtn = document.getElementById('edit-time-btn');
     const pickerInput = document.getElementById('datetime-picker');
     const submitOrderBtn = document.getElementById('submit-order-btn');
+    const paymentStep = document.getElementById('payment-step');
+    const timeNextBtn = document.getElementById('time-next-btn');
     let orderData = {};
 
     function updateSummary() {
@@ -101,15 +103,19 @@ document.addEventListener('DOMContentLoaded', () => {
         else { summaryTimeContainer.style.display = 'none'; }
     }
 
-    function goToStep(stepToShow) {
-        if (stepToShow === 'address') {
-            addressStep.style.display = 'flex';
-            timeStep.style.display = 'none';
-        } else if (stepToShow === 'time') {
-            addressStep.style.display = 'none';
-            timeStep.style.display = 'flex';
-        }
+   function goToStep(stepToShow) {
+    addressStep.style.display = 'none';
+    timeStep.style.display = 'none';
+    paymentStep.style.display = 'none'; // Додано
+
+    if (stepToShow === 'address') {
+        addressStep.style.display = 'flex';
+    } else if (stepToShow === 'time') {
+        timeStep.style.display = 'flex';
+    } else if (stepToShow === 'payment') { // Додано
+        paymentStep.style.display = 'flex';
     }
+}
 
     function resetQuickOrder() {
         orderData = {};
@@ -385,15 +391,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    submitOrderBtn.addEventListener('click', () => {
-        orderData.comment = document.getElementById('comment').value.trim();
-        if (!orderData.time) {
-            alert("Будь ласка, оберіть час поїздки");
-            return;
-        }
-        console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderData);
-        showScreen('order-confirmation-screen');
-    });
+   // Новий обробник для кнопки "Далі" на кроці вибору часу
+timeNextBtn?.addEventListener('click', () => {
+    // Перевіряємо, чи обраний час, перед переходом далі
+    if (!orderData.time) {
+        alert("Будь ласка, оберіть час поїздки");
+        return;
+    }
+    // Зберігаємо коментар
+    orderData.comment = document.getElementById('comment').value.trim();
+    
+    // Якщо все ок, переходимо на крок оплати
+    goToStep('payment');
+});
+
+// Оновлений обробник для фінальної кнопки "Відправити замовлення"
+submitOrderBtn.addEventListener('click', () => {
+    // В майбутньому тут буде логіка вибору оплати
+    
+    console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderData);
+    showScreen('order-confirmation-screen');
+});
 
     // --- Універсальна і розумна кнопка "Назад" ---
     const quickOrderBackButton = document.querySelector('#quick-order-screen .btn-back');
