@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // == 1. ОСНОВНІ НАЛАШТУВАННЯ ==
     let globalOrderStatus = 'searching'; // 'searching', 'trip_active'
     let fakeUserHasCard = false; // Став 'true' для тестування, ніби картка є
+    let fakeDriverAcceptsCard = false; // Став 'true', якщо водій приймає картки
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -201,11 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // == ЛОГІКА ДЛЯ ЕКРАНУ "ШУКАЮТЬ ВОДІЯ" ==
-    const fakeDriverOrders = [
-        { passengerName: "Олена", rating: 4.9, from: "вул. Зоряна, 31", to: "Залізничний вокзал", price: 115, time: "Зараз" },
-        { passengerName: "Максим", rating: 4.7, from: "с. Ков'яги, вул. Центральна, 5", to: "вул. Музейна, 4", price: 210, time: "14:30" },
-        { passengerName: "Ірина", rating: 5.0, from: "лікарня", to: "Центр", price: 85, time: "Зараз" },
-    ];
+   const fakeDriverOrders = [
+    { passengerName: "Олена", rating: 4.9, from: "вул. Зоряна, 31", to: "Залізничний вокзал", price: 115, time: "Зараз", paymentMethod: 'cash' },
+    { passengerName: "Максим", rating: 4.7, from: "с. Ков'яги", to: "вул. Музейна, 4", price: 210, time: "14:30", paymentMethod: 'card' },
+    { passengerName: "Ірина", rating: 5.0, from: "лікарня", to: "Центр", price: 85, time: "Зараз", paymentMethod: 'card' },
+    { passengerName: "Сергій", rating: 4.8, from: "вул. Соборна, 1", to: "Помідорчик", price: 95, time: "Зараз", paymentMethod: 'cash' },
+];
+
     const detailsPassengerName = document.getElementById('details-passenger-name');
     const detailsPassengerRating = document.getElementById('details-passenger-rating');
     const detailsFromAddress = document.getElementById('details-from-address');
@@ -229,18 +232,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayDriverOrders() {
-        const orderList = document.getElementById('driver-order-list');
-        if (!orderList) return;
-        orderList.innerHTML = '';
-        fakeDriverOrders.forEach(order => {
-            const cardElement = createDriverOrderCard(order);
+    const orderList = document.getElementById('driver-order-list');
+    if (!orderList) return;
+    orderList.innerHTML = '';
+    
+    fakeDriverOrders.forEach(order => {
+        const cardElement = createDriverOrderCard(order);
+
+        // Головна логіка: перевіряємо, чи може водій прийняти це замовлення
+        if (order.paymentMethod === 'card' && !fakeDriverAcceptsCard) {
+            cardElement.classList.add('disabled-for-driver');
+        } else {
             cardElement.addEventListener('click', () => {
                 displayOrderDetails(order);
                 navigateTo('driver-order-details-screen');
             });
-            orderList.appendChild(cardElement);
-        });
-    }
+        }
+        
+        orderList.appendChild(cardElement);
+    });
+}
+
 
     function displayOrderDetails(order) {
         detailsPassengerName.textContent = order.passengerName;
