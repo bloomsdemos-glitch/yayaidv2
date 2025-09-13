@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitOrderBtn = document.getElementById('submit-order-btn');
     const paymentStep = document.getElementById('payment-step');
     const timeNextBtn = document.getElementById('time-next-btn');
+    const paymentCashBtn = document.getElementById('payment-cash-btn');
+    const paymentCardBtn = document.getElementById('payment-card-btn');
     let orderData = {};
 
     function updateSummary() {
@@ -391,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-   // Новий обробник для кнопки "Далі" на кроці вибору часу
+// Новий обробник для кнопки "Далі" на кроці вибору часу
 timeNextBtn?.addEventListener('click', () => {
     // Перевіряємо, чи обраний час, перед переходом далі
     if (!orderData.time) {
@@ -403,6 +405,8 @@ timeNextBtn?.addEventListener('click', () => {
     
     // Якщо все ок, переходимо на крок оплати
     goToStep('payment');
+    
+    submitOrderBtn.classList.add('disabled'); // <-- Додано рядок з Кроку В
 });
 
 // Оновлений обробник для фінальної кнопки "Відправити замовлення"
@@ -413,26 +417,51 @@ submitOrderBtn.addEventListener('click', () => {
     showScreen('order-confirmation-screen');
 });
 
-    // --- Універсальна і розумна кнопка "Назад" ---
-    const quickOrderBackButton = document.querySelector('#quick-order-screen .btn-back');
-    backButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const isQuickOrderScreen = button.closest('#quick-order-screen');
-            if (isQuickOrderScreen) {
-                const isOnTimeStep = timeStep.style.display === 'flex';
-                if (isOnTimeStep) {
-                    editTimeBtn.click();
-                    goToStep('address');
-                } else {
-                    if (confirm('Скасувати оформлення замовлення? Всі дані буде втрачено.')) {
-                        showScreen('passenger-dashboard');
-                    }
-                }
+// --- Обробники для вибору способу оплати (Додано новий блок з Кроку Б) ---
+function handlePaymentChoice(choice) {
+    // Зберігаємо вибір
+    orderData.paymentMethod = choice;
+    
+    // Оновлюємо вигляд кнопок
+    paymentCashBtn.classList.remove('active');
+    paymentCardBtn.classList.remove('active');
+    
+    if (choice === 'cash') {
+        paymentCashBtn.classList.add('active');
+        document.getElementById('card-payment-note').style.display = 'none';
+    } else if (choice === 'card') {
+        paymentCardBtn.classList.add('active');
+        document.getElementById('card-payment-note').style.display = 'block';
+    }
+
+    // Робимо фінальну кнопку активною
+    submitOrderBtn.classList.remove('disabled');
+}
+
+paymentCashBtn?.addEventListener('click', () => handlePaymentChoice('cash'));
+paymentCardBtn?.addEventListener('click', () => handlePaymentChoice('card'));
+
+
+// --- Універсальна і розумна кнопка "Назад" ---
+const quickOrderBackButton = document.querySelector('#quick-order-screen .btn-back');
+backButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const isQuickOrderScreen = button.closest('#quick-order-screen');
+        if (isQuickOrderScreen) {
+            const isOnTimeStep = timeStep.style.display === 'flex';
+            if (isOnTimeStep) {
+                editTimeBtn.click();
+                goToStep('address');
             } else {
-                showScreen(button.dataset.target || 'home-screen');
+                if (confirm('Скасувати оформлення замовлення? Всі дані буде втрачено.')) {
+                    showScreen('passenger-dashboard');
+                }
             }
-        });
+        } else {
+            showScreen(button.dataset.target || 'home-screen');
+        }
     });
+});
 
     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
     const themeToggle = document.getElementById('theme-toggle');
