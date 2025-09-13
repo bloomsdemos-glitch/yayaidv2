@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // == 1. ОСНОВНІ НАЛАШТУВАННЯ ==
     let globalOrderStatus = 'searching'; // 'searching', 'trip_active'
+    let fakeUserHasCard = false; // Став 'true' для тестування, ніби картка є
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
