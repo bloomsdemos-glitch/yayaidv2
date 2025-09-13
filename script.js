@@ -396,19 +396,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 // Новий обробник для кнопки "Далі" на кроці вибору часу
 timeNextBtn?.addEventListener('click', () => {
-    // Перевіряємо, чи обраний час, перед переходом далі
     if (!orderData.time) {
         alert("Будь ласка, оберіть час поїздки");
         return;
     }
-    // Зберігаємо коментар
     orderData.comment = document.getElementById('comment').value.trim();
     
-    // Якщо все ок, переходимо на крок оплати
-    goToStep('payment');
+    // Перевіряємо, чи є у юзера картка
+    if (fakeUserHasCard) {
+        paymentCardBtn.classList.remove('disabled');
+    } else {
+        paymentCardBtn.classList.add('disabled');
+    }
     
-    submitOrderBtn.classList.add('disabled'); // <-- Додано рядок з Кроку В
+    goToStep('payment');
+    submitOrderBtn.classList.add('disabled');
 });
+
 
 // Оновлений обробник для фінальної кнопки "Відправити замовлення"
 submitOrderBtn.addEventListener('click', () => {
@@ -440,7 +444,17 @@ function handlePaymentChoice(choice) {
 }
 
 paymentCashBtn?.addEventListener('click', () => handlePaymentChoice('cash'));
-paymentCardBtn?.addEventListener('click', () => handlePaymentChoice('card'));
+paymentCardBtn?.addEventListener('click', () => {
+    // Якщо кнопка неактивна - показуємо попередження
+    if (paymentCardBtn.classList.contains('disabled')) {
+        alert('Ви не додали метод оплати онлайн. Перейдіть в налаштування, щоб додати картку.');
+        // В майбутньому тут буде красиве модальне вікно з кнопкою "Додати"
+        return;
+    }
+    // Якщо все ок - обробляємо клік
+    handlePaymentChoice('card');
+});
+
 
 
 // --- Універсальна і розумна кнопка "Назад" ---
