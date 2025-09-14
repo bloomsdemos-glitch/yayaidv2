@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
     detailsFromAddress.textContent = order.from;
     detailsToAddress.textContent = order.to;
-    
+
     const commission = Math.round(order.price * 0.05);
     detailsTotalPrice.textContent = `${order.price} грн`;
     detailsCommission.textContent = `- ${commission} грн`;
@@ -278,27 +278,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     acceptOrderBtn.onclick = () => {
         globalOrderStatus = 'trip_active'; 
-        
-        // Наповнюємо картку активного замовлення даними
+
         document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
         document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
         document.getElementById('driver-active-from-address').textContent = order.from;
         document.getElementById('driver-active-to-address').textContent = order.to;
 
-        // Показуємо картку на екрані "Мої замовлення"
         const activeCard = document.getElementById('driver-active-trip-card');
         activeCard.style.display = 'block';
         document.getElementById('no-active-driver-orders').style.display = 'none';
 
-        // Робимо цю картку клікабельною
         activeCard.onclick = () => {
             // Наповнюємо даними новий детальний екран
             document.getElementById('details-active-passenger-name').textContent = order.passengerName;
             document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
             document.getElementById('details-active-from-address').textContent = order.from;
             document.getElementById('details-active-to-address').textContent = order.to;
-            
-            // І переходимо на нього
+
             navigateTo('driver-active-trip-details-screen');
         };
 
@@ -310,6 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigateTo('driver-find-passengers-screen');
     };
 }
+
 
 
     // == 4. ОБРОБНИКИ ПОДІЙ ==
@@ -355,6 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
     showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
     document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+// Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
+    document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => {
+    navigateTo('driver-orders-screen');
+});
 
     
 
