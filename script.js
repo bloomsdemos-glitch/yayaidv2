@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
     detailsFromAddress.textContent = order.from;
     detailsToAddress.textContent = order.to;
-    
+
     const commission = Math.round(order.price * 0.05);
     detailsTotalPrice.textContent = `${order.price} грн`;
     detailsCommission.textContent = `- ${commission} грн`;
@@ -273,13 +273,12 @@ document.addEventListener('DOMContentLoaded', () => {
         detailsCommentContainer.style.display = 'none';
     }
 
-    // Оновлена логіка для кнопок "Прийняти" / "Відхилити"
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const declineOrderBtn = document.getElementById('decline-order-btn');
 
     acceptOrderBtn.onclick = () => {
         globalOrderStatus = 'trip_active'; 
-        
+
         // Наповнюємо картку активного замовлення даними
         document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
         document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
@@ -287,12 +286,33 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('driver-active-to-address').textContent = order.to;
 
         // Показуємо картку на екрані "Мої замовлення"
-        document.getElementById('driver-active-trip-card').style.display = 'block';
+        const activeCard = document.getElementById('driver-active-trip-card');
+        activeCard.style.display = 'block';
         document.getElementById('no-active-driver-orders').style.display = 'none';
+
+        // === НОВИЙ КОД ===
+        // Робимо цю картку клікабельною
+        activeCard.onclick = () => {
+            // Наповнюємо даними новий детальний екран
+            document.getElementById('details-active-passenger-name').textContent = order.passengerName;
+            document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
+            document.getElementById('details-active-from-address').textContent = order.from;
+            document.getElementById('details-active-to-address').textContent = order.to;
+
+            // І переходимо на нього
+            navigateTo('driver-active-trip-details-screen');
+        };
+        // === КІНЕЦЬ НОВОГО КОДУ ===
 
         navigateTo('driver-orders-screen'); 
         alert('Замовлення прийнято!');
     };
+
+    declineOrderBtn.onclick = () => {
+        navigateTo('driver-find-passengers-screen');
+    };
+}
+
 
     declineOrderBtn.onclick = () => {
         navigateTo('driver-find-passengers-screen');
