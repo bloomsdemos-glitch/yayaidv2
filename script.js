@@ -354,7 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
     showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
     showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
-    
+    document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+
     
 
     // --- Обробники логіки "Швидкого замовлення" ---
