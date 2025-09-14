@@ -475,7 +475,6 @@ submitOrderBtn.addEventListener('click', () => {
 });
 
 
-
 // --- Обробники для вибору способу оплати (Додано новий блок з Кроку Б) ---
 function handlePaymentChoice(choice) {
     // Зберігаємо вибір
@@ -530,19 +529,6 @@ backButtons.forEach(button => {
             showScreen(button.dataset.target || 'home-screen');
         }
     });
-});
-submitOrderBtn.addEventListener('click', () => {
-    // Додаємо ім'я пасажира (поки фейкове) і унікальний ID
-    orderData.passengerName = "Віта"; 
-    orderData.rating = 4.8; // теж поки фейковий
-    orderData.id = Date.now(); // простий спосіб зробити ID унікальним
-
-    // Додаємо нове замовлення в нашу "базу даних"
-    orders_database.push(orderData);
-
-    console.log('НОВЕ ЗАМОВЛЕННЯ ДОДАНО:', orders_database);
-    showScreen('order-confirmation-screen');
-});
 
 
     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
