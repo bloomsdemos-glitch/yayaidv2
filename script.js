@@ -529,7 +529,7 @@ backButtons.forEach(button => {
             showScreen(button.dataset.target || 'home-screen');
         }
     });
-
+});
 
     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
     const themeToggle = document.getElementById('theme-toggle');
@@ -592,30 +592,33 @@ backButtons.forEach(button => {
         }
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
-// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
-driverArrivedBtn?.addEventListener('click', () => {
-    alert('Пасажира сповіщено, що ви прибули!');
-    driverArrivedBtn.classList.add('disabled');
-    driverStartTripBtn.classList.remove('disabled');
-    // В майбутньому тут буде пуш-сповіщення для пасажира
-});
 
-driverStartTripBtn?.addEventListener('click', () => {
-    alert('Поїздку розпочато!');
-    driverStartTripBtn.classList.add('disabled');
-    driverFinishTripBtn.classList.remove('disabled');
-    // В майбутньому тут буде пуш-сповіщення для пасажира
-});
+    // === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
+    driverArrivedBtn?.addEventListener('click', () => {
+        alert('Пасажира сповіщено, що ви прибули!');
+        driverArrivedBtn.classList.add('disabled');
+        driverStartTripBtn.classList.remove('disabled');
+        // В майбутньому тут буде пуш-сповіщення для пасажира
+    });
 
-driverFinishTripBtn?.addEventListener('click', () => {
-    alert('Поїздку завершено!');
-    // Повертаємо водія на головний екран і "обнуляємо" статус
-    globalOrderStatus = 'searching';
-    navigateTo('driver-dashboard');
+    driverStartTripBtn?.addEventListener('click', () => {
+        alert('Поїздку розпочато!');
+        driverStartTripBtn.classList.add('disabled');
+        driverFinishTripBtn.classList.remove('disabled');
+        // В майбутньому тут буде пуш-сповіщення для пасажира
+    });
 
-    // Ховаємо активну картку і показуємо повідомлення "немає замовлень"
-    document.getElementById('driver-active-trip-card').style.display = 'none';
-    document.getElementById('no-active-driver-orders').style.display = 'block';
+    driverFinishTripBtn?.addEventListener('click', () => {
+        alert('Поїздку завершено!');
+        // Повертаємо водія на головний екран і "обнуляємо" статус
+        globalOrderStatus = 'searching';
+        navigateTo('driver-dashboard');
 
-    // І в майбутньому тут буде логіка додавання поїздки в архів
+        // Ховаємо активну картку і показуємо повідомлення "немає замовлень"
+        document.getElementById('driver-active-trip-card').style.display = 'none';
+        document.getElementById('no-active-driver-orders').style.display = 'block';
+
+        // І в майбутньому тут буде логіка додавання поїздки в архів
+    });
+
 });
