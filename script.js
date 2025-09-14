@@ -206,12 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // == ЛОГІКА ДЛЯ ЕКРАНУ "ШУКАЮТЬ ВОДІЯ" ==
-   const fakeDriverOrders = [
-    { passengerName: "Олена", rating: 4.9, from: "вул. Зоряна, 31", to: "Залізничний вокзал", price: 115, time: "Зараз", paymentMethod: 'cash' },
-    { passengerName: "Максим", rating: 4.7, from: "с. Ков'яги", to: "вул. Музейна, 4", price: 210, time: "14:30", paymentMethod: 'card' },
-    { passengerName: "Ірина", rating: 5.0, from: "лікарня", to: "Центр", price: 85, time: "Зараз", paymentMethod: 'card' },
-    { passengerName: "Сергій", rating: 4.8, from: "вул. Соборна, 1", to: "Помідорчик", price: 95, time: "Зараз", paymentMethod: 'cash' },
-];
+   // Тимчасова база даних замовлень
+    let orders_database = [];
+
 
     const detailsPassengerName = document.getElementById('details-passenger-name');
     const detailsPassengerRating = document.getElementById('details-passenger-rating');
@@ -240,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!orderList) return;
     orderList.innerHTML = '';
     
-    fakeDriverOrders.forEach(order => {
+    orders_database.forEach(order => { ... });
         const cardElement = createDriverOrderCard(order);
 
         // Головна логіка: перевіряємо, чи може водій прийняти це замовлення
@@ -465,11 +462,19 @@ timeNextBtn?.addEventListener('click', () => {
 
 // Оновлений обробник для фінальної кнопки "Відправити замовлення"
 submitOrderBtn.addEventListener('click', () => {
-    // В майбутньому тут буде логіка вибору оплати
-    
-    console.log('ФІНАЛЬНЕ ЗАМОВЛЕННЯ:', orderData);
+    // Додаємо ім'я пасажира (поки фейкове) і унікальний ID
+    orderData.passengerName = "Віта"; 
+    orderData.rating = 4.8; // теж поки фейковий
+    orderData.id = Date.now(); // простий спосіб зробити ID унікальним
+
+    // Додаємо нове замовлення в нашу "базу даних"
+    orders_database.push(orderData);
+
+    console.log('НОВЕ ЗАМОВЛЕННЯ ДОДАНО:', orders_database);
     showScreen('order-confirmation-screen');
 });
+
+
 
 // --- Обробники для вибору способу оплати (Додано новий блок з Кроку Б) ---
 function handlePaymentChoice(choice) {
