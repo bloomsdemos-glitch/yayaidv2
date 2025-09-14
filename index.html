@@ -440,9 +440,62 @@
         <div class="header-placeholder"></div>
     </header>
     <main>
-        <p>Тут буде активне замовлення та архів поїздок.</p>
+        <div id="driver-active-trip-card" class="order-card-container" style="display: none;">
+            <div class="order-card active-trip">
+                <div class="order-header">
+                    <h3 class="order-title">Активне замовлення</h3>
+                </div>
+                <div class="map-placeholder"><p>Тут буде карта маршруту до пасажира</p></div>
+                <div class="details-card driver" style="box-shadow: none; padding: 0;">
+                     <div class="passenger-info">
+                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong id="driver-active-passenger-name">Олена</strong>
+                            <span id="driver-active-passenger-rating">4.9 <i class="fa-solid fa-star"></i></span>
+                        </div>
+                    </div>
+                    <div class="order-route-info" style="margin-top: 10px;">
+                        <div class="address-line">
+                            <i class="fa-solid fa-circle start-address-icon"></i>
+                            <span id="driver-active-from-address">вул. Зоряна, 31</span>
+                        </div>
+                        <div class="address-line">
+                            <i class="fa-solid fa-location-dot end-address-icon"></i>
+                            <span id="driver-active-to-address">Залізничний вокзал</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-actions" style="padding: 10px 0 0 0;">
+                     <button class="btn-main-action decline" style="flex: 1;">Скасувати</button>
+                     <button class="btn-main-action accept" style="flex: 1;">Завершити</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="no-active-driver-orders" style="text-align: center; color: var(--md-on-surface-variant); padding: 20px;">
+            <p>У вас немає активних замовлень.</p>
+        </div>
+
+        <div class="archive-separator">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Архів поїздок</span>
+        </div>
+        <ul class="order-list driver">
+            <li class="order-card archived">
+                <div class="archived-info">
+                    <span class="archived-date">24.08.2025</span>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle"></i> с. Ков'яги</span>
+                        <span><i class="fa-solid fa-location-dot"></i> Центр</span>
+                    </div>
+                    <div class="driver-details">Пасажир: Максим</div>
+                </div>
+                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+            </li>
+        </ul>
     </main>
 </div>
+
 
 
 <div id="driver-valky-kharkiv-screen" class="screen hidden">
