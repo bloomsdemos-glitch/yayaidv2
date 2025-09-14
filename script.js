@@ -531,6 +531,19 @@ backButtons.forEach(button => {
         }
     });
 });
+submitOrderBtn.addEventListener('click', () => {
+    // Додаємо ім'я пасажира (поки фейкове) і унікальний ID
+    orderData.passengerName = "Віта"; 
+    orderData.rating = 4.8; // теж поки фейковий
+    orderData.id = Date.now(); // простий спосіб зробити ID унікальним
+
+    // Додаємо нове замовлення в нашу "базу даних"
+    orders_database.push(orderData);
+
+    console.log('НОВЕ ЗАМОВЛЕННЯ ДОДАНО:', orders_database);
+    showScreen('order-confirmation-screen');
+});
+
 
     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
     const themeToggle = document.getElementById('theme-toggle');
