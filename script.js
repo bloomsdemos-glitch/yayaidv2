@@ -255,22 +255,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function displayOrderDetails(order) {
-        detailsPassengerName.textContent = order.passengerName;
-        detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
-        detailsFromAddress.textContent = order.from;
-        detailsToAddress.textContent = order.to;
-        const commission = Math.round(order.price * 0.05);
-        detailsTotalPrice.textContent = `${order.price} грн`;
-        detailsCommission.textContent = `- ${commission} грн`;
-        detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
-        const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
-        if (Math.random() > 0.5) {
-            detailsCommentText.textContent = randomComment;
-            detailsCommentContainer.style.display = 'block';
-        } else {
-            detailsCommentContainer.style.display = 'none';
-        }
+    detailsPassengerName.textContent = order.passengerName;
+    detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
+    detailsFromAddress.textContent = order.from;
+    detailsToAddress.textContent = order.to;
+    
+    const commission = Math.round(order.price * 0.05);
+    detailsTotalPrice.textContent = `${order.price} грн`;
+    detailsCommission.textContent = `- ${commission} грн`;
+    detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
+
+    const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
+    if (Math.random() > 0.5) {
+        detailsCommentText.textContent = randomComment;
+        detailsCommentContainer.style.display = 'block';
+    } else {
+        detailsCommentContainer.style.display = 'none';
     }
+
+    // Оновлена логіка для кнопок "Прийняти" / "Відхилити"
+    const acceptOrderBtn = document.getElementById('accept-order-btn');
+    const declineOrderBtn = document.getElementById('decline-order-btn');
+
+    acceptOrderBtn.onclick = () => {
+        globalOrderStatus = 'trip_active'; 
+        
+        // Наповнюємо картку активного замовлення даними
+        document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
+        document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
+        document.getElementById('driver-active-from-address').textContent = order.from;
+        document.getElementById('driver-active-to-address').textContent = order.to;
+
+        // Показуємо картку на екрані "Мої замовлення"
+        document.getElementById('driver-active-trip-card').style.display = 'block';
+        document.getElementById('no-active-driver-orders').style.display = 'none';
+
+        navigateTo('driver-orders-screen'); 
+        alert('Замовлення прийнято!');
+    };
+
+    declineOrderBtn.onclick = () => {
+        navigateTo('driver-find-passengers-screen');
+    };
+}
+
 
     // == 4. ОБРОБНИКИ ПОДІЙ ==
     
@@ -315,17 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
     showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
     
-    // --- Обробники кнопок "Прийняти" / "Відхилити" ---
-    const acceptOrderBtn = document.getElementById('accept-order-btn');
-    const declineOrderBtn = document.getElementById('decline-order-btn');
-    acceptOrderBtn?.addEventListener('click', () => {
-        globalOrderStatus = 'trip_active'; 
-        navigateTo('driver-orders-screen'); 
-        alert('Замовлення прийнято!');
-    });
-    declineOrderBtn?.addEventListener('click', () => {
-        navigateTo('driver-find-passengers-screen');
-    });
+    
 
     // --- Обробники логіки "Швидкого замовлення" ---
     
