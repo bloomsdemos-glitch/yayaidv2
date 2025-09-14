@@ -255,57 +255,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function displayOrderDetails(order) {
-    detailsPassengerName.textContent = order.passengerName;
-    detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
-    detailsFromAddress.textContent = order.from;
-    detailsToAddress.textContent = order.to;
+    if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
+    if(detailsPassengerRating) detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
+    if(detailsFromAddress) detailsFromAddress.textContent = order.from;
+    if(detailsToAddress) detailsToAddress.textContent = order.to;
 
     const commission = Math.round(order.price * 0.05);
-    detailsTotalPrice.textContent = `${order.price} грн`;
-    detailsCommission.textContent = `- ${commission} грн`;
-    detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
+    if(detailsTotalPrice) detailsTotalPrice.textContent = `${order.price} грн`;
+    if(detailsCommission) detailsCommission.textContent = `- ${commission} грн`;
+    if(detailsDriverEarning) detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
 
     const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
     if (Math.random() > 0.5) {
-        detailsCommentText.textContent = randomComment;
-        detailsCommentContainer.style.display = 'block';
+        if(detailsCommentText) detailsCommentText.textContent = randomComment;
+        if(detailsCommentContainer) detailsCommentContainer.style.display = 'block';
     } else {
-        detailsCommentContainer.style.display = 'none';
+        if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
     }
 
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const declineOrderBtn = document.getElementById('decline-order-btn');
 
-    acceptOrderBtn.onclick = () => {
+    if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
         globalOrderStatus = 'trip_active'; 
 
-        document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
-        document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
-        document.getElementById('driver-active-from-address').textContent = order.from;
-        document.getElementById('driver-active-to-address').textContent = order.to;
-
         const activeCard = document.getElementById('driver-active-trip-card');
-        activeCard.style.display = 'block';
-        document.getElementById('no-active-driver-orders').style.display = 'none';
+        if(activeCard) {
+            document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
+            document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
+            document.getElementById('driver-active-from-address').textContent = order.from;
+            document.getElementById('driver-active-to-address').textContent = order.to;
+            activeCard.style.display = 'block';
 
-        activeCard.onclick = () => {
-            // Наповнюємо даними новий детальний екран
-            document.getElementById('details-active-passenger-name').textContent = order.passengerName;
-            document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
-            document.getElementById('details-active-from-address').textContent = order.from;
-            document.getElementById('details-active-to-address').textContent = order.to;
+            activeCard.onclick = () => {
+                document.getElementById('details-active-passenger-name').textContent = order.passengerName;
+                document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
+                document.getElementById('details-active-from-address').textContent = order.from;
+                document.getElementById('details-active-to-address').textContent = order.to;
+                navigateTo('driver-active-trip-details-screen');
+            };
+        }
 
-            navigateTo('driver-active-trip-details-screen');
-        };
+        const noOrdersMsg = document.getElementById('no-active-driver-orders');
+        if(noOrdersMsg) noOrdersMsg.style.display = 'none';
 
         navigateTo('driver-orders-screen'); 
         alert('Замовлення прийнято!');
     };
 
-    declineOrderBtn.onclick = () => {
+    if(declineOrderBtn) declineOrderBtn.onclick = () => {
         navigateTo('driver-find-passengers-screen');
     };
 }
+
 
 
 
@@ -351,11 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
     showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
     showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
     showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
-    document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
-    document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => {
-    navigateTo('driver-orders-screen');
-});
+    document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+
 
     
 
