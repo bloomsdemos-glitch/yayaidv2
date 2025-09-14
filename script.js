@@ -232,15 +232,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return li;
     }
 
-    function displayDriverOrders() {
+function displayDriverOrders() {
     const orderList = document.getElementById('driver-order-list');
     if (!orderList) return;
     orderList.innerHTML = '';
-    
-    orders_database.forEach(order => { ... });
+
+    // Правильний цикл forEach
+    orders_database.forEach(order => {
         const cardElement = createDriverOrderCard(order);
 
-        // Головна логіка: перевіряємо, чи може водій прийняти це замовлення
+        // Ця логіка має бути ВСЕРЕДИНІ циклу
         if (order.paymentMethod === 'card' && !fakeDriverAcceptsCard) {
             cardElement.classList.add('disabled-for-driver');
         } else {
@@ -249,11 +250,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo('driver-order-details-screen');
             });
         }
-        
+
         orderList.appendChild(cardElement);
     });
 }
-
 
     function displayOrderDetails(order) {
     if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
