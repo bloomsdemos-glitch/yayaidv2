@@ -616,4 +616,5 @@ driverFinishTripBtn?.addEventListener('click', () => {
     // І в майбутньому тут буде логіка додавання поїздки в архів
 });
 
+});
 
