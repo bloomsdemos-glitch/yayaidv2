@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const screens = document.querySelectorAll('.screen');
     const backButtons = document.querySelectorAll('.btn-back');
     const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
+// -- Елементи керування поїздкою водія --
+    const driverArrivedBtn = document.getElementById('driver-arrived-btn');
+    const driverStartTripBtn = document.getElementById('driver-start-trip-btn');
+    const driverFinishTripBtn = document.getElementById('driver-finish-trip-btn');
 
     // -- Навігація --
     const showDriverLoginBtn = document.getElementById('show-driver-login');
@@ -584,5 +588,32 @@ backButtons.forEach(button => {
         }
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
-
+// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
+driverArrivedBtn?.addEventListener('click', () => {
+    alert('Пасажира сповіщено, що ви прибули!');
+    driverArrivedBtn.classList.add('disabled');
+    driverStartTripBtn.classList.remove('disabled');
+    // В майбутньому тут буде пуш-сповіщення для пасажира
 });
+
+driverStartTripBtn?.addEventListener('click', () => {
+    alert('Поїздку розпочато!');
+    driverStartTripBtn.classList.add('disabled');
+    driverFinishTripBtn.classList.remove('disabled');
+    // В майбутньому тут буде пуш-сповіщення для пасажира
+});
+
+driverFinishTripBtn?.addEventListener('click', () => {
+    alert('Поїздку завершено!');
+    // Повертаємо водія на головний екран і "обнуляємо" статус
+    globalOrderStatus = 'searching';
+    navigateTo('driver-dashboard');
+
+    // Ховаємо активну картку і показуємо повідомлення "немає замовлень"
+    document.getElementById('driver-active-trip-card').style.display = 'none';
+    document.getElementById('no-active-driver-orders').style.display = 'block';
+
+    // І в майбутньому тут буде логіка додавання поїздки в архів
+});
+
+
