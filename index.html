@@ -471,6 +471,42 @@
                 </div>
             </div>
         </div>
+<div id="driver-active-trip-details-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Активна поїздка</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main style="display: flex; flex-direction: column;">
+        <div class="map-placeholder" style="flex-shrink: 0;"><p>Тут буде карта з маршрутом</p></div>
+
+        <div class="details-card driver" style="margin-top: 16px;">
+             <div class="passenger-info">
+                <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                <div class="passenger-details">
+                    <strong id="details-active-passenger-name">Олена</strong>
+                    <span id="details-active-passenger-rating">4.9 <i class="fa-solid fa-star"></i></span>
+                </div>
+            </div>
+            <div class="order-route-info" style="margin-top: 10px;">
+                <div class="address-line">
+                    <i class="fa-solid fa-circle start-address-icon"></i>
+                    <span id="details-active-from-address">вул. Зоряна, 31</span>
+                </div>
+                <div class="address-line">
+                    <i class="fa-solid fa-location-dot end-address-icon"></i>
+                    <span id="details-active-to-address">Залізничний вокзал</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="driver-trip-controls" class="button-group-vertical" style="margin-top: auto; padding-top: 20px;">
+            <button id="driver-arrived-btn" class="btn-main-action accept">Я на місці</button>
+            <button id="driver-start-trip-btn" class="btn-main-action disabled">Почати поїздку</button>
+            <button id="driver-finish-trip-btn" class="btn-main-action decline disabled">Завершити поїздку</button>
+        </div>
+    </main>
+</div>
 
         <div id="no-active-driver-orders" style="text-align: center; color: var(--md-on-surface-variant); padding: 20px;">
             <p>У вас немає активних замовлень.</p>
