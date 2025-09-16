@@ -371,7 +371,6 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
     document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
 
 
-    
 
     // --- Обробники логіки "Швидкого замовлення" ---
     
@@ -605,7 +604,7 @@ backButtons.forEach(button => {
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
 
-    // === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
+ // === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
     driverArrivedBtn?.addEventListener('click', () => {
         alert('Пасажира сповіщено, що ви прибули!');
         driverArrivedBtn.classList.add('disabled');
@@ -621,27 +620,12 @@ backButtons.forEach(button => {
     });
 
     driverFinishTripBtn?.addEventListener('click', () => {
-    alert('Поїздку завершено!');
-    showScreen('passenger-rating-trip-screen');
+        alert('Поїздку завершено!');
+        showScreen('passenger-rating-trip-screen');
 
-    // НЕ скидаємо статус тут, щоб пасажир міг спокійно оцінити поїздку
-    // globalOrderStatus = 'searching'; 
-});
-
-
-    // Магічний рядок, який показує пасажиру екран оцінки
-    showScreen('passenger-rating-trip-screen');
-
-    // Тимчасово прибираємо перехід для водія, щоб було зручно тестувати
-    // navigateTo('driver-dashboard'); 
-
-    // "Обнуляємо" статус
-    globalOrderStatus = 'searching';
-    document.getElementById('driver-active-trip-card').style.display = 'none';
-    document.getElementById('no-active-driver-orders').style.display = 'block';
-
-    // І в майбутньому тут буде логіка додавання поїздки в архів
-});
+        // НЕ скидаємо статус тут, щоб пасажир міг спокійно оцінити поїздку
+        // globalOrderStatus = 'searching'; 
+    });
 
     // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
 let currentRating = 0;
