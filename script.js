@@ -280,38 +280,47 @@ function displayDriverOrders() {
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const declineOrderBtn = document.getElementById('decline-order-btn');
 
-    if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
-        globalOrderStatus = 'trip_active'; 
+if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
+    globalOrderStatus = 'trip_active';
 
-        const activeCard = document.getElementById('driver-active-trip-card');
-        if(activeCard) {
-            document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
-            document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
-            document.getElementById('driver-active-from-address').textContent = order.from;
-            document.getElementById('driver-active-to-address').textContent = order.to;
-            activeCard.style.display = 'block';
+    // === НОВИЙ КОД: ОНОВЛЮЄМО ЕКРАН ПАСАЖИРА ===
+    const passengerSearchingCard = document.getElementById('searching-card');
+    const passengerActiveCard = document.getElementById('active-trip-card');
+    if (passengerSearchingCard && passengerActiveCard) {
+        passengerSearchingCard.style.display = 'none';
+        passengerActiveCard.style.display = 'block';
+        runActiveTripSimulation(); // Запускаємо анімацію машинки
+    }
+    // === КІНЕЦЬ НОВОГО КОДУ ===
 
-            activeCard.onclick = () => {
-                document.getElementById('details-active-passenger-name').textContent = order.passengerName;
-                document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
-                document.getElementById('details-active-from-address').textContent = order.from;
-                document.getElementById('details-active-to-address').textContent = order.to;
-                navigateTo('driver-active-trip-details-screen');
-            };
-        }
+    const activeCard = document.getElementById('driver-active-trip-card');
+    if(activeCard) {
+        document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
+        document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
+        document.getElementById('driver-active-from-address').textContent = order.from;
+        document.getElementById('driver-active-to-address').textContent = order.to;
+        activeCard.style.display = 'block';
 
-        const noOrdersMsg = document.getElementById('no-active-driver-orders');
-        if(noOrdersMsg) noOrdersMsg.style.display = 'none';
+        activeCard.onclick = () => {
+            document.getElementById('details-active-passenger-name').textContent = order.passengerName;
+            document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
+            document.getElementById('details-active-from-address').textContent = order.from;
+            document.getElementById('details-active-to-address').textContent = order.to;
+            navigateTo('driver-active-trip-details-screen');
+        };
+    }
 
-        navigateTo('driver-orders-screen'); 
-        alert('Замовлення прийнято!');
-    };
+    const noOrdersMsg = document.getElementById('no-active-driver-orders');
+    if(noOrdersMsg) noOrdersMsg.style.display = 'none';
 
-    if(declineOrderBtn) declineOrderBtn.onclick = () => {
-        navigateTo('driver-find-passengers-screen');
-    };
+    navigateTo('driver-orders-screen'); 
+    alert('Замовлення прийнято!');
+};
+
+if(declineOrderBtn) declineOrderBtn.onclick = () => {
+    navigateTo('driver-find-passengers-screen');
+};
 }
-
 
 
 
@@ -613,6 +622,12 @@ backButtons.forEach(button => {
 
     driverFinishTripBtn?.addEventListener('click', () => {
     alert('Поїздку завершено!');
+    showScreen('passenger-rating-trip-screen');
+
+    // НЕ скидаємо статус тут, щоб пасажир міг спокійно оцінити поїздку
+    // globalOrderStatus = 'searching'; 
+});
+
 
     // Магічний рядок, який показує пасажиру екран оцінки
     showScreen('passenger-rating-trip-screen');
@@ -664,7 +679,13 @@ submitRatingBtn?.addEventListener('click', () => {
         const comment = document.getElementById('trip-comment').value.trim();
         alert(`Дякуємо за оцінку! Ваш рейтинг: ${currentRating} зірок. Коментар: "${comment}"`);
 
-        // Скидаємо все до початкового стану і повертаємось на головний екран
+        // === ОСЬ ТУТ ПРАВИЛЬНЕ МІСЦЕ ДЛЯ СКИДАННЯ СТАТУСУ ===
+        globalOrderStatus = 'searching';
+
+        // Ховаємо активну картку і показуємо знову екран пошуку
+        document.getElementById('searching-card').style.display = 'block';
+        document.getElementById('active-trip-card').style.display = 'none';
+
         currentRating = 0;
         updateStars(0);
         document.getElementById('trip-comment').value = '';
@@ -672,5 +693,6 @@ submitRatingBtn?.addEventListener('click', () => {
         navigateTo('passenger-dashboard');
     }
 });
+
 
 });
