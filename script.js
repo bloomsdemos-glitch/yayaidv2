@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // == 1. ОСНОВНІ НАЛАШТУВАННЯ ==
-    let globalOrderStatus = 'searching'; // 'searching', 'trip_active'
-    let fakeUserHasCard = false; // Став 'true' для тестування, ніби картка є
-    let fakeDriverAcceptsCard = false; // Став 'true', якщо водій приймає картки
+let globalOrderStatus = 'searching';
+let fakeUserHasCard = false;
+let fakeDriverAcceptsCard = false;
+let passenger_archive = []; // Архів для пасажира
+let driver_archive = [];    // Архів для водія
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -334,6 +335,7 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
     goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
     passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
     showMyOrdersBtn?.addEventListener('click', () => {
+        displayArchives();
         navigateTo('passenger-orders-screen');
         const searchingCard = document.getElementById('searching-card');
         const activeTripCard = document.getElementById('active-trip-card');
@@ -351,17 +353,40 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
         resetQuickOrder();
     });
     findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
-    showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
-    showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
-    showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
-    showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
-    showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
-    showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
-    showDriverOrdersBtn?.addEventListener('click', () => navigateTo('driver-orders-screen'));
-    showFindPassengersBtn?.addEventListener('click', () => {
-        navigateTo('driver-find-passengers-screen');
-        displayDriverOrders();
-    });
+showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
+showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
+showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
+showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
+showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+
+// Обробник для кнопки "Мої замовлення" у водія
+showDriverOrdersBtn?.addEventListener('click', () => {
+    displayArchives(); // <-- Ось цей рядок додано
+    navigateTo('driver-orders-screen');
+});
+
+// Обробник для кнопки "Мої поїздки" у пасажира (бо його не було в твоєму шматку коду, а він потрібен)
+showMyOrdersBtn?.addEventListener('click', () => {
+    displayArchives(); // <-- І сюди теж додано
+    navigateTo('passenger-orders-screen');
+    const searchingCard = document.getElementById('searching-card');
+    const activeTripCard = document.getElementById('active-trip-card');
+    if (globalOrderStatus === 'searching') {
+        if(searchingCard) searchingCard.style.display = 'block';
+        if(activeTripCard) activeTripCard.style.display = 'none';
+    } else {
+        if(searchingCard) searchingCard.style.display = 'none';
+        if(activeTripCard) activeTripCard.style.display = 'block';
+        runActiveTripSimulation();
+    }
+});
+
+showFindPassengersBtn?.addEventListener('click', () => {
+    navigateTo('driver-find-passengers-screen');
+    displayDriverOrders();
+});
+
     showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
     showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
     showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
@@ -627,7 +652,7 @@ backButtons.forEach(button => {
         // globalOrderStatus = 'searching'; 
     });
 
-    // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
+// === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
 let currentRating = 0;
 
 function updateStars(rating) {
@@ -653,7 +678,7 @@ ratingStars.forEach(star => {
 
     star.addEventListener('click', () => {
         currentRating = star.dataset.value;
-        submitRatingBtn.classList.remove('disabled'); // Активуємо кнопку
+        if(submitRatingBtn) submitRatingBtn.classList.remove('disabled'); // Активуємо кнопку
         updateStars(currentRating);
     });
 });
@@ -663,13 +688,22 @@ submitRatingBtn?.addEventListener('click', () => {
         const comment = document.getElementById('trip-comment').value.trim();
         alert(`Дякуємо за оцінку! Ваш рейтинг: ${currentRating} зірок. Коментар: "${comment}"`);
 
-        // === ОСЬ ТУТ ПРАВИЛЬНЕ МІСЦЕ ДЛЯ СКИДАННЯ СТАТУСУ ===
+        // === НОВИЙ КОД: ДОДАЄМО ПОЇЗДКУ В АРХІВ ===
+        // Створюємо копію замовлення, щоб не втратити дані
+        const finishedOrder = { ...orderData }; 
+        passenger_archive.push(finishedOrder);
+        driver_archive.push(finishedOrder); // Поки що додаємо те саме і водію
+        // ===========================================
+
         globalOrderStatus = 'searching';
 
         // Ховаємо активну картку і показуємо знову екран пошуку
-        document.getElementById('searching-card').style.display = 'block';
-        document.getElementById('active-trip-card').style.display = 'none';
+        const searchingCard = document.getElementById('searching-card');
+        const activeTripCard = document.getElementById('active-trip-card');
+        if(searchingCard) searchingCard.style.display = 'block';
+        if(activeTripCard) activeTripCard.style.display = 'none';
 
+        // Скидаємо все інше
         currentRating = 0;
         updateStars(0);
         document.getElementById('trip-comment').value = '';
@@ -677,6 +711,5 @@ submitRatingBtn?.addEventListener('click', () => {
         navigateTo('passenger-dashboard');
     }
 });
-
 
 });
