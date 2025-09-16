@@ -5,6 +5,41 @@ let fakeUserHasCard = false;
 let fakeDriverAcceptsCard = false;
 let passenger_archive = []; // Архів для пасажира
 let driver_archive = [];    // Архів для водія
+let orders_database = [];
+// Тимчасова база даних водіїв
+const drivers_database = [
+    {
+        id: 1,
+        name: 'Сергій Авдєєв',
+        rating: 4.9,
+        trips: 152,
+        car: 'Skoda Octavia, сірий',
+        tags: [
+            { icon: 'fa-solid fa-music', text: 'Рок/Альтернатива' },
+            { icon: 'fa-solid fa-paw', text: 'Можна з тваринами' },
+            { icon: 'fa-solid fa-ban-smoking', text: 'Не палю' }
+        ],
+        reviews: [
+            { name: 'Вікторія', rating: 5.0, text: 'Дуже приємний водій, комфортна поїздка. Дякую!' },
+            { name: 'Олексій', rating: 5.0, text: 'Все супер, швидко і безпечно.' },
+            { name: 'Марина', rating: 4.0, text: 'В салоні був трохи дивний запах, але в цілому нормально.' }
+        ]
+    },
+    {
+        id: 2,
+        name: 'Олена Петренко',
+        rating: 5.0,
+        trips: 211,
+        car: 'Renault Megane, білий',
+        tags: [
+            { icon: 'fa-solid fa-volume-xmark', text: 'Тиша в салоні' },
+            { icon: 'fa-solid fa-child', text: 'Є дитяче крісло' }
+        ],
+        reviews: [
+            { name: 'Іван', rating: 5.0, text: 'Найкраща водійка в місті!' }
+        ]
+    }
+];
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -370,6 +405,64 @@ function displayArchives() {
     }
 }
 
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ВОДІЯ ==
+
+// Спочатку збираємо всі елементи профілю, щоб до них звертатись
+const profileDriverNameHeader = document.getElementById('profile-driver-name-header');
+const profileDriverName = document.getElementById('profile-driver-name');
+const profileDriverRating = document.getElementById('profile-driver-rating');
+const profileDriverTrips = document.getElementById('profile-driver-trips');
+const profileDriverCar = document.getElementById('profile-driver-car');
+const profileDriverTags = document.getElementById('profile-driver-tags');
+const profileDriverReviews = document.getElementById('profile-driver-reviews');
+const profileRequestRideBtn = document.getElementById('profile-request-ride-btn');
+
+function displayDriverProfile(driverId) {
+    // Знаходимо потрібного водія в нашій базі по його ID
+    const driver = drivers_database.find(d => d.id === driverId);
+
+    // Якщо раптом водія не знайшли, нічого не робимо
+    if (!driver) {
+        console.error('Водія з ID', driverId, 'не знайдено.');
+        return;
+    }
+
+    // 1. Заповнюємо прості текстові поля
+    profileDriverNameHeader.textContent = `Профіль: ${driver.name}`;
+    profileDriverName.textContent = driver.name;
+    profileDriverRating.textContent = driver.rating.toFixed(1);
+    profileDriverTrips.textContent = driver.trips;
+    profileDriverCar.textContent = driver.car;
+
+    // 2. Генеруємо список тегів "Про мене"
+    profileDriverTags.innerHTML = ''; // Очищуємо старі теги
+    driver.tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.className = 'tag';
+        tagElement.innerHTML = `<i class="${tag.icon}"></i> ${tag.text}`;
+        profileDriverTags.appendChild(tagElement);
+    });
+
+    // 3. Генеруємо список відгуків
+    const reviewsSectionTitle = document.querySelector('#driver-rating-screen .details-section h4');
+    reviewsSectionTitle.textContent = `Відгуки (${driver.reviews.length})`;
+    profileDriverReviews.innerHTML = ''; // Очищуємо старі відгуки
+    driver.reviews.forEach(review => {
+        const reviewElement = document.createElement('div');
+        reviewElement.className = 'review-card';
+        reviewElement.innerHTML = `
+            <div class="review-header">
+                <strong>${review.name}</strong>
+                <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
+            </div>
+            <p class="review-text">${review.text}</p>
+        `;
+        profileDriverReviews.appendChild(reviewElement);
+    });
+    
+    // Показуємо сам екран профілю
+    navigateTo('driver-rating-screen');
+}
 
 // --- Навігація ---
 showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
