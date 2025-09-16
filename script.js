@@ -323,6 +323,52 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
 };
 }
 
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ ==
+function displayArchives() {
+    // Архів пасажира
+    const passengerArchiveList = document.querySelector('#passenger-orders-screen .order-list.passenger');
+    if (passengerArchiveList) {
+        passengerArchiveList.innerHTML = ''; // Очищуємо старий список
+        passenger_archive.forEach(order => {
+            const li = document.createElement('li');
+            li.className = 'order-card archived';
+            li.innerHTML = `
+                <div class="archived-info">
+                    <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
+                        <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
+                    </div>
+                    <div class="driver-details">Водій: ${order.driverName || 'Дмитро'}</div>
+                </div>
+                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+            `;
+            passengerArchiveList.appendChild(li);
+        });
+    }
+
+    // Архів водія
+    const driverArchiveList = document.querySelector('#driver-orders-screen .order-list.driver');
+    if (driverArchiveList) {
+        driverArchiveList.innerHTML = ''; // Очищуємо старий список
+        driver_archive.forEach(order => {
+            const li = document.createElement('li');
+            li.className = 'order-card archived';
+            li.innerHTML = `
+                <div class="archived-info">
+                    <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
+                    <div class="route">
+                        <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
+                        <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
+                    </div>
+                    <div class="driver-details">Пасажир: ${order.passengerName}</div>
+                </div>
+                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+            `;
+            driverArchiveList.appendChild(li);
+        });
+    }
+}
 
 
 // --- Навігація ---
@@ -378,23 +424,6 @@ showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settin
 
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
 document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
-
-
-// Обробник для кнопки "Шукають водія"
-showFindPassengersBtn?.addEventListener('click', () => {
-    navigateTo('driver-find-passengers-screen');
-    displayDriverOrders();
-});
-
-
-    showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
-    showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
-    showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
-    showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
-    showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
-// Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
-    document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
-
 
 
     // --- Обробники логіки "Швидкого замовлення" ---
