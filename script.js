@@ -334,7 +334,7 @@ passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger
 // Кнопка на екрані підтвердження, яка веде в "Мої поїздки"
 goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
 
-// Кнопка "Мої поїздки" в головному меню пасажира
+// --- Навігація ПАСАЖИРА ---
 showMyOrdersBtn?.addEventListener('click', () => {
     displayArchives();
     navigateTo('passenger-orders-screen');
@@ -349,7 +349,6 @@ showMyOrdersBtn?.addEventListener('click', () => {
         runActiveTripSimulation();
     }
 });
-
 showQuickOrderBtn?.addEventListener('click', () => {
     navigateTo('quick-order-screen');
     resetQuickOrder();
@@ -362,14 +361,24 @@ showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-s
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
 showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 
-// Обробник для кнопки "Мої замовлення" у водія
+// --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
     displayArchives();
     navigateTo('driver-orders-screen');
 });
+showFindPassengersBtn?.addEventListener('click', () => {
+    navigateTo('driver-find-passengers-screen');
+    displayDriverOrders();
+});
+showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
+showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
+showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
+showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
+showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
 
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
 document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+
 
 // Обробник для кнопки "Шукають водія"
 showFindPassengersBtn?.addEventListener('click', () => {
