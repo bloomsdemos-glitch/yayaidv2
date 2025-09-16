@@ -245,8 +245,6 @@ const drivers_database = [
     }
 
     // == ЛОГІКА ДЛЯ ЕКРАНУ "ШУКАЮТЬ ВОДІЯ" ==
-   // Тимчасова база даних замовлень
-    let orders_database = [];
 
 
     const detailsPassengerName = document.getElementById('details-passenger-name');
