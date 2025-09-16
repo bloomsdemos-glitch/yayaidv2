@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const driverArrivedBtn = document.getElementById('driver-arrived-btn');
     const driverStartTripBtn = document.getElementById('driver-start-trip-btn');
     const driverFinishTripBtn = document.getElementById('driver-finish-trip-btn');
+// -- Елементи екрану оцінки --
+    const ratingStars = document.querySelectorAll('.rating-stars i');
+    const submitRatingBtn = document.getElementById('submit-rating-btn');
 
     // -- Навігація --
     const showDriverLoginBtn = document.getElementById('show-driver-login');
@@ -620,5 +623,49 @@ backButtons.forEach(button => {
 
         // І в майбутньому тут буде логіка додавання поїздки в архів
     });
+    // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
+let currentRating = 0;
+
+function updateStars(rating) {
+    ratingStars.forEach(star => {
+        if (star.dataset.value <= rating) {
+            star.classList.add('fa-solid');
+            star.classList.remove('fa-regular');
+        } else {
+            star.classList.add('fa-regular');
+            star.classList.remove('fa-solid');
+        }
+    });
+}
+
+ratingStars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+        updateStars(star.dataset.value);
+    });
+
+    star.addEventListener('mouseout', () => {
+        updateStars(currentRating); // Повертаємо до обраного рейтингу
+    });
+
+    star.addEventListener('click', () => {
+        currentRating = star.dataset.value;
+        submitRatingBtn.classList.remove('disabled'); // Активуємо кнопку
+        updateStars(currentRating);
+    });
+});
+
+submitRatingBtn?.addEventListener('click', () => {
+    if (currentRating > 0) {
+        const comment = document.getElementById('trip-comment').value.trim();
+        alert(`Дякуємо за оцінку! Ваш рейтинг: ${currentRating} зірок. Коментар: "${comment}"`);
+
+        // Скидаємо все до початкового стану і повертаємось на головний екран
+        currentRating = 0;
+        updateStars(0);
+        document.getElementById('trip-comment').value = '';
+        submitRatingBtn.classList.add('disabled');
+        navigateTo('passenger-dashboard');
+    }
+});
 
 });
