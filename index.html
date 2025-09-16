@@ -930,16 +930,28 @@
                 <p>Поки що всі розрахунки відбуваються напряму з водієм.</p>
             </main>
         </div>
-        <div id="passenger-valky-kharkiv-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Валки-Харків</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для створення поїздки за маршрутом Валки-Харків.</p>
-            </main>
+    <div id="passenger-valky-kharkiv-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Поїздка: Валки-Харків</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main class="list-view-main">
+        <button id="vh-passenger-create-request-btn" class="btn-main-action accept">
+            <i class="fa-solid fa-plus"></i>
+            Створити запит на поїздку
+        </button>
+
+        <div class="list-header">
+            <h4><i class="fa-solid fa-car-on"></i> Актуальні пропозиції від водіїв</h4>
         </div>
+        
+        <ul id="vh-driver-list" class="driver-list">
+            <p class="list-placeholder">Наразі немає активних водіїв за цим маршрутом. Створіть свій запит, і водії його побачать!</p>
+        </ul>
+    </main>
+</div>
+
 
         <div id="passenger-bus-schedule-screen" class="screen hidden">
             <header>
