@@ -325,51 +325,18 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
 
 
 
+// --- Навігація ---
+showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
+showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
+driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
+passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
 
-    // == 4. ОБРОБНИКИ ПОДІЙ ==
-    
-    // --- Навігація ---
-    showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
-    showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
-    driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
-    goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
-    passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
-    goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
-    showMyOrdersBtn?.addEventListener('click', () => {
-        displayArchives();
-        navigateTo('passenger-orders-screen');
-        const searchingCard = document.getElementById('searching-card');
-        const activeTripCard = document.getElementById('active-trip-card');
-        if (globalOrderStatus === 'searching') {
-            searchingCard.style.display = 'block';
-            activeTripCard.style.display = 'none';
-        } else {
-            searchingCard.style.display = 'none';
-            activeTripCard.style.display = 'block';
-            runActiveTripSimulation();
-        }
-    });
-    showQuickOrderBtn?.addEventListener('click', () => {
-        navigateTo('quick-order-screen');
-        resetQuickOrder();
-    });
-    findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
-showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
-showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
-showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
-showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
-showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
-showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+// Кнопка на екрані підтвердження, яка веде в "Мої поїздки"
+goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
 
-// Обробник для кнопки "Мої замовлення" у водія
-showDriverOrdersBtn?.addEventListener('click', () => {
-    displayArchives(); // <-- Ось цей рядок додано
-    navigateTo('driver-orders-screen');
-});
-
-// Обробник для кнопки "Мої поїздки" у пасажира (бо його не було в твоєму шматку коду, а він потрібен)
+// Кнопка "Мої поїздки" в головному меню пасажира
 showMyOrdersBtn?.addEventListener('click', () => {
-    displayArchives(); // <-- І сюди теж додано
+    displayArchives();
     navigateTo('passenger-orders-screen');
     const searchingCard = document.getElementById('searching-card');
     const activeTripCard = document.getElementById('active-trip-card');
@@ -383,10 +350,33 @@ showMyOrdersBtn?.addEventListener('click', () => {
     }
 });
 
+showQuickOrderBtn?.addEventListener('click', () => {
+    navigateTo('quick-order-screen');
+    resetQuickOrder();
+});
+findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
+showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
+showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
+showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
+showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
+showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+
+// Обробник для кнопки "Мої замовлення" у водія
+showDriverOrdersBtn?.addEventListener('click', () => {
+    displayArchives();
+    navigateTo('driver-orders-screen');
+});
+
+// Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
+document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
+
+// Обробник для кнопки "Шукають водія"
 showFindPassengersBtn?.addEventListener('click', () => {
     navigateTo('driver-find-passengers-screen');
     displayDriverOrders();
 });
+
 
     showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
     showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
