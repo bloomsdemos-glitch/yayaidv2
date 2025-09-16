@@ -848,6 +848,50 @@ h3 {
     border-radius: var(--md-radius-medium);
 }
 
+/* === СТИЛІ ДЛЯ ЕКРАНУ "ВАЛКИ-ХАРКІВ" === */
+
+.list-view-main {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+#vh-passenger-create-request-btn {
+    width: 100%;
+    padding: 18px; /* Робимо кнопку трохи більшою */
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+}
+
+#vh-passenger-create-request-btn i {
+    margin-right: 8px; /* Відступ для іконки плюса */
+}
+
+.list-header {
+    width: 100%;
+    text-align: center;
+    color: var(--md-on-surface-variant);
+    font-size: 14px;
+    border-bottom: 1px solid var(--md-outline);
+    padding-bottom: 12px;
+}
+
+.list-header h4 {
+    font-weight: var(--font-weight-regular);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.list-placeholder {
+    color: var(--md-on-surface-variant);
+    text-align: center;
+    padding: 24px;
+    font-style: italic;
+}
+
 
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
