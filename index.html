@@ -952,16 +952,39 @@
             </main>
         </div>
 
-        <div id="passenger-profile-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Мій профіль</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут пасажир зможе побачити свій профіль так, як його бачать водії.</p>
-            </main>
+       <div id="passenger-profile-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2 id="profile-passenger-name-header">Мій профіль</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main class="profile-main">
+        <div class="profile-content-wrapper">
+            <div class="details-card profile-header-card">
+                <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                <h3 id="profile-passenger-name">Віта Бондаренко</h3>
+                <div class="profile-rating-summary">
+                    <span><i class="fa-solid fa-route"></i> <strong id="profile-passenger-trips">27</strong> поїздок</span>
+                </div>
+            </div>
+
+            <div class="details-section">
+                <h4><i class="fa-solid fa-circle-info"></i> Про мене</h4>
+                <div class="details-card">
+                    <p id="profile-passenger-bio">Люблю подорожувати з комфортом та гарною музикою.</p>
+                </div>
+            </div>
+
+            <div class="details-section">
+                <h4><i class="fa-solid fa-comments"></i> Відгуки водіїв</h4>
+                <div class="review-list">
+                    <p class="no-reviews-placeholder">Відгуків поки що немає.</p>
+                </div>
+            </div>
         </div>
+    </main>
+</div>
+
 
         <div id="passenger-settings-screen" class="screen hidden">
             <header>
