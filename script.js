@@ -41,6 +41,18 @@ const drivers_database = [
     }
 ];
 
+// Тимчасова база даних пасажирів
+const passengers_database = [
+    {
+        id: 1,
+        name: 'Віта Бондаренко',
+        trips: 27,
+        bio: 'Люблю подорожувати з комфортом та гарною музикою.',
+        reviews: [] // Поки що відгуків немає
+    }
+];
+
+
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
     const backButtons = document.querySelectorAll('.btn-back');
@@ -461,6 +473,35 @@ function displayDriverProfile(driverId) {
     // Показуємо сам екран профілю
     navigateTo('driver-rating-screen');
 }
+
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ПАСАЖИРА ==
+
+// Збираємо елементи пасажирського профілю
+const profilePassengerNameHeader = document.getElementById('profile-passenger-name-header');
+const profilePassengerName = document.getElementById('profile-passenger-name');
+const profilePassengerTrips = document.getElementById('profile-passenger-trips');
+const profilePassengerBio = document.getElementById('profile-passenger-bio');
+
+function displayPassengerProfile(passengerId) {
+    const passenger = passengers_database.find(p => p.id === passengerId);
+
+    if (!passenger) {
+        console.error('Пасажира з ID', passengerId, 'не знайдено.');
+        return;
+    }
+
+    // Заповнюємо поля даними
+    profilePassengerNameHeader.textContent = `Профіль: ${passenger.name}`;
+    profilePassengerName.textContent = passenger.name;
+    profilePassengerTrips.textContent = passenger.trips;
+    profilePassengerBio.textContent = passenger.bio;
+
+    // Тут в майбутньому буде логіка для відгуків
+
+    navigateTo('passenger-profile-screen');
+}
+
+
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ДОСТУПНИХ ВОДІЇВ (ДЛЯ ПАСАЖИРА) ==
 function displayAvailableDrivers() {
     const driverListContainer = document.querySelector('#passenger-find-driver-screen .driver-list');
@@ -532,7 +573,11 @@ findDriverBtn?.addEventListener('click', () => {
 
 showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
-showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
+showPassengerProfileBtn?.addEventListener('click', () => {
+    // Викликаємо функцію і передаємо ID нашого тестового пасажира (Віти)
+    displayPassengerProfile(1); 
+});
+
 showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
 showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
