@@ -833,6 +833,21 @@ h3 {
     box-sizing: border-box;
 }
 
+/* -- Додаткові стилі для профілю пасажира -- */
+
+#passenger-profile-screen .profile-rating-summary {
+    justify-content: center; /* Центруємо кількість поїздок, бо елемент один */
+}
+
+.no-reviews-placeholder {
+    color: var(--md-on-surface-variant);
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    background-color: var(--md-surface);
+    border-radius: var(--md-radius-medium);
+}
+
 
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
