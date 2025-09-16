@@ -334,6 +334,7 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
     driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
     goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
     passengerTelegramLoginBtn?.addEventListener('click', () => navigateTo('passenger-dashboard'));
+    goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
     showMyOrdersBtn?.addEventListener('click', () => {
         displayArchives();
         navigateTo('passenger-orders-screen');
