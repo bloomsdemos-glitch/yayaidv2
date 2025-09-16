@@ -461,6 +461,41 @@ function displayDriverProfile(driverId) {
     // Показуємо сам екран профілю
     navigateTo('driver-rating-screen');
 }
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ДОСТУПНИХ ВОДІЇВ (ДЛЯ ПАСАЖИРА) ==
+function displayAvailableDrivers() {
+    const driverListContainer = document.querySelector('#passenger-find-driver-screen .driver-list');
+
+    // Якщо контейнера немає, нічого не робимо
+    if (!driverListContainer) return;
+
+    // 1. Очищуємо старий статичний список з HTML
+    driverListContainer.innerHTML = '';
+
+    // 2. Пробігаємось по нашій базі водіїв і створюємо для кожного картку
+    drivers_database.forEach(driver => {
+        const li = document.createElement('li');
+        li.className = 'driver-card online'; // Поки всі будуть онлайн для тесту
+        
+        li.innerHTML = `
+            <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+            <div class="driver-info">
+                <h4>${driver.name}</h4>
+                <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
+                <small class="status-available">Доступний</small>
+            </div>
+            <div class="status-dot online"></div>
+        `;
+
+        // 3. Додаємо магію: обробник кліку, який відкриває профіль саме цього водія
+        li.addEventListener('click', () => {
+            displayDriverProfile(driver.id);
+        });
+
+        // 4. Додаємо готову картку в список
+        driverListContainer.appendChild(li);
+    });
+}
+
 
 // --- Навігація ---
 showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
@@ -490,7 +525,11 @@ showQuickOrderBtn?.addEventListener('click', () => {
     navigateTo('quick-order-screen');
     resetQuickOrder();
 });
-findDriverBtn?.addEventListener('click', () => navigateTo('passenger-find-driver-screen'));
+findDriverBtn?.addEventListener('click', () => {
+    displayAvailableDrivers(); // <-- Ось це ми додали
+    navigateTo('passenger-find-driver-screen');
+});
+
 showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
 showPassengerProfileBtn?.addEventListener('click', () => navigateTo('passenger-profile-screen'));
