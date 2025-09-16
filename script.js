@@ -612,17 +612,22 @@ backButtons.forEach(button => {
     });
 
     driverFinishTripBtn?.addEventListener('click', () => {
-        alert('Поїздку завершено!');
-        // Повертаємо водія на головний екран і "обнуляємо" статус
-        globalOrderStatus = 'searching';
-        navigateTo('driver-dashboard');
+    alert('Поїздку завершено!');
 
-        // Ховаємо активну картку і показуємо повідомлення "немає замовлень"
-        document.getElementById('driver-active-trip-card').style.display = 'none';
-        document.getElementById('no-active-driver-orders').style.display = 'block';
+    // Магічний рядок, який показує пасажиру екран оцінки
+    showScreen('passenger-rating-trip-screen');
 
-        // І в майбутньому тут буде логіка додавання поїздки в архів
-    });
+    // Тимчасово прибираємо перехід для водія, щоб було зручно тестувати
+    // navigateTo('driver-dashboard'); 
+
+    // "Обнуляємо" статус
+    globalOrderStatus = 'searching';
+    document.getElementById('driver-active-trip-card').style.display = 'none';
+    document.getElementById('no-active-driver-orders').style.display = 'block';
+
+    // І в майбутньому тут буде логіка додавання поїздки в архів
+});
+
     // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
 let currentRating = 0;
 
