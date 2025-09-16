@@ -706,6 +706,134 @@ h3 {
 .btn-text:hover {
     background-color: rgba(25, 118, 210, 0.08);
 }
+
+/* === СТИЛІ ДЛЯ ЕКРАНУ ПРОФІЛЮ ВОДІЯ === */
+
+.profile-main {
+    padding: 16px; /* Задаємо відступи, щоб контент не прилипав до країв */
+}
+
+.profile-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Відстань між секціями */
+    padding-bottom: 80px; /* Залишаємо місце для кнопки внизу */
+}
+
+.profile-header-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    gap: 12px;
+}
+
+.profile-header-card h3 {
+    font-size: 22px;
+    font-weight: var(--font-weight-bold);
+}
+
+.profile-rating-summary {
+    display: flex;
+    gap: 24px;
+    font-size: 16px;
+    color: var(--md-on-surface-variant);
+}
+
+.profile-rating-summary span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-rating-summary i {
+    color: var(--md-primary);
+}
+
+.details-section h4 {
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-surface-variant);
+    margin-bottom: 12px;
+    padding-left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.details-section .details-card {
+    padding: 16px;
+    font-size: 16px;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background-color: var(--md-surface-variant);
+    color: var(--md-on-surface);
+    padding: 8px 12px;
+    border-radius: var(--md-radius-large);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.review-card {
+    background-color: var(--md-surface);
+    border: 1px solid var(--md-outline);
+    border-radius: var(--md-radius-medium);
+    padding: 16px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.review-header strong {
+    font-weight: var(--font-weight-medium);
+}
+
+.review-rating {
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+    color: var(--md-primary);
+}
+
+.review-text {
+    font-size: 15px;
+    color: var(--md-on-surface-variant);
+}
+
+.profile-action-button {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 480px; /* Важливо для центрування на великих екранах */
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(255,0,0,0) 0%, var(--md-background) 30%); /* Градієнт для плавного переходу */
+    padding: 24px 16px 16px 16px;
+    box-sizing: border-box;
+}
+
+
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
     --sun-color: #f3b519;
