@@ -81,7 +81,8 @@ const passengers_database = [
     const showPassengerProfileBtn = document.getElementById('show-passenger-profile-btn');
     const showPassengerSupportBtn = document.getElementById('show-passenger-support-btn');
     const showPassengerSettingsBtn = document.getElementById('show-passenger-settings-btn');
-       
+    const vhPassengerCreateRequestBtn = document.getElementById('vh-passenger-create-request-btn');
+
     // -- Елементи водія --
     const showFindPassengersBtn = document.getElementById('show-find-passengers-btn');
     const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
@@ -581,6 +582,8 @@ showPassengerProfileBtn?.addEventListener('click', () => {
 showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
 showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+// --- Навігація для "Валки-Харків" ---
+vhPassengerCreateRequestBtn?.addEventListener('click', () => navigateTo('vh-passenger-form-screen'));
 
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
