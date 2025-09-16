@@ -892,6 +892,53 @@ h3 {
     font-style: italic;
 }
 
+/* -- Стилі для форми "Валки-Харків" -- */
+
+.main-form {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.button-group-toggle {
+    display: flex;
+    border-radius: var(--md-radius-medium);
+    overflow: hidden;
+    border: 1px solid var(--md-outline);
+}
+
+.button-group-toggle .btn-toggle {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 15px;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-group-toggle .btn-toggle:first-child {
+    border-right: 1px solid var(--md-outline);
+}
+
+.button-group-toggle .btn-toggle.active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+}
+
+.button-group-toggle .btn-toggle i {
+    margin: 0 8px;
+}
+
 
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
