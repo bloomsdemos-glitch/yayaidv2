@@ -892,6 +892,37 @@ h3 {
     font-style: italic;
 }
 
+/* -- Стилі для форми "Валки-Харків" v2.0 (Google-style) -- */
+.route-swap-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.route-display-field {
+    flex-grow: 1; /* Поля займають весь доступний простір */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: var(--md-radius-medium);
+    border: 1px solid var(--md-outline);
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 16px;
+    font-family: var(--font-family);
+}
+
+.route-display-field i {
+    color: var(--md-primary);
+}
+
+#vh-swap-route-btn {
+    flex-shrink: 0; /* Кнопка не буде стискатись */
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+}
 
 
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
