@@ -929,6 +929,35 @@ h3 {
     transition: transform 0.15s ease-in-out;
 }
 
+/* -- Стилі для кастомного чекбоксу -- */
+.form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background-color: var(--md-surface);
+    border: 1px solid var(--md-outline);
+    border-radius: var(--md-radius-medium);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.form-group-checkbox:hover {
+    background-color: var(--md-surface-variant);
+}
+
+.form-group-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--md-primary); /* Сучасний спосіб змінити колір чекбоксу */
+}
+
+.form-group-checkbox label {
+    font-size: 16px;
+    font-weight: var(--font-weight-medium);
+    color: var(--md-on-surface);
+    cursor: pointer;
+}
 
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
