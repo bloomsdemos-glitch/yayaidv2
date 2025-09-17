@@ -922,24 +922,17 @@ function displayVhRequests() {
     }
 }
 
-// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.1 (надійний) ==
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.2 (з робочою кнопкою) ==
 function displayVhOffers(filter = 'all') {
     const offerListContainer = document.getElementById('vh-driver-list');
     const placeholder = offerListContainer?.querySelector('.list-placeholder');
 
     if (!offerListContainer || !placeholder) return;
 
-    // Фільтруємо базу даних, використовуючи надійні ключі
     const filteredOffers = vh_offers_database.filter(offer => {
-        if (filter === 'all') {
-            return true; // Показуємо всі
-        }
-        if (filter === 'vk') {
-            return offer.direction.startsWith('Валки'); // Перевіряємо, чи починається з "Валки"
-        }
-        if (filter === 'kv') {
-            return offer.direction.startsWith('Харків'); // Перевіряємо, чи починається з "Харків"
-        }
+        if (filter === 'all') return true;
+        if (filter === 'vk') return offer.direction.startsWith('Валки');
+        if (filter === 'kv') return offer.direction.startsWith('Харків');
         return false;
     });
 
@@ -966,12 +959,56 @@ function displayVhOffers(filter = 'all') {
                     <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
                     <small class="status-available">${offer.time}</small>
                 </div>
-                <button class="btn-main-action accept" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
+                <button class="btn-main-action accept select-offer-btn" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
             `;
+
+            // Ось ключова зміна: знаходимо кнопку всередині картки і вішаємо на неї обробник
+            const selectBtn = li.querySelector('.select-offer-btn');
+            selectBtn.addEventListener('click', () => {
+                selectOffer(offer.id);
+            });
+
             offerListContainer.appendChild(li);
         });
     }
 }
+
+// == ЛОГІКА ВИБОРУ ПРОПОЗИЦІЇ ТА СПОВІЩЕНЬ ==
+function selectOffer(offerId) {
+    const offer = vh_offers_database.find(o => o.id === offerId);
+    if (!offer) return;
+
+    // Показуємо сповіщення у водія
+    const notificationBadge = document.getElementById('driver-notification-badge');
+    if (notificationBadge) {
+        notificationBadge.textContent = '1';
+        notificationBadge.classList.remove('hidden');
+    }
+
+    // Кажемо пасажиру, що все ок
+    alert(`Ваш запит надіслано водію. Очікуйте на підтвердження.`);
+
+    // Перекидаємо пасажира на головний екран
+    navigateTo('passenger-dashboard');
+}
+
+// Додаємо обробник для самого дзвіночка
+const driverNotificationsBtn = document.getElementById('driver-notifications-btn');
+driverNotificationsBtn?.addEventListener('click', () => {
+    const notificationBadge = document.getElementById('driver-notification-badge');
+    if (notificationBadge && !notificationBadge.classList.contains('hidden')) {
+        // Ховаємо крапочку
+        notificationBadge.classList.add('hidden');
+        notificationBadge.textContent = '';
+
+        // Показуємо водію сповіщення
+        alert('У вас нове замовлення за маршрутом Валки-Харків! Підтвердіть його у розділі "Мої замовлення".');
+        // В майбутньому тут буде перехід на екран підтвердження
+    } else {
+        alert('Нових сповіщень немає.');
+    }
+});
+
 
 
 
