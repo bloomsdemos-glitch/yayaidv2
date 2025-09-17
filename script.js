@@ -53,6 +53,9 @@ const drivers_database = [
     }
 ];
 
+// Тимчасова база даних для всіх сповіщень
+const notifications_database = [];
+
 
 // Тимчасова база даних пасажирів
 const passengers_database = [
