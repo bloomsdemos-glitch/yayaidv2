@@ -924,6 +924,11 @@ h3 {
     font-size: 16px;
 }
 
+.route-swap-container.swapped .route-display-field {
+    transform: scale(1.05);
+    transition: transform 0.15s ease-in-out;
+}
+
 
 /* === СТИЛІ ДЛЯ ПЕРЕМИКАЧА ТЕМ === */
 :root {
