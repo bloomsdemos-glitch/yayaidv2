@@ -976,41 +976,95 @@ function displayVhOffers(filter = 'all') {
     }
 }
 
-// == ЛОГІКА ВИБОРУ ПРОПОЗИЦІЇ ТА СПОВІЩЕНЬ ==
+
 function selectOffer(offerId) {
     const offer = vh_offers_database.find(o => o.id === offerId);
     if (!offer) return;
+    const driver = drivers_database.find(d => d.id === offer.driverId);
+    if (!driver) return;
 
-    // Показуємо сповіщення у водія
+    // 1. Створюємо нове сповіщення і додаємо його в базу
+    const newNotification = {
+        id: Date.now(),
+        userId: offer.driverId, // Для якого юзера це сповіщення
+        text: `<strong>Нове замовлення!</strong> Пасажир хоче поїхати з вами за маршрутом <strong>${offer.direction}</strong>.`,
+        type: 'new_order',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+
+    // 2. Показуємо значок сповіщення у водія
     const notificationBadge = document.getElementById('driver-notification-badge');
     if (notificationBadge) {
-        notificationBadge.textContent = '1';
+        const unreadCount = notifications_database.filter(n => !n.isRead).length;
+        notificationBadge.textContent = unreadCount;
         notificationBadge.classList.remove('hidden');
     }
 
-    // Кажемо пасажиру, що все ок
-    alert(`Ваш запит надіслано водію. Очікуйте на підтвердження.`);
-
-    // Перекидаємо пасажира на головний екран
+    // 3. Кажемо пасажиру, що все ок
+    alert(`Ваш запит надіслано водію ${driver.name}. Очікуйте на підтвердження.`);
+    
+    // 4. Перекидаємо пасажира на головний екран
     navigateTo('passenger-dashboard');
 }
 
-// Додаємо обробник для самого дзвіночка
+
+// Функція, яка малює список сповіщень з бази даних
+function displayNotifications(userType) {
+    const listContainer = document.getElementById('notification-list');
+    const placeholder = listContainer.querySelector('.list-placeholder');
+
+    // Встановлюємо, куди повертатись кнопці "Назад"
+    const backBtn = document.querySelector('#notifications-screen .btn-back');
+    if (userType === 'driver') {
+        backBtn.dataset.target = 'driver-dashboard';
+    } else {
+        backBtn.dataset.target = 'passenger-dashboard';
+    }
+
+    listContainer.innerHTML = ''; // Очищуємо
+    listContainer.appendChild(placeholder);
+
+    if (notifications_database.length === 0) {
+        placeholder.style.display = 'block';
+    } else {
+        placeholder.style.display = 'none';
+        notifications_database.slice().reverse().forEach(notif => { // .slice().reverse() щоб нові були зверху
+            const li = document.createElement('li');
+            li.className = 'notification-card';
+            if(notif.isRead) li.classList.add('is-read');
+
+            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-circle-info';
+
+            li.innerHTML = `
+                <i class="notification-icon ${iconClass}"></i>
+                <p class="notification-text">${notif.text}</p>
+            `;
+            listContainer.appendChild(li);
+        });
+    }
+}
+
+
+// Оновлений обробник для дзвіночка
 const driverNotificationsBtn = document.getElementById('driver-notifications-btn');
 driverNotificationsBtn?.addEventListener('click', () => {
     const notificationBadge = document.getElementById('driver-notification-badge');
-    if (notificationBadge && !notificationBadge.classList.contains('hidden')) {
-        // Ховаємо крапочку
+
+    // Очищуємо значок нових сповіщень
+    if (notificationBadge) {
         notificationBadge.classList.add('hidden');
         notificationBadge.textContent = '';
-
-        // Показуємо водію сповіщення
-        alert('У вас нове замовлення за маршрутом Валки-Харків! Підтвердіть його у розділі "Мої замовлення".');
-        // В майбутньому тут буде перехід на екран підтвердження
-    } else {
-        alert('Нових сповіщень немає.');
     }
+
+    // Позначаємо всі сповіщення як прочитані
+    notifications_database.forEach(n => n.isRead = true);
+
+    // Показуємо екран зі сповіщеннями
+    displayNotifications('driver');
+    navigateTo('notifications-screen');
 });
+
 
 
 
