@@ -7,6 +7,7 @@ let passenger_archive = []; // Архів для пасажира
 let driver_archive = [];    // Архів для водія
 let orders_database = [];
 // Тимчасова база даних водіїв
+// Тимчасова база даних водіїв
 const drivers_database = [
     {
         id: 1,
@@ -38,16 +39,28 @@ const drivers_database = [
         reviews: [
             { name: 'Іван', rating: 5.0, text: 'Найкраща водійка в місті!' }
         ]
+    },
+    {
+        id: 3,
+        name: 'Максим Новенький',
+        rating: 0, // Рейтинг 0, бо ще немає поїздок
+        trips: 3,  // Мало поїздок
+        car: 'Daewoo Lanos, зелений',
+        tags: [
+            { icon: 'fa-solid fa-music', text: 'Поп-музика' }
+        ],
+        reviews: [] // Відгуків ще немає
     }
 ];
+
 
 // Тимчасова база даних пасажирів
 const passengers_database = [
     {
         id: 1,
-        name: 'Віта Бондаренко',
+        name: 'Віта Білецька',
         trips: 27,
-        bio: 'Люблю подорожувати з комфортом та гарною музикою.',
+        bio: 'Валки.',
         reviews: [] // Поки що відгуків немає
     }
 ];
@@ -443,12 +456,18 @@ function displayDriverProfile(driverId) {
         return;
     }
 
-    // 1. Заповнюємо прості текстові поля
-    profileDriverNameHeader.textContent = `Профіль: ${driver.name}`;
-    profileDriverName.textContent = driver.name;
+ // 1. Заповнюємо прості текстові поля
+profileDriverNameHeader.textContent = `Профіль: ${driver.name}`;
+profileDriverName.textContent = driver.name;
+profileDriverTrips.textContent = driver.trips;
+profileDriverCar.textContent = driver.car;
+
+// Ось тут нова логіка для рейтингу!
+if (driver.trips < 5) {
+    profileDriverRating.innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
+} else {
     profileDriverRating.textContent = driver.rating.toFixed(1);
-    profileDriverTrips.textContent = driver.trips;
-    profileDriverCar.textContent = driver.car;
+}
 
     // 2. Генеруємо список тегів "Про мене"
     profileDriverTags.innerHTML = ''; // Очищуємо старі теги
@@ -501,6 +520,8 @@ function displayPassengerProfile(passengerId) {
     profilePassengerName.textContent = passenger.name;
     profilePassengerTrips.textContent = passenger.trips;
     profilePassengerBio.textContent = passenger.bio;
+// Заповнюємо плейсхолдер для оцінок від водіїв
+    document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>6 👍🏻 0 👎🏻</strong>`;
 
     // Тут в майбутньому буде логіка для відгуків
 
