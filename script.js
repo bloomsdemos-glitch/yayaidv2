@@ -638,7 +638,6 @@ showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 // --- Навігація для "Валки-Харків" ---
 vhPassengerCreateRequestBtn?.addEventListener('click', () => navigateTo('vh-passenger-form-screen'));
 
-// == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ПАСАЖИР) v2.0 ==
 
 // == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ПАСАЖИР) v2.0 ==
 
@@ -902,31 +901,42 @@ function displayVhRequests() {
     }
 }
 
-// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) ==
-function displayVhOffers() {
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.1 (надійний) ==
+function displayVhOffers(filter = 'all') {
     const offerListContainer = document.getElementById('vh-driver-list');
     const placeholder = offerListContainer?.querySelector('.list-placeholder');
 
     if (!offerListContainer || !placeholder) return;
 
-    // Очищуємо попередні результати, але залишаємо заглушку
+    // Фільтруємо базу даних, використовуючи надійні ключі
+    const filteredOffers = vh_offers_database.filter(offer => {
+        if (filter === 'all') {
+            return true; // Показуємо всі
+        }
+        if (filter === 'vk') {
+            return offer.direction.startsWith('Валки'); // Перевіряємо, чи починається з "Валки"
+        }
+        if (filter === 'kv') {
+            return offer.direction.startsWith('Харків'); // Перевіряємо, чи починається з "Харків"
+        }
+        return false;
+    });
+
     offerListContainer.innerHTML = '';
     offerListContainer.appendChild(placeholder);
 
-    // Перевіряємо, чи є взагалі пропозиції
-    if (vh_offers_database.length === 0) {
-        placeholder.style.display = 'block'; // Показуємо заглушку
+    if (filteredOffers.length === 0) {
+        placeholder.style.display = 'block';
+        placeholder.textContent = 'За цим напрямком пропозицій поки немає.';
     } else {
-        placeholder.style.display = 'none'; // Ховаємо заглушку
+        placeholder.style.display = 'none';
 
-        // Створюємо картку для кожної пропозиції
-        vh_offers_database.forEach(offer => {
-            // Знаходимо дані водія по його ID
+        filteredOffers.forEach(offer => {
             const driver = drivers_database.find(d => d.id === offer.driverId);
-            if (!driver) return; // Якщо водія не знайдено, пропускаємо цю пропозицію
+            if (!driver) return;
 
             const li = document.createElement('li');
-            li.className = 'driver-card online'; // Перевикористовуємо стиль
+            li.className = 'driver-card online';
 
             li.innerHTML = `
                 <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
@@ -941,6 +951,7 @@ function displayVhOffers() {
         });
     }
 }
+
 
 
 // --- Навігація ВОДІЯ ---
