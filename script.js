@@ -577,7 +577,11 @@ findDriverBtn?.addEventListener('click', () => {
     navigateTo('passenger-find-driver-screen');
 });
 
-showPassengerValkyKharkivBtn?.addEventListener('click', () => navigateTo('passenger-valky-kharkiv-screen'));
+showPassengerValkyKharkivBtn?.addEventListener('click', () => {
+    displayVhOffers(); // <-- Додаємо виклик нашої нової функції
+    navigateTo('passenger-valky-kharkiv-screen');
+});
+
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
 showPassengerProfileBtn?.addEventListener('click', () => {
     // Викликаємо функцію і передаємо ID нашого тестового пасажира (Віти)
@@ -840,6 +844,46 @@ function displayVhRequests() {
     }
 }
 
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) ==
+function displayVhOffers() {
+    const offerListContainer = document.getElementById('vh-driver-list');
+    const placeholder = offerListContainer?.querySelector('.list-placeholder');
+
+    if (!offerListContainer || !placeholder) return;
+
+    // Очищуємо попередні результати, але залишаємо заглушку
+    offerListContainer.innerHTML = '';
+    offerListContainer.appendChild(placeholder);
+
+    // Перевіряємо, чи є взагалі пропозиції
+    if (vh_offers_database.length === 0) {
+        placeholder.style.display = 'block'; // Показуємо заглушку
+    } else {
+        placeholder.style.display = 'none'; // Ховаємо заглушку
+
+        // Створюємо картку для кожної пропозиції
+        vh_offers_database.forEach(offer => {
+            // Знаходимо дані водія по його ID
+            const driver = drivers_database.find(d => d.id === offer.driverId);
+            if (!driver) return; // Якщо водія не знайдено, пропускаємо цю пропозицію
+
+            const li = document.createElement('li');
+            li.className = 'driver-card online'; // Перевикористовуємо стиль
+
+            li.innerHTML = `
+                <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="driver-info">
+                    <h4>${driver.name}</h4>
+                    <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
+                    <small class="status-available">${offer.time}</small>
+                </div>
+                <button class="btn-main-action accept" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
+            `;
+            offerListContainer.appendChild(li);
+        });
+    }
+}
+
 
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
@@ -854,6 +898,8 @@ showDriverValkyKharkivBtn?.addEventListener('click', () => {
     displayVhRequests(); // <-- Оновлюємо список перед показом
     navigateTo('driver-valky-kharkiv-screen');
 });
+
+
 
 showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
 showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
