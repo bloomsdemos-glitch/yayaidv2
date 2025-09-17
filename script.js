@@ -578,7 +578,51 @@ findDriverBtn?.addEventListener('click', () => {
 });
 
 showPassengerValkyKharkivBtn?.addEventListener('click', () => {
-    displayVhOffers(); // <-- Додаємо виклик нашої нової функції
+    // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.0 ==
+function displayVhOffers(filter = 'all') { // Додали параметр фільтру
+    const offerListContainer = document.getElementById('vh-driver-list');
+    const placeholder = offerListContainer?.querySelector('.list-placeholder');
+
+    if (!offerListContainer || !placeholder) return;
+
+    // Фільтруємо базу даних перед відображенням
+    const filteredOffers = vh_offers_database.filter(offer => {
+        if (filter === 'all') {
+            return true; // Якщо фільтр 'all', показуємо всі
+        }
+        return offer.direction === filter; // Інакше - тільки ті, що збігаються
+    });
+
+    offerListContainer.innerHTML = '';
+    offerListContainer.appendChild(placeholder);
+
+    if (filteredOffers.length === 0) {
+        placeholder.style.display = 'block';
+        placeholder.textContent = 'За цим напрямком пропозицій поки немає.';
+    } else {
+        placeholder.style.display = 'none';
+
+        filteredOffers.forEach(offer => {
+            const driver = drivers_database.find(d => d.id === offer.driverId);
+            if (!driver) return;
+
+            const li = document.createElement('li');
+            li.className = 'driver-card online';
+
+            li.innerHTML = `
+                <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="driver-info">
+                    <h4>${driver.name}</h4>
+                    <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
+                    <small class="status-available">${offer.time}</small>
+                </div>
+                <button class="btn-main-action accept" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
+            `;
+            offerListContainer.appendChild(li);
+        });
+    }
+}
+
     navigateTo('passenger-valky-kharkiv-screen');
 });
 
@@ -786,6 +830,20 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     navigateTo('driver-valky-kharkiv-screen');
 });
 
+// == ЛОГІКА ДЛЯ ФІЛЬТРІВ "В-Х" (ПАСАЖИР) ==
+const vhFilterButtons = document.querySelectorAll('#passenger-valky-kharkiv-screen .btn-filter');
+
+vhFilterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Знімаємо клас active з усіх кнопок
+        vhFilterButtons.forEach(btn => btn.classList.remove('active'));
+        // Додаємо клас active тій, яку натиснули
+        button.classList.add('active');
+
+        const direction = button.dataset.direction;
+        displayVhOffers(direction); // Викликаємо оновлення списку з фільтром
+    });
+});
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ЗАПИТІВ "В-Х" (ДЛЯ ВОДІЯ) ==
 function displayVhRequests() {
