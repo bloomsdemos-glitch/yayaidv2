@@ -52,6 +52,9 @@ const passengers_database = [
     }
 ];
 
+// Тимчасова база даних запитів на поїздки Валки-Харків
+const vh_requests_database = [];
+
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -605,6 +608,95 @@ vhSwapRouteBtn?.addEventListener('click', () => {
     container.classList.add('swapped');
     setTimeout(() => container.classList.remove('swapped'), 300);
 });
+// --- Логіка для вибору часу ---
+const vhTimeChoiceButtons = document.querySelectorAll('#vh-passenger-form-screen .btn-segment');
+const vhPickerInput = document.getElementById('vh-form-datetime-picker-specific');
+
+vhTimeChoiceButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const choice = e.currentTarget.dataset.timeChoice;
+
+        // Робимо активною тільки натиснуту кнопку
+        vhTimeChoiceButtons.forEach(btn => btn.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+
+        if (choice === 'now') {
+            // Якщо вибрали "Зараз", ховаємо поле для дати
+            vhPickerInput.style.display = 'none';
+        } else {
+            // Для інших варіантів - показуємо і налаштовуємо календар
+            vhPickerInput.style.display = 'block';
+            let pickerOptions = {
+                enableTime: true,
+                minDate: "today",
+                time_24hr: true,
+                onClose: function(selectedDates, dateStr) {
+                    if (!dateStr) {
+                        // Якщо користувач закрив календар, не вибравши дату,
+                        // знімаємо активний клас з кнопки
+                        e.currentTarget.classList.remove('active');
+                    }
+                }
+            };
+
+            if (choice === 'today') {
+                pickerOptions.noCalendar = true;
+                pickerOptions.dateFormat = "H:i";
+            } else { // choice === 'date'
+                pickerOptions.dateFormat = "d.m.Y H:i";
+            }
+            
+            flatpickr(vhPickerInput, pickerOptions).open();
+        }
+    });
+});
+
+// --- Логіка для кнопки "Опублікувати запит" ---
+const vhFormSubmitBtn = document.getElementById('vh-form-submit-btn-specific');
+
+vhFormSubmitBtn?.addEventListener('click', () => {
+    // 1. Збираємо дані з форми
+    const direction = document.querySelector('#vh-passenger-form-screen .btn-toggle.active').dataset.direction;
+    const fromSpecific = document.getElementById('vh-form-from-address-specific').value.trim();
+    const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
+    
+    let time;
+    const activeTimeButton = document.querySelector('#vh-passenger-form-screen .btn-segment.active');
+    if (activeTimeButton) {
+        const choice = activeTimeButton.dataset.timeChoice;
+        if (choice === 'now') {
+            time = 'Зараз';
+        } else {
+            time = vhPickerInput.value;
+        }
+    }
+
+    // 2. Робимо базову перевірку
+    if (!time) {
+        alert('Будь ласка, оберіть час поїздки.');
+        return;
+    }
+
+    // 3. Створюємо об'єкт запиту
+    const newRequest = {
+        id: Date.now(), // Унікальний ID
+        passengerId: 1, // Поки що захардкодимо ID пасажира (Віти)
+        direction: direction,
+        fromSpecific: fromSpecific,
+        toSpecific: toSpecific,
+        time: time
+    };
+
+    // 4. Додаємо запит в нашу "базу даних"
+    vh_requests_database.push(newRequest);
+    console.log('Новий запит В-Х додано:', newRequest);
+    console.log('Вся база запитів В-Х:', vh_requests_database);
+
+    // 5. Сповіщаємо користувача і повертаємо на екран-список
+    alert('Ваш запит успішно опубліковано!');
+    navigateTo('passenger-valky-kharkiv-screen');
+});
+
 
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
