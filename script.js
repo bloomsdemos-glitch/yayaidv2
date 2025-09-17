@@ -652,11 +652,17 @@ vhTimeChoiceButtons.forEach(button => {
 });
 
 // --- Логіка для кнопки "Опублікувати запит" ---
-const vhFormSubmitBtn = document.getElementById('vh-form-submit-btn-specific');
+const vhFormSubmitBtn = document.getElementById('vh-form-submit-btn-specific'); // <--- Ось рядок, якого, скоріш за все, не вистачало
 
 vhFormSubmitBtn?.addEventListener('click', () => {
     // 1. Збираємо дані з форми
-    const direction = document.querySelector('#vh-passenger-form-screen .btn-toggle.active').dataset.direction;
+    const directionElement = document.querySelector('#vh-passenger-form-screen .btn-toggle.active');
+    if (!directionElement) {
+        alert('Будь ласка, оберіть напрямок.');
+        return;
+    }
+    const direction = directionElement.dataset.direction;
+    
     const fromSpecific = document.getElementById('vh-form-from-address-specific').value.trim();
     const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
     
@@ -667,7 +673,8 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         if (choice === 'now') {
             time = 'Зараз';
         } else {
-            time = vhPickerInput.value;
+            // Використовуємо правильний ID для цього пікера
+            time = document.getElementById('vh-form-datetime-picker-specific').value;
         }
     }
 
@@ -696,7 +703,6 @@ vhFormSubmitBtn?.addEventListener('click', () => {
     alert('Ваш запит успішно опубліковано!');
     navigateTo('passenger-valky-kharkiv-screen');
 });
-
 
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
