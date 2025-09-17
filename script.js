@@ -585,6 +585,27 @@ showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
 // --- Навігація для "Валки-Харків" ---
 vhPassengerCreateRequestBtn?.addEventListener('click', () => navigateTo('vh-passenger-form-screen'));
 
+// == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ПАСАЖИР) v2.0 ==
+
+// --- Логіка для перемикача напрямку зі стрілками ---
+const vhSwapRouteBtn = document.getElementById('vh-swap-route-btn');
+const vhFromLocation = document.getElementById('vh-from-location').querySelector('span');
+const vhToLocation = document.getElementById('vh-to-location').querySelector('span');
+
+vhSwapRouteBtn?.addEventListener('click', () => {
+    // Зберігаємо поточне значення "Звідки" в тимчасову змінну
+    const tempLocation = vhFromLocation.textContent;
+
+    // Міняємо їх місцями
+    vhFromLocation.textContent = vhToLocation.textContent;
+    vhToLocation.textContent = tempLocation;
+
+    // Додамо легку анімацію для краси
+    const container = document.querySelector('.route-swap-container');
+    container.classList.add('swapped');
+    setTimeout(() => container.classList.remove('swapped'), 300);
+});
+
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
     displayArchives();
