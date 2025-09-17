@@ -765,6 +765,11 @@ showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-
 showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
 showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
 showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+// Обробник для кнопки "Запропонувати поїздку" на екрані Валки-Харків
+const vhDriverCreateOfferBtn = document.getElementById('vh-driver-create-offer-btn');
+vhDriverCreateOfferBtn?.addEventListener('click', () => {
+    navigateTo('vh-driver-form-screen');
+});
 
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
 document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
