@@ -590,24 +590,24 @@ vhPassengerCreateRequestBtn?.addEventListener('click', () => navigateTo('vh-pass
 
 // == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ПАСАЖИР) v2.0 ==
 
+// == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ПАСАЖИР) v2.0 ==
+
 // --- Логіка для перемикача напрямку зі стрілками ---
 const vhSwapRouteBtn = document.getElementById('vh-swap-route-btn');
-const vhFromLocation = document.getElementById('vh-from-location').querySelector('span');
-const vhToLocation = document.getElementById('vh-to-location').querySelector('span');
+const vhFromLocationSpan = document.getElementById('vh-from-location')?.querySelector('span');
+const vhToLocationSpan = document.getElementById('vh-to-location')?.querySelector('span');
 
 vhSwapRouteBtn?.addEventListener('click', () => {
-    // Зберігаємо поточне значення "Звідки" в тимчасову змінну
-    const tempLocation = vhFromLocation.textContent;
+    if (!vhFromLocationSpan || !vhToLocationSpan) return;
+    const tempLocation = vhFromLocationSpan.textContent;
+    vhFromLocationSpan.textContent = vhToLocationSpan.textContent;
+    vhToLocationSpan.textContent = tempLocation;
 
-    // Міняємо їх місцями
-    vhFromLocation.textContent = vhToLocation.textContent;
-    vhToLocation.textContent = tempLocation;
-
-    // Додамо легку анімацію для краси
-    const container = document.querySelector('.route-swap-container');
-    container.classList.add('swapped');
-    setTimeout(() => container.classList.remove('swapped'), 300);
+    const container = vhSwapRouteBtn.closest('.route-swap-container');
+    container?.classList.add('swapped');
+    setTimeout(() => container?.classList.remove('swapped'), 300);
 });
+
 // --- Логіка для вибору часу ---
 const vhTimeChoiceButtons = document.querySelectorAll('#vh-passenger-form-screen .btn-segment');
 const vhPickerInput = document.getElementById('vh-form-datetime-picker-specific');
@@ -615,53 +615,38 @@ const vhPickerInput = document.getElementById('vh-form-datetime-picker-specific'
 vhTimeChoiceButtons.forEach(button => {
     button.addEventListener('click', (e) => {
         const choice = e.currentTarget.dataset.timeChoice;
-
-        // Робимо активною тільки натиснуту кнопку
         vhTimeChoiceButtons.forEach(btn => btn.classList.remove('active'));
         e.currentTarget.classList.add('active');
 
         if (choice === 'now') {
-            // Якщо вибрали "Зараз", ховаємо поле для дати
-            vhPickerInput.style.display = 'none';
+            if(vhPickerInput) vhPickerInput.style.display = 'none';
         } else {
-            // Для інших варіантів - показуємо і налаштовуємо календар
-            vhPickerInput.style.display = 'block';
+            if(vhPickerInput) vhPickerInput.style.display = 'block';
             let pickerOptions = {
-                enableTime: true,
-                minDate: "today",
-                time_24hr: true,
-                onClose: function(selectedDates, dateStr) {
-                    if (!dateStr) {
-                        // Якщо користувач закрив календар, не вибравши дату,
-                        // знімаємо активний клас з кнопки
-                        e.currentTarget.classList.remove('active');
-                    }
+                enableTime: true, minDate: "today", time_24hr: true,
+                onClose: (selectedDates, dateStr) => {
+                    if (!dateStr) e.currentTarget.classList.remove('active');
                 }
             };
-
             if (choice === 'today') {
                 pickerOptions.noCalendar = true;
                 pickerOptions.dateFormat = "H:i";
-            } else { // choice === 'date'
+            } else {
                 pickerOptions.dateFormat = "d.m.Y H:i";
             }
-            
-            flatpickr(vhPickerInput, pickerOptions).open();
+            if(vhPickerInput) flatpickr(vhPickerInput, pickerOptions).open();
         }
     });
 });
 
-// --- Логіка для кнопки "Опублікувати запит" ---
-const vhFormSubmitBtn = document.getElementById('vh-form-submit-btn-specific'); // <--- Ось рядок, якого, скоріш за все, не вистачало
+// --- Логіка для кнопки "Опублікувати запит" v2.0 (ПРАВИЛЬНА) ---
+const vhFormSubmitBtn = document.getElementById('vh-form-submit-btn-specific');
 
 vhFormSubmitBtn?.addEventListener('click', () => {
-    // 1. Збираємо дані з форми
-    const directionElement = document.querySelector('#vh-passenger-form-screen .btn-toggle.active');
-    if (!directionElement) {
-        alert('Будь ласка, оберіть напрямок.');
-        return;
-    }
-    const direction = directionElement.dataset.direction;
+    // 1. Збираємо дані з форми (новий, правильний спосіб)
+    const fromLocation = vhFromLocationSpan?.textContent || 'Н/Д';
+    const toLocation = vhToLocationSpan?.textContent || 'Н/Д';
+    const direction = `${fromLocation} - ${toLocation}`;
     
     const fromSpecific = document.getElementById('vh-form-from-address-specific').value.trim();
     const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
@@ -673,8 +658,7 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         if (choice === 'now') {
             time = 'Зараз';
         } else {
-            // Використовуємо правильний ID для цього пікера
-            time = document.getElementById('vh-form-datetime-picker-specific').value;
+            time = vhPickerInput?.value;
         }
     }
 
@@ -686,8 +670,8 @@ vhFormSubmitBtn?.addEventListener('click', () => {
 
     // 3. Створюємо об'єкт запиту
     const newRequest = {
-        id: Date.now(), // Унікальний ID
-        passengerId: 1, // Поки що захардкодимо ID пасажира (Віти)
+        id: Date.now(),
+        passengerId: 1,
         direction: direction,
         fromSpecific: fromSpecific,
         toSpecific: toSpecific,
@@ -697,7 +681,6 @@ vhFormSubmitBtn?.addEventListener('click', () => {
     // 4. Додаємо запит в нашу "базу даних"
     vh_requests_database.push(newRequest);
     console.log('Новий запит В-Х додано:', newRequest);
-    console.log('Вся база запитів В-Х:', vh_requests_database);
 
     // 5. Сповіщаємо користувача і повертаємо на екран-список
     alert('Ваш запит успішно опубліковано!');
