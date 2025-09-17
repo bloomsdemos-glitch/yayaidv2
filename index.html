@@ -562,13 +562,25 @@
 <div id="driver-valky-kharkiv-screen" class="screen hidden">
     <header>
         <button class="btn-back" data-target="driver-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Валки-Харків</h2>
+        <h2>Запити: Валки-Харків</h2>
         <div class="header-placeholder"></div>
     </header>
-    <main>
-        <p>Тут буде список пасажирів, які шукають поїздку за маршрутом Валки-Харків.</p>
+    <main class="list-view-main">
+        <button id="vh-driver-create-offer-btn" class="btn-main-action accept">
+            <i class="fa-solid fa-bullhorn"></i>
+            Запропонувати поїздку
+        </button>
+
+        <div class="list-header">
+            <h4><i class="fa-solid fa-user-clock"></i> Пасажири шукають водія</h4>
+        </div>
+        
+        <ul id="vh-passenger-request-list" class="order-list driver">
+            <p class="list-placeholder">Наразі немає активних запитів від пасажирів.</p>
+        </ul>
     </main>
 </div>
+
 
 <!-- Тут у нас профіль водія -->
 
