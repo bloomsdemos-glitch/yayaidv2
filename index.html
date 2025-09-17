@@ -581,6 +581,55 @@
     </main>
 </div>
 
+<div id="vh-driver-form-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-valky-kharkiv-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Створити пропозицію</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main class="main-form">
+        <div class="form-step">
+            <label class="section-label">Напрямок</label>
+            <div class="route-swap-container">
+                <div class="route-display-field" id="vh-driver-from-location">
+                    <i class="fa-solid fa-circle-dot"></i>
+                    <span>Валки</span>
+                </div>
+                <button id="vh-driver-swap-route-btn" class="btn-icon-action">
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+                <div class="route-display-field" id="vh-driver-to-location">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Харків</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-step">
+            <label class="section-label">Місце (необов'язково)</label>
+            <div class="form-group">
+                <input type="text" id="vh-driver-form-from-specific" class="form-input" placeholder="Звідки конкретно? (напр. Біля музею)">
+            </div>
+        </div>
+        
+        <div class="form-group-checkbox">
+            <input type="checkbox" id="vh-driver-flexible-route">
+            <label for="vh-driver-flexible-route">Готовий заїхати за пасажиром</label>
+        </div>
+
+        <div class="form-step">
+            <label class="section-label">Коли?</label>
+            <div class="button-group-vertical">
+                <button class="btn-segment" data-time-choice="now">Зараз</button>
+                <button class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
+                <button class="btn-segment" data-time-choice="date">Обрати дату</button>
+            </div>
+            <input type="text" id="vh-driver-form-datetime-picker" class="form-input" style="display: none;">
+        </div>
+        
+        <button id="vh-driver-form-submit-btn" class="btn-main-action accept">Опублікувати пропозицію</button>
+    </main>
+</div>
 
 <!-- Тут у нас профіль водія -->
 
