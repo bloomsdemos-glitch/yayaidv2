@@ -1716,3 +1716,22 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     color: var(--md-on-primary);
     border-color: var(--md-primary);
 }
+/* === СТИЛІ ДЛЯ ІКОНКИ СПОВІЩЕНЬ === */
+.header-icon-wrapper {
+    position: relative;
+}
+
+#driver-notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 12px;
+    height: 12px;
+    padding: 0;
+    font-size: 9px;
+    border: 2px solid var(--md-background);
+}
+
+#driver-notification-badge.hidden {
+    display: none;
+}
