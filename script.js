@@ -400,13 +400,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileRequestRideBtn = document.getElementById('profile-request-ride-btn');
 
     function displayDriverProfile(driverId) {
-        const driver = drivers_database.find(d => d.id === driverId);
-        if (!driver) return;
-        profileDriverNameHeader.textContent = `Профіль: ${driver.name}`;
-        profileDriverName.textContent = driver.name;
-        profileDriverRating.textContent = driver.rating.toFixed(1);
-        profileDriverTrips.textContent = driver.trips;
-        profileDriverCar.textContent = driver.car;
+    const driver = drivers_database.find(d => d.id === driverId);
+    if (!driver) {
+        console.error('Водія з ID', driverId, 'не знайдено.');
+        return;
+    }
+
+    // Заповнюємо хедер і назву
+    if (profileDriverNameHeader) profileDriverNameHeader.textContent = `Профіль: ${driver.name}`;
+    if (profileDriverName) profileDriverName.textContent = driver.name;
+    if (profileDriverRating) profileDriverRating.textContent = driver.rating.toFixed(1);
+    if (profileDriverTrips) profileDriverTrips.textContent = driver.trips;
+    if (profileDriverCar) profileDriverCar.textContent = driver.car;
+
+    // Заповнюємо теги
+    if (profileDriverTags) {
         profileDriverTags.innerHTML = '';
         driver.tags.forEach(tag => {
             const tagElement = document.createElement('span');
@@ -414,17 +422,39 @@ document.addEventListener('DOMContentLoaded', () => {
             tagElement.innerHTML = `<i class="${tag.icon}"></i> ${tag.text}`;
             profileDriverTags.appendChild(tagElement);
         });
-        const reviewsSectionTitle = document.querySelector('#driver-rating-screen .details-section h4[i.fa-comments]');
-        if(reviewsSectionTitle) reviewsSectionTitle.textContent = `Відгуки (${driver.reviews.length})`;
-        profileDriverReviews.innerHTML = '';
-        driver.reviews.forEach(review => {
-            const reviewElement = document.createElement('div');
-            reviewElement.className = 'review-card';
-            reviewElement.innerHTML = `<div class="review-header"><strong>${review.name}</strong><span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span></div><p class="review-text">${review.text}</p>`;
-            profileDriverReviews.appendChild(reviewElement);
-        });
-        navigateTo('driver-rating-screen');
     }
+
+    // Заповнюємо відгуки (ВИПРАВЛЕНА ЛОГІКА)
+    if (profileDriverReviews) {
+        const reviewsSection = profileDriverReviews.closest('.details-section');
+        const reviewsSectionTitle = reviewsSection?.querySelector('h4');
+
+        if (reviewsSectionTitle) {
+            reviewsSectionTitle.textContent = `Відгуки (${driver.reviews.length})`;
+        }
+        
+        profileDriverReviews.innerHTML = '';
+        if (driver.reviews.length > 0) {
+            driver.reviews.forEach(review => {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review-card';
+                reviewElement.innerHTML = `
+                    <div class="review-header">
+                        <strong>${review.name}</strong>
+                        <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
+                    </div>
+                    <p class="review-text">${review.text}</p>`;
+                profileDriverReviews.appendChild(reviewElement);
+            });
+        } else {
+            profileDriverReviews.innerHTML = `<p class="no-reviews-placeholder">Відгуків поки що немає.</p>`;
+        }
+    }
+    
+    // І тільки тепер переходимо на екран
+    goTo('driver-rating-screen'); // Використовуємо нашу нову функцію goTo
+}
+
 
     const profilePassengerNameHeader = document.getElementById('profile-passenger-name-header');
     const profilePassengerName = document.getElementById('profile-passenger-name');
