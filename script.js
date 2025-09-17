@@ -54,6 +54,8 @@ const passengers_database = [
 
 // Тимчасова база даних запитів на поїздки Валки-Харків
 const vh_requests_database = [];
+// Тимчасова база даних пропозицій від водіїв на маршруті В-Х
+const vh_offers_database = [];
 
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
