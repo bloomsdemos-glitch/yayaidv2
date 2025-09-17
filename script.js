@@ -689,6 +689,100 @@ vhFormSubmitBtn?.addEventListener('click', () => {
     navigateTo('passenger-valky-kharkiv-screen');
 });
 
+// == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ВОДІЙ) ==
+
+// --- Збираємо елементи водійської форми ---
+const vhDriverSwapRouteBtn = document.getElementById('vh-driver-swap-route-btn');
+const vhDriverFromLocationSpan = document.getElementById('vh-driver-from-location')?.querySelector('span');
+const vhDriverToLocationSpan = document.getElementById('vh-driver-to-location')?.querySelector('span');
+const vhDriverTimeChoiceButtons = document.querySelectorAll('#vh-driver-form-screen .btn-segment');
+const vhDriverPickerInput = document.getElementById('vh-driver-form-datetime-picker');
+const vhDriverFormSubmitBtn = document.getElementById('vh-driver-form-submit-btn');
+
+// --- Логіка для перемикача напрямку (аналогічно до пасажирської) ---
+vhDriverSwapRouteBtn?.addEventListener('click', () => {
+    if (!vhDriverFromLocationSpan || !vhDriverToLocationSpan) return;
+    const tempLocation = vhDriverFromLocationSpan.textContent;
+    vhDriverFromLocationSpan.textContent = vhDriverToLocationSpan.textContent;
+    vhDriverToLocationSpan.textContent = tempLocation;
+});
+
+// --- Логіка для вибору часу (аналогічно до пасажирської) ---
+vhDriverTimeChoiceButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const choice = e.currentTarget.dataset.timeChoice;
+        vhDriverTimeChoiceButtons.forEach(btn => btn.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+
+        if (choice === 'now') {
+            if(vhDriverPickerInput) vhDriverPickerInput.style.display = 'none';
+        } else {
+            if(vhDriverPickerInput) vhDriverPickerInput.style.display = 'block';
+            let pickerOptions = {
+                enableTime: true, minDate: "today", time_24hr: true,
+                onClose: (selectedDates, dateStr) => {
+                    if (!dateStr) e.currentTarget.classList.remove('active');
+                }
+            };
+            if (choice === 'today') {
+                pickerOptions.noCalendar = true;
+                pickerOptions.dateFormat = "H:i";
+            } else {
+                pickerOptions.dateFormat = "d.m.Y H:i";
+            }
+            if(vhDriverPickerInput) flatpickr(vhDriverPickerInput, pickerOptions).open();
+        }
+    });
+});
+
+// --- Логіка для кнопки "Опублікувати пропозицію" ---
+vhDriverFormSubmitBtn?.addEventListener('click', () => {
+    // 1. Збираємо дані
+    const fromLocation = vhDriverFromLocationSpan?.textContent || 'Н/Д';
+    const toLocation = vhDriverToLocationSpan?.textContent || 'Н/Д';
+    const direction = `${fromLocation} - ${toLocation}`;
+    const fromSpecific = document.getElementById('vh-driver-form-from-specific').value.trim();
+    const isFlexible = document.getElementById('vh-driver-flexible-route').checked;
+
+    let time;
+    const activeTimeButton = document.querySelector('#vh-driver-form-screen .btn-segment.active');
+    if (activeTimeButton) {
+        const choice = activeTimeButton.dataset.timeChoice;
+        if (choice === 'now') {
+            time = 'Зараз';
+        } else {
+            time = vhDriverPickerInput?.value;
+        }
+    }
+
+    // 2. Перевірка
+    if (!time) {
+        alert('Будь ласка, оберіть час поїздки.');
+        return;
+    }
+
+    // 3. Створюємо об'єкт пропозиції
+    const newOffer = {
+        id: Date.now(),
+        driverId: 1, // Поки що хардкод, ID водія "Сергій"
+        direction: direction,
+        fromSpecific: fromSpecific,
+        isFlexible: isFlexible,
+        time: time
+    };
+
+    // 4. Додаємо пропозицію в нашу "базу даних"
+    vh_offers_database.push(newOffer);
+    console.log('Нову пропозицію В-Х додано:', newOffer);
+    console.log('Поточний стан бази пропозицій:', vh_offers_database);
+
+
+    // 5. Сповіщаємо і повертаємо назад
+    alert('Вашу пропозицію успішно опубліковано!');
+    navigateTo('driver-valky-kharkiv-screen');
+});
+
+
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ЗАПИТІВ "В-Х" (ДЛЯ ВОДІЯ) ==
 function displayVhRequests() {
     const requestListContainer = document.getElementById('vh-passenger-request-list');
