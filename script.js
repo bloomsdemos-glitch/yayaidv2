@@ -687,6 +687,64 @@ vhFormSubmitBtn?.addEventListener('click', () => {
     navigateTo('passenger-valky-kharkiv-screen');
 });
 
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ЗАПИТІВ "В-Х" (ДЛЯ ВОДІЯ) ==
+function displayVhRequests() {
+    const requestListContainer = document.getElementById('vh-passenger-request-list');
+    const placeholder = requestListContainer?.querySelector('.list-placeholder');
+
+    if (!requestListContainer || !placeholder) return;
+
+    // Очищуємо попередні результати, але залишаємо заглушку
+    requestListContainer.innerHTML = '';
+    requestListContainer.appendChild(placeholder);
+
+    // Перевіряємо, чи є взагалі запити
+    if (vh_requests_database.length === 0) {
+        placeholder.style.display = 'block'; // Показуємо заглушку
+    } else {
+        placeholder.style.display = 'none'; // Ховаємо заглушку
+        
+        // Створюємо картку для кожного запиту
+        vh_requests_database.forEach(request => {
+            // Знаходимо ім'я пасажира по його ID
+            const passenger = passengers_database.find(p => p.id === request.passengerId);
+            const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
+
+            const li = document.createElement('li');
+            li.className = 'order-card driver-view'; // Перевикористовуємо стиль
+            
+            li.innerHTML = `
+                <div class="order-main-info">
+                    <div class="passenger-info">
+                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong>${passengerName}</strong>
+                            <span>${request.direction}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-route-info">
+                    <div class="address-line">
+                        <i class="fa-solid fa-circle start-address-icon"></i>
+                        <span>${request.fromSpecific || 'Точка не вказана'}</span>
+                    </div>
+                    <div class="address-line">
+                        <i class="fa-solid fa-location-dot end-address-icon"></i>
+                        <span>${request.toSpecific || 'Точка не вказана'}</span>
+                    </div>
+                </div>
+                <div class="order-time-info">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>${request.time}</span>
+                </div>
+                <button class="btn-main-action accept" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
+            `;
+            requestListContainer.appendChild(li);
+        });
+    }
+}
+
+
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
     displayArchives();
@@ -696,7 +754,11 @@ showFindPassengersBtn?.addEventListener('click', () => {
     navigateTo('driver-find-passengers-screen');
     displayDriverOrders();
 });
-showDriverValkyKharkivBtn?.addEventListener('click', () => navigateTo('driver-valky-kharkiv-screen'));
+showDriverValkyKharkivBtn?.addEventListener('click', () => {
+    displayVhRequests(); // <-- Оновлюємо список перед показом
+    navigateTo('driver-valky-kharkiv-screen');
+});
+
 showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
 showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
 showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
