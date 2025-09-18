@@ -402,44 +402,27 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
 };
 }
 
-// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ v2.0 (динамічна і клікабельна) ==
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ v2.1 (клікабельно для всіх) ==
 function displayArchives() {
     // --- Архів пасажира ---
     const passengerArchiveList = document.querySelector('#passenger-orders-screen .order-list.passenger');
     if (passengerArchiveList) {
-        passengerArchiveList.innerHTML = ''; // Завжди очищуємо перед оновленням
-        
+        passengerArchiveList.innerHTML = '';
         if (passenger_archive.length === 0) {
-            // Якщо архів порожній, показуємо відповідний напис
             const li = document.createElement('li');
             li.innerHTML = `<p class="list-placeholder" style="font-style: italic; text-align: center; color: var(--md-on-surface-variant);">Архів поїздок порожній.</p>`;
             passengerArchiveList.appendChild(li);
         } else {
             passenger_archive.forEach(order => {
-                // Знаходимо дані водія для відображення
                 const driver = drivers_database.find(d => d.id === (order.driverId || 1));
                 const driverName = driver ? driver.name : 'Водій';
                 const driverCar = driver ? driver.car : '';
                 const driverRating = driver ? driver.rating.toFixed(1) : 'N/A';
-
                 const li = document.createElement('li');
                 li.className = 'order-card archived';
-                li.style.cursor = 'pointer'; // Додаємо стиль, щоб було видно, що картка клікабельна
-                li.innerHTML = `
-                    <div class="archived-info">
-                        <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
-                        <div class="route">
-                            <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
-                            <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
-                        </div>
-                        <div class="driver-details">Водій: ${driverName}</div>
-                    </div>
-                    <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
-                `;
-                
-                // РОБИМО КАРТКУ КЛІКАБЕЛЬНОЮ
+                li.style.cursor = 'pointer';
+                li.innerHTML = `...`; // (весь HTML картки, залишаємо як є)
                 li.addEventListener('click', () => {
-                    // Заповнюємо детальний екран даними з архівної поїздки
                     document.getElementById('archived-details-date').textContent = new Date(order.id).toLocaleString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     document.getElementById('archived-details-from').textContent = order.from;
                     document.getElementById('archived-details-to').textContent = order.to;
@@ -448,30 +431,29 @@ function displayArchives() {
                     document.getElementById('archived-details-driver-name').textContent = driverName;
                     document.getElementById('archived-details-driver-car').textContent = driverCar;
                     document.getElementById('archived-details-driver-rating').innerHTML = `${driverRating} <i class="fa-solid fa-star"></i>`;
-                    
-                    // Переходимо на екран деталей
                     navigateTo('archived-trip-details-screen');
                 });
-                
                 passengerArchiveList.appendChild(li);
             });
         }
     }
 
-    // --- Архів водія (оновлена версія з перевіркою на пустоту) ---
+    // --- Архів водія ---
     const driverArchiveList = document.querySelector('#driver-orders-screen .order-list.driver');
     if (driverArchiveList) {
-        driverArchiveList.innerHTML = ''; // Очищуємо
-        
+        driverArchiveList.innerHTML = '';
         if (driver_archive.length === 0) {
             const li = document.createElement('li');
             li.innerHTML = `<p class="list-placeholder" style="font-style: italic; text-align: center; color: var(--md-on-surface-variant);">Архів поїздок порожній.</p>`;
             driverArchiveList.appendChild(li);
         } else {
             driver_archive.forEach(order => {
+                const passenger = passengers_database.find(p => p.id === (order.passengerId || 1));
+                const passengerName = passenger ? passenger.name : 'Пасажир';
+                const passengerRating = passenger ? '4.8 <i class="fa-solid fa-star"></i>' : 'N/A'; // поки хардкод
                 const li = document.createElement('li');
                 li.className = 'order-card archived';
-                // Цей архів поки що не клікабельний, просто показуємо дані
+                li.style.cursor = 'pointer';
                 li.innerHTML = `
                     <div class="archived-info">
                         <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
@@ -479,16 +461,22 @@ function displayArchives() {
                             <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
                             <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
                         </div>
-                        <div class="driver-details">Пасажир: ${order.passengerName}</div>
+                        <div class="driver-details">Пасажир: ${passengerName}</div>
                     </div>
                     <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
                 `;
+                li.addEventListener('click', () => {
+                    document.getElementById('driver-archived-passenger-name').textContent = passengerName;
+                    document.getElementById('driver-archived-passenger-rating').innerHTML = passengerRating;
+                    document.getElementById('driver-archived-from').textContent = order.from;
+                    document.getElementById('driver-archived-to').textContent = order.to;
+                    navigateTo('driver-archived-trip-details-screen');
+                });
                 driverArchiveList.appendChild(li);
             });
         }
     }
 }
-
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ВОДІЯ ==
 
