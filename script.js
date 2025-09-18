@@ -504,7 +504,19 @@ if (driver.trips < 5) {
         `;
         profileDriverReviews.appendChild(reviewElement);
     });
-    
+    // "Оживляємо" кнопку "Замовити поїздку"
+profileRequestRideBtn.onclick = () => {
+    // Запам'ятовуємо ID водія, якого обрали
+    currentOfferIdForConfirmation = `driver_${driver.id}`; 
+
+    // Заповнюємо даними екран підтвердження
+    document.getElementById('confirm-ride-driver-name').textContent = driver.name;
+    document.getElementById('confirm-ride-driver-car').textContent = driver.car;
+
+    // Переходимо на екран підтвердження
+    navigateTo('driver-confirm-ride-screen');
+};
+
     // Показуємо сам екран профілю
     navigateTo('driver-rating-screen');
 }
