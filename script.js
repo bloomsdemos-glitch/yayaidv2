@@ -1009,12 +1009,11 @@ function selectOffer(offerId) {
 }
 
 
-// Функція, яка малює список сповіщень з бази даних
+// Функція, яка малює список сповіщень з бази даних v2.0 (інтерактивна)
 function displayNotifications(userType) {
     const listContainer = document.getElementById('notification-list');
     const placeholder = listContainer.querySelector('.list-placeholder');
-
-    // Встановлюємо, куди повертатись кнопці "Назад"
+    
     const backBtn = document.querySelector('#notifications-screen .btn-back');
     if (userType === 'driver') {
         backBtn.dataset.target = 'driver-dashboard';
@@ -1022,14 +1021,18 @@ function displayNotifications(userType) {
         backBtn.dataset.target = 'passenger-dashboard';
     }
 
-    listContainer.innerHTML = ''; // Очищуємо
+    listContainer.innerHTML = '';
     listContainer.appendChild(placeholder);
 
-    if (notifications_database.length === 0) {
+    // Поки що логіка userId дуже проста, потім ускладнимо
+    const currentUserId = (userType === 'driver') ? 1 : 1; 
+    const userNotifications = notifications_database.filter(n => n.userId === currentUserId);
+
+    if (userNotifications.length === 0) {
         placeholder.style.display = 'block';
     } else {
         placeholder.style.display = 'none';
-        notifications_database.slice().reverse().forEach(notif => { // .slice().reverse() щоб нові були зверху
+        userNotifications.slice().reverse().forEach(notif => {
             const li = document.createElement('li');
             li.className = 'notification-card';
             if(notif.isRead) li.classList.add('is-read');
@@ -1040,9 +1043,23 @@ function displayNotifications(userType) {
                 <i class="notification-icon ${iconClass}"></i>
                 <p class="notification-text">${notif.text}</p>
             `;
+
+            // Ось ключова логіка інтерактивності!
+            if (notif.type === 'new_order' && userType === 'driver') {
+                li.style.cursor = 'pointer';
+                li.addEventListener('click', () => {
+                    // Тут ми маємо знайти відповідне замовлення і показати його деталі
+                    // Поки що це буде імітація, яка просто перекидає на екран замовлень
+                    alert('Перехід до підтвердження замовлення...');
+                    showScreen('driver-orders-screen'); 
+                });
+            }
+
             listContainer.appendChild(li);
         });
     }
+}
+
 }
 
 
@@ -1066,6 +1083,21 @@ driverNotificationsBtn?.addEventListener('click', () => {
 });
 
 
+// Обробник для дзвіночка ПАСАЖИРА
+const passengerNotificationsBtn = document.getElementById('passenger-notifications-btn');
+passengerNotificationsBtn?.addEventListener('click', () => {
+    const notificationBadge = document.getElementById('passenger-notification-badge');
+
+    if (notificationBadge) {
+        notificationBadge.classList.add('hidden');
+        notificationBadge.textContent = '';
+    }
+
+    notifications_database.forEach(n => n.isRead = true);
+
+    displayNotifications('passenger'); // <-- Зверни увагу, передаємо 'passenger'
+    navigateTo('notifications-screen');
+});
 
 
 
@@ -1333,11 +1365,29 @@ backButtons.forEach(button => {
 
  // === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
     driverArrivedBtn?.addEventListener('click', () => {
-        alert('Пасажира сповіщено, що ви прибули!');
-        driverArrivedBtn.classList.add('disabled');
-        driverStartTripBtn.classList.remove('disabled');
-        // В майбутньому тут буде пуш-сповіщення для пасажира
-    });
+    // Замість алерта створюємо сповіщення для пасажира
+    const newNotification = {
+        id: Date.now(),
+        userId: 1, // ID пасажира "Віта", поки хардкод
+        text: `<strong>Водій прибув!</strong> Ваш водій очікує на вас.`,
+        type: 'driver_arrived',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+
+    // І показуємо значок сповіщення у пасажира
+    const passengerBadge = document.getElementById('passenger-notification-badge');
+    if (passengerBadge) {
+        const unreadCount = notifications_database.filter(n => !n.isRead).length;
+        passengerBadge.textContent = unreadCount;
+        passengerBadge.classList.remove('hidden');
+    }
+
+    alert('Пасажира сповіщено, що ви прибули!'); // Цей алерт залишаємо для водія, щоб він знав, що дія відбулась
+    driverArrivedBtn.classList.add('disabled');
+    driverStartTripBtn.classList.remove('disabled');
+});
+
 
     driverStartTripBtn?.addEventListener('click', () => {
         alert('Поїздку розпочато!');
