@@ -1495,46 +1495,74 @@ backButtons.forEach(button => {
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
 
- // === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
-    driverArrivedBtn?.addEventListener('click', () => {
-    // Замість алерта створюємо сповіщення для пасажира
+// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) v2.0 ===
+driverArrivedBtn?.addEventListener('click', () => {
+    // Створюємо сповіщення для пасажира
     const newNotification = {
         id: Date.now(),
-        userId: 1, // ID пасажира "Віта", поки хардкод
+        userId: 1, // ID пасажира "Віта"
         text: `<strong>Водій прибув!</strong> Ваш водій очікує на вас.`,
         type: 'driver_arrived',
         isRead: false
     };
     notifications_database.push(newNotification);
 
-    // І показуємо значок сповіщення у пасажира
+    // Оновлюємо значок сповіщень у пасажира
     const passengerBadge = document.getElementById('passenger-notification-badge');
     if (passengerBadge) {
-        const unreadCount = notifications_database.filter(n => !n.isRead).length;
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === 1).length;
         passengerBadge.textContent = unreadCount;
         passengerBadge.classList.remove('hidden');
     }
 
-    alert('Пасажира сповіщено, що ви прибули!'); // Цей алерт залишаємо для водія, щоб він знав, що дія відбулась
+    alert('Пасажира сповіщено, що ви прибули!');
     driverArrivedBtn.classList.add('disabled');
     driverStartTripBtn.classList.remove('disabled');
 });
 
+driverStartTripBtn?.addEventListener('click', () => {
+    alert('Поїздку розпочато!');
+    driverStartTripBtn.classList.add('disabled');
+    driverFinishTripBtn.classList.remove('disabled');
+    // В майбутньому тут можна додати сповіщення для пасажира
+});
 
-    driverStartTripBtn?.addEventListener('click', () => {
-        alert('Поїздку розпочато!');
-        driverStartTripBtn.classList.add('disabled');
-        driverFinishTripBtn.classList.remove('disabled');
-        // В майбутньому тут буде пуш-сповіщення для пасажира
-    });
+driverFinishTripBtn?.addEventListener('click', () => {
+    // Знаходимо активну поїздку, щоб її завершити
+    if (active_trips_database.length === 0) return;
+    const finishedTrip = active_trips_database[0];
 
-    driverFinishTripBtn?.addEventListener('click', () => {
-        alert('Поїздку завершено!');
-        showScreen('passenger-rating-trip-screen');
+    // Додаємо поїздку в архів водія
+    driver_archive.push(finishedTrip);
+    // І в архів пасажира
+    passenger_archive.push(finishedTrip);
 
-        // НЕ скидаємо статус тут, щоб пасажир міг спокійно оцінити поїздку
-        // globalOrderStatus = 'searching'; 
-    });
+    // Видаляємо поїздку з активних
+    active_trips_database.splice(0, 1);
+
+    // Тут в майбутньому буде логіка, яка покаже пасажиру екран оцінки
+    // А поки що просто сповістимо його
+    const newNotification = {
+        id: Date.now(),
+        userId: 1, // ID пасажира "Віта"
+        text: `<strong>Поїздку завершено.</strong> Дякуємо, що обрали наш сервіс!`,
+        type: 'trip_finished',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+
+    const passengerBadge = document.getElementById('passenger-notification-badge');
+    if (passengerBadge) {
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === 1).length;
+        passengerBadge.textContent = unreadCount;
+        passengerBadge.classList.remove('hidden');
+    }
+
+    alert('Поїздку завершено!');
+    // Повертаємо водія на його головний екран
+    navigateTo('driver-dashboard');
+});
+
 
 // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
 let currentRating = 0;
