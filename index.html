@@ -1306,6 +1306,43 @@
         </ul>
     </main>
 </div>
+<div id="driver-vh-confirmation-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="notifications-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Нове замовлення</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+        <div class="details-card driver">
+            <div class="passenger-info">
+                <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                <div class="passenger-details">
+                    <strong id="vh-confirm-passenger-name">Ім'я пасажира</strong>
+                    <span id="vh-confirm-passenger-rating">Рейтинг</span>
+                </div>
+            </div>
+            <div class="order-route-info" style="margin-top: 16px;">
+                <div class="address-line">
+                    <i class="fa-solid fa-route start-address-icon"></i>
+                    <span id="vh-confirm-direction">Напрямок</span>
+                </div>
+                <div class="address-line">
+                    <i class="fa-solid fa-location-dot end-address-icon"></i>
+                    <span id="vh-confirm-specifics">Точки посадки/висадки</span>
+                </div>
+                 <div class="address-line">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="vh-confirm-time">Час</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-actions">
+            <button id="vh-decline-btn" class="btn-main-action decline">Відхилити</button>
+            <button id="vh-confirm-btn" class="btn-main-action accept">Підтвердити</button>
+        </div>
+    </main>
+</div>
 
 
     </div>
