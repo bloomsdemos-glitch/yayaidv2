@@ -185,19 +185,27 @@ const vh_offers_database = [];
     }
 
    function goToStep(stepToShow) {
-    // Замість прямої маніпуляції стилями, працюємо з класами
+    alert(`1. Вхід в goToStep. Хочу показати крок: "${stepToShow}"`);
+
     addressStep.classList.remove('active');
     timeStep.classList.remove('active');
     paymentStep.classList.remove('active');
+    alert('2. Зняв клас "active" з усіх кроків.');
 
     if (stepToShow === 'address') {
         addressStep.classList.add('active');
+        alert('3. Додав клас "active" до кроку АДРЕСА.');
     } else if (stepToShow === 'time') {
         timeStep.classList.add('active');
+        alert('3. Додав клас "active" до кроку ЧАС.');
     } else if (stepToShow === 'payment') {
         paymentStep.classList.add('active');
+        alert('3. Додав клас "active" до кроку ОПЛАТА.');
     }
+
+    alert('4. Роботу goToStep завершено.');
 }
+
 
 
     function resetQuickOrder() {
