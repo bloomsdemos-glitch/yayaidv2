@@ -1076,31 +1076,40 @@ function displayNotifications(userType) {
     }
 }
 
-// Функція, яка показує/ховає картку активної поїздки для водія
+// Функція, яка показує/ховає картку активної поїздки для водія v2.0 (клікабельна)
 function displayDriverActiveTrip() {
     const activeTripCard = document.getElementById('driver-active-trip-card');
     const noOrdersMsg = document.getElementById('no-active-driver-orders');
 
     if (active_trips_database.length > 0) {
-        // Якщо є хоч одна активна поїздка, беремо першу
         const trip = active_trips_database[0];
 
-        // Заповнюємо картку даними з поїздки
+        // Заповнюємо картку-прев'ю в "Моїх замовленнях"
         document.getElementById('driver-active-passenger-name').textContent = trip.passengerName;
         document.getElementById('driver-active-passenger-rating').innerHTML = `${trip.passengerRating} <i class="fa-solid fa-star"></i>`;
         document.getElementById('driver-active-from-address').textContent = trip.from;
         document.getElementById('driver-active-to-address').textContent = trip.to;
 
-        // Показуємо картку і ховаємо заглушку
+        // Робимо картку клікабельною
+        activeTripCard.onclick = () => {
+            // Заповнюємо даними детальний екран активної поїздки
+            document.getElementById('details-active-passenger-name').textContent = trip.passengerName;
+            document.getElementById('details-active-passenger-rating').innerHTML = `${trip.passengerRating} <i class="fa-solid fa-star"></i>`;
+            document.getElementById('details-active-from-address').textContent = trip.from;
+            document.getElementById('details-active-to-address').textContent = trip.to;
+
+            // Переходимо на детальний екран
+            navigateTo('driver-active-trip-details-screen');
+        };
+
         if(activeTripCard) activeTripCard.style.display = 'block';
         if(noOrdersMsg) noOrdersMsg.style.display = 'none';
     } else {
-        // Якщо активних поїздок немає, ховаємо картку і показуємо заглушку
         if(activeTripCard) activeTripCard.style.display = 'none';
+        if(activeTripCard) activeTripCard.onclick = null; // Прибираємо обробник, якщо поїздок немає
         if(noOrdersMsg) noOrdersMsg.style.display = 'block';
     }
 }
-
 
 // == ЛОГІКА КНОПОК ПІДТВЕРДЖЕННЯ/ВІДХИЛЕННЯ ЗАМОВЛЕННЯ В-Х ==
 const vhConfirmBtn = document.getElementById('vh-confirm-btn');
