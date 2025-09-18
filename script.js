@@ -990,6 +990,7 @@ function selectOffer(offerId) {
         text: `<strong>Нове замовлення!</strong> Пасажир хоче поїхати з вами за маршрутом <strong>${offer.direction}</strong>.`,
         type: 'new_order',
         isRead: false
+        offerId: offerId
     };
     notifications_database.push(newNotification);
 
@@ -1009,11 +1010,11 @@ function selectOffer(offerId) {
 }
 
 
-// Функція, яка малює список сповіщень з бази даних v2.0 (інтерактивна)
+// Функція, яка малює список сповіщень v2.1 (веде на екран підтвердження)
 function displayNotifications(userType) {
     const listContainer = document.getElementById('notification-list');
     const placeholder = listContainer.querySelector('.list-placeholder');
-    
+
     const backBtn = document.querySelector('#notifications-screen .btn-back');
     if (userType === 'driver') {
         backBtn.dataset.target = 'driver-dashboard';
@@ -1024,7 +1025,6 @@ function displayNotifications(userType) {
     listContainer.innerHTML = '';
     listContainer.appendChild(placeholder);
 
-    // Поки що логіка userId дуже проста, потім ускладнимо
     const currentUserId = (userType === 'driver') ? 1 : 1; 
     const userNotifications = notifications_database.filter(n => n.userId === currentUserId);
 
@@ -1044,14 +1044,23 @@ function displayNotifications(userType) {
                 <p class="notification-text">${notif.text}</p>
             `;
 
-            // Ось ключова логіка інтерактивності!
             if (notif.type === 'new_order' && userType === 'driver') {
                 li.style.cursor = 'pointer';
                 li.addEventListener('click', () => {
-                    // Тут ми маємо знайти відповідне замовлення і показати його деталі
-                    // Поки що це буде імітація, яка просто перекидає на екран замовлень
-                    alert('Перехід до підтвердження замовлення...');
-                    showScreen('driver-orders-screen'); 
+                    // Знаходимо пропозицію і пасажира по ID зі сповіщення
+                    const offer = vh_offers_database.find(o => o.id === notif.offerId);
+                    const passenger = passengers_database.find(p => p.id === 1); // Поки що пасажир один
+                    if (!offer || !passenger) return;
+
+                    // Заповнюємо новий екран даними
+                    document.getElementById('vh-confirm-passenger-name').textContent = passenger.name;
+                    document.getElementById('vh-confirm-passenger-rating').innerHTML = `4.8 <i class="fa-solid fa-star"></i> • 27 поїздок`; // Поки що хардкод
+                    document.getElementById('vh-confirm-direction').textContent = offer.direction;
+                    document.getElementById('vh-confirm-specifics').textContent = `${offer.fromSpecific || 'Точка не вказана'} - ${offer.toSpecific || 'Точка не вказана'}`;
+                    document.getElementById('vh-confirm-time').textContent = offer.time;
+
+                    // Переходимо на екран підтвердження
+                    navigateTo('driver-vh-confirmation-screen');
                 });
             }
 
@@ -1059,6 +1068,22 @@ function displayNotifications(userType) {
         });
     }
 }
+// == ЛОГІКА КНОПОК ПІДТВЕРДЖЕННЯ/ВІДХИЛЕННЯ ЗАМОВЛЕННЯ В-Х ==
+const vhConfirmBtn = document.getElementById('vh-confirm-btn');
+const vhDeclineBtn = document.getElementById('vh-decline-btn');
+
+vhConfirmBtn?.addEventListener('click', () => {
+    alert('ЗАМОВЛЕННЯ ПІДТВЕРДЖЕНО! (поки що)');
+    // Тут в майбутньому буде створення активної поїздки і сповіщення для пасажира
+    navigateTo('driver-dashboard');
+});
+
+vhDeclineBtn?.addEventListener('click', () => {
+    alert('Замовлення відхилено.');
+    // Тут в майбутньому буде сповіщення для пасажира про відхилення
+    navigateTo('notifications-screen');
+});
+
 
 // Оновлений обробник для дзвіночка
 const driverNotificationsBtn = document.getElementById('driver-notifications-btn');
