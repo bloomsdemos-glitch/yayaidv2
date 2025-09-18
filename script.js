@@ -991,6 +991,7 @@ function selectOffer(offerId) {
         type: 'new_order',
         isRead: false
         offerId: offerId
+        }
     };
     notifications_database.push(newNotification);
 
