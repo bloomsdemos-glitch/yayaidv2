@@ -989,7 +989,7 @@ function selectOffer(offerId) {
         userId: offer.driverId, // Для якого юзера це сповіщення
         text: `<strong>Нове замовлення!</strong> Пасажир хоче поїхати з вами за маршрутом <strong>${offer.direction}</strong>.`,
         type: 'new_order',
-        isRead: false
+        isRead: false,
         offerId: offerId
         };
     notifications_database.push(newNotification);
