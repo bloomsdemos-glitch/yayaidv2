@@ -1624,4 +1624,27 @@ submitRatingBtn?.addEventListener('click', () => {
     }
 });
 
+// == ЧІТЕРСЬКА КНОПКА ДЛЯ ТЕСТУВАННЯ ==
+const devCreateTestTripBtn = document.getElementById('dev-create-test-trip');
+devCreateTestTripBtn?.addEventListener('click', () => {
+    // Створюємо фейкову активну поїздку
+    const testTrip = {
+        id: Date.now(),
+        passengerName: 'Тестовий Пасажир',
+        passengerRating: 5.0,
+        from: 'Точка А',
+        to: 'Точка Б',
+        time: 'Зараз'
+    };
+
+    // Очищуємо старі активні поїздки і додаємо нову
+    active_trips_database.length = 0;
+    active_trips_database.push(testTrip);
+
+    alert('Тестову поїздку створено!');
+
+    // Одразу переходимо в "Мої замовлення", щоб побачити результат
+    showDriverOrdersBtn.click();
+});
+
 });
