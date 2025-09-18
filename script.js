@@ -1076,10 +1076,32 @@ const vhConfirmBtn = document.getElementById('vh-confirm-btn');
 const vhDeclineBtn = document.getElementById('vh-decline-btn');
 
 vhConfirmBtn?.addEventListener('click', () => {
-    alert('ЗАМОВЛЕННЯ ПІДТВЕРДЖЕНО! (поки що)');
-    // Тут в майбутньому буде створення активної поїздки і сповіщення для пасажира
+    // Знаходимо пасажира "Віту" (поки що ID=1)
+    const passenger = passengers_database.find(p => p.id === 1);
+    if (!passenger) return;
+
+    // 1. Створюємо сповіщення для пасажира
+    const newNotification = {
+        id: Date.now(),
+        userId: passenger.id, // ID пасажира
+        text: `<strong>Вашу поїздку підтверджено!</strong> Водій скоро буде на місці.`,
+        type: 'trip_confirmed',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+
+    // 2. Показуємо значок сповіщення у пасажира
+    const passengerBadge = document.getElementById('passenger-notification-badge');
+    if (passengerBadge) {
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
+        passengerBadge.textContent = unreadCount;
+        passengerBadge.classList.remove('hidden');
+    }
+
+    alert('Замовлення підтверджено! Пасажира сповіщено.');
     navigateTo('driver-dashboard');
 });
+
 
 vhDeclineBtn?.addEventListener('click', () => {
     alert('Замовлення відхилено.');
