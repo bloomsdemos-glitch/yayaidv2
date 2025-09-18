@@ -1058,9 +1058,6 @@ function displayNotifications(userType) {
             listContainer.appendChild(li);
         });
     }
-}
-
-}
 
 
 // Оновлений обробник для дзвіночка
