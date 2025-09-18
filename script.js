@@ -6,7 +6,8 @@ let fakeDriverAcceptsCard = false;
 let passenger_archive = []; // Архів для пасажира
 let driver_archive = [];    // Архів для водія
 let orders_database = [];
-// Тимчасова база даних водіїв
+let currentOfferIdForConfirmation = null;
+
 // Тимчасова база даних водіїв
 const drivers_database = [
     {
@@ -1016,7 +1017,7 @@ function selectOffer(offerId) {
 }
 
 
-// Функція, яка малює список сповіщень v2.1 (веде на екран підтвердження)
+// Функція, яка малює список сповіщень v2.2 (зберігає ID для підтвердження)
 function displayNotifications(userType) {
     const listContainer = document.getElementById('notification-list');
     const placeholder = listContainer.querySelector('.list-placeholder');
@@ -1043,7 +1044,7 @@ function displayNotifications(userType) {
             li.className = 'notification-card';
             if(notif.isRead) li.classList.add('is-read');
 
-            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-circle-info';
+            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-file-circle-info';
 
             li.innerHTML = `
                 <i class="notification-icon ${iconClass}"></i>
@@ -1053,19 +1054,19 @@ function displayNotifications(userType) {
             if (notif.type === 'new_order' && userType === 'driver') {
                 li.style.cursor = 'pointer';
                 li.addEventListener('click', () => {
-                    // Знаходимо пропозицію і пасажира по ID зі сповіщення
                     const offer = vh_offers_database.find(o => o.id === notif.offerId);
-                    const passenger = passengers_database.find(p => p.id === 1); // Поки що пасажир один
+                    const passenger = passengers_database.find(p => p.id === 1);
                     if (!offer || !passenger) return;
 
-                    // Заповнюємо новий екран даними
                     document.getElementById('vh-confirm-passenger-name').textContent = passenger.name;
-                    document.getElementById('vh-confirm-passenger-rating').innerHTML = `4.8 <i class="fa-solid fa-star"></i> • 27 поїздок`; // Поки що хардкод
+                    document.getElementById('vh-confirm-passenger-rating').innerHTML = `4.8 <i class="fa-solid fa-star"></i> • 27 поїздок`;
                     document.getElementById('vh-confirm-direction').textContent = offer.direction;
                     document.getElementById('vh-confirm-specifics').textContent = `${offer.fromSpecific || 'Точка не вказана'} - ${offer.toSpecific || 'Точка не вказана'}`;
                     document.getElementById('vh-confirm-time').textContent = offer.time;
 
-                    // Переходимо на екран підтвердження
+                    // Ось цей рядок ми додаємо!
+                    currentOfferIdForConfirmation = notif.offerId; // ЗАПИСУЄМО ID В ПАМ'ЯТЬ
+
                     navigateTo('driver-vh-confirmation-screen');
                 });
             }
@@ -1074,6 +1075,7 @@ function displayNotifications(userType) {
         });
     }
 }
+
 // Функція, яка показує/ховає картку активної поїздки для водія
 function displayDriverActiveTrip() {
     const activeTripCard = document.getElementById('driver-active-trip-card');
@@ -1105,21 +1107,47 @@ const vhConfirmBtn = document.getElementById('vh-confirm-btn');
 const vhDeclineBtn = document.getElementById('vh-decline-btn');
 
 vhConfirmBtn?.addEventListener('click', () => {
-    // Знаходимо пасажира "Віту" (поки що ID=1)
+    // 1. Витягуємо ID пропозиції з нашої тимчасової пам'яті
+    if (!currentOfferIdForConfirmation) return;
+    const offer = vh_offers_database.find(o => o.id === currentOfferIdForConfirmation);
+    if (!offer) return;
+
+    // 2. Знаходимо пасажира (поки що "Віту")
     const passenger = passengers_database.find(p => p.id === 1);
     if (!passenger) return;
 
-    // 1. Створюємо сповіщення для пасажира
+    // 3. Створюємо об'єкт АКТИВНОЇ ПОЇЗДКИ
+    const newActiveTrip = {
+        id: offer.id,
+        passengerName: passenger.name,
+        passengerRating: 4.8, // поки хардкод
+        from: offer.direction.split(' - ')[0],
+        to: offer.direction.split(' - ')[1],
+        time: offer.time
+    };
+
+    // 4. Додаємо цю поїздку в базу активних
+    active_trips_database.push(newActiveTrip);
+
+    // 5. Видаляємо пропозицію із загального списку, щоб її більше ніхто не бачив
+    const offerIndex = vh_offers_database.findIndex(o => o.id === currentOfferIdForConfirmation);
+    if (offerIndex > -1) {
+        vh_offers_database.splice(offerIndex, 1);
+    }
+
+    // 6. Скидаємо тимчасову пам'ять
+    currentOfferIdForConfirmation = null;
+
+    // 7. Створюємо сповіщення для пасажира (як ми робили раніше)
     const newNotification = {
         id: Date.now(),
-        userId: passenger.id, // ID пасажира
+        userId: passenger.id,
         text: `<strong>Вашу поїздку підтверджено!</strong> Водій скоро буде на місці.`,
         type: 'trip_confirmed',
         isRead: false
     };
     notifications_database.push(newNotification);
 
-    // 2. Показуємо значок сповіщення у пасажира
     const passengerBadge = document.getElementById('passenger-notification-badge');
     if (passengerBadge) {
         const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
@@ -1131,12 +1159,6 @@ vhConfirmBtn?.addEventListener('click', () => {
     navigateTo('driver-dashboard');
 });
 
-
-vhDeclineBtn?.addEventListener('click', () => {
-    alert('Замовлення відхилено.');
-    // Тут в майбутньому буде сповіщення для пасажира про відхилення
-    navigateTo('notifications-screen');
-});
 
 
 // Оновлений обробник для дзвіночка
