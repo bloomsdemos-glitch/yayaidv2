@@ -310,6 +310,53 @@
                 </div>
             </main>
         </div>
+        <div id="archived-trip-details-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="passenger-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Деталі поїздки</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main>
+        <div class="details-card">
+            <div class="trip-summary" style="padding-bottom: 16px; border-bottom: 1px solid var(--md-outline);">
+                <div class="summary-item">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span id="archived-details-date">Дата</span>
+                </div>
+                <div class="summary-item">
+                    <i class="fa-solid fa-hryvnia-sign"></i>
+                    <span id="archived-details-price">~ 117 грн</span>
+                </div>
+                <div class="summary-item">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span id="archived-details-payment">Картка</span>
+                </div>
+            </div>
+            <div class="order-route-info" style="margin-top: 16px; padding: 0;">
+                <div class="address-line">
+                    <i class="fa-solid fa-circle start-address-icon"></i>
+                    <span id="archived-details-from">Звідки</span>
+                </div>
+                <div class="address-line">
+                    <i class="fa-solid fa-location-dot end-address-icon"></i>
+                    <span id="archived-details-to">Куди</span>
+                </div>
+            </div>
+        </div>
+        <div class="details-card" style="margin-top: 16px;">
+             <div class="driver-card-full">
+                <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="driver-info">
+                    <h4 id="archived-details-driver-name">Водій</h4>
+                    <span id="archived-details-driver-car">Автомобіль</span>
+                </div>
+                <div id="archived-details-driver-rating" class="driver-rating">5.0 <i class="fa-solid fa-star"></i></div>
+            </div>
+        </div>
+    </main>
+</div>
+
+        
         <div id="passenger-find-driver-screen" class="screen hidden">
             <header>
                 <button class="btn-back" data-target="passenger-dashboard"><i class="fa-solid fa-arrow-left"></i></button>
