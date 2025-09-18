@@ -1058,7 +1058,7 @@ function displayNotifications(userType) {
             listContainer.appendChild(li);
         });
     }
-
+}
 
 // Оновлений обробник для дзвіночка
 const driverNotificationsBtn = document.getElementById('driver-notifications-btn');
