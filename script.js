@@ -185,18 +185,20 @@ const vh_offers_database = [];
     }
 
    function goToStep(stepToShow) {
-    addressStep.style.display = 'none';
-    timeStep.style.display = 'none';
-    paymentStep.style.display = 'none'; // Додано
+    // Замість прямої маніпуляції стилями, працюємо з класами
+    addressStep.classList.remove('active');
+    timeStep.classList.remove('active');
+    paymentStep.classList.remove('active');
 
     if (stepToShow === 'address') {
-        addressStep.style.display = 'flex';
+        addressStep.classList.add('active');
     } else if (stepToShow === 'time') {
-        timeStep.style.display = 'flex';
-    } else if (stepToShow === 'payment') { // Додано
-        paymentStep.style.display = 'flex';
+        timeStep.classList.add('active');
+    } else if (stepToShow === 'payment') {
+        paymentStep.classList.add('active');
     }
 }
+
 
     function resetQuickOrder() {
         orderData = {};
