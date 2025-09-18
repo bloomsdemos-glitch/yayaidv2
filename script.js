@@ -73,6 +73,9 @@ const vh_requests_database = [];
 // Тимчасова база даних пропозицій від водіїв на маршруті В-Х
 const vh_offers_database = [];
 
+// Тимчасова база даних для активних поїздок
+const active_trips_database = [];
+
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -1071,6 +1074,32 @@ function displayNotifications(userType) {
         });
     }
 }
+// Функція, яка показує/ховає картку активної поїздки для водія
+function displayDriverActiveTrip() {
+    const activeTripCard = document.getElementById('driver-active-trip-card');
+    const noOrdersMsg = document.getElementById('no-active-driver-orders');
+
+    if (active_trips_database.length > 0) {
+        // Якщо є хоч одна активна поїздка, беремо першу
+        const trip = active_trips_database[0];
+
+        // Заповнюємо картку даними з поїздки
+        document.getElementById('driver-active-passenger-name').textContent = trip.passengerName;
+        document.getElementById('driver-active-passenger-rating').innerHTML = `${trip.passengerRating} <i class="fa-solid fa-star"></i>`;
+        document.getElementById('driver-active-from-address').textContent = trip.from;
+        document.getElementById('driver-active-to-address').textContent = trip.to;
+
+        // Показуємо картку і ховаємо заглушку
+        if(activeTripCard) activeTripCard.style.display = 'block';
+        if(noOrdersMsg) noOrdersMsg.style.display = 'none';
+    } else {
+        // Якщо активних поїздок немає, ховаємо картку і показуємо заглушку
+        if(activeTripCard) activeTripCard.style.display = 'none';
+        if(noOrdersMsg) noOrdersMsg.style.display = 'block';
+    }
+}
+
+
 // == ЛОГІКА КНОПОК ПІДТВЕРДЖЕННЯ/ВІДХИЛЕННЯ ЗАМОВЛЕННЯ В-Х ==
 const vhConfirmBtn = document.getElementById('vh-confirm-btn');
 const vhDeclineBtn = document.getElementById('vh-decline-btn');
@@ -1150,9 +1179,11 @@ passengerNotificationsBtn?.addEventListener('click', () => {
 
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
+    displayDriverActiveTrip(); // <-- ОСЬ ТУТ викликаємо нашу нову функцію
     displayArchives();
     navigateTo('driver-orders-screen');
 });
+
 showFindPassengersBtn?.addEventListener('click', () => {
     navigateTo('driver-find-passengers-screen');
     displayDriverOrders();
