@@ -1107,55 +1107,6 @@ const vhConfirmBtn = document.getElementById('vh-confirm-btn');
 const vhDeclineBtn = document.getElementById('vh-decline-btn');
 
 vhConfirmBtn?.addEventListener('click', () => {
-    // 1. Витягуємо ID пропозиції з нашої тимчасової пам'яті
-    if (!currentOfferIdForConfirmation) return;
-    const offer = vh_offers_database.find(o => o.id === currentOfferIdForConfirmation);
-    if (!offer) return;
-
-    // 2. Знаходимо пасажира (поки що "Віту")
-    const passenger = passengers_database.find(p => p.id === 1);
-    if (!passenger) return;
-
-    // 3. Створюємо об'єкт АКТИВНОЇ ПОЇЗДКИ
-    const newActiveTrip = {
-        id: offer.id,
-        passengerName: passenger.name,
-        passengerRating: 4.8, // поки хардкод
-        from: offer.direction.split(' - ')[0],
-        to: offer.direction.split(' - ')[1],
-        time: offer.time
-    };
-
-    // 4. Додаємо цю поїздку в базу активних
-    active_trips_database.push(newActiveTrip);
-
-    // 5. Видаляємо пропозицію із загального списку, щоб її більше ніхто не бачив
-    const offerIndex = vh_offers_database.findIndex(o => o.id === currentOfferIdForConfirmation);
-    if (offerIndex > -1) {
-        vh_offers_database.splice(offerIndex, 1);
-    }
-
-    // 6. Скидаємо тимчасову пам'ять
-    currentOfferIdForConfirmation = null;
-
-    // 7. Створюємо сповіщення для пасажира (як ми робили раніше)
-    const newNotification = {
-        id: Date.now(),
-        userId: passenger.id,
-        text: `<strong>Вашу поїздку підтверджено!</strong> Водій скоро буде на місці.`,
-        type: 'trip_confirmed',
-        isRead: false
-    };
-    notifications_database.push(newNotification);
-
-    const passengerBadge = document.getElementById('passenger-notification-badge');
-    if (passengerBadge) {
-        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
-        passengerBadge.textContent = unreadCount;
-        passengerBadge.classList.remove('hidden');
-    }
-
-    vhConfirmBtn?.addEventListener('click', () => {
     if (!currentOfferIdForConfirmation) return;
     const offerIndex = vh_offers_database.findIndex(o => o.id === currentOfferIdForConfirmation);
     if (offerIndex === -1) return;
@@ -1180,7 +1131,7 @@ vhConfirmBtn?.addEventListener('click', () => {
 
     currentOfferIdForConfirmation = null;
 
-    // КРОК 3: Сповіщаємо пасажира (ця логіка у нас вже була)
+    // КРОК 3: Сповіщаємо пасажира
     const newNotification = {
         id: Date.now(),
         userId: passenger.id,
@@ -1201,7 +1152,11 @@ vhConfirmBtn?.addEventListener('click', () => {
     navigateTo('driver-dashboard');
 });
 
-
+vhDeclineBtn?.addEventListener('click', () => {
+    alert('Замовлення відхилено.');
+    // Тут в майбутньому буде сповіщення для пасажира про відхилення
+    navigateTo('notifications-screen');
+});
 
 
 // Оновлений обробник для дзвіночка
