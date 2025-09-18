@@ -1260,18 +1260,22 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-/* === ФІКСИ ВЕРСТКИ ДЛЯ "ШВИДКОГО ЗАМОВЛЕННЯ" v4.0 === */
+/* === ФІКСИ ВЕРСТКИ ДЛЯ "ШВИДКОГО ЗАМОВЛЕННЯ" v4.1 (більш специфічні) === */
 
-.step-container {
-    display: none; /* За замовчуванням кроки приховані */
+#address-step,
+#time-step,
+#payment-step {
+    display: none; /* Ховаємо всі кроки по ID */
     flex-direction: column;
-    gap: 20px; /* Відстань між елементами всередині кроку */
+    gap: 20px;
     width: 100%;
     animation: fadeIn 0.3s ease-in-out;
 }
 
-.step-container.active {
-    display: flex; /* Показуємо тільки активний крок */
+#address-step.active,
+#time-step.active,
+#payment-step.active {
+    display: flex; /* А показуємо тільки той, у якого є клас active */
 }
 
 /* Наводимо порядок на другому кроці */
@@ -1358,6 +1362,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     border-radius: var(--md-radius-large);
     border: 1px solid var(--md-outline);
 }
+
 /* === СТИЛІ ДЛЯ ЕКРАНУ "МОЇ ПОЇЗДКИ" v2.0 === */
 
 .order-card-container {
