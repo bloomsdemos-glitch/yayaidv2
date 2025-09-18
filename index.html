@@ -345,6 +345,37 @@
     </main>
 </div>
 
+    <div id="driver-archived-trip-details-screen" class="screen hidden">
+        <header>
+            <button class="btn-back" data-target="driver-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2>Деталі поїздки</h2>
+            <div class="header-placeholder"></div>
+        </header>
+        <main>
+            <div class="details-card">
+                 <div class="passenger-info">
+                    <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                    <div class="passenger-details">
+                        <strong id="driver-archived-passenger-name">Ім'я пасажира</strong>
+                        <span id="driver-archived-passenger-rating">Рейтинг</span>
+                    </div>
+                </div>
+            </div>
+            <div class="details-card" style="margin-top: 16px;">
+                <div class="order-route-info" style="padding: 0;">
+                    <div class="address-line">
+                        <i class="fa-solid fa-circle start-address-icon"></i>
+                        <span id="driver-archived-from">Звідки</span>
+                    </div>
+                    <div class="address-line">
+                        <i class="fa-solid fa-location-dot end-address-icon"></i>
+                        <span id="driver-archived-to">Куди</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
         
         <div id="passenger-find-driver-screen" class="screen hidden">
             <header>
