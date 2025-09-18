@@ -205,31 +205,36 @@ function goToStep(stepToShow) {
 
 
 
-    function resetQuickOrder() {
-        orderData = {};
-        fromAddressInput.value = '';
-        toAddressInput.value = '';
-        document.getElementById('comment').value = '';
-        quickOrderSummaryCard.classList.add('hidden');
-        summaryFromContainer.style.display = 'none';
-        summaryToContainer.style.display = 'none';
-        summaryTimeContainer.style.display = 'none';
-        addressNextBtn.classList.add('disabled');
-        document.getElementById('from-address-container').style.display = 'block';
-        fromVillageContainer.style.display = 'none';
-        document.getElementById('to-address-container').style.display = 'block';
-        toVillageContainer.style.display = 'none';
-        fromVillageSelect.selectedIndex = 0;
-        toVillageSelect.selectedIndex = 0;
-        settlementButtons.forEach(btn => {
-            if (btn.dataset.type === 'valky') btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        timeChoiceContainer.style.display = 'flex';
-        timeResultContainer.style.display = 'none';
-        pickerInput.style.display = 'none';
-        goToStep('address');
-    }
+function resetQuickOrder() {
+    orderData = {};
+    fromAddressInput.value = '';
+    toAddressInput.value = '';
+    document.getElementById('comment').value = '';
+    quickOrderSummaryCard.classList.add('hidden');
+    summaryFromContainer.style.display = 'none';
+    summaryToContainer.style.display = 'none';
+    summaryTimeContainer.style.display = 'none';
+    
+    // Ховаємо блок з інфо про водія, якщо він був
+    document.getElementById('summary-driver-container').style.display = 'none'; 
+
+    addressNextBtn.classList.add('disabled');
+    document.getElementById('from-address-container').style.display = 'block';
+    fromVillageContainer.style.display = 'none';
+    document.getElementById('to-address-container').style.display = 'block';
+    toVillageContainer.style.display = 'none';
+    fromVillageSelect.selectedIndex = 0;
+    toVillageSelect.selectedIndex = 0;
+    settlementButtons.forEach(btn => {
+        if (btn.dataset.type === 'valky') btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    timeChoiceContainer.style.display = 'flex';
+    timeResultContainer.style.display = 'none';
+    pickerInput.style.display = 'none';
+    goToStep('address');
+}
+
 
     function showTimeResult(text) {
         orderData.time = text;
@@ -1203,6 +1208,38 @@ vhDeclineBtn?.addEventListener('click', () => {
     navigateTo('notifications-screen'); // Повертаємо водія до списку сповіщень
 });
 
+// == ЛОГІКА ПІДТВЕРДЖЕННЯ ВИБОРУ ВОДІЯ З ПРОФІЛЮ ==
+const cancelRideBtn = document.getElementById('cancel-ride-btn');
+const confirmRideWithDriverBtn = document.getElementById('confirm-ride-with-driver-btn');
+
+cancelRideBtn?.addEventListener('click', () => {
+    // Просто повертаємось назад на профіль водія
+    navigateTo('driver-rating-screen'); 
+});
+
+confirmRideWithDriverBtn?.addEventListener('click', () => {
+    // 1. Витягуємо ID водія з нашого "блокноту"
+    const driverIdString = currentOfferIdForConfirmation?.replace('driver_', '');
+    if (!driverIdString) return;
+    const driverId = parseInt(driverIdString);
+    const driver = drivers_database.find(d => d.id === driverId);
+    if (!driver) return;
+
+    // 2. Переходимо на екран Швидкого замовлення
+    navigateTo('quick-order-screen');
+    resetQuickOrder();
+
+    // 3. Заповнюємо картку-саммарі даними про водія і показуємо її
+    const summaryCard = document.getElementById('quick-order-summary-card');
+    const summaryDriverContainer = document.getElementById('summary-driver-container');
+    const summaryDriver = document.getElementById('summary-driver');
+
+    if (summaryDriverContainer && summaryDriver) {
+        summaryDriver.textContent = `${driver.name} (${driver.car})`;
+        summaryDriverContainer.style.display = 'flex';
+        summaryCard.classList.remove('hidden');
+    }
+});
 
 
 // Оновлений обробник для дзвіночка
