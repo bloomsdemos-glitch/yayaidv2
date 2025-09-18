@@ -402,52 +402,93 @@ if(declineOrderBtn) declineOrderBtn.onclick = () => {
 };
 }
 
-// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ ==
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ v2.0 (динамічна і клікабельна) ==
 function displayArchives() {
-    // Архів пасажира
+    // --- Архів пасажира ---
     const passengerArchiveList = document.querySelector('#passenger-orders-screen .order-list.passenger');
     if (passengerArchiveList) {
-        passengerArchiveList.innerHTML = ''; // Очищуємо старий список
-        passenger_archive.forEach(order => {
+        passengerArchiveList.innerHTML = ''; // Завжди очищуємо перед оновленням
+        
+        if (passenger_archive.length === 0) {
+            // Якщо архів порожній, показуємо відповідний напис
             const li = document.createElement('li');
-            li.className = 'order-card archived';
-            li.innerHTML = `
-                <div class="archived-info">
-                    <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
-                        <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
-                    </div>
-                    <div class="driver-details">Водій: ${order.driverName || 'Дмитро'}</div>
-                </div>
-                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
-            `;
+            li.innerHTML = `<p class="list-placeholder" style="font-style: italic; text-align: center; color: var(--md-on-surface-variant);">Архів поїздок порожній.</p>`;
             passengerArchiveList.appendChild(li);
-        });
+        } else {
+            passenger_archive.forEach(order => {
+                // Знаходимо дані водія для відображення
+                const driver = drivers_database.find(d => d.id === (order.driverId || 1));
+                const driverName = driver ? driver.name : 'Водій';
+                const driverCar = driver ? driver.car : '';
+                const driverRating = driver ? driver.rating.toFixed(1) : 'N/A';
+
+                const li = document.createElement('li');
+                li.className = 'order-card archived';
+                li.style.cursor = 'pointer'; // Додаємо стиль, щоб було видно, що картка клікабельна
+                li.innerHTML = `
+                    <div class="archived-info">
+                        <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
+                        <div class="route">
+                            <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
+                            <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
+                        </div>
+                        <div class="driver-details">Водій: ${driverName}</div>
+                    </div>
+                    <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+                `;
+                
+                // РОБИМО КАРТКУ КЛІКАБЕЛЬНОЮ
+                li.addEventListener('click', () => {
+                    // Заповнюємо детальний екран даними з архівної поїздки
+                    document.getElementById('archived-details-date').textContent = new Date(order.id).toLocaleString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    document.getElementById('archived-details-from').textContent = order.from;
+                    document.getElementById('archived-details-to').textContent = order.to;
+                    document.getElementById('archived-details-price').textContent = `~ ${order.price || 125} грн`;
+                    document.getElementById('archived-details-payment').textContent = order.paymentMethod === 'card' ? 'Картка' : 'Готівка';
+                    document.getElementById('archived-details-driver-name').textContent = driverName;
+                    document.getElementById('archived-details-driver-car').textContent = driverCar;
+                    document.getElementById('archived-details-driver-rating').innerHTML = `${driverRating} <i class="fa-solid fa-star"></i>`;
+                    
+                    // Переходимо на екран деталей
+                    navigateTo('archived-trip-details-screen');
+                });
+                
+                passengerArchiveList.appendChild(li);
+            });
+        }
     }
 
-    // Архів водія
+    // --- Архів водія (оновлена версія з перевіркою на пустоту) ---
     const driverArchiveList = document.querySelector('#driver-orders-screen .order-list.driver');
     if (driverArchiveList) {
-        driverArchiveList.innerHTML = ''; // Очищуємо старий список
-        driver_archive.forEach(order => {
+        driverArchiveList.innerHTML = ''; // Очищуємо
+        
+        if (driver_archive.length === 0) {
             const li = document.createElement('li');
-            li.className = 'order-card archived';
-            li.innerHTML = `
-                <div class="archived-info">
-                    <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
-                        <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
-                    </div>
-                    <div class="driver-details">Пасажир: ${order.passengerName}</div>
-                </div>
-                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
-            `;
+            li.innerHTML = `<p class="list-placeholder" style="font-style: italic; text-align: center; color: var(--md-on-surface-variant);">Архів поїздок порожній.</p>`;
             driverArchiveList.appendChild(li);
-        });
+        } else {
+            driver_archive.forEach(order => {
+                const li = document.createElement('li');
+                li.className = 'order-card archived';
+                // Цей архів поки що не клікабельний, просто показуємо дані
+                li.innerHTML = `
+                    <div class="archived-info">
+                        <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
+                        <div class="route">
+                            <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
+                            <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
+                        </div>
+                        <div class="driver-details">Пасажир: ${order.passengerName}</div>
+                    </div>
+                    <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+                `;
+                driverArchiveList.appendChild(li);
+            });
+        }
     }
 }
+
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ВОДІЯ ==
 
