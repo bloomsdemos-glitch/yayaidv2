@@ -1155,9 +1155,52 @@ vhConfirmBtn?.addEventListener('click', () => {
         passengerBadge.classList.remove('hidden');
     }
 
+    vhConfirmBtn?.addEventListener('click', () => {
+    if (!currentOfferIdForConfirmation) return;
+    const offerIndex = vh_offers_database.findIndex(o => o.id === currentOfferIdForConfirmation);
+    if (offerIndex === -1) return;
+
+    const offer = vh_offers_database[offerIndex];
+    const passenger = passengers_database.find(p => p.id === 1);
+    if (!passenger) return;
+
+    // КРОК 1: Створюємо об'єкт активної поїздки
+    const newActiveTrip = {
+        id: offer.id,
+        passengerName: passenger.name,
+        passengerRating: 4.8, // поки хардкод
+        from: offer.direction.split(' - ')[0],
+        to: offer.direction.split(' - ')[1],
+        time: offer.time
+    };
+    active_trips_database.push(newActiveTrip);
+
+    // КРОК 2: Видаляємо пропозицію із загального списку
+    vh_offers_database.splice(offerIndex, 1);
+
+    currentOfferIdForConfirmation = null;
+
+    // КРОК 3: Сповіщаємо пасажира (ця логіка у нас вже була)
+    const newNotification = {
+        id: Date.now(),
+        userId: passenger.id,
+        text: `<strong>Вашу поїздку підтверджено!</strong> Водій скоро буде на місці.`,
+        type: 'trip_confirmed',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+
+    const passengerBadge = document.getElementById('passenger-notification-badge');
+    if (passengerBadge) {
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
+        passengerBadge.textContent = unreadCount;
+        passengerBadge.classList.remove('hidden');
+    }
+
     alert('Замовлення підтверджено! Пасажира сповіщено.');
     navigateTo('driver-dashboard');
 });
+
 
 
 
