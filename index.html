@@ -1162,7 +1162,6 @@
                 </nav>
             </main>
 
-
         </div>
         <div id="passenger-settings-photo-screen" class="screen hidden">
             <header>
@@ -1345,7 +1344,25 @@
         </div>
     </main>
 </div>
-
+<div id="driver-confirm-ride-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-rating-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Підтвердити вибір?</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main class="content-center">
+        <div class="details-card" style="width: 100%; text-align: center;">
+            <p style="margin-bottom: 16px;">Ви замовляєте поїздку з цим водієм:</p>
+            <div class="avatar-convex large" style="margin: 0 auto 12px auto;"><i class="fa-solid fa-user-tie"></i></div>
+            <h3 id="confirm-ride-driver-name">Ім'я Водія</h3>
+            <p id="confirm-ride-driver-car" style="color: var(--md-on-surface-variant); margin-top: 4px;">Автомобіль</p>
+            <div class="order-actions" style="margin-top: 24px;">
+                <button id="cancel-ride-btn" class="btn-main-action decline">Скасувати</button>
+                <button id="confirm-ride-with-driver-btn" class="btn-main-action accept">Так, замовити</button>
+            </div>
+        </div>
+    </main>
+</div>
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
