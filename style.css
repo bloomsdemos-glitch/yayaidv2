@@ -1719,22 +1719,30 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 /* === СТИЛІ ДЛЯ ІКОНКИ СПОВІЩЕНЬ === */
 .header-icon-wrapper {
     position: relative;
+    display: inline-block; /* <-- ДОДАНО: робимо блок компактним, щоб він не розтягувався */
 }
 
-#driver-notification-badge {
+#driver-notification-badge,
+#passenger-notification-badge { /* <-- ОБ'ЄДНАНО: стилі тепер спільні для обох значків */
     position: absolute;
     top: 4px;
     right: 4px;
-    min-width: 12px;
+    width: 12px; /* <-- ЗМІНЕНО: фіксована ширина замість min-width */
     height: 12px;
     padding: 0;
     font-size: 9px;
     border: 2px solid var(--md-background);
+    border-radius: 50%; /* <-- ДОДАНО: робимо ідеальний круг */
+    display: flex; /* <-- ДОДАНО: для ідеального центрування цифри всередині */
+    align-items: center;
+    justify-content: center;
 }
 
-#driver-notification-badge.hidden {
+#driver-notification-badge.hidden,
+#passenger-notification-badge.hidden { /* <-- ОБ'ЄДНАНО */
     display: none;
 }
+
 /* === СТИЛІ ДЛЯ ЦЕНТРУ СПОВІЩЕНЬ === */
 .notification-list {
     list-style: none;
