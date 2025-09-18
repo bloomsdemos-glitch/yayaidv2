@@ -184,27 +184,20 @@ const vh_offers_database = [];
         else { summaryTimeContainer.style.display = 'none'; }
     }
 
-   function goToStep(stepToShow) {
-    alert(`1. Вхід в goToStep. Хочу показати крок: "${stepToShow}"`);
-
+function goToStep(stepToShow) {
     addressStep.classList.remove('active');
     timeStep.classList.remove('active');
     paymentStep.classList.remove('active');
-    alert('2. Зняв клас "active" з усіх кроків.');
 
     if (stepToShow === 'address') {
         addressStep.classList.add('active');
-        alert('3. Додав клас "active" до кроку АДРЕСА.');
     } else if (stepToShow === 'time') {
         timeStep.classList.add('active');
-        alert('3. Додав клас "active" до кроку ЧАС.');
     } else if (stepToShow === 'payment') {
         paymentStep.classList.add('active');
-        alert('3. Додав клас "active" до кроку ОПЛАТА.');
     }
-
-    alert('4. Роботу goToStep завершено.');
 }
+
 
 
 
