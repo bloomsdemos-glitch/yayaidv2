@@ -1153,10 +1153,35 @@ vhConfirmBtn?.addEventListener('click', () => {
 });
 
 vhDeclineBtn?.addEventListener('click', () => {
-    alert('Замовлення відхилено.');
-    // Тут в майбутньому буде сповіщення для пасажира про відхилення
-    navigateTo('notifications-screen');
+    // Знаходимо пасажира "Віту" (поки що ID=1)
+    const passenger = passengers_database.find(p => p.id === 1);
+    if (!passenger) return;
+
+    // 1. Створюємо сповіщення для пасажира про відхилення
+    const newNotification = {
+        id: Date.now(),
+        userId: passenger.id, // ID пасажира
+        text: `<strong>На жаль, водій відхилив ваше замовлення.</strong> Спробуйте обрати іншого водія.`,
+        type: 'trip_declined',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+
+    // 2. Показуємо значок сповіщення у пасажира
+    const passengerBadge = document.getElementById('passenger-notification-badge');
+    if (passengerBadge) {
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
+        passengerBadge.textContent = unreadCount;
+        passengerBadge.classList.remove('hidden');
+    }
+
+    // 3. Скидаємо тимчасову пам'ять
+    currentOfferIdForConfirmation = null;
+
+    alert('Замовлення відхилено. Пасажира сповіщено.');
+    navigateTo('notifications-screen'); // Повертаємо водія до списку сповіщень
 });
+
 
 
 // Оновлений обробник для дзвіночка
