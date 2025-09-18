@@ -1197,70 +1197,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     text-align: center;
 }
 
-/* === НОВІ СТИЛІ ДЛЯ КВІЗУ "ШВИДКЕ ЗАМОВЛЕННЯ" === */
-
-#quick-order-screen main {
-    display: flex;
-    flex-direction: column;
-    gap: 24px; /* Відстань між інфо-карткою і блоком квізу */
-}
-
-#quiz-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.order-step {
-    display: none; /* Ховаємо всі кроки за замовчуванням */
-    flex-direction: column;
-    gap: 16px; /* Відступи між елементами всередині кроку */
-    width: 100%;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.order-step.active {
-    display: flex; /* Показуємо тільки активний крок */
-}
-
-#quick-order-summary-card {
-    background-color: var(--md-surface-variant);
-    padding: 16px;
-    border-radius: var(--md-radius-large);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-#quick-order-summary-card.hidden {
-    display: none;
-}
-
-.section-label {
-    font-weight: var(--font-weight-medium);
-    font-size: 16px;
-    margin-bottom: -8px;
-}
-
-.button-group-vertical {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.info-text {
-    color: var(--md-on-surface-variant);
-    font-size: 14px;
-    text-align: center;
-    padding: 8px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-/* === ФІКСИ ВЕРСТКИ ДЛЯ "ШВИДКОГО ЗАМОВЛЕННЯ" v4.1 (більш специфічні) === */
+/* === ФІКСИ ВЕРСТКИ ДЛЯ "ШВИДКОГО ЗАМОВЛЕННЯ" v4.2 (фінальний) === */
 
 #address-step,
 #time-step,
@@ -1272,9 +1209,10 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     animation: fadeIn 0.3s ease-in-out;
 }
 
-#address-step.active,
-#time-step.active,
-#payment-step.active {
+/* Робимо правило "непереможним", додаючи батьківський ID */
+#quick-order-screen #address-step.active,
+#quick-order-screen #time-step.active,
+#quick-order-screen #payment-step.active {
     display: flex; /* А показуємо тільки той, у якого є клас active */
 }
 
@@ -1362,6 +1300,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     border-radius: var(--md-radius-large);
     border: 1px solid var(--md-outline);
 }
+
 
 /* === СТИЛІ ДЛЯ ЕКРАНУ "МОЇ ПОЇЗДКИ" v2.0 === */
 
