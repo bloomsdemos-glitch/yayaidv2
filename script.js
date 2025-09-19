@@ -116,7 +116,7 @@ const active_trips_database = [];
     const showDriverProfileBtn = document.getElementById('show-driver-profile-btn');
     const showDriverHelpBtn = document.getElementById('show-driver-help-btn');
     const showDriverSupportBtn = document.getElementById('show-driver-support-btn');
-    const showDriverSettingsBtn = document.getElementById('show-driver-settings-
+    const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
     
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
     function showScreen(screenId) {
