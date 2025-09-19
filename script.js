@@ -7,6 +7,7 @@ let passenger_archive = []; // Архів для пасажира
 let driver_archive = [];    // Архів для водія
 let orders_database = [];
 let currentOfferIdForConfirmation = null;
+let driverStatus = 'online'; // Можливі статуси: 'online', 'offline'
 
 // Тимчасова база даних водіїв
 const drivers_database = [
@@ -1723,6 +1724,28 @@ devCreateTestTripBtn?.addEventListener('click', () => {
 
     // Одразу переходимо в "Мої замовлення", щоб побачити результат
     showDriverOrdersBtn.click();
+});
+// == ЛОГІКА ДЛЯ КНОПКИ СТАТУСУ ВОДІЯ ==
+const driverStatusIndicator = document.getElementById('driver-status-indicator');
+
+driverStatusIndicator?.addEventListener('click', () => {
+    const statusText = driverStatusIndicator.querySelector('.status-text');
+
+    if (driverStatus === 'online') {
+        // Переключаємо на "На перерві"
+        driverStatus = 'offline';
+        statusText.textContent = 'На перерві';
+        driverStatusIndicator.classList.remove('online');
+        driverStatusIndicator.classList.add('offline');
+        alert('Ваш статус змінено на "На перерві". Вас тимчасово не видно пасажирам.');
+    } else {
+        // Переключаємо назад на "Онлайн"
+        driverStatus = 'online';
+        statusText.textContent = 'Онлайн';
+        driverStatusIndicator.classList.remove('offline');
+        driverStatusIndicator.classList.add('online');
+        alert('Ви знову онлайн!');
+    }
 });
 
 });
