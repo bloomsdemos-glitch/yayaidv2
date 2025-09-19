@@ -1429,17 +1429,43 @@ timeNextBtn?.addEventListener('click', () => {
 
 // Оновлений обробник для фінальної кнопки "Відправити замовлення"
 submitOrderBtn.addEventListener('click', () => {
-    // Додаємо ім'я пасажира (поки фейкове) і унікальний ID
+    // Додаємо базові дані
     orderData.passengerName = "Віта"; 
-    orderData.rating = 4.8; // теж поки фейковий
-    orderData.id = Date.now(); // простий спосіб зробити ID унікальним
+    orderData.rating = 4.8;
+    orderData.id = Date.now();
 
-    // Додаємо нове замовлення в нашу "базу даних"
+    // А тепер перевіряємо, чи був обраний конкретний водій
+    const driverIdString = currentOfferIdForConfirmation?.replace('driver_', '');
+    if (driverIdString) {
+        const driverId = parseInt(driverIdString);
+        const driver = drivers_database.find(d => d.id === driverId);
+        if (driver) {
+            // Якщо так, додаємо ID водія до замовлення
+            orderData.specificDriverId = driverId;
+
+            // І змінюємо текст на екрані підтвердження!
+            const confTitle = document.querySelector('#order-confirmation-screen .conf-title');
+            const confText = document.querySelector('#order-confirmation-screen .conf-text');
+            if(confTitle) confTitle.textContent = `Замовлення для ${driver.name}`;
+            if(confText) confText.textContent = `⚡️ Запит надіслано! Очікуйте на підтвердження від водія.`;
+        }
+    } else {
+        // Якщо водія не обрано, залишаємо стандартний текст
+        const confTitle = document.querySelector('#order-confirmation-screen .conf-title');
+        const confText = document.querySelector('#order-confirmation-screen .conf-text');
+        if(confTitle) confTitle.textContent = `Замовлення #${orderData.id.toString().slice(-4)}`;
+        if(confText) confText.textContent = `⚡️ Прийнято! Вже шукаємо для вас вільних водіїв!`;
+    }
+
     orders_database.push(orderData);
-
     console.log('НОВЕ ЗАМОВЛЕННЯ ДОДАНО:', orders_database);
+
+    // Скидаємо "пам'ять" про обраного водія
+    currentOfferIdForConfirmation = null;
+
     showScreen('order-confirmation-screen');
 });
+
 
 
 // --- Обробники для вибору способу оплати (Додано новий блок з Кроку Б) ---
