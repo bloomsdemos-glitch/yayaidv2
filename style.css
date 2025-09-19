@@ -1726,3 +1726,35 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 .notification-text strong {
     color: var(--md-on-surface);
 }
+/* === СТИЛІ ДЛЯ СТАТУСУ ВОДІЯ === */
+.driver-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: var(--md-radius-large);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+.driver-status .status-dot {
+    width: 10px;
+    height: 10px;
+}
+.driver-status .status-text {
+    font-weight: var(--font-weight-medium);
+    font-size: 14px;
+}
+.driver-status.online {
+    background-color: rgba(76, 175, 80, 0.15); /* Прозорий зелений */
+    color: var(--md-success);
+}
+.driver-status.online .status-dot {
+    background-color: var(--md-success);
+}
+.driver-status.offline {
+    background-color: rgba(244, 67, 54, 0.15); /* Прозорий червоний */
+    color: var(--md-error);
+}
+.driver-status.offline .status-dot {
+    background-color: var(--md-error);
+}
