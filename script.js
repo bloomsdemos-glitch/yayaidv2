@@ -1746,3 +1746,5 @@ passengerProfileBadge?.addEventListener('click', () => {
     // Імітуємо клік на пункт меню "Мій профіль"
     showPassengerProfileBtn.click();
 });
+
+});
