@@ -66,7 +66,7 @@
 
 </div>
     
-        <div id="login-screen-driver" class="screen hidden">
+                <div id="login-screen-driver" class="screen hidden">
             <header>
                 <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2>Вхід для водія</h2>
@@ -92,24 +92,24 @@
             </main>
         </div>
 
-<header>
-    <div class="profile-badge">
-        <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
-        <h3>Сергій</h3>
-    </div>
-
-    <div id="driver-status-indicator" class="driver-status online">
-        <span class="status-dot"></span>
-        <span class="status-text">Онлайн</span>
-    </div>
-
-    <div class="header-icon-wrapper">
-        <button id="driver-notifications-btn" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
-        <span id="driver-notification-badge" class="badge hidden"></span>
-    </div>
-    
+        <div id="driver-dashboard" class="screen hidden">
+            <header>
+                <div class="profile-badge">
+                    <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
+                    <h3>Сергій</h3>
+                </div>
+        
+                <div id="driver-status-indicator" class="driver-status online">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Онлайн</span>
+                </div>
+        
+                <div class="header-icon-wrapper">
+                    <button id="driver-notifications-btn" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+                    <span id="driver-notification-badge" class="badge hidden"></span>
+                </div>
             </header>
-                        <main>
+            <main>
                 <nav class="main-menu">
                     <button class="menu-item" id="show-driver-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
@@ -132,9 +132,12 @@
                         <span><i class="fa-solid fa-gear"></i> Налаштування</span>
                     </button>
                 </nav>
+                <button id="dev-create-test-trip" style="margin: 20px auto; padding: 10px; background-color: var(--md-error); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                    DEV: Створити тестову поїздку
+                </button>
             </main>
-
         </div>
+
 
         <div id="passenger-dashboard" class="screen hidden">
             <header>
