@@ -92,25 +92,25 @@
             </main>
         </div>
 
-        <div id="driver-dashboard" class="screen hidden">
-            <header>
-                <div class="profile-badge">
-                    <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
-                    <h3>Сергій</h3>
-                </div>
         
-                <div id="driver-status-indicator" class="driver-status online">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Онлайн</span>
-                </div>
-        
-                <div class="header-icon-wrapper">
-                    <button id="driver-notifications-btn" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
-                    <span id="driver-notification-badge" class="badge hidden"></span>
-                </div>
-            </header>
-            <main>
-                <nav class="main-menu">
+        <!-- HOME SCREEN Водія-->
+<div id="driver-home-screen" class="screen hidden">
+    <header>
+        <div class="profile-badge">
+            <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
+            <h3>Сергій</h3>
+        </div>
+        <div id="driver-status-indicator-home" class="driver-status online">
+            <span class="status-dot"></span>
+            <span class="status-text">Онлайн</span>
+        </div>
+        <div class="header-icon-wrapper">
+            <button id="driver-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+            <span id="driver-notification-badge-home" class="badge hidden"></span>
+        </div>
+    </header>
+    <main id="driver-home-content" class="main-menu">
+         <nav class="main-menu">
                     <button class="menu-item" id="show-driver-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
                         <span class="badge">3</span>
@@ -135,26 +135,6 @@
                 <button id="dev-create-test-trip" style="margin: 20px auto; padding: 10px; background-color: var(--md-error); color: white; border: none; border-radius: 8px; cursor: pointer;">
                     DEV: Створити тестову поїздку
                 </button>
-            </main>
-        </div>
-        
-        <!-- HOME SCREEN Водія-->
-<div id="driver-home-screen" class="screen hidden">
-    <header>
-        <div class="profile-badge">
-            <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
-            <h3>Сергій</h3>
-        </div>
-        <div id="driver-status-indicator-home" class="driver-status online">
-            <span class="status-dot"></span>
-            <span class="status-text">Онлайн</span>
-        </div>
-        <div class="header-icon-wrapper">
-            <button id="driver-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
-            <span id="driver-notification-badge-home" class="badge hidden"></span>
-        </div>
-    </header>
-    <main id="driver-home-content" class="main-menu">
         </main>
 </div>
 
