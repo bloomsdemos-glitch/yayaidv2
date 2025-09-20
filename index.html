@@ -137,6 +137,26 @@
                 </button>
             </main>
         </div>
+        
+        <!-- HOME SCREEN Водія-->
+<div id="driver-home-screen" class="screen hidden">
+    <header>
+        <div class="profile-badge">
+            <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
+            <h3>Сергій</h3>
+        </div>
+        <div id="driver-status-indicator-home" class="driver-status online">
+            <span class="status-dot"></span>
+            <span class="status-text">Онлайн</span>
+        </div>
+        <div class="header-icon-wrapper">
+            <button id="driver-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+            <span id="driver-notification-badge-home" class="badge hidden"></span>
+        </div>
+    </header>
+    <main id="driver-home-content" class="main-menu">
+        </main>
+</div>
 
          
         <!-- HOME SCREEN Пасажира-->
@@ -709,7 +729,7 @@
     </main>
 </div>
 
-<!-- Тут у нас профіль водія -->
+
 
 <div id="driver-rating-screen" class="screen hidden">
     <header>
@@ -1452,6 +1472,7 @@
         </div>
     </main>
 </div>
+<!-- TAB-BAR пасажира -->
 <nav id="passenger-tab-bar" class="tab-bar hidden">
     <button class="tab-item active" data-target="passenger-home-screen">
         <i class="fa-solid fa-house"></i>
@@ -1474,6 +1495,30 @@
         <span>Профіль</span>
     </button>
 </nav>
+<!-- TAB-BAR водія -->
+<nav id="driver-tab-bar" class="tab-bar hidden">
+    <button class="tab-item active" data-target="driver-home-screen">
+        <i class="fa-solid fa-house"></i>
+        <span>Головна</span>
+    </button>
+    <button class="tab-item" data-target="driver-find-passengers-screen">
+        <i class="fa-solid fa-users"></i>
+        <span>Замовлення</span>
+    </button>
+    <button class="tab-item fab" data-target="driver-vh-form-screen">
+        <i class="fa-solid fa-plus"></i>
+        <span>Створити</span>
+    </button>
+    <button class="tab-item" data-target="driver-valky-kharkiv-screen">
+        <i class="fa-solid fa-route"></i>
+        <span>Попутка</span>
+    </button>
+    <button class="tab-item" data-target="driver-profile-screen">
+        <i class="fa-solid fa-car-side"></i>
+        <span>Профіль</span>
+    </button>
+</nav>
+
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
