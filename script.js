@@ -730,22 +730,20 @@ passengerTabItems?.forEach(item => {
         handleTabClick(item);
     });
 });
-// == ЛОГІКА ДЛЯ TAB BAR ВОДІЯ ==
+// == ЛОГІКА ДЛЯ TAB BAR (ВОДІЙ) v1.1 (з робочим профілем) ==
 const driverTabBar = document.getElementById('driver-tab-bar');
 const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
 
 function handleDriverTabClick(clickedItem) {
-    // 1. Знімаємо 'active' з усіх кнопок водія
-    driverTabItems.forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // 2. Додаємо 'active' тій, яку натиснули
+    driverTabItems.forEach(item => item.classList.remove('active'));
     clickedItem.classList.add('active');
 
-    // 3. Переходимо на потрібний екран
     const targetScreen = clickedItem.dataset.target;
-    if (targetScreen) {
+    if (targetScreen === 'driver-profile-screen') {
+        // Якщо це кнопка профілю, імітуємо клік по старій кнопці меню
+        showDriverProfileBtn.click();
+    } else if (targetScreen) {
+        // Для всіх інших - просто переходимо на екран
         navigateTo(targetScreen);
     }
 }
@@ -755,6 +753,7 @@ driverTabItems?.forEach(item => {
         handleDriverTabClick(item);
     });
 });
+
 
 showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
