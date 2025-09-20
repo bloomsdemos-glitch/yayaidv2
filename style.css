@@ -1803,6 +1803,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 }
 
 .tab-item.fab {
+    flex-grow: 0;
     color: var(--md-on-primary);
     background-color: var(--md-primary);
     border-radius: 50%;
