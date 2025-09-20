@@ -730,18 +730,15 @@ passengerTabItems?.forEach(item => {
         handleTabClick(item);
     });
 });
-// == ЛОГІКА ДЛЯ TAB BAR (ВОДІЙ) v1.1 (з робочим профілем) ==
+// == ЛОГІКА ДЛЯ TAB BAR (ВОДІЙ) v2.0 (фінальна) ==
 const driverTabBar = document.getElementById('driver-tab-bar');
 const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
 
 function handleDriverTabClick(clickedItem) {
     driverTabItems.forEach(item => item.classList.remove('active'));
     clickedItem.classList.add('active');
-
     const targetScreen = clickedItem.dataset.target;
-    if (targetScreen === 'driver-profile-screen') {
-        displayDriverProfile(1); 
-    } else if (targetScreen) {
+    if (targetScreen) {
         navigateTo(targetScreen);
     }
     if (targetScreen === 'driver-home-screen') {
@@ -749,12 +746,29 @@ function handleDriverTabClick(clickedItem) {
     }
 }
 
-
 driverTabItems?.forEach(item => {
     item.addEventListener('click', () => {
         handleDriverTabClick(item);
     });
 });
+
+// == ЛОГІКА ДЛЯ НОВОГО ЕКРАНУ "ПРОФІЛЬ" (ВОДІЙ) ==
+// (Цього блоку у тебе раніше не було, він додасть функціонал кнопкам)
+const showFullDriverProfileBtn = document.getElementById('show-full-driver-profile-btn');
+showFullDriverProfileBtn?.addEventListener('click', () => {
+    displayDriverProfile(1);
+    navigateTo('driver-full-profile-screen');
+});
+
+const driverSettingsBtnFromProfile = document.getElementById('show-driver-settings-btn-from-profile');
+driverSettingsBtnFromProfile?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+
+const driverHelpBtnFromProfile = document.getElementById('show-driver-help-btn-from-profile');
+driverHelpBtnFromProfile?.addEventListener('click', () => navigateTo('driver-help-screen'));
+
+const driverSupportBtnFromProfile = document.getElementById('show-driver-support-btn-from-profile');
+driverSupportBtnFromProfile?.addEventListener('click', () => navigateTo('driver-support-screen'));
+
 
 
 showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
