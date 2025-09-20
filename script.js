@@ -739,22 +739,22 @@ showPassengerProfileBtn?.addEventListener('click', () => {
     const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
 
     function handleDriverTabClick(clickedItem) {
-        driverTabItems.forEach(item => item.classList.remove('active'));
-        clickedItem.classList.add('active');
-        const targetScreen = clickedItem.dataset.target;
-        
-        if (targetScreen === 'driver-profile-screen') {
-            displayDriverProfile(1);
-        }
-        
-        if (targetScreen) {
-            navigateTo(targetScreen);
-        }
-        
-        if (targetScreen === 'driver-home-screen') {
-            updateHomeScreenView('driver');
-        }
+    driverTabItems.forEach(item => item.classList.remove('active'));
+    clickedItem.classList.add('active');
+    const targetScreen = clickedItem.dataset.target;
+
+    if (targetScreen === 'driver-profile-screen') {
+        displayDriverProfile(1); // ЗАПОВНЮЄМО профіль даними
+        navigateTo(targetScreen); // А ПОТІМ переходимо
+    } else if (targetScreen) {
+        navigateTo(targetScreen);
     }
+
+    if (targetScreen === 'driver-home-screen') {
+        updateHomeScreenView('driver');
+    }
+}
+
 
     driverTabItems?.forEach(item => {
         item.addEventListener('click', () => {
@@ -1584,26 +1584,34 @@ paymentCardBtn?.addEventListener('click', () => {
 
 
 
-// --- Універсальна і розумна кнопка "Назад" ---
-const quickOrderBackButton = document.querySelector('#quick-order-screen .btn-back');
+// Розумна кнопка "Назад"
 backButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const isQuickOrderScreen = button.closest('#quick-order-screen');
-        if (isQuickOrderScreen) {
-            const isOnTimeStep = timeStep.style.display === 'flex';
+        const currentScreen = button.closest('.screen');
+
+        // Особлива логіка для "Швидкого замовлення"
+        if (currentScreen && currentScreen.id === 'quick-order-screen') {
+            const isOnTimeStep = timeStep.classList.contains('active');
+            const isOnPaymentStep = paymentStep.classList.contains('active');
+
             if (isOnTimeStep) {
-                editTimeBtn.click();
-                goToStep('address');
+                goToStep('address'); // З кроку "Час" повертаємось на "Адресу"
+            } else if (isOnPaymentStep) {
+                goToStep('time'); // З кроку "Оплата" повертаємось на "Час"
             } else {
+                // Якщо ми на першому кроці, показуємо алерт
                 if (confirm('Скасувати оформлення замовлення? Всі дані буде втрачено.')) {
-                    showScreen('passenger-dashboard');
+                    navigateTo('passenger-home-screen'); // І повертаємось на правильний екран
                 }
             }
         } else {
-            showScreen(button.dataset.target || 'home-screen');
+            // Стандартна логіка для всіх інших екранів
+            const target = button.dataset.target || 'home-screen'; // 'home-screen' тут як запасний варіант
+            navigateTo(target);
         }
     });
 });
+
 
     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
     const themeToggle = document.getElementById('theme-toggle');
