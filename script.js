@@ -611,7 +611,11 @@ function displayAvailableDrivers() {
 // --- Навігація ---
 showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
 showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
-driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
+driverTelegramLoginBtn?.addEventListener('click', () => {
+    navigateTo('driver-home-screen'); // <-- Змінили на новий екран
+    // Показуємо Tab Bar для водія
+    document.getElementById('driver-tab-bar').classList.remove('hidden');
+});
 passengerTelegramLoginBtn?.addEventListener('click', () => {
     navigateTo('passenger-home-screen'); // <-- Змінили на новий екран
     // Тимчасово показуємо Tab Bar для пасажира
