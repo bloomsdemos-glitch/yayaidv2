@@ -1175,23 +1175,26 @@
                 <p>Тут буде актуальний розклад автобусів.</p>
             </main>
         </div>
-    <div id="passenger-profile-screen" class="screen hidden">
+        <div id="passenger-profile-screen" class="screen hidden">
         <header>
             <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
             <h2>Профіль</h2>
             <div class="header-placeholder"></div>
         </header>
-        <main>
-             <div class="details-card profile-header-card">
-                <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-                <h3 id="profile-passenger-name">Віта Б.</h3>
-               <div class="profile-rating-summary">
-    <span><i class="fa-solid fa-route"></i> <strong id="profile-passenger-trips">27</strong> поїздок</span>
-    <span id="passenger-feedback-placeholder"><i class="fa-solid fa-thumbs-up"></i> <strong>...</strong></span>
-</div>
-            <nav class="main-menu">
+        <main class="profile-main">
+            <div class="profile-content-wrapper">
+                <div class="details-card profile-header-card">
+                    <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                    <h3 id="profile-passenger-name">Віта Б.</h3>
+                    <div class="profile-rating-summary">
+                        <span><i class="fa-solid fa-route"></i> <strong id="profile-passenger-trips">27</strong> поїздок</span>
+                        <span id="passenger-feedback-placeholder"><i class="fa-solid fa-thumbs-up"></i> <strong>...</strong></span>
+                    </div>
+                </div>
+            </div>
+            <nav class="main-menu" style="margin-top: 16px;">
                 <button class="menu-item" id="show-full-passenger-profile-btn">
-                    <span><i class="fa-solid fa-id-card"></i> Переглянути профіль</span>
+                    <span><i class="fa-solid fa-id-card"></i> Переглянути деталі</span>
                 </button>
                 <button class="menu-item" id="show-passenger-settings-btn-from-profile">
                     <span><i class="fa-solid fa-gear"></i> Налаштування</span>
@@ -1206,39 +1209,39 @@
         </main>
     </div>
 
-       <div id="passenger-full-profile-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2 id="profile-passenger-name-header">Мій профіль</h2>
-        <div class="header-placeholder"></div>
-    </header>
-<main class="profile-main">
-    <div class="profile-content-wrapper">
-        <div class="details-card profile-header-card">
-            <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-            <h3 id="profile-passenger-name">Віта Б.</h3>
-           <div class="profile-rating-summary">
-                <span><i class="fa-solid fa-route"></i> <strong id="profile-passenger-trips">27</strong> поїздок</span>
-                <span id="passenger-feedback-placeholder"><i class="fa-solid fa-thumbs-up"></i> <strong>...</strong></span>
+    <div id="passenger-full-profile-screen" class="screen hidden">
+        <header>
+            <button class="btn-back" data-target="passenger-profile-screen"><i class="fa-solid fa-arrow-left"></i></button> <h2 id="profile-passenger-name-header">Мій профіль</h2>
+            <div class="header-placeholder"></div>
+        </header>
+        <main class="profile-main">
+            <div class="profile-content-wrapper">
+                <div class="details-card profile-header-card">
+                    <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                    <h3 id="profile-passenger-name-full">Віта Б.</h3> <div class="profile-rating-summary">
+                        <span id="profile-passenger-trips-full">...</span> <span id="passenger-feedback-placeholder-full">...</span> </div>
+                </div>
+
+                <div class="details-section">
+                    <h4><i class="fa-solid fa-circle-info"></i> Про мене</h4>
+                    <div class="details-card">
+                        <p id="profile-passenger-bio">Люблю подорожувати з комфортом та гарною музикою.</p>
+                    </div>
+                </div>
+    
+                <div class="details-section">
+                    <h4><i class="fa-solid fa-comments"></i> Відгуки водіїв</h4>
+                    <div class="review-list">
+                        <p class="no-reviews-placeholder">Відгуків поки що немає.</p>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="profile-action-button">
+                 <button id="edit-passenger-profile-btn" class="btn-main-action">Редагувати профіль</button>
+            </div>
+        </main>
     </div>
-    <nav class="main-menu" style="margin-top: 16px;">
-        <button class="menu-item" id="show-full-passenger-profile-btn">
-            <span><i class="fa-solid fa-id-card"></i> Переглянути деталі</span>
-        </button>
-        <button class="menu-item" id="show-passenger-settings-btn-from-profile">
-            <span><i class="fa-solid fa-gear"></i> Налаштування</span>
-        </button>
-        <button class="menu-item" id="show-help-btn-from-profile">
-            <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
-        </button>
-        <button class="menu-item" id="show-passenger-support-btn-from-profile">
-            <span><i class="fa-solid fa-headset"></i> Підтримка</span>
-        </button>
-    </nav>
-</main>
-</div>
 
 
         <div id="passenger-settings-screen" class="screen hidden">
