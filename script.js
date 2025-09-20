@@ -1833,5 +1833,39 @@ passengerProfileBadge?.addEventListener('click', () => {
     // Імітуємо клік на пункт меню "Мій профіль"
     showPassengerProfileBtn.click();
 });
+// == ЛОГІКА ДЛЯ НОВИХ ЕКРАНІВ-МЕНЮ "ПРОФІЛЬ" ==
+
+// --- Пасажир ---
+const showFullPassengerProfileBtn = document.getElementById('show-full-passenger-profile-btn');
+showFullPassengerProfileBtn?.addEventListener('click', () => {
+    // Просто переходимо на детальний екран. Його заповненням вже займається функція displayPassengerProfile
+    navigateTo('passenger-full-profile-screen');
+});
+
+const passengerSettingsBtn = document.getElementById('show-passenger-settings-btn-from-profile');
+passengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+
+const passengerHelpBtn = document.getElementById('show-help-btn-from-profile');
+passengerHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+
+const passengerSupportBtn = document.getElementById('show-passenger-support-btn-from-profile');
+passengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
+
+
+// --- Водій ---
+const showFullDriverProfileBtn = document.getElementById('show-full-driver-profile-btn');
+showFullDriverProfileBtn?.addEventListener('click', () => {
+    // Аналогічно, просто переходимо на детальний екран водія
+    navigateTo('driver-full-profile-screen');
+});
+
+const driverSettingsBtn = document.getElementById('show-driver-settings-btn-from-profile');
+driverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+
+const driverHelpBtn = document.getElementById('show-driver-help-btn-from-profile');
+driverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
+
+const driverSupportBtn = document.getElementById('show-driver-support-btn-from-profile');
+driverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
 
 });
