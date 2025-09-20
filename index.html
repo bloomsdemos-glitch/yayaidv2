@@ -151,7 +151,31 @@
     </div>
             </header>
                         <main>
-                <nav class="main-menu">
+                
+                <button id="dev-create-test-trip" style="margin: 20px auto; padding: 10px; background-color: var(--md-error); color: white; border: none; border-radius: 8px; cursor: pointer;">
+    DEV: Створити тестову поїздку
+</button>
+
+            </main>
+
+        </div>
+        <!-- HOME SCREEN Пасажира-->
+        <div id="passenger-home-screen" class="screen hidden">
+    <header>
+        <div class="profile-badge">
+            <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+            <h3>Віта</h3>
+        </div>
+        <div id="passenger-status-indicator" class="driver-status online" style="display: none;"> <span class="status-dot"></span>
+            <span class="status-text">Онлайн</span>
+        </div>
+        <div class="header-icon-wrapper">
+            <button id="passenger-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+            <span id="passenger-notification-badge-home" class="badge hidden"></span>
+        </div>
+    </header>
+    <main id="passenger-home-content" class="main-menu">
+        <nav class="main-menu">
                     <button class="menu-item" id="show-my-orders-btn">
                         <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
                         <span class="badge">1</span>
@@ -181,29 +205,6 @@
                         <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
                     </button>                   
                 </nav>
-                <button id="dev-create-test-trip" style="margin: 20px auto; padding: 10px; background-color: var(--md-error); color: white; border: none; border-radius: 8px; cursor: pointer;">
-    DEV: Створити тестову поїздку
-</button>
-
-            </main>
-
-        </div>
-        <!-- HOME SCREEN Пасажира-->
-        <div id="passenger-home-screen" class="screen hidden">
-    <header>
-        <div class="profile-badge">
-            <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-            <h3>Віта</h3>
-        </div>
-        <div id="passenger-status-indicator" class="driver-status online" style="display: none;"> <span class="status-dot"></span>
-            <span class="status-text">Онлайн</span>
-        </div>
-        <div class="header-icon-wrapper">
-            <button id="passenger-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
-            <span id="passenger-notification-badge-home" class="badge hidden"></span>
-        </div>
-    </header>
-    <main id="passenger-home-content" class="main-menu">
         </main>
 </div>
 
