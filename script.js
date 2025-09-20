@@ -740,13 +740,15 @@ function handleDriverTabClick(clickedItem) {
 
     const targetScreen = clickedItem.dataset.target;
     if (targetScreen === 'driver-profile-screen') {
-        // Якщо це кнопка профілю, імітуємо клік по старій кнопці меню
-        showDriverProfileBtn.click();
+        displayDriverProfile(1); 
     } else if (targetScreen) {
-        // Для всіх інших - просто переходимо на екран
         navigateTo(targetScreen);
     }
+    if (targetScreen === 'driver-home-screen') {
+        updateHomeScreenView('driver');
+    }
 }
+
 
 driverTabItems?.forEach(item => {
     item.addEventListener('click', () => {
