@@ -705,7 +705,7 @@ showPassengerProfileBtn?.addEventListener('click', () => {
     // Викликаємо функцію і передаємо ID нашого тестового пасажира (Віти)
     displayPassengerProfile(1); 
 });
-// == ЛОГІКА ДЛЯ TAB BAR ==
+// == ЛОГІКА ДЛЯ TAB BAR ПАСАЖИРА ==
 const passengerTabBar = document.getElementById('passenger-tab-bar');
 const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
 
@@ -728,6 +728,31 @@ function handleTabClick(clickedItem) {
 passengerTabItems?.forEach(item => {
     item.addEventListener('click', () => {
         handleTabClick(item);
+    });
+});
+// == ЛОГІКА ДЛЯ TAB BAR ВОДІЯ ==
+const driverTabBar = document.getElementById('driver-tab-bar');
+const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
+
+function handleDriverTabClick(clickedItem) {
+    // 1. Знімаємо 'active' з усіх кнопок водія
+    driverTabItems.forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // 2. Додаємо 'active' тій, яку натиснули
+    clickedItem.classList.add('active');
+
+    // 3. Переходимо на потрібний екран
+    const targetScreen = clickedItem.dataset.target;
+    if (targetScreen) {
+        navigateTo(targetScreen);
+    }
+}
+
+driverTabItems?.forEach(item => {
+    item.addEventListener('click', () => {
+        handleDriverTabClick(item);
     });
 });
 
