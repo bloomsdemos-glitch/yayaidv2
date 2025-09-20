@@ -613,10 +613,11 @@ showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-dri
 showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
 driverTelegramLoginBtn?.addEventListener('click', () => navigateTo('driver-dashboard'));
 passengerTelegramLoginBtn?.addEventListener('click', () => {
-    navigateTo('passenger-dashboard');
+    navigateTo('passenger-home-screen'); // <-- Змінили на новий екран
     // Тимчасово показуємо Tab Bar для пасажира
     document.getElementById('passenger-tab-bar').classList.remove('hidden');
 });
+
 
 
 // Кнопка на екрані підтвердження, яка веде в "Мої поїздки"
