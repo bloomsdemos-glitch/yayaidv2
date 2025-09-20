@@ -700,6 +700,31 @@ showPassengerProfileBtn?.addEventListener('click', () => {
     // Викликаємо функцію і передаємо ID нашого тестового пасажира (Віти)
     displayPassengerProfile(1); 
 });
+// == ЛОГІКА ДЛЯ TAB BAR ==
+const passengerTabBar = document.getElementById('passenger-tab-bar');
+const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
+
+function handleTabClick(clickedItem) {
+    // 1. Знімаємо клас 'active' з усіх кнопок
+    passengerTabItems.forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // 2. Додаємо клас 'active' тій, яку натиснули
+    clickedItem.classList.add('active');
+
+    // 3. Переходимо на екран, вказаний в data-target
+    const targetScreen = clickedItem.dataset.target;
+    if (targetScreen) {
+        navigateTo(targetScreen);
+    }
+}
+
+passengerTabItems?.forEach(item => {
+    item.addEventListener('click', () => {
+        handleTabClick(item);
+    });
+});
 
 showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
 showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
