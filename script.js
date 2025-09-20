@@ -705,75 +705,81 @@ showPassengerProfileBtn?.addEventListener('click', () => {
     // Викликаємо функцію і передаємо ID нашого тестового пасажира (Віти)
     displayPassengerProfile(1); 
 });
-// == ЛОГІКА ДЛЯ TAB BAR ПАСАЖИРА ==
-const passengerTabBar = document.getElementById('passenger-tab-bar');
-const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
+    // == ЛОГІКА ДЛЯ TAB BAR (ПАСАЖИР) ==
+    const passengerTabBar = document.getElementById('passenger-tab-bar');
+    const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
 
-function handleTabClick(clickedItem) {
-    // 1. Знімаємо клас 'active' з усіх кнопок
-    passengerTabItems.forEach(item => {
-        item.classList.remove('active');
+    function handleTabClick(clickedItem) {
+        passengerTabItems.forEach(item => item.classList.remove('active'));
+        clickedItem.classList.add('active');
+        const targetScreen = clickedItem.dataset.target;
+        
+        if (targetScreen === 'passenger-profile-screen') {
+            // Заповнюємо дані перед переходом
+            displayPassengerProfile(1);
+        }
+
+        if (targetScreen) {
+            navigateTo(targetScreen);
+        }
+
+        if (targetScreen === 'passenger-home-screen') {
+            updateHomeScreenView('passenger');
+        }
+    }
+
+    passengerTabItems?.forEach(item => {
+        item.addEventListener('click', () => {
+            handleTabClick(item);
+        });
     });
 
-    // 2. Додаємо клас 'active' тій, яку натиснули
-    clickedItem.classList.add('active');
+    // == ЛОГІКА ДЛЯ TAB BAR (ВОДІЙ) ==
+    const driverTabBar = document.getElementById('driver-tab-bar');
+    const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
 
-    // 3. Переходимо на екран, вказаний в data-target
-    const targetScreen = clickedItem.dataset.target;
-    if (targetScreen) {
-        navigateTo(targetScreen);
+    function handleDriverTabClick(clickedItem) {
+        driverTabItems.forEach(item => item.classList.remove('active'));
+        clickedItem.classList.add('active');
+        const targetScreen = clickedItem.dataset.target;
+        
+        if (targetScreen === 'driver-profile-screen') {
+            displayDriverProfile(1);
+        }
+        
+        if (targetScreen) {
+            navigateTo(targetScreen);
+        }
+        
+        if (targetScreen === 'driver-home-screen') {
+            updateHomeScreenView('driver');
+        }
     }
-}
 
-passengerTabItems?.forEach(item => {
-    item.addEventListener('click', () => {
-        handleTabClick(item);
+    driverTabItems?.forEach(item => {
+        item.addEventListener('click', () => {
+            handleDriverTabClick(item);
+        });
     });
-});
-// == ЛОГІКА ДЛЯ TAB BAR (ВОДІЙ) v2.0 (фінальна) ==
-const driverTabBar = document.getElementById('driver-tab-bar');
-const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
 
-function handleDriverTabClick(clickedItem) {
-    driverTabItems.forEach(item => item.classList.remove('active'));
-    clickedItem.classList.add('active');
-    const targetScreen = clickedItem.dataset.target;
-    if (targetScreen) {
-        navigateTo(targetScreen);
-    }
-    if (targetScreen === 'driver-home-screen') {
-        updateHomeScreenView('driver');
-    }
-}
+    // == ЛОГІКА ДЛЯ НОВИХ ЕКРАНІВ-МЕНЮ "ПРОФІЛЬ" ==
 
-driverTabItems?.forEach(item => {
-    item.addEventListener('click', () => {
-        handleDriverTabClick(item);
+    // --- Пасажир ---
+    document.getElementById('show-full-passenger-profile-btn')?.addEventListener('click', () => {
+        navigateTo('passenger-full-profile-screen');
     });
-});
+    document.getElementById('show-passenger-settings-btn-from-profile')?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
+    document.getElementById('show-help-btn-from-profile')?.addEventListener('click', () => navigateTo('help-screen'));
+    document.getElementById('show-passenger-support-btn-from-profile')?.addEventListener('click', () => navigateTo('passenger-support-screen'));
 
-// == ЛОГІКА ДЛЯ НОВОГО ЕКРАНУ "ПРОФІЛЬ" (ВОДІЙ) ==
-// (Цього блоку у тебе раніше не було, він додасть функціонал кнопкам)
-const showFullDriverProfileBtn = document.getElementById('show-full-driver-profile-btn');
-showFullDriverProfileBtn?.addEventListener('click', () => {
-    displayDriverProfile(1);
-    navigateTo('driver-full-profile-screen');
-});
-
-const driverSettingsBtnFromProfile = document.getElementById('show-driver-settings-btn-from-profile');
-driverSettingsBtnFromProfile?.addEventListener('click', () => navigateTo('driver-settings-screen'));
-
-const driverHelpBtnFromProfile = document.getElementById('show-driver-help-btn-from-profile');
-driverHelpBtnFromProfile?.addEventListener('click', () => navigateTo('driver-help-screen'));
-
-const driverSupportBtnFromProfile = document.getElementById('show-driver-support-btn-from-profile');
-driverSupportBtnFromProfile?.addEventListener('click', () => navigateTo('driver-support-screen'));
-
-
-
-showPassengerSupportBtn?.addEventListener('click', () => navigateTo('passenger-support-screen'));
-showPassengerSettingsBtn?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
-showHelpBtn?.addEventListener('click', () => navigateTo('help-screen'));
+    // --- Водій ---
+    document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
+        navigateTo('driver-full-profile-screen');
+    });
+    document.getElementById('show-driver-settings-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-settings-screen'));
+    document.getElementById('show-driver-help-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-help-screen'));
+    document.getElementById('show-driver-support-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-support-screen'));
+;
 // --- Навігація для "Валки-Харків" ---
 vhPassengerCreateRequestBtn?.addEventListener('click', () => navigateTo('vh-passenger-form-screen'));
 
