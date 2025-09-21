@@ -1892,3 +1892,4 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     animation: fab-crossfade 4s ease-in-out infinite;
     animation-delay: 2s; /* Текст з'являється, коли іконка зникає */
 }
+#fab-icon-online { opacity: 0; }
