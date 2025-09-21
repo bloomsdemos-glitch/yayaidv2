@@ -1890,7 +1890,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 #driver-fab-btn.animate-loop #fab-icon-initial,
 #driver-fab-btn.animate-loop #fab-icon-anim,
 #driver-fab-btn.animate-loop #fab-text-anim {
-    animation: fab-cycle 6s linear infinite;
+    animation: fab-cycle 2s linear infinite;
 }
 
 #driver-fab-btn.animate-loop #fab-icon-anim { animation-delay: 2s; }
