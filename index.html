@@ -192,22 +192,7 @@
                     DEV: Створити тестову поїздку
                 </button>
         </main>
-        <div style="display: flex; justify-content: space-around; align-items: center; padding: 20px; background: #333; border-radius: 12px; margin-bottom: 20px;">
-    
-    <button class="tab-item fab" style="background: var(--md-success); position: static; transform: none;">
-        <i class="fa-solid fa-location-arrow"></i>
-    </button>
-
-    <button class="tab-item fab" style="background: var(--md-success); position: static; transform: none;">
-        <span class="material-symbols-outlined">
-assistant_navigation </span>
-    </button>
-
-    <button class="tab-item fab" style="background: var(--md-success); position: static; transform: none; font-size: 18px; font-weight: bold;">
-        GO
-    </button>
-</div>
-
+        
 </div>
 
 <div id="passenger-orders-screen" class="screen hidden">
@@ -1547,10 +1532,14 @@ assistant_navigation </span>
         <i class="fa-solid fa-users"></i>
         <span>Замовлення</span>
     </button>
-    <button class="tab-item fab" data-target="driver-create-choice-screen">
-    <i class="fa-solid fa-plus"></i>
-    <span>Створити</span>
+    <button class="tab-item fab" id="driver-fab-btn">
+    <div class="fab-content-wrapper">
+        <i class="fa-solid fa-car fab-icon" id="fab-icon-initial"></i>
+        <i class="fa-solid fa-location-arrow fab-icon fab-anim" id="fab-icon-anim"></i>
+        <span class="fab-text fab-anim" id="fab-text-anim">GO</span>
+    </div>
 </button>
+
 
     <button class="tab-item" data-target="driver-valky-kharkiv-screen">
         <i class="fa-solid fa-route"></i>
