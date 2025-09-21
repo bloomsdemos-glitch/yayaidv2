@@ -83,6 +83,7 @@ const active_trips_database = [];
     const screens = document.querySelectorAll('.screen');
     const backButtons = document.querySelectorAll('.btn-back');
     const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
+    const fabIconOnline = document.getElementById('fab-icon-online');
 // -- Елементи керування поїздкою водія --
     const driverArrivedBtn = document.getElementById('driver-arrived-btn');
     const driverStartTripBtn = document.getElementById('driver-start-trip-btn');
@@ -143,6 +144,29 @@ function initDriverFabAnimation() {
         
     }, 1000); // 1 секунда затримки
 }
+// --- 3. Обробник кліку по FAB-кнопці ---
+driverFabBtn?.addEventListener('click', () => {
+    if (driverStatus === 'offline') {
+        // --- Переходимо в режим ОНЛАЙН ---
+        driverStatus = 'online';
+
+        // Оновлюємо статус в хедері
+        driverStatusIndicator.classList.remove('offline');
+        driverStatusIndicator.classList.add('online');
+        driverStatusIndicator.querySelector('.status-text').textContent = 'Онлайн';
+
+        // Зупиняємо анімацію і змінюємо кнопку на "+"
+        driverFabBtn.classList.remove('animate-loop');
+        driverFabBtn.style.background = 'var(--md-primary)'; // Міняємо колір на синій
+        fabIconAnim.style.opacity = '0';
+        fabTextAnim.style.opacity = '0';
+        fabIconOnline.style.opacity = '1'; // Показуємо плюсик
+
+    } else {
+        // --- Якщо вже ОНЛАЙН, відкриваємо меню створення поїздки ---
+        navigateTo('driver-create-choice-screen');
+    }
+});
 
 
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
