@@ -1833,48 +1833,5 @@ devCreateTestTripBtn?.addEventListener('click', () => {
 });
 
 
-// == ЛОГІКА ДЛЯ КНОПКИ СТАТУСУ ВОДІЯ ==
-const driverStatusIndicator = document.getElementById('driver-status-indicator-home');
-driverStatusIndicator?.addEventListener('click', () => {
-    const statusText = driverStatusIndicator.querySelector('.status-text');
-    if (driverStatus === 'online') {
-        driverStatus = 'offline';
-        statusText.textContent = 'На перерві';
-        driverStatusIndicator.classList.remove('online');
-        driverStatusIndicator.classList.add('offline');
-        alert('Ваш статус змінено на "На перерві". Вас тимчасово не видно пасажирам.');
-    } else {
-        driverStatus = 'online';
-        statusText.textContent = 'Онлайн';
-        driverStatusIndicator.classList.remove('offline');
-        driverStatusIndicator.classList.add('online');
-        alert('Ви знову онлайн!');
-    }
-});
-
-// == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ПРОФІЛІВ В ХЕДЕРІ ==
-document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => {
-    displayPassengerProfile(1);
-    navigateTo('passenger-full-profile-screen');
-});
-document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => {
-    displayDriverProfile(1);
-    navigateTo('driver-full-profile-screen');
-});
-
-// == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ДЗВІНОЧКІВ В ХЕДЕРІ ==
-document.getElementById('passenger-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('passenger'));
-document.getElementById('driver-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('driver'));
-
-function handleNotificationClick(userType) {
-    const badge = document.getElementById(`${userType}-notification-badge-home`);
-    if (badge) {
-        badge.classList.add('hidden');
-        badge.textContent = '';
-    }
-    notifications_database.forEach(n => n.isRead = true);
-    displayNotifications(userType);
-    navigateTo('notifications-screen');
-}
 
 });
