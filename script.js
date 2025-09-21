@@ -734,33 +734,47 @@ showPassengerProfileBtn?.addEventListener('click', () => {
         });
     });
 
-    // == ЛОГІКА ДЛЯ TAB BAR (ВОДІЙ) ==
-    const driverTabBar = document.getElementById('driver-tab-bar');
-    const driverTabItems = driverTabBar?.querySelectorAll('.tab-item');
+// =================================================================
+// == ОБ'ЄДНАНИЙ БЛОК КЕРУВАННЯ ІНТЕРФЕЙСОМ ВОДІЯ (НОВА ВЕРСІЯ) ==
+// =================================================================
 
-    function handleDriverTabClick(clickedItem) {
-    driverTabItems.forEach(item => item.classList.remove('active'));
-    clickedItem.classList.add('active');
-    const targetScreen = clickedItem.dataset.target;
-
-    if (targetScreen === 'driver-profile-screen') {
-        displayDriverProfile(1); // ЗАПОВНЮЄМО профіль даними
-        navigateTo(targetScreen); // А ПОТІМ переходимо
-    } else if (targetScreen) {
-        navigateTo(targetScreen);
+// --- Кнопка статусу водія в хедері ---
+const driverStatusIndicator = document.getElementById('driver-status-indicator-home'); // ВИПРАВЛЕНО ID
+driverStatusIndicator?.addEventListener('click', () => {
+    const statusText = driverStatusIndicator.querySelector('.status-text');
+    if (driverStatus === 'online') {
+        driverStatus = 'offline';
+        statusText.textContent = 'На перерві';
+        driverStatusIndicator.classList.remove('online');
+        driverStatusIndicator.classList.add('offline');
+        alert('Ваш статус змінено на "На перерві".');
+    } else {
+        driverStatus = 'online';
+        statusText.textContent = 'Онлайн';
+        driverStatusIndicator.classList.remove('offline');
+        driverStatusIndicator.classList.add('online');
+        alert('Ви знову онлайн!');
     }
+});
 
-    if (targetScreen === 'driver-home-screen') {
-        updateHomeScreenView('driver');
-    }
-}
+// --- Tab Bar водія ---
+const driverTabItems = document.querySelectorAll('#driver-tab-bar .tab-item');
+driverTabItems.forEach(item => {
+    item.addEventListener('click', () => {
+        driverTabItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        const target = item.dataset.target;
 
-
-    driverTabItems?.forEach(item => {
-        item.addEventListener('click', () => {
-            handleDriverTabClick(item);
-        });
+        if (target === 'driver-profile-screen') {
+            // Тут ми навмисно переходимо на проміжний екран, а не на повний
+            displayDriverProfile(1);
+            navigateTo(target); 
+        } else if (target) {
+            navigateTo(target);
+        }
     });
+});
 
     // == ЛОГІКА ДЛЯ НОВИХ ЕКРАНІВ-МЕНЮ "ПРОФІЛЬ" ==
 
@@ -779,7 +793,7 @@ showPassengerProfileBtn?.addEventListener('click', () => {
     document.getElementById('show-driver-settings-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-settings-screen'));
     document.getElementById('show-driver-help-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-help-screen'));
     document.getElementById('show-driver-support-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-support-screen'));
-;
+
 // --- Навігація для "Валки-Харків" ---
 vhPassengerCreateRequestBtn?.addEventListener('click', () => navigateTo('vh-passenger-form-screen'));
 
@@ -1821,24 +1835,6 @@ devCreateTestTripBtn?.addEventListener('click', () => {
     showDriverOrdersBtn.click();
 });
 
-// == ЛОГІКА ДЛЯ КНОПКИ СТАТУСУ ВОДІЯ ==
-const driverStatusIndicator = document.getElementById('driver-status-indicator');
-driverStatusIndicator?.addEventListener('click', () => {
-    const statusText = driverStatusIndicator.querySelector('.status-text');
-    if (driverStatus === 'online') {
-        driverStatus = 'offline';
-        statusText.textContent = 'На перерві';
-        driverStatusIndicator.classList.remove('online');
-        driverStatusIndicator.classList.add('offline');
-        alert('Ваш статус змінено на "На перерві". Вас тимчасово не видно пасажирам.');
-    } else {
-        driverStatus = 'online';
-        statusText.textContent = 'Онлайн';
-        driverStatusIndicator.classList.remove('offline');
-        driverStatusIndicator.classList.add('online');
-        alert('Ви знову онлайн!');
-    }
-});
 
 // == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ПРОФІЛІВ В ХЕДЕРІ ==
 document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => {
