@@ -1127,7 +1127,7 @@ function selectOffer(offerId) {
     alert(`Ваш запит надіслано водію ${driver.name}. Очікуйте на підтвердження.`);
     
     // 4. Перекидаємо пасажира на головний екран
-    navigateTo('passenger-dashboard');
+    navigateTo('passenger-home-screen');
 }
 
 
@@ -1138,9 +1138,9 @@ function displayNotifications(userType) {
 
     const backBtn = document.querySelector('#notifications-screen .btn-back');
     if (userType === 'driver') {
-        backBtn.dataset.target = 'driver-dashboard';
+        backBtn.dataset.target = 'driver-home-screen';
     } else {
-        backBtn.dataset.target = 'passenger-dashboard';
+        backBtn.dataset.target = 'passenger-home-screen';
     }
 
     listContainer.innerHTML = '';
@@ -1272,7 +1272,7 @@ vhConfirmBtn?.addEventListener('click', () => {
     }
 
     alert('Замовлення підтверджено! Пасажира сповіщено.');
-    navigateTo('driver-dashboard');
+    navigateTo('driver-home-screen');
 });
 
 vhDeclineBtn?.addEventListener('click', () => {
@@ -1740,7 +1740,7 @@ driverFinishTripBtn?.addEventListener('click', () => {
 
     alert('Поїздку завершено!');
     // Повертаємо водія на його головний екран
-    navigateTo('driver-dashboard');
+    navigateTo('driver-home-screen');
 });
 
 
@@ -1800,7 +1800,7 @@ submitRatingBtn?.addEventListener('click', () => {
         updateStars(0);
         document.getElementById('trip-comment').value = '';
         submitRatingBtn.classList.add('disabled');
-        navigateTo('passenger-dashboard');
+        navigateTo('passenger-home-screen');
     }
 });
 
