@@ -1841,4 +1841,48 @@ devCreateTestTripBtn?.addEventListener('click', () => {
     alert('Тестову поїздку створено!');
     showDriverOrdersBtn.click();
 });
+
+// =================================================================
+// == ОБ'ЄДНАНИЙ БЛОК КЕРУВАННЯ ХЕДЕРАМИ (НОВА ВЕРСІЯ) ==
+// =================================================================
+
+// --- Клікабельні профілі в хедері ---
+document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => {
+    displayPassengerProfile(1);
+    navigateTo('passenger-full-profile-screen');
+});
+document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => {
+    displayDriverProfile(1);
+    navigateTo('driver-full-profile-screen');
+});
+
+// --- Клікабельні дзвіночки в хедері ---
+document.getElementById('passenger-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('passenger'));
+document.getElementById('driver-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('driver'));
+
+function handleNotificationClick(userType) {
+    // Знаходимо обидва значки сповіщень (в хедері і на головному екрані)
+    const badgeHome = document.getElementById(`${userType}-notification-badge-home`);
+    const badgeMain = document.getElementById(`${userType}-notification-badge`);
+
+    if (badgeHome) {
+        badgeHome.classList.add('hidden');
+        badgeHome.textContent = '';
+    }
+    if (badgeMain) {
+        badgeMain.classList.add('hidden');
+        badgeMain.textContent = '';
+    }
+    
+    // Позначаємо всі сповіщення як прочитані
+    notifications_database.forEach(n => {
+        if (n.userId === 1) { // Поки що хардкод для нашого єдиного юзера
+            n.isRead = true;
+        }
+    });
+
+    displayNotifications(userType);
+    navigateTo('notifications-screen');
+}
+
 });
