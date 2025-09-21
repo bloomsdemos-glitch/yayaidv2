@@ -537,7 +537,7 @@ profileRequestRideBtn.onclick = () => {
     // Переходимо на екран підтвердження
     navigateTo('driver-confirm-ride-screen');
 };
-
+}
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ПАСАЖИРА ==
 
