@@ -117,7 +117,10 @@ const active_trips_database = [];
     const showDriverHelpBtn = document.getElementById('show-driver-help-btn');
     const showDriverSupportBtn = document.getElementById('show-driver-support-btn');
     const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
-    
+    // -- Елементи екрану вибору дії водія --
+const choiceCreateTripBtn = document.getElementById('choice-create-trip');
+const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
+
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
     function showScreen(screenId) {
         screens.forEach(screen => {
@@ -1425,6 +1428,19 @@ const vhDriverCreateOfferBtn = document.getElementById('vh-driver-create-offer-b
 vhDriverCreateOfferBtn?.addEventListener('click', () => {
     navigateTo('vh-driver-form-screen');
 });
+
+// == ЛОГІКА ДЛЯ НОВОГО ЕКРАНУ ВИБОРУ ДІЇ ВОДІЯ ==
+choiceCreateTripBtn?.addEventListener('click', () => {
+    // Тимчасово ведемо на стару форму В-Х. Потім тут буде ще один екран вибору.
+    navigateTo('vh-driver-form-screen');
+});
+
+choiceFindPassengersBtn?.addEventListener('click', () => {
+    // Ця кнопка просто перекидає на вже існуючий екран
+    navigateTo('driver-find-passengers-screen');
+    displayDriverOrders(); // Оновлюємо список замовлень перед переходом
+});
+
 
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
 document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
