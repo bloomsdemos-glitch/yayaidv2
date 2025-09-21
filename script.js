@@ -1924,3 +1924,5 @@ document.getElementById('show-driver-help-btn-from-profile')?.addEventListener('
 document.getElementById('show-driver-support-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-support-screen'));
 
 });
+
+   });
