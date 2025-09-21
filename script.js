@@ -1807,7 +1807,6 @@ submitRatingBtn?.addEventListener('click', () => {
 // == ЧІТЕРСЬКА КНОПКА ДЛЯ ТЕСТУВАННЯ ==
 const devCreateTestTripBtn = document.getElementById('dev-create-test-trip');
 devCreateTestTripBtn?.addEventListener('click', () => {
-    // Створюємо фейкову активну поїздку
     const testTrip = {
         id: Date.now(),
         passengerName: 'Тестовий Пасажир',
@@ -1816,31 +1815,23 @@ devCreateTestTripBtn?.addEventListener('click', () => {
         to: 'Точка Б',
         time: 'Зараз'
     };
-
-    // Очищуємо старі активні поїздки і додаємо нову
     active_trips_database.length = 0;
     active_trips_database.push(testTrip);
-
     alert('Тестову поїздку створено!');
-
-    // Одразу переходимо в "Мої замовлення", щоб побачити результат
     showDriverOrdersBtn.click();
 });
+
 // == ЛОГІКА ДЛЯ КНОПКИ СТАТУСУ ВОДІЯ ==
 const driverStatusIndicator = document.getElementById('driver-status-indicator');
-
 driverStatusIndicator?.addEventListener('click', () => {
     const statusText = driverStatusIndicator.querySelector('.status-text');
-
     if (driverStatus === 'online') {
-        // Переключаємо на "На перерві"
         driverStatus = 'offline';
         statusText.textContent = 'На перерві';
         driverStatusIndicator.classList.remove('online');
         driverStatusIndicator.classList.add('offline');
         alert('Ваш статус змінено на "На перерві". Вас тимчасово не видно пасажирам.');
     } else {
-        // Переключаємо назад на "Онлайн"
         driverStatus = 'online';
         statusText.textContent = 'Онлайн';
         driverStatusIndicator.classList.remove('offline');
@@ -1848,19 +1839,25 @@ driverStatusIndicator?.addEventListener('click', () => {
         alert('Ви знову онлайн!');
     }
 });
+
 // == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ПРОФІЛІВ В ХЕДЕРІ ==
-const driverProfileBadgeOnHome = document.querySelector('#driver-home-screen .profile-badge');
-const passengerProfileBadgeOnHome = document.querySelector('#passenger-home-screen .profile-badge');
+document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => document.querySelector('#passenger-tab-bar [data-target="passenger-profile-screen"]')?.click());
+document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => document.querySelector('#driver-tab-bar [data-target="driver-profile-screen"]')?.click());
 
-driverProfileBadgeOnHome?.addEventListener('click', () => {
-    // Імітуємо клік на вкладку "Профіль" в Tab Bar
-    document.querySelector('#driver-tab-bar [data-target="driver-profile-screen"]')?.click();
-});
+// == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ДЗВІНОЧКІВ В ХЕДЕРІ ==
+document.getElementById('passenger-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('passenger'));
+document.getElementById('driver-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('driver'));
 
-passengerProfileBadgeOnHome?.addEventListener('click', () => {
-    // Імітуємо клік на вкладку "Профіль" в Tab Bar
-    document.querySelector('#passenger-tab-bar [data-target="passenger-profile-screen"]')?.click();
-});
+function handleNotificationClick(userType) {
+    const badge = document.getElementById(`${userType}-notification-badge-home`);
+    if (badge) {
+        badge.classList.add('hidden');
+        badge.textContent = '';
+    }
+    notifications_database.forEach(n => n.isRead = true);
+    displayNotifications(userType);
+    navigateTo('notifications-screen');
+}
 
 // == ЛОГІКА ДЛЯ TAB BAR (ПАСАЖИР) ==
 const passengerTabItems = document.querySelectorAll('#passenger-tab-bar .tab-item');
@@ -1869,15 +1866,12 @@ passengerTabItems.forEach(item => {
         passengerTabItems.forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         const target = item.dataset.target;
-
         if (target === 'passenger-profile-screen') {
             displayPassengerProfile(1);
         }
-        
         if (target) {
             navigateTo(target);
         }
-
         if (target === 'passenger-home-screen') {
             updateHomeScreenView('passenger');
         }
@@ -1891,15 +1885,12 @@ driverTabItems.forEach(item => {
         driverTabItems.forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         const target = item.dataset.target;
-        
         if (target === 'driver-profile-screen') {
             displayDriverProfile(1);
         }
-        
         if (target) {
             navigateTo(target);
         }
-        
         if (target === 'driver-home-screen') {
             updateHomeScreenView('driver');
         }
@@ -1923,6 +1914,4 @@ document.getElementById('show-driver-settings-btn-from-profile')?.addEventListen
 document.getElementById('show-driver-help-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-help-screen'));
 document.getElementById('show-driver-support-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-support-screen'));
 
-});
-
-   });
+}); // <-- ЄДИНИЙ І ПРАВИЛЬНИЙ, що закриває DOMContentLoaded
