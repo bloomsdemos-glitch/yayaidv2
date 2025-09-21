@@ -1850,3 +1850,45 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 .menu-item-content i {
     margin-right: 12px;
 }
+/* --- Стилі для динамічної FAB-кнопки --- */
+.fab-content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fab-icon, .fab-text {
+    position: absolute;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.fab-text {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Початковий стан: анімаційні елементи повністю прозорі */
+.fab-anim {
+    opacity: 0;
+}
+
+/* Анімація перемикання між іконкою стрілки і текстом "GO" */
+@keyframes fab-crossfade {
+    0%, 100% {
+        opacity: 1; /* Іконка видима */
+    }
+    50% {
+        opacity: 0; /* Іконка невидима */
+    }
+}
+
+#driver-fab-btn.animate-loop #fab-icon-anim {
+    animation: fab-crossfade 4s ease-in-out infinite;
+}
+#driver-fab-btn.animate-loop #fab-text-anim {
+    animation: fab-crossfade 4s ease-in-out infinite;
+    animation-delay: 2s; /* Текст з'являється, коли іконка зникає */
+}
