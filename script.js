@@ -1833,14 +1833,33 @@ devCreateTestTripBtn?.addEventListener('click', () => {
 });
 
 
+// == ЛОГІКА ДЛЯ КНОПКИ СТАТУСУ ВОДІЯ ==
+const driverStatusIndicator = document.getElementById('driver-status-indicator-home');
+driverStatusIndicator?.addEventListener('click', () => {
+    const statusText = driverStatusIndicator.querySelector('.status-text');
+    if (driverStatus === 'online') {
+        driverStatus = 'offline';
+        statusText.textContent = 'На перерві';
+        driverStatusIndicator.classList.remove('online');
+        driverStatusIndicator.classList.add('offline');
+        alert('Ваш статус змінено на "На перерві". Вас тимчасово не видно пасажирам.');
+    } else {
+        driverStatus = 'online';
+        statusText.textContent = 'Онлайн';
+        driverStatusIndicator.classList.remove('offline');
+        driverStatusIndicator.classList.add('online');
+        alert('Ви знову онлайн!');
+    }
+});
+
 // == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ПРОФІЛІВ В ХЕДЕРІ ==
 document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => {
-    displayPassengerProfile(1); // Завантажуємо дані пасажира
-    navigateTo('passenger-full-profile-screen'); // Прямий перехід на повний профіль
+    displayPassengerProfile(1);
+    navigateTo('passenger-full-profile-screen');
 });
 document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => {
-    displayDriverProfile(1); // Завантажуємо дані водія
-    navigateTo('driver-full-profile-screen'); // Прямий перехід на повний профіль
+    displayDriverProfile(1);
+    navigateTo('driver-full-profile-screen');
 });
 
 // == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ДЗВІНОЧКІВ В ХЕДЕРІ ==
@@ -1857,5 +1876,5 @@ function handleNotificationClick(userType) {
     displayNotifications(userType);
     navigateTo('notifications-screen');
 }
-});
 
+});
