@@ -1921,15 +1921,7 @@ devCreateTestTripBtn?.addEventListener('click', () => {
 // == ОБ'ЄДНАНИЙ БЛОК КЕРУВАННЯ ХЕДЕРАМИ (НОВА ВЕРСІЯ) ==
 // =================================================================
 
-// --- Клікабельні профілі в хедері ---
-document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => {
-    displayPassengerProfile(1);
-    navigateTo('passenger-full-profile-screen');
-});
-document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => {
-    displayDriverProfile(1);
-    navigateTo('driver-full-profile-screen');
-});
+
 
 // --- Клікабельні дзвіночки в хедері ---
 document.getElementById('passenger-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('passenger'));
