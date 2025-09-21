@@ -477,67 +477,77 @@ const profileDriverTags = document.getElementById('profile-driver-tags');
 const profileDriverReviews = document.getElementById('profile-driver-reviews');
 const profileRequestRideBtn = document.getElementById('profile-request-ride-btn');
 
-function displayDriverProfile(driverId) {
-    // Знаходимо потрібного водія в нашій базі по його ID
-    const driver = drivers_database.find(d => d.id === driverId);
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛІВ ВОДІЇВ (РОЗДІЛЕНО) ==
 
-    // Якщо раптом водія не знайшли, нічого не робимо
+// Функція №1: Готує дані для проміжного екрану профілю
+function displayDriverProfile(driverId) {
+    const driver = drivers_database.find(d => d.id === driverId);
     if (!driver) {
         console.error('Водія з ID', driverId, 'не знайдено.');
         return;
     }
 
- // 1. Заповнюємо прості текстові поля
-profileDriverNameHeader.textContent = `Профіль: ${driver.name}`;
-profileDriverName.textContent = driver.name;
-profileDriverTrips.textContent = driver.trips;
-profileDriverCar.textContent = driver.car;
-
-// Ось тут нова логіка для рейтингу!
-if (driver.trips < 5) {
-    profileDriverRating.innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
-} else {
-    profileDriverRating.textContent = driver.rating.toFixed(1);
+    // Заповнюємо ТІЛЬКИ елементи на екрані driver-profile-screen
+    document.getElementById('profile-driver-name').textContent = driver.name;
+    document.getElementById('profile-driver-trips').textContent = driver.trips;
+    
+    if (driver.trips < 5) {
+        document.getElementById('profile-driver-rating').innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
+    } else {
+        document.getElementById('profile-driver-rating').textContent = driver.rating.toFixed(1);
+    }
 }
 
-    // 2. Генеруємо список тегів "Про мене"
-    profileDriverTags.innerHTML = ''; // Очищуємо старі теги
+// Функція №2: Готує дані для ПОВНОГО екрану профілю
+function displayDriverFullProfile(driverId) {
+    const driver = drivers_database.find(d => d.id === driverId);
+    if (!driver) return;
+
+    // Заповнюємо елементи на екрані driver-full-profile-screen
+    document.getElementById('profile-driver-name-header').textContent = `Профіль: ${driver.name}`;
+    document.getElementById('profile-driver-name-full').textContent = driver.name;
+    document.getElementById('profile-driver-trips-full').textContent = `${driver.trips} поїздки`;
+    document.getElementById('profile-driver-car').textContent = driver.car;
+
+    if (driver.trips < 5) {
+        document.getElementById('profile-driver-rating-full').innerHTML = `<small>Новий водій</small>`;
+    } else {
+        document.getElementById('profile-driver-rating-full').innerHTML = `<i class="fa-solid fa-star"></i> ${driver.rating.toFixed(1)}`;
+    }
+    
+    const tagsContainer = document.getElementById('profile-driver-tags');
+    tagsContainer.innerHTML = '';
     driver.tags.forEach(tag => {
-        const tagElement = document.createElement('span');
-        tagElement.className = 'tag';
-        tagElement.innerHTML = `<i class="${tag.icon}"></i> ${tag.text}`;
-        profileDriverTags.appendChild(tagElement);
+        tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
     });
 
-    // 3. Генеруємо список відгуків
-    const reviewsSectionTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
-    reviewsSectionTitle.textContent = `Відгуки (${driver.reviews.length})`;
-    profileDriverReviews.innerHTML = ''; // Очищуємо старі відгуки
-    driver.reviews.forEach(review => {
-        const reviewElement = document.createElement('div');
-        reviewElement.className = 'review-card';
-        reviewElement.innerHTML = `
-            <div class="review-header">
-                <strong>${review.name}</strong>
-                <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
-            </div>
-            <p class="review-text">${review.text}</p>
-        `;
-        profileDriverReviews.appendChild(reviewElement);
-    });
-    // "Оживляємо" кнопку "Замовити поїздку"
-profileRequestRideBtn.onclick = () => {
-    // Запам'ятовуємо ID водія, якого обрали
-    currentOfferIdForConfirmation = `driver_${driver.id}`; 
-
-    // Заповнюємо даними екран підтвердження
-    document.getElementById('confirm-ride-driver-name').textContent = driver.name;
-    document.getElementById('confirm-ride-driver-car').textContent = driver.car;
-
-    // Переходимо на екран підтвердження
-    navigateTo('driver-confirm-ride-screen');
-};
+    const reviewsContainer = document.getElementById('profile-driver-reviews');
+    const reviewsTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
+    reviewsTitle.textContent = `Відгуки (${driver.reviews.length})`;
+    reviewsContainer.innerHTML = '';
+    
+    if (driver.reviews.length > 0) {
+        driver.reviews.forEach(review => {
+            reviewsContainer.innerHTML += `
+                <div class="review-card">
+                    <div class="review-header">
+                        <strong>${review.name}</strong>
+                        <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
+                    </div>
+                    <p class="review-text">${review.text}</p>
+                </div>`;
+        });
+    } else {
+        reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
+    }
 }
+
+// Оновлюємо обробник для кнопки "Переглянути профіль"
+document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
+    displayDriverFullProfile(1); // Спочатку готуємо дані для повного профілю
+    navigateTo('driver-full-profile-screen'); // А потім переходимо
+});
+
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ПАСАЖИРА ==
 
