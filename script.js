@@ -144,29 +144,36 @@ function initDriverFabAnimation() {
         
     }, 1000); // 1 секунда затримки
 }
-// --- 3. Обробник кліку по FAB-кнопці ---
+// --- 3. Обробник кліку по FAB-кнопці (v2 - з миттєвою реакцією) ---
 driverFabBtn?.addEventListener('click', () => {
     if (driverStatus === 'offline') {
         // --- Переходимо в режим ОНЛАЙН ---
         driverStatus = 'online';
 
+        // Миттєво і жорстко зупиняємо всі анімації
+        driverFabBtn.classList.remove('animate-loop', 'is-flipping');
+        fabIconInitial.style.animation = 'none';
+        fabIconAnim.style.animation = 'none';
+        fabTextAnim.style.animation = 'none';
+        
         // Оновлюємо статус в хедері
         driverStatusIndicator.classList.remove('offline');
         driverStatusIndicator.classList.add('online');
         driverStatusIndicator.querySelector('.status-text').textContent = 'Онлайн';
 
-        // Зупиняємо анімацію і змінюємо кнопку на "+"
-        driverFabBtn.classList.remove('animate-loop');
-        driverFabBtn.style.background = 'var(--md-primary)'; // Міняємо колір на синій
+        // Змінюємо кнопку на "+"
+        driverFabBtn.style.background = 'var(--md-primary)';
+        fabIconInitial.style.opacity = '0';
         fabIconAnim.style.opacity = '0';
         fabTextAnim.style.opacity = '0';
-        fabIconOnline.style.opacity = '1'; // Показуємо плюсик
+        fabIconOnline.style.opacity = '1';
 
     } else {
         // --- Якщо вже ОНЛАЙН, відкриваємо меню створення поїздки ---
         navigateTo('driver-create-choice-screen');
     }
 });
+
 
 
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
