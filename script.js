@@ -510,7 +510,7 @@ if (driver.trips < 5) {
     });
 
     // 3. Генеруємо список відгуків
-    const reviewsSectionTitle = document.querySelector('#driver-rating-screen .details-section h4');
+    const reviewsSectionTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
     reviewsSectionTitle.textContent = `Відгуки (${driver.reviews.length})`;
     profileDriverReviews.innerHTML = ''; // Очищуємо старі відгуки
     driver.reviews.forEach(review => {
@@ -538,9 +538,6 @@ profileRequestRideBtn.onclick = () => {
     navigateTo('driver-confirm-ride-screen');
 };
 
-    // Показуємо сам екран профілю
-    navigateTo('driver-rating-screen');
-}
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ПАСАЖИРА ==
 
@@ -1325,7 +1322,7 @@ const confirmRideWithDriverBtn = document.getElementById('confirm-ride-with-driv
 
 cancelRideBtn?.addEventListener('click', () => {
     // Просто повертаємось назад на профіль водія
-    navigateTo('driver-rating-screen'); 
+    navigateTo('driver-full-profile-screen'); 
 });
 
 confirmRideWithDriverBtn?.addEventListener('click', () => {
@@ -1409,7 +1406,7 @@ showDriverValkyKharkivBtn?.addEventListener('click', () => {
 
 
 
-showDriverProfileBtn?.addEventListener('click', () => navigateTo('driver-rating-screen'));
+
 showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
 showDriverSupportBtn?.addEventListener('click', () => navigateTo('driver-support-screen'));
 showDriverSettingsBtn?.addEventListener('click', () => navigateTo('driver-settings-screen'));
