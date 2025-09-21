@@ -1490,9 +1490,10 @@ vhDriverCreateOfferBtn?.addEventListener('click', () => {
 
 // == ЛОГІКА ДЛЯ НОВОГО ЕКРАНУ ВИБОРУ ДІЇ ВОДІЯ ==
 choiceCreateTripBtn?.addEventListener('click', () => {
-    // Тимчасово ведемо на стару форму В-Х. Потім тут буде ще один екран вибору.
-    navigateTo('vh-driver-form-screen');
+    // Ведемо на новий екран вибору типу поїздки
+    navigateTo('driver-create-trip-choice-screen');
 });
+
 
 choiceFindPassengersBtn?.addEventListener('click', () => {
     // Ця кнопка просто перекидає на вже існуючий екран
