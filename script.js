@@ -130,21 +130,24 @@ const fabIconInitial = document.getElementById('fab-icon-initial');
 const fabIconAnim = document.getElementById('fab-icon-anim');
 const fabTextAnim = document.getElementById('fab-text-anim');
 
-// --- 2. Функція, що запускає всю анімацію ---
+// --- 2. Функція, що запускає всю анімацію (v2 - зі спінером) ---
 function initDriverFabAnimation() {
-    if (!driverFabBtn) return; // Перевірка, що кнопка існує
+    if (!driverFabBtn) return;
 
-    // Через 1 секунду після появи екрану...
     setTimeout(() => {
-        // ... ховаємо початкову іконку машини...
-        if (fabIconInitial) fabIconInitial.style.opacity = '0';
+        driverFabBtn.classList.add('is-flipping'); // Запускаємо спінер
 
-        // ... і запускаємо нескінченну анімацію перемикання стрілки і "GO".
-        if (driverFabBtn) driverFabBtn.classList.add('animate-loop');
-        
-    }, 1000); // 1 секунда затримки
+        // Після спінера запускаємо цикл
+        setTimeout(() => {
+            driverFabBtn.classList.remove('is-flipping');
+            driverFabBtn.classList.add('animate-loop');
+        }, 500); // 0.5с на анімацію спінера
+
+    }, 1000); // 1с затримки перед стартом
 }
+
 // --- 3. Обробник кліку по FAB-кнопці (v2 - з миттєвою реакцією) ---
+// --- 3. Обробник кліку по FAB-кнопці (v3 - фінальний) ---
 driverFabBtn?.addEventListener('click', () => {
     if (driverStatus === 'offline') {
         // --- Переходимо в режим ОНЛАЙН ---
@@ -152,10 +155,7 @@ driverFabBtn?.addEventListener('click', () => {
 
         // Миттєво і жорстко зупиняємо всі анімації
         driverFabBtn.classList.remove('animate-loop', 'is-flipping');
-        fabIconInitial.style.animation = 'none';
-        fabIconAnim.style.animation = 'none';
-        fabTextAnim.style.animation = 'none';
-        
+
         // Оновлюємо статус в хедері
         driverStatusIndicator.classList.remove('offline');
         driverStatusIndicator.classList.add('online');
@@ -163,7 +163,7 @@ driverFabBtn?.addEventListener('click', () => {
 
         // Змінюємо кнопку на "+"
         driverFabBtn.style.background = 'var(--md-primary)';
-        fabIconInitial.style.opacity = '0';
+        fabIconInitial.style.opacity = '0'; // <-- ОСЬ ВАЖЛИВИЙ ФІКС
         fabIconAnim.style.opacity = '0';
         fabTextAnim.style.opacity = '0';
         fabIconOnline.style.opacity = '1';
@@ -173,6 +173,7 @@ driverFabBtn?.addEventListener('click', () => {
         navigateTo('driver-create-choice-screen');
     }
 });
+
 
 
 
