@@ -1831,7 +1831,3 @@ devCreateTestTripBtn?.addEventListener('click', () => {
     alert('Тестову поїздку створено!');
     showDriverOrdersBtn.click();
 });
-
-
-
-});
