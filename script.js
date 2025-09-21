@@ -1841,8 +1841,14 @@ driverStatusIndicator?.addEventListener('click', () => {
 });
 
 // == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ПРОФІЛІВ В ХЕДЕРІ ==
-document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => document.querySelector('#passenger-tab-bar [data-target="passenger-profile-screen"]')?.click());
-document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => document.querySelector('#driver-tab-bar [data-target="driver-profile-screen"]')?.click());
+document.querySelector('#passenger-home-screen .profile-badge')?.addEventListener('click', () => {
+    displayPassengerProfile(1); // Завантажуємо дані пасажира
+    navigateTo('passenger-full-profile-screen'); // Прямий перехід на повний профіль
+});
+document.querySelector('#driver-home-screen .profile-badge')?.addEventListener('click', () => {
+    displayDriverProfile(1); // Завантажуємо дані водія
+    navigateTo('driver-full-profile-screen'); // Прямий перехід на повний профіль
+});
 
 // == ЛОГІКА ДЛЯ КЛІКАБЕЛЬНИХ ДЗВІНОЧКІВ В ХЕДЕРІ ==
 document.getElementById('passenger-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('passenger'));
