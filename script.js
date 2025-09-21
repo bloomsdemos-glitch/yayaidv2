@@ -121,6 +121,30 @@ const active_trips_database = [];
 const choiceCreateTripBtn = document.getElementById('choice-create-trip');
 const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
+// == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ ==
+
+// --- 1. Збираємо елементи кнопки ---
+const driverFabBtn = document.getElementById('driver-fab-btn');
+const fabIconInitial = document.getElementById('fab-icon-initial');
+const fabIconAnim = document.getElementById('fab-icon-anim');
+const fabTextAnim = document.getElementById('fab-text-anim');
+
+// --- 2. Функція, що запускає всю анімацію ---
+function initDriverFabAnimation() {
+    if (!driverFabBtn) return; // Перевірка, що кнопка існує
+
+    // Через 1 секунду після появи екрану...
+    setTimeout(() => {
+        // ... ховаємо початкову іконку машини...
+        if (fabIconInitial) fabIconInitial.style.opacity = '0';
+
+        // ... і запускаємо нескінченну анімацію перемикання стрілки і "GO".
+        if (driverFabBtn) driverFabBtn.classList.add('animate-loop');
+        
+    }, 1000); // 1 секунда затримки
+}
+
+
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
     function showScreen(screenId) {
         screens.forEach(screen => {
@@ -625,7 +649,11 @@ driverTelegramLoginBtn?.addEventListener('click', () => {
     navigateTo('driver-home-screen'); // <-- Змінили на новий екран
     // Показуємо Tab Bar для водія
     document.getElementById('driver-tab-bar').classList.remove('hidden');
+
+    // Запускаємо нашу нову анімацію!
+    initDriverFabAnimation();
 });
+
 passengerTelegramLoginBtn?.addEventListener('click', () => {
     navigateTo('passenger-home-screen'); // <-- Змінили на новий екран
     // Тимчасово показуємо Tab Bar для пасажира
