@@ -1850,7 +1850,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 .menu-item-content i {
     margin-right: 12px;
 }
-/* --- Стилі для динамічної FAB-кнопки --- */
+/* --- Стилі для динамічної FAB-кнопки (v2) --- */
 .fab-content-wrapper {
     position: relative;
     width: 100%;
@@ -1858,16 +1858,21 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Додаємо 3D-сцену для перевертання */
+    transform-style: preserve-3d;
 }
 
 .fab-icon, .fab-text {
     position: absolute;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    /* Ховаємо зворотню сторону під час перевертання */
+    backface-visibility: hidden;
 }
 
 .fab-text {
     font-size: 18px;
     font-weight: bold;
+    color: var(--md-on-primary); /* <-- Ось фікс для тексту "GO" */
 }
 
 /* Початковий стан: анімаційні елементи повністю прозорі */
@@ -1875,21 +1880,33 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     opacity: 0;
 }
 
-/* Анімація перемикання між іконкою стрілки і текстом "GO" */
-@keyframes fab-crossfade {
-    0%, 100% {
-        opacity: 1; /* Іконка видима */
-    }
-    50% {
-        opacity: 0; /* Іконка невидима */
-    }
+#fab-icon-online { opacity: 0; }
+
+/* Анімація "спінера" для початкової іконки */
+@keyframes fab-flip-out {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(180deg); }
 }
 
+#driver-fab-btn.is-flipping #fab-icon-initial {
+    animation: fab-flip-out 0.5s forwards;
+}
+
+/* Анімація перемикання між іконками і текстом "GO" (3 етапи) */
+@keyframes fab-cycle {
+    0%, 33.33% { opacity: 1; } /* Елемент видимий 1/3 часу */
+    33.34%, 100% { opacity: 0; } /* Решту часу невидимий */
+}
+
+#driver-fab-btn.animate-loop #fab-icon-initial {
+    animation: fab-cycle 6s linear infinite;
+    animation-delay: 0s;
+}
 #driver-fab-btn.animate-loop #fab-icon-anim {
-    animation: fab-crossfade 4s ease-in-out infinite;
+    animation: fab-cycle 6s linear infinite;
+    animation-delay: 2s; /* З'являється через 2с */
 }
 #driver-fab-btn.animate-loop #fab-text-anim {
-    animation: fab-crossfade 4s ease-in-out infinite;
-    animation-delay: 2s; /* Текст з'являється, коли іконка зникає */
+    animation: fab-cycle 6s linear infinite;
+    animation-delay: 4s; /* З'являється через 4с */
 }
-#fab-icon-online { opacity: 0; }
