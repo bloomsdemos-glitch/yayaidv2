@@ -1878,3 +1878,5 @@ function handleNotificationClick(userType) {
 }
 
 });
+
+});
