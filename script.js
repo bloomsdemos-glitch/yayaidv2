@@ -1913,5 +1913,5 @@ document.getElementById('show-full-driver-profile-btn')?.addEventListener('click
 document.getElementById('show-driver-settings-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-settings-screen'));
 document.getElementById('show-driver-help-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-help-screen'));
 document.getElementById('show-driver-support-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-support-screen'));
-});
+
 }); // <-- ЄДИНИЙ І ПРАВИЛЬНИЙ, що закриває DOMContentLoaded
