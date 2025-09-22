@@ -79,6 +79,8 @@ const vh_offers_database = [];
 // Тимчасова база даних для активних поїздок
 const active_trips_database = [];
 
+const custom_trips_database = []; // База для власних поїздок водіїв
+
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -1107,12 +1109,77 @@ customTripTimeChoiceButtons.forEach(button => {
     });
 });
 
+// == ЛОГІКА ДЛЯ КНОПКИ "ОПУБЛІКУВАТИ ПОЇЗДКУ" (ВЛАСНИЙ МАРШРУТ) ==
 const customTripSubmitBtn = document.getElementById('custom-trip-submit-btn');
 customTripSubmitBtn?.addEventListener('click', () => {
-    alert('Логіка публікації власної поїздки буде додана тут!');
-    // Тут ми згодом будемо збирати дані з форми і додавати їх в нову базу даних
+    // -- КРОК 1: Збираємо всі дані з форми --
+
+    // Збираємо "Звідки"
+    const fromType = document.querySelector('#driver-create-custom-trip-screen .btn-settlement[data-group="custom-from"].active').dataset.type;
+    const fromLocation = fromType === 'village'
+        ? document.getElementById('custom-from-village-select').value
+        : document.getElementById('custom-trip-from').value.trim();
+
+    // Збираємо "Куди"
+    const toType = document.querySelector('#driver-create-custom-trip-screen .btn-settlement[data-group="custom-to"].active').dataset.type;
+    const toLocation = toType === 'village'
+        ? document.getElementById('custom-to-village-select').value
+        : document.getElementById('custom-trip-to').value.trim();
+
+    // Збираємо проміжні точки
+    const intermediateStops = [];
+    const stopInputs = document.querySelectorAll('.intermediate-stop-input');
+    stopInputs.forEach(input => {
+        if (input.value.trim() !== '') {
+            intermediateStops.push(input.value.trim());
+        }
+    });
+
+    // Збираємо час
+    let time;
+    const activeTimeButton = document.querySelector('#driver-create-custom-trip-screen .btn-segment.active');
+    if (activeTimeButton) {
+        const choice = activeTimeButton.dataset.timeChoice;
+        if (choice === 'now') {
+            time = 'Зараз';
+        } else {
+            time = document.getElementById('custom-trip-datetime-picker').value;
+        }
+    }
+
+    // Збираємо деталі
+    const seats = document.getElementById('custom-trip-seats').value.trim();
+    const price = document.getElementById('custom-trip-price').value.trim();
+
+    // -- КРОК 2: Перевіряємо, чи заповнені основні поля --
+    if (!fromLocation || fromLocation === 'Оберіть населений пункт...' || !toLocation || toLocation === 'Оберіть населений пункт...' || !time || !seats || !price) {
+        alert('Будь ласка, заповніть всі основні поля: Звідки, Куди, Коли, Кількість місць та Ціну.');
+        return;
+    }
+
+    // -- КРОК 3: Формуємо об'єкт поїздки --
+    const newCustomTrip = {
+        id: Date.now(),
+        driverId: 1, // Поки що хардкод для водія "Сергій"
+        from: fromLocation,
+        to: toLocation,
+        stops: intermediateStops, // Масив з проміжними точками
+        time: time,
+        seats: parseInt(seats), // Перетворюємо в число
+        price: price,
+        type: 'custom' // Додаємо тип, щоб відрізняти від поїздок В-Х
+    };
+
+    // -- КРОК 4: "Зберігаємо" поїздку і даємо фідбек --
+    custom_trips_database.push(newCustomTrip);
+    console.log('Створено нову власну поїздку:', newCustomTrip);
+    console.log('Поточна база власних поїздок:', custom_trips_database);
+
+    alert('Вашу поїздку успішно опубліковано!');
     navigateTo('driver-home-screen');
+    // В майбутньому тут треба буде також очищувати форму
 });
+
 
 // == ЛОГІКА ДЛЯ ВИБОРУ Н.П. У ВЛАСНОМУ МАРШРУТІ ==
 const customSettlementButtons = document.querySelectorAll('#driver-create-custom-trip-screen .btn-settlement');
