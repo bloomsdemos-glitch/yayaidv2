@@ -1065,7 +1065,7 @@ let time;
         direction: direction,
         fromSpecific: fromSpecific,
         isFlexible: isFlexible,
-        time: time
+        time: time,
         seats: parseInt(seats)
     };
 
