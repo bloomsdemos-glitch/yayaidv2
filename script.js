@@ -123,56 +123,52 @@ const choiceCreateTripBtn = document.getElementById('choice-create-trip');
 const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
 // =======================================================
-// == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ (v4 - фінальна) ==
+// == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ (v5 - РОБОЧА) ==
 // =======================================================
 
 const driverFabBtn = document.getElementById('driver-fab-btn');
 const fabIconInitial = document.getElementById('fab-icon-initial');
 const fabIconAnim = document.getElementById('fab-icon-anim');
 const fabTextAnim = document.getElementById('fab-text-anim');
+
+let fabAnimationTimeout; // Змінна для контролю анімації
+
 // Функція, що запускає всю анімацію
 function initDriverFabAnimation() {
     if (!driverFabBtn || driverStatus === 'online') return;
 
-    // Скидаємо всі стилі на початкові
+    // Скидаємо все до початкового стану
+    clearTimeout(fabAnimationTimeout);
     driverFabBtn.classList.remove('animate-loop', 'is-flipping');
-    driverFabBtn.style.background = ''; // Повертаємо дефолтний колір
-    [fabIconInitial, fabIconAnim, fabTextAnim, fabIconOnline].forEach(el => {
-        if (el) el.style.opacity = '';
-    });
-    // Робимо видимою тільки початкову іконку
-    if (fabIconInitial) fabIconInitial.style.opacity = '1';
+    driverFabBtn.style.background = '';
+    [fabIconAnim, fabTextAnim, fabIconOnline].forEach(el => el.style.opacity = '0');
+    fabIconInitial.style.opacity = '1';
+    fabIconInitial.style.transform = '';
 
-
-    setTimeout(() => {
-        if (driverStatus === 'offline') { // Додаткова перевірка, раптом юзер вже клікнув
-             driverFabBtn.classList.add('is-flipping');
+    // Запускаємо анімацію через 1 секунду
+    fabAnimationTimeout = setTimeout(() => {
+        if (driverStatus === 'offline') {
+            driverFabBtn.classList.add('is-flipping');
         }
-
-        setTimeout(() => {
+        // Після спінера запускаємо цикл
+        fabAnimationTimeout = setTimeout(() => {
             if (driverStatus === 'offline') {
                 driverFabBtn.classList.remove('is-flipping');
                 driverFabBtn.classList.add('animate-loop');
-                // Робимо всі анімаційні елементи видимими для циклу
-                [fabIconInitial, fabIconAnim, fabTextAnim].forEach(el => {
-                    if (el) el.style.opacity = '0'; // CSS анімація сама зробить їх видимими
-                });
             }
-        }, 500); // Час на анімацію спінера
-        
-    }, 1000); // 1с затримки перед стартом
+        }, 500);
+    }, 1000);
 }
 
 // Обробник кліку по FAB-кнопці
 driverFabBtn?.addEventListener('click', () => {
+    // Зупиняємо будь-які заплановані анімації
+    clearTimeout(fabAnimationTimeout);
+    
     if (driverStatus === 'offline') {
-        // --- Переходимо в режим ОНЛАЙН ---
         driverStatus = 'online';
-
-        // Миттєво зупиняємо всі анімації
         driverFabBtn.classList.remove('animate-loop', 'is-flipping');
         
-        // Оновлюємо статус в хедері
         const driverStatusIndicator = document.getElementById('driver-status-indicator-home');
         if (driverStatusIndicator) {
             driverStatusIndicator.classList.remove('offline');
@@ -180,19 +176,15 @@ driverFabBtn?.addEventListener('click', () => {
             driverStatusIndicator.querySelector('.status-text').textContent = 'Онлайн';
         }
 
-        // Змінюємо кнопку на "+"
         driverFabBtn.style.background = 'var(--md-primary)';
         fabIconInitial.style.opacity = '0';
         fabIconAnim.style.opacity = '0';
         fabTextAnim.style.opacity = '0';
         fabIconOnline.style.opacity = '1';
-
     } else {
-        // --- Якщо вже ОНЛАЙН, відкриваємо меню створення поїздки ---
         navigateTo('driver-create-choice-screen');
     }
 });
-
 
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
 
@@ -1515,9 +1507,15 @@ choiceCreateTripBtn?.addEventListener('click', () => {
 
 
 choiceFindPassengersBtn?.addEventListener('click', () => {
-    // Ця кнопка просто перекидає на вже існуючий екран
+    // Змінюємо ціль для кнопки "Назад" на екрані, куди ми переходимо
+    const targetBackBtn = document.querySelector('#driver-find-passengers-screen .btn-back');
+    if (targetBackBtn) {
+        targetBackBtn.dataset.target = 'driver-create-choice-screen';
+    }
+
+    // А тепер переходимо
     navigateTo('driver-find-passengers-screen');
-    displayDriverOrders(); // Оновлюємо список замовлень перед переходом
+    displayDriverOrders();
 });
 
 
