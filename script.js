@@ -974,7 +974,7 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         fromSpecific: fromSpecific,
         toSpecific: toSpecific,
         time: time,
-        seats: parseInt(seats)
+        seats: seats
     };
 
     // 4. Додаємо запит в нашу "базу даних"
@@ -1040,9 +1040,10 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     const direction = `${fromLocation} - ${toLocation}`;
     const fromSpecific = document.getElementById('vh-driver-form-from-specific').value.trim();
     const isFlexible = document.getElementById('vh-driver-flexible-route').checked;
-    const seats = document.getElementById('vh-driver-form-seats').value.trim(); 
+    const seats = document.getElementById('vh-driver-seats-display').textContent;
     const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
-    const seats = document.getElementById('vh-passenger-form-seats').value.trim(); // <-- ДОДАЙ ЦЕЙ РЯДОК
+    const seats = document.getElementById('vh-pass-seats-display').textContent;
+
 
 let time;
 //...
@@ -1072,7 +1073,7 @@ let time;
         fromSpecific: fromSpecific,
         isFlexible: isFlexible,
         time: time,
-        seats: parseInt(seats)
+        seats: seats
     };
 
     // 4. Додаємо пропозицію в нашу "базу даних"
@@ -1156,7 +1157,7 @@ customTripSubmitBtn?.addEventListener('click', () => {
     }
 
     // Збираємо деталі
-    const seats = document.getElementById('custom-trip-seats').value.trim();
+    const seats = document.getElementById('custom-trip-seats-display').textContent;
     const price = document.getElementById('custom-trip-price').value.trim();
 
     // -- КРОК 2: Перевіряємо, чи заповнені основні поля --
@@ -1173,7 +1174,7 @@ customTripSubmitBtn?.addEventListener('click', () => {
         to: toLocation,
         stops: intermediateStops, // Масив з проміжними точками
         time: time,
-        seats: parseInt(seats), // Перетворюємо в число
+        seats: seats, // Перетворюємо в число
         price: price,
         type: 'custom' // Додаємо тип, щоб відрізняти від поїздок В-Х
     };
@@ -2242,5 +2243,44 @@ passengerProfileBadge?.addEventListener('click', () => {
 
 // Нова, надійна логіка закриття: клік по оверлею = закрити все
 popupOverlay?.addEventListener('click', hideProfilePopup);
+
+// == ЛОГІКА ДЛЯ УНІВЕРСАЛЬНОГО ЛІЧИЛЬНИКА МІСЦЬ (+/-) ==
+function setupSeatCounter(minusBtnId, plusBtnId, displayId, maxSeats = 4) {
+    const minusBtn = document.getElementById(minusBtnId);
+    const plusBtn = document.getElementById(plusBtnId);
+    const display = document.getElementById(displayId);
+
+    if (!minusBtn || !plusBtn || !display) return;
+
+    let count = 1;
+
+    function updateDisplay() {
+        display.textContent = count;
+        minusBtn.classList.toggle('disabled', count === 1);
+        plusBtn.classList.toggle('disabled', count === maxSeats);
+    }
+
+    minusBtn.addEventListener('click', () => {
+        if (count > 1) {
+            count--;
+            updateDisplay();
+        }
+    });
+
+    plusBtn.addEventListener('click', () => {
+        if (count < maxSeats) {
+            count++;
+            updateDisplay();
+        }
+    });
+
+    updateDisplay(); // Ініціалізуємо початковий вигляд
+}
+
+// Ініціалізуємо всі наші лічильники
+setupSeatCounter('vh-pass-minus-btn', 'vh-pass-plus-btn', 'vh-pass-seats-display');
+setupSeatCounter('custom-trip-minus-btn', 'custom-trip-plus-btn', 'custom-trip-seats-display');
+setupSeatCounter('vh-driver-minus-btn', 'vh-driver-plus-btn', 'vh-driver-seats-display');
+
 
 });
