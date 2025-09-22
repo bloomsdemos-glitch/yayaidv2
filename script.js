@@ -973,7 +973,7 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         direction: direction,
         fromSpecific: fromSpecific,
         toSpecific: toSpecific,
-        time: time
+        time: time,
         seats: parseInt(seats)
     };
 
