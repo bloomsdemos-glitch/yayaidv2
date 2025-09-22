@@ -974,6 +974,7 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         fromSpecific: fromSpecific,
         toSpecific: toSpecific,
         time: time
+        seats: parseInt(seats)
     };
 
     // 4. Додаємо запит в нашу "базу даних"
@@ -1040,6 +1041,11 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     const fromSpecific = document.getElementById('vh-driver-form-from-specific').value.trim();
     const isFlexible = document.getElementById('vh-driver-flexible-route').checked;
     const seats = document.getElementById('vh-driver-form-seats').value.trim(); 
+    const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
+    const seats = document.getElementById('vh-passenger-form-seats').value.trim(); // <-- ДОДАЙ ЦЕЙ РЯДОК
+
+let time;
+//...
 
 let time;
     const activeTimeButton = document.querySelector('#vh-driver-form-screen .btn-segment.active');
@@ -1301,34 +1307,33 @@ function displayVhRequests() {
             const li = document.createElement('li');
             li.className = 'order-card driver-view'; // Перевикористовуємо стиль
             
-            li.innerHTML = `
-                <div class="order-main-info">
-                    <div class="passenger-info">
-                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-                        <div class="passenger-details">
-                            <strong>${passengerName}</strong>
-                            <span>${request.direction}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="order-route-info">
-                    <div class="address-line">
-                        <i class="fa-solid fa-circle start-address-icon"></i>
-                        <span>${request.fromSpecific || 'Точка не вказана'}</span>
-                    </div>
-                    <div class="address-line">
-                        <i class="fa-solid fa-location-dot end-address-icon"></i>
-                        <span>${request.toSpecific || 'Точка не вказана'}</span>
-                    </div>
-                </div>
-                <div class="order-time-info">
-                    <i class="fa-solid fa-clock"></i>
-                    <span>${request.time}</span>
-                </div>
-                <button class="btn-main-action accept" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
-            `;
-            requestListContainer.appendChild(li);
-        });
+        li.innerHTML = `
+    <div class="order-main-info">
+        <div class="passenger-info">
+            <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+            <div class="passenger-details">
+                <strong>${passengerName}</strong>
+                <span>${request.direction} • <i class="fa-solid fa-user-group"></i> ${request.seats}</span>
+            </div>
+        </div>
+    </div>
+    <div class="order-route-info">
+        <div class="address-line">
+            <i class="fa-solid fa-circle start-address-icon"></i>
+            <span>${request.fromSpecific || 'Точка не вказана'}</span>
+        </div>
+        <div class="address-line">
+            <i class="fa-solid fa-location-dot end-address-icon"></i>
+            <span>${request.toSpecific || 'Точка не вказана'}</span>
+        </div>
+    </div>
+    <div class="order-time-info">
+        <i class="fa-solid fa-clock"></i>
+        <span>${request.time}</span>
+    </div>
+    <button class="btn-main-action accept" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
+`;
+
     }
 }
 
