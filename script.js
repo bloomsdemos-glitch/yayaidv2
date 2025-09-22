@@ -122,48 +122,69 @@ const active_trips_database = [];
 const choiceCreateTripBtn = document.getElementById('choice-create-trip');
 const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
-// == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ ==
+// =======================================================
+// == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ (v4 - фінальна) ==
+// =======================================================
 
-// --- 1. Збираємо елементи кнопки ---
 const driverFabBtn = document.getElementById('driver-fab-btn');
 const fabIconInitial = document.getElementById('fab-icon-initial');
 const fabIconAnim = document.getElementById('fab-icon-anim');
 const fabTextAnim = document.getElementById('fab-text-anim');
+const fabIconOnline = document.getElementById('fab-icon-online');
 
-// --- 2. Функція, що запускає всю анімацію (v2 - зі спінером) ---
+// Функція, що запускає всю анімацію
 function initDriverFabAnimation() {
-    if (!driverFabBtn) return;
+    if (!driverFabBtn || driverStatus === 'online') return;
+
+    // Скидаємо всі стилі на початкові
+    driverFabBtn.classList.remove('animate-loop', 'is-flipping');
+    driverFabBtn.style.background = ''; // Повертаємо дефолтний колір
+    [fabIconInitial, fabIconAnim, fabTextAnim, fabIconOnline].forEach(el => {
+        if (el) el.style.opacity = '';
+    });
+    // Робимо видимою тільки початкову іконку
+    if (fabIconInitial) fabIconInitial.style.opacity = '1';
+
 
     setTimeout(() => {
-        driverFabBtn.classList.add('is-flipping'); // Запускаємо спінер
+        if (driverStatus === 'offline') { // Додаткова перевірка, раптом юзер вже клікнув
+             driverFabBtn.classList.add('is-flipping');
+        }
 
-        // Після спінера запускаємо цикл
         setTimeout(() => {
-            driverFabBtn.classList.remove('is-flipping');
-            driverFabBtn.classList.add('animate-loop');
-        }, 500); // 0.5с на анімацію спінера
-
+            if (driverStatus === 'offline') {
+                driverFabBtn.classList.remove('is-flipping');
+                driverFabBtn.classList.add('animate-loop');
+                // Робимо всі анімаційні елементи видимими для циклу
+                [fabIconInitial, fabIconAnim, fabTextAnim].forEach(el => {
+                    if (el) el.style.opacity = '0'; // CSS анімація сама зробить їх видимими
+                });
+            }
+        }, 500); // Час на анімацію спінера
+        
     }, 1000); // 1с затримки перед стартом
 }
 
-// --- 3. Обробник кліку по FAB-кнопці (v2 - з миттєвою реакцією) ---
-// --- 3. Обробник кліку по FAB-кнопці (v3 - фінальний) ---
+// Обробник кліку по FAB-кнопці
 driverFabBtn?.addEventListener('click', () => {
     if (driverStatus === 'offline') {
         // --- Переходимо в режим ОНЛАЙН ---
         driverStatus = 'online';
 
-        // Миттєво і жорстко зупиняємо всі анімації
+        // Миттєво зупиняємо всі анімації
         driverFabBtn.classList.remove('animate-loop', 'is-flipping');
-
+        
         // Оновлюємо статус в хедері
-        driverStatusIndicator.classList.remove('offline');
-        driverStatusIndicator.classList.add('online');
-        driverStatusIndicator.querySelector('.status-text').textContent = 'Онлайн';
+        const driverStatusIndicator = document.getElementById('driver-status-indicator-home');
+        if (driverStatusIndicator) {
+            driverStatusIndicator.classList.remove('offline');
+            driverStatusIndicator.classList.add('online');
+            driverStatusIndicator.querySelector('.status-text').textContent = 'Онлайн';
+        }
 
         // Змінюємо кнопку на "+"
         driverFabBtn.style.background = 'var(--md-primary)';
-        fabIconInitial.style.opacity = '0'; // <-- ОСЬ ВАЖЛИВИЙ ФІКС
+        fabIconInitial.style.opacity = '0';
         fabIconAnim.style.opacity = '0';
         fabTextAnim.style.opacity = '0';
         fabIconOnline.style.opacity = '1';
@@ -173,9 +194,6 @@ driverFabBtn?.addEventListener('click', () => {
         navigateTo('driver-create-choice-screen');
     }
 });
-
-
-
 
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
     function showScreen(screenId) {
