@@ -2239,6 +2239,3 @@ passengerProfileBadge?.addEventListener('click', () => {
 popupOverlay?.addEventListener('click', hideProfilePopup);
 
 });
-
-
-});
