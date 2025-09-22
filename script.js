@@ -848,6 +848,8 @@ driverTabItems.forEach(item => {
         item.classList.add('active');
 
         const target = item.dataset.target;
+const target = item.dataset.target;
+console.log('Таб-бар: Намагаюся перейти на екран:', target); // <-- ДОДАЙ ЦЕЙ РЯДОК
 
         // Наша нова логіка для кнопки "Назад"
         if (target === 'driver-find-passengers-screen') {
