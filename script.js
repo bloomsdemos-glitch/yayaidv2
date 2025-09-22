@@ -130,8 +130,6 @@ const driverFabBtn = document.getElementById('driver-fab-btn');
 const fabIconInitial = document.getElementById('fab-icon-initial');
 const fabIconAnim = document.getElementById('fab-icon-anim');
 const fabTextAnim = document.getElementById('fab-text-anim');
-const fabIconOnline = document.getElementById('fab-icon-online');
-
 // Функція, що запускає всю анімацію
 function initDriverFabAnimation() {
     if (!driverFabBtn || driverStatus === 'online') return;
