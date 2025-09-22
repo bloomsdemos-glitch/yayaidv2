@@ -744,15 +744,20 @@
         </div>
         
         <div class="form-step">
-    <label class="section-label">Деталі поїздки</label>
-    <div class="form-group">
-        <input type="number" id="vh-driver-form-seats" class="form-input" placeholder="Кількість вільних місць (1-4)">
-    </div>
-</div>
+            <label class="section-label">Деталі поїздки</label>
+            <div class="form-group">
+                <div class="seat-counter">
+                    <button type="button" id="vh-driver-minus-btn" class="seat-counter-btn">-</button>
+                    <span id="vh-driver-seats-display" class="seat-counter-display">1</span>
+                    <button type="button" id="vh-driver-plus-btn" class="seat-counter-btn">+</button>
+                </div>
+            </div>
+        </div>
 
         <button id="vh-driver-form-submit-btn" class="btn-main-action accept">Опублікувати пропозицію</button>
     </main>
 </div>
+
 
 <div id="driver-create-custom-trip-screen" class="screen hidden">
     <header>
@@ -839,7 +844,11 @@
         <div class="form-step">
             <label class="section-label">Деталі поїздки</label>
             <div class="form-group">
-                <input type="number" id="custom-trip-seats" class="form-input" placeholder="Кількість вільних місць">
+                <div class="seat-counter">
+                    <button type="button" id="custom-trip-minus-btn" class="seat-counter-btn">-</button>
+                    <span id="custom-trip-seats-display" class="seat-counter-display">1</span>
+                    <button type="button" id="custom-trip-plus-btn" class="seat-counter-btn">+</button>
+                </div>
             </div>
              <div class="form-group">
                 <input type="text" id="custom-trip-price" class="form-input" placeholder="Ціна за місце (напр. 60 грн)">
@@ -849,6 +858,7 @@
         <button id="custom-trip-submit-btn" class="btn-main-action accept">Опублікувати поїздку</button>
     </main>
 </div>
+
 
 
     <div id="driver-profile-screen" class="screen hidden">
