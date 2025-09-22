@@ -2178,37 +2178,36 @@ function handleNotificationClick(userType) {
     navigateTo('notifications-screen');
 }
 
-// == ЛОГІКА ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) ==
+// == ЛОГІКА ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) v2.0 ==
 const profilePopup = document.getElementById('profile-popup');
+const popupOverlay = document.getElementById('popup-overlay'); // Наш новий оверлей
 const driverProfileBadge = document.querySelector('#driver-home-screen .profile-badge');
 const passengerProfileBadge = document.querySelector('#passenger-home-screen .profile-badge');
 
-// Елементи всередині попапу
 const popupAvatarIcon = document.getElementById('popup-avatar-icon');
 const popupUserName = document.getElementById('popup-user-name');
 const popupUserDetails = document.getElementById('popup-user-details');
 const popupViewProfileBtn = document.getElementById('popup-view-profile-btn');
 
 function showProfilePopup(userType) {
-    if (!profilePopup) return;
+    if (!profilePopup || !popupOverlay) return;
 
+    // Заповнюємо картку даними (логіка залишається та сама)
     if (userType === 'driver') {
-        const driver = drivers_database[0]; // Беремо нашого тестового водія
+        const driver = drivers_database[0];
         popupAvatarIcon.className = 'fa-solid fa-user-tie';
         popupUserName.textContent = driver.name;
         popupUserDetails.textContent = `${driver.rating.toFixed(1)} ★ • ${driver.trips} поїздок`;
-        // Кнопка в попапі буде вести на профіль водія
         popupViewProfileBtn.onclick = () => {
             displayDriverProfile(driver.id);
             navigateTo('driver-profile-screen');
             hideProfilePopup();
         };
     } else { // passenger
-        const passenger = passengers_database[0]; // Беремо нашу тестову пасажирку
+        const passenger = passengers_database[0];
         popupAvatarIcon.className = 'fa-solid fa-user';
         popupUserName.textContent = passenger.name;
         popupUserDetails.textContent = `${passenger.trips} поїздок`;
-        // Кнопка в попапі буде вести на профіль пасажира
         popupViewProfileBtn.onclick = () => {
             displayPassengerProfile(passenger.id);
             navigateTo('passenger-profile-screen');
@@ -2216,42 +2215,30 @@ function showProfilePopup(userType) {
         };
     }
 
+    // Робимо видимими і попап, і оверлей
+    popupOverlay.classList.remove('hidden');
     profilePopup.classList.add('visible');
 }
 
 function hideProfilePopup() {
+    popupOverlay?.classList.add('hidden');
     profilePopup?.classList.remove('visible');
 }
 
 // Обробники кліків на іконки в хедері
-driverProfileBadge?.addEventListener('click', (event) => {
-    event.stopPropagation(); // Зупиняємо "спливання" кліку
-    if (profilePopup.classList.contains('visible')) {
-        hideProfilePopup();
-    } else {
-        showProfilePopup('driver');
-    }
+driverProfileBadge?.addEventListener('click', () => {
+    // Якщо попап вже видимий - ховаємо, якщо ні - показуємо
+    profilePopup.classList.contains('visible') ? hideProfilePopup() : showProfilePopup('driver');
 });
 
-passengerProfileBadge?.addEventListener('click', (event) => {
-    event.stopPropagation(); // Зупиняємо "спливання" кліку
-    if (profilePopup.classList.contains('visible')) {
-        hideProfilePopup();
-    } else {
-        showProfilePopup('passenger');
-    }
+passengerProfileBadge?.addEventListener('click', () => {
+    profilePopup.classList.contains('visible') ? hideProfilePopup() : showProfilePopup('passenger');
 });
 
-// Дуже важлива логіка: ховаємо попап при кліку будь-де поза ним
-window.addEventListener('click', (event) => {
-    if (profilePopup?.classList.contains('visible')) {
-        // Якщо клік був не по самому попапу і не по іконці в хедері
-        if (!profilePopup.contains(event.target) && !driverProfileBadge.contains(event.target) && !passengerProfileBadge.contains(event.target)) {
-            hideProfilePopup();
-        }
-    }
-});
+// Нова, надійна логіка закриття: клік по оверлею = закрити все
+popupOverlay?.addEventListener('click', hideProfilePopup);
 
+});
 
 
 });
