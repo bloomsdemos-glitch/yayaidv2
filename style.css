@@ -1903,3 +1903,50 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     flex-grow: 0; /* Забороняємо кнопці розтягуватись по висоті */
     margin-top: auto; /* Притискаємо кнопку до низу екрану */
 }
+/* === СТИЛІ ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) === */
+#profile-popup {
+    position: absolute;
+    top: 60px; /* Відступ від верху екрану */
+    left: 16px; /* Відступ зліва */
+    width: calc(100% - 32px); /* Ширина на весь екран з відступами */
+    max-width: 300px; /* Але не ширше 300px */
+    z-index: 200; /* Має бути поверх усього */
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    /* Анімація появи */
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    pointer-events: none; /* Не можна клікнути, поки схована */
+    transition: all 0.2s ease-in-out;
+}
+
+#profile-popup.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all; /* Можна клікнути, коли видима */
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.popup-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-user-info span {
+    font-size: 14px;
+    color: var(--md-on-surface-variant);
+}
+
+#popup-view-profile-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+}
