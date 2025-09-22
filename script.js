@@ -122,8 +122,6 @@ const active_trips_database = [];
 const choiceCreateTripBtn = document.getElementById('choice-create-trip');
 const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
-    const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
-
 // =======================================================
 // == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ (v4 - фінальна) ==
 // =======================================================
