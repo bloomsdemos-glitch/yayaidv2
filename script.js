@@ -1039,8 +1039,9 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     const direction = `${fromLocation} - ${toLocation}`;
     const fromSpecific = document.getElementById('vh-driver-form-from-specific').value.trim();
     const isFlexible = document.getElementById('vh-driver-flexible-route').checked;
+    const seats = document.getElementById('vh-driver-form-seats').value.trim(); 
 
-    let time;
+let time;
     const activeTimeButton = document.querySelector('#vh-driver-form-screen .btn-segment.active');
     if (activeTimeButton) {
         const choice = activeTimeButton.dataset.timeChoice;
@@ -1052,10 +1053,10 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     }
 
     // 2. Перевірка
-    if (!time) {
-        alert('Будь ласка, оберіть час поїздки.');
-        return;
-    }
+    if (!time || !seats) {
+    alert('Будь ласка, оберіть час поїздки та вкажіть кількість місць.');
+    return;
+}
 
     // 3. Створюємо об'єкт пропозиції
     const newOffer = {
@@ -1065,6 +1066,7 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
         fromSpecific: fromSpecific,
         isFlexible: isFlexible,
         time: time
+        seats: parseInt(seats)
     };
 
     // 4. Додаємо пропозицію в нашу "базу даних"
@@ -1361,14 +1363,15 @@ function displayVhOffers(filter = 'all') {
             li.className = 'driver-card online';
 
             li.innerHTML = `
-                <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
-                <div class="driver-info">
-                    <h4>${driver.name}</h4>
-                    <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
-                    <small class="status-available">${offer.time}</small>
-                </div>
-                <button class="btn-main-action accept select-offer-btn" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
-            `;
+    <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+    <div class="driver-info">
+        <h4>${driver.name}</h4>
+        <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
+        <small class="status-available">${offer.time} • <i class="fa-solid fa-user-group"></i> ${offer.seats} вільних</small>
+    </div>
+    <button class="btn-main-action accept select-offer-btn" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
+`;
+
 
             // Ось ключова зміна: знаходимо кнопку всередині картки і вішаємо на неї обробник
             const selectBtn = li.querySelector('.select-offer-btn');
