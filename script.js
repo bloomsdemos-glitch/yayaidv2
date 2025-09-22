@@ -1114,6 +1114,29 @@ customTripSubmitBtn?.addEventListener('click', () => {
     navigateTo('driver-home-screen');
 });
 
+// == ЛОГІКА ДЛЯ ВИБОРУ Н.П. У ВЛАСНОМУ МАРШРУТІ ==
+const customSettlementButtons = document.querySelectorAll('#driver-create-custom-trip-screen .btn-settlement');
+
+customSettlementButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const group = button.dataset.group; // 'custom-from' or 'custom-to'
+        const type = button.dataset.type;   // 'manual' or 'village'
+
+        // Оновлюємо активну кнопку
+        document.querySelectorAll(`.btn-settlement[data-group="${group}"]`).forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Показуємо/ховаємо відповідні поля
+        if (group === 'custom-from') {
+            document.getElementById('custom-from-village-container').style.display = type === 'village' ? 'block' : 'none';
+            document.getElementById('custom-from-manual-container').style.display = type === 'manual' ? 'block' : 'none';
+        } else { // 'custom-to'
+            document.getElementById('custom-to-village-container').style.display = type === 'village' ? 'block' : 'none';
+            document.getElementById('custom-to-manual-container').style.display = type === 'manual' ? 'block' : 'none';
+        }
+    });
+});
+
 
 // == ЛОГІКА ДЛЯ ФІЛЬТРІВ "В-Х" (ПАСАЖИР) ==
 const vhFilterButtons = document.querySelectorAll('#passenger-valky-kharkiv-screen .btn-filter');
