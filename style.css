@@ -1950,3 +1950,19 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     padding: 12px;
     font-size: 15px;
 }
+/* === СТИЛІ ДЛЯ ОВЕРЛЕЮ ПОПАПУ === */
+#popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Ледь помітний темний фон */
+    z-index: 199; /* Має бути ПІД попапом, але НАД усім іншим */
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#popup-overlay.hidden {
+    display: none;
+}
