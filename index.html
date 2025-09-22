@@ -747,6 +747,48 @@
     </main>
 </div>
 
+<div id="driver-create-custom-trip-screen" class="screen hidden">
+    <header>
+        <button class="btn-back" data-target="driver-create-trip-choice-screen"><i class="fa-solid fa-arrow-left"></i></button>
+        <h2>Створити власну поїздку</h2>
+        <div class="header-placeholder"></div>
+    </header>
+    <main class="main-form">
+        <div class="form-step">
+            <label class="section-label">Маршрут</label>
+            <div class="form-group">
+                <input type="text" id="custom-trip-from" class="form-input" placeholder="Звідки?">
+            </div>
+            <div class="form-group">
+                <input type="text" id="custom-trip-to" class="form-input" placeholder="Куди?">
+            </div>
+        </div>
+
+        <div class="form-step">
+            <label class="section-label">Коли?</label>
+            <div class="button-group-vertical">
+                <button class="btn-segment" data-time-choice="now">Зараз</button>
+                <button class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
+                <button class="btn-segment" data-time-choice="date">Обрати дату</button>
+            </div>
+            <input type="text" id="custom-trip-datetime-picker" class="form-input" style="display: none;">
+        </div>
+
+        <div class="form-step">
+            <label class="section-label">Деталі поїздки</label>
+            <div class="form-group">
+                <input type="number" id="custom-trip-seats" class="form-input" placeholder="Кількість вільних місць">
+            </div>
+             <div class="form-group">
+                <input type="text" id="custom-trip-price" class="form-input" placeholder="Ціна за місце (напр. 60 грн)">
+            </div>
+        </div>
+
+        <button id="custom-trip-submit-btn" class="btn-main-action accept">Опублікувати поїздку</button>
+    </main>
+</div>
+
+
     <div id="driver-profile-screen" class="screen hidden">
         <header>
             <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
