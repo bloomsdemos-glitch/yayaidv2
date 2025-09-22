@@ -1302,35 +1302,40 @@ function displayVhRequests() {
             const li = document.createElement('li');
             li.className = 'order-card driver-view'; // Перевикористовуємо стиль
             
-        li.innerHTML = `
-    <div class="order-main-info">
-        <div class="passenger-info">
-            <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-            <div class="passenger-details">
-                <strong>${passengerName}</strong>
-                <span>${request.direction} • <i class="fa-solid fa-user-group"></i> ${request.seats}</span>
-            </div>
-        </div>
-    </div>
-    <div class="order-route-info">
-        <div class="address-line">
-            <i class="fa-solid fa-circle start-address-icon"></i>
-            <span>${request.fromSpecific || 'Точка не вказана'}</span>
-        </div>
-        <div class="address-line">
-            <i class="fa-solid fa-location-dot end-address-icon"></i>
-            <span>${request.toSpecific || 'Точка не вказана'}</span>
-        </div>
-    </div>
-    <div class="order-time-info">
-        <i class="fa-solid fa-clock"></i>
-        <span>${request.time}</span>
-    </div>
-    <button class="btn-main-action accept" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
-`;
+            li.innerHTML = `
+                <div class="order-main-info">
+                    <div class="passenger-info">
+                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong>${passengerName}</strong>
+                            <span>${request.direction} • <i class="fa-solid fa-user-group"></i> ${request.seats}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-route-info">
+                    <div class="address-line">
+                        <i class="fa-solid fa-circle start-address-icon"></i>
+                        <span>${request.fromSpecific || 'Точка не вказана'}</span>
+                    </div>
+                    <div class="address-line">
+                        <i class="fa-solid fa-location-dot end-address-icon"></i>
+                        <span>${request.toSpecific || 'Точка не вказана'}</span>
+                    </div>
+                </div>
+                <div class="order-time-info">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>${request.time}</span>
+                </div>
+                <button class="btn-main-action accept" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
+            `;
 
+            // ОСЬ РЯДОК, ЯКОГО НЕ ВИСТАЧАЛО:
+            requestListContainer.appendChild(li); 
+        
+        }); // <-- І ОСЬ ПРАВИЛЬНА ЗАКРИВАЮЧА ДУЖКА
     }
 }
+
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.2 (з робочою кнопкою) ==
 function displayVhOffers(filter = 'all') {
