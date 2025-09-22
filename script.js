@@ -1076,6 +1076,45 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     navigateTo('driver-valky-kharkiv-screen');
 });
 
+// == ЛОГІКА ДЛЯ ФОРМИ СТВОРЕННЯ ВЛАСНОГО МАРШРУТУ (ВОДІЙ) ==
+const customTripTimeChoiceButtons = document.querySelectorAll('#driver-create-custom-trip-screen .btn-segment');
+const customTripPickerInput = document.getElementById('custom-trip-datetime-picker');
+
+customTripTimeChoiceButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const choice = e.currentTarget.dataset.timeChoice;
+        customTripTimeChoiceButtons.forEach(btn => btn.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+
+        if (choice === 'now') {
+            if(customTripPickerInput) customTripPickerInput.style.display = 'none';
+        } else {
+            if(customTripPickerInput) customTripPickerInput.style.display = 'block';
+            let pickerOptions = {
+                enableTime: true, minDate: "today", time_24hr: true,
+                onClose: (selectedDates, dateStr) => {
+                    if (!dateStr) e.currentTarget.classList.remove('active');
+                }
+            };
+            if (choice === 'today') {
+                pickerOptions.noCalendar = true;
+                pickerOptions.dateFormat = "H:i";
+            } else {
+                pickerOptions.dateFormat = "d.m.Y H:i";
+            }
+            if(customTripPickerInput) flatpickr(customTripPickerInput, pickerOptions).open();
+        }
+    });
+});
+
+const customTripSubmitBtn = document.getElementById('custom-trip-submit-btn');
+customTripSubmitBtn?.addEventListener('click', () => {
+    alert('Логіка публікації власної поїздки буде додана тут!');
+    // Тут ми згодом будемо збирати дані з форми і додавати їх в нову базу даних
+    navigateTo('driver-home-screen');
+});
+
+
 // == ЛОГІКА ДЛЯ ФІЛЬТРІВ "В-Х" (ПАСАЖИР) ==
 const vhFilterButtons = document.querySelectorAll('#passenger-valky-kharkiv-screen .btn-filter');
 
@@ -1536,9 +1575,10 @@ choiceValkyKharkivBtn?.addEventListener('click', () => {
 });
 
 choiceCustomRouteBtn?.addEventListener('click', () => {
-    // Цей функціонал ми реалізуємо наступним кроком. Поки що покажемо сповіщення.
-    alert('Створення власного маршруту буде додано незабаром!');
+    // Ведемо водія на новий екран створення кастомної поїздки
+    navigateTo('driver-create-custom-trip-screen');
 });
+
 
 
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
