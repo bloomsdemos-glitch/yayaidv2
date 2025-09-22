@@ -1311,14 +1311,17 @@
         </div>
         
         <div class="form-step">
-    <label class="section-label">Кількість місць</label>
-    <div class="form-group">
-        <input type="number" id="vh-passenger-form-seats" class="form-input" placeholder="Скільки місць вам потрібно? (1-4)">
-    </div>
-</div>
+            <label class="section-label">Кількість місць</label>
+            <div class="seat-counter">
+                <button type="button" id="vh-pass-minus-btn" class="seat-counter-btn">-</button>
+                <span id="vh-pass-seats-display" class="seat-counter-display">1</span>
+                <button type="button" id="vh-pass-plus-btn" class="seat-counter-btn">+</button>
+            </div>
+        </div>
         <button id="vh-form-submit-btn-specific" class="btn-main-action accept">Опублікувати запит</button>
     </main>
 </div>
+
 
 
         <div id="passenger-bus-schedule-screen" class="screen hidden">
