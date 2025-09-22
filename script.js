@@ -7,7 +7,8 @@ let passenger_archive = []; // Архів для пасажира
 let driver_archive = [];    // Архів для водія
 let orders_database = [];
 let currentOfferIdForConfirmation = null;
-let driverStatus = 'online'; // Можливі статуси: 'online', 'offline'
+let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
+
 
 // Тимчасова база даних водіїв
 const drivers_database = [
@@ -843,11 +844,18 @@ driverTabItems.forEach(item => {
     item.addEventListener('click', () => {
         driverTabItems.forEach(i => i.classList.remove('active'));
         item.classList.add('active');
-        
+
         const target = item.dataset.target;
 
+        // Наша нова логіка для кнопки "Назад"
+        if (target === 'driver-find-passengers-screen') {
+            const targetBackBtn = document.querySelector('#driver-find-passengers-screen .btn-back');
+            if (targetBackBtn) {
+                targetBackBtn.dataset.target = 'driver-home-screen';
+            }
+        }
+
         if (target === 'driver-profile-screen') {
-            // Тут ми навмисно переходимо на проміжний екран, а не на повний
             displayDriverProfile(1);
             navigateTo(target); 
         } else if (target) {
