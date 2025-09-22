@@ -1897,3 +1897,9 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 #driver-fab-btn.animate-loop #fab-icon-initial { animation-delay: 0s; }
 #driver-fab-btn.animate-loop #fab-icon-anim { animation-delay: 2s; }
 #driver-fab-btn.animate-loop #fab-text-anim { animation-delay: 4s; }
+/* === ШВИДКИЙ ФІКС ДЛЯ ВЕЛИЧЕЗНИХ КНОПОК === */
+.list-view-main > .btn-main-action,
+.main-form > .btn-main-action {
+    flex-grow: 0; /* Забороняємо кнопці розтягуватись по висоті */
+    margin-top: auto; /* Притискаємо кнопку до низу екрану */
+}
