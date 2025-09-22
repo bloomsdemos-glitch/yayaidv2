@@ -1137,6 +1137,59 @@ customSettlementButtons.forEach(button => {
     });
 });
 
+// == ЛОГІКА ДЛЯ ДОДАВАННЯ ПРОМІЖНИХ ТОЧОК ==
+const addStopBtn = document.getElementById('add-stop-btn');
+const stopsContainer = document.getElementById('intermediate-stops-container');
+let stopCounter = 0;
+
+addStopBtn?.addEventListener('click', () => {
+    stopCounter++;
+
+    // Створюємо новий блок для зупинки
+    const newStopDiv = document.createElement('div');
+    newStopDiv.className = 'intermediate-stop-group';
+    newStopDiv.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 0 12px;';
+
+    // Створюємо іконку
+    const icon = document.createElement('i');
+    icon.className = 'fa-solid fa-location-arrow';
+    icon.style.color = 'var(--md-on-surface-variant)';
+
+    // Створюємо поле вводу
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'form-input intermediate-stop-input';
+    input.placeholder = `Проміжна точка ${stopCounter}`;
+    input.style.flexGrow = '1';
+
+    // Створюємо кнопку видалення
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn-icon-action';
+    removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    removeBtn.style.cssText = 'width: 40px; height: 40px; flex-shrink: 0;';
+
+    // Додаємо логіку видалення
+    removeBtn.addEventListener('click', () => {
+        newStopDiv.remove();
+        // Перенумеруємо плейсхолдери, щоб було красиво
+        const remainingInputs = stopsContainer.querySelectorAll('.intermediate-stop-input');
+        stopCounter = 0;
+        remainingInputs.forEach(inp => {
+            stopCounter++;
+            inp.placeholder = `Проміжна точка ${stopCounter}`;
+        });
+    });
+
+    // Збираємо все разом
+    newStopDiv.appendChild(icon);
+    newStopDiv.appendChild(input);
+    newStopDiv.appendChild(removeBtn);
+
+    // Додаємо новий блок у контейнер
+    stopsContainer.appendChild(newStopDiv);
+});
+
 
 // == ЛОГІКА ДЛЯ ФІЛЬТРІВ "В-Х" (ПАСАЖИР) ==
 const vhFilterButtons = document.querySelectorAll('#passenger-valky-kharkiv-screen .btn-filter');
