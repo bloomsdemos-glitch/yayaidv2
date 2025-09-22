@@ -1526,6 +1526,20 @@ choiceFindPassengersBtn?.addEventListener('click', () => {
     displayDriverOrders();
 });
 
+// Обробники для екрану вибору типу поїздки
+const choiceValkyKharkivBtn = document.getElementById('choice-valky-kharkiv');
+const choiceCustomRouteBtn = document.getElementById('choice-custom-route');
+
+choiceValkyKharkivBtn?.addEventListener('click', () => {
+    // Переводимо водія на знайому нам форму створення пропозиції "Валки-Харків"
+    navigateTo('vh-driver-form-screen');
+});
+
+choiceCustomRouteBtn?.addEventListener('click', () => {
+    // Цей функціонал ми реалізуємо наступним кроком. Поки що покажемо сповіщення.
+    alert('Створення власного маршруту буде додано незабаром!');
+});
+
 
 // Обробник для кнопки "Назад" на екрані деталей активної поїздки водія
 document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEventListener('click', () => navigateTo('driver-orders-screen'));
