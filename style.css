@@ -1850,7 +1850,7 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 .menu-item-content i {
     margin-right: 12px;
 }
-/* --- Стилі для динамічної FAB-кнопки (v3) --- */
+/* --- Стилі для динамічної FAB-кнопки (v4 - фінальна) --- */
 .fab-content-wrapper {
     position: relative;
     width: 100%;
@@ -1858,11 +1858,13 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     display: flex;
     align-items: center;
     justify-content: center;
+    perspective: 1000px; /* Додаємо 3D-перспективу для спінера */
 }
 
 .fab-icon, .fab-text {
     position: absolute;
     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    backface-visibility: hidden; /* Ховаємо зворотню сторону під час обертання */
 }
 
 .fab-text {
@@ -1877,21 +1879,21 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 
 /* Анімація "спінера" для початкової іконки */
 #driver-fab-btn.is-flipping #fab-icon-initial {
-    transform: rotate(360deg) scale(0);
+    transform: rotateY(360deg) scale(0);
     opacity: 0;
 }
 
 /* Анімація перемикання між іконками і текстом "GO" (3 етапи) */
 @keyframes fab-cycle {
-    0%, 33.33% { opacity: 1; }
-    33.34%, 100% { opacity: 0; }
+    0%, 33.32% { opacity: 1; transform: scale(1); }
+    33.33%, 100% { opacity: 0; transform: scale(0.9); }
 }
 
-#driver-fab-btn.animate-loop #fab-icon-initial,
-#driver-fab-btn.animate-loop #fab-icon-anim,
-#driver-fab-btn.animate-loop #fab-text-anim {
-    animation: fab-cycle 4s linear infinite;
+#driver-fab-btn.animate-loop .fab-anim {
+    animation: fab-cycle 6s linear infinite;
 }
 
+/* Розносимо анімації в часі, щоб вони йшли одна за одною */
+#driver-fab-btn.animate-loop #fab-icon-initial { animation-delay: 0s; }
 #driver-fab-btn.animate-loop #fab-icon-anim { animation-delay: 2s; }
 #driver-fab-btn.animate-loop #fab-text-anim { animation-delay: 4s; }
