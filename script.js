@@ -1041,8 +1041,6 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     const fromSpecific = document.getElementById('vh-driver-form-from-specific').value.trim();
     const isFlexible = document.getElementById('vh-driver-flexible-route').checked;
     const seats = document.getElementById('vh-driver-seats-display').textContent;
-    const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
-    const seats = document.getElementById('vh-pass-seats-display').textContent;
 
 
 let time;
