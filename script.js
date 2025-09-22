@@ -2178,4 +2178,79 @@ function handleNotificationClick(userType) {
     navigateTo('notifications-screen');
 }
 
+// == ЛОГІКА ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) ==
+const profilePopup = document.getElementById('profile-popup');
+const driverProfileBadge = document.querySelector('#driver-home-screen .profile-badge');
+const passengerProfileBadge = document.querySelector('#passenger-home-screen .profile-badge');
+
+// Елементи всередині попапу
+const popupAvatarIcon = document.getElementById('popup-avatar-icon');
+const popupUserName = document.getElementById('popup-user-name');
+const popupUserDetails = document.getElementById('popup-user-details');
+const popupViewProfileBtn = document.getElementById('popup-view-profile-btn');
+
+function showProfilePopup(userType) {
+    if (!profilePopup) return;
+
+    if (userType === 'driver') {
+        const driver = drivers_database[0]; // Беремо нашого тестового водія
+        popupAvatarIcon.className = 'fa-solid fa-user-tie';
+        popupUserName.textContent = driver.name;
+        popupUserDetails.textContent = `${driver.rating.toFixed(1)} ★ • ${driver.trips} поїздок`;
+        // Кнопка в попапі буде вести на профіль водія
+        popupViewProfileBtn.onclick = () => {
+            displayDriverProfile(driver.id);
+            navigateTo('driver-profile-screen');
+            hideProfilePopup();
+        };
+    } else { // passenger
+        const passenger = passengers_database[0]; // Беремо нашу тестову пасажирку
+        popupAvatarIcon.className = 'fa-solid fa-user';
+        popupUserName.textContent = passenger.name;
+        popupUserDetails.textContent = `${passenger.trips} поїздок`;
+        // Кнопка в попапі буде вести на профіль пасажира
+        popupViewProfileBtn.onclick = () => {
+            displayPassengerProfile(passenger.id);
+            navigateTo('passenger-profile-screen');
+            hideProfilePopup();
+        };
+    }
+
+    profilePopup.classList.add('visible');
+}
+
+function hideProfilePopup() {
+    profilePopup?.classList.remove('visible');
+}
+
+// Обробники кліків на іконки в хедері
+driverProfileBadge?.addEventListener('click', (event) => {
+    event.stopPropagation(); // Зупиняємо "спливання" кліку
+    if (profilePopup.classList.contains('visible')) {
+        hideProfilePopup();
+    } else {
+        showProfilePopup('driver');
+    }
+});
+
+passengerProfileBadge?.addEventListener('click', (event) => {
+    event.stopPropagation(); // Зупиняємо "спливання" кліку
+    if (profilePopup.classList.contains('visible')) {
+        hideProfilePopup();
+    } else {
+        showProfilePopup('passenger');
+    }
+});
+
+// Дуже важлива логіка: ховаємо попап при кліку будь-де поза ним
+window.addEventListener('click', (event) => {
+    if (profilePopup?.classList.contains('visible')) {
+        // Якщо клік був не по самому попапу і не по іконці в хедері
+        if (!profilePopup.contains(event.target) && !driverProfileBadge.contains(event.target) && !passengerProfileBadge.contains(event.target)) {
+            hideProfilePopup();
+        }
+    }
+});
+
+
 });
