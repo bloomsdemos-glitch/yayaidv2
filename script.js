@@ -1042,10 +1042,6 @@ vhDriverFormSubmitBtn?.addEventListener('click', () => {
     const isFlexible = document.getElementById('vh-driver-flexible-route').checked;
     const seats = document.getElementById('vh-driver-seats-display').textContent;
 
-
-let time;
-//...
-
 let time;
     const activeTimeButton = document.querySelector('#vh-driver-form-screen .btn-segment.active');
     if (activeTimeButton) {
