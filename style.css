@@ -1966,3 +1966,45 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
 #popup-overlay.hidden {
     display: none;
 }
+/* === СТИЛІ ДЛЯ ЛІЧИЛЬНИКА МІСЦЬ (+/-) === */
+.seat-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 200px; /* Обмежимо ширину */
+    margin: 0 auto; /* Центруємо */
+    background-color: var(--md-surface-variant);
+    border-radius: var(--md-radius-large);
+    padding: 8px;
+}
+
+.seat-counter-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--md-surface);
+    color: var(--md-on-surface);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--elevation-1);
+    transition: transform 0.1s ease;
+}
+
+.seat-counter-btn:active {
+    transform: scale(0.95);
+}
+
+.seat-counter-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.seat-counter-display {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--md-on-surface);
+    user-select: none; /* Щоб не можна було виділити текст */
+}
