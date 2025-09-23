@@ -859,12 +859,17 @@ driverTabItems.forEach(item => {
             }
         }
 
-        if (target === 'driver-profile-screen') {
-            displayDriverProfile(1);
-            navigateTo(target); 
-        } else if (target) {
-            navigateTo(target);
-        }
+        // Новий, виправлений код:
+if (target === 'driver-profile-screen') {
+    displayDriverProfile(1);
+    navigateTo(target);
+} else if (target === 'driver-valky-kharkiv-screen') { // <-- Додаємо спеціальну перевірку
+    displayVhRequests(); // <-- Викликаємо "кур'єра", щоб оновити список
+    navigateTo(target);
+} else if (target) {
+    navigateTo(target);
+}
+
     });
 });
 
