@@ -2217,28 +2217,7 @@ submitRatingBtn?.addEventListener('click', () => {
     }
 });
 
-// == ЧІТЕРСЬКА ЛОГІКА ДЛЯ ШВИДКОЇ ЗМІНИ РОЛЕЙ (ДЛЯ ТЕСТУВАННЯ) ==
-const devSwitchToPassengerBtn = document.getElementById('dev-switch-to-passenger');
-const devSwitchToDriverBtn = document.getElementById('dev-switch-to-driver');
 
-devSwitchToPassengerBtn?.addEventListener('click', () => {
-    // Ховаємо все водійське
-    document.getElementById('driver-tab-bar').classList.add('hidden');
-    // Показуємо все пасажирське
-    document.getElementById('passenger-tab-bar').classList.remove('hidden');
-    navigateTo('passenger-home-screen');
-    updateHomeScreenView('passenger'); // <-- ОСЬ ЦЕЙ ВАЖЛИВИЙ РЯДОК
-});
-
-devSwitchToDriverBtn?.addEventListener('click', () => {
-    // Ховаємо все пасажирське
-    document.getElementById('passenger-tab-bar').classList.add('hidden');
-    // Показуємо все водійське
-    document.getElementById('driver-tab-bar').classList.remove('hidden');
-    navigateTo('driver-home-screen');
-    updateHomeScreenView('driver'); // <-- І ОСЬ ЦЕЙ
-    initDriverFabAnimation(); 
-});
 
 
 // =================================================================
