@@ -84,6 +84,7 @@ const custom_trips_database = []; // База для власних поїздо
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
+    const requestListContainer = document.getElementById('vh-passenger-request-list');
     const backButtons = document.querySelectorAll('.btn-back');
     const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
     const fabIconOnline = document.getElementById('fab-icon-online');
@@ -1278,7 +1279,7 @@ vhFilterButtons.forEach(button => {
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ЗАПИТІВ "В-Х" (ДЛЯ ВОДІЯ) ==
 function displayVhRequests() {
-    const requestListContainer = document.getElementById('vh-passenger-request-list');
+    // Зверни увагу: рядок const requestListContainer = ... звідси видалено!
     const placeholder = requestListContainer?.querySelector('.list-placeholder');
 
     if (!requestListContainer || !placeholder) return;
@@ -1326,13 +1327,12 @@ function displayVhRequests() {
                     <i class="fa-solid fa-clock"></i>
                     <span>${request.time}</span>
                 </div>
-                <button class="btn-main-action accept" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
+                <button class="btn-main-action accept" data-request-id="${request.id}" style="width: 100%; margin-top: 12px;">Відгукнутись</button>
             `;
 
-            // ОСЬ РЯДОК, ЯКОГО НЕ ВИСТАЧАЛО:
             requestListContainer.appendChild(li); 
         
-        }); // <-- І ОСЬ ПРАВИЛЬНА ЗАКРИВАЮЧА ДУЖКА
+        }); 
     }
 }
 
@@ -2242,6 +2242,25 @@ passengerProfileBadge?.addEventListener('click', () => {
 
 // Нова, надійна логіка закриття: клік по оверлею = закрити все
 popupOverlay?.addEventListener('click', hideProfilePopup);
+
+// == ЛОГІКА ДЛЯ КНОПКИ "ВІДГУКНУТИСЬ" (ОПТИМАЛЬНА ВЕРСІЯ) ==
+if (requestListContainer) {
+    requestListContainer.addEventListener('click', (event) => {
+        const targetButton = event.target.closest('.btn-main-action.accept[data-request-id]');
+        
+        if (!targetButton) return; // Якщо клік був не по кнопці, нічого не робимо
+
+        const requestId = targetButton.dataset.requestId;
+        const request = v_requests_database.find(r => r.id == requestId);
+        
+        if (request) {
+            console.log('Водій відгукнувся на запит:', request);
+            alert(`Ви відгукнулись на поїздку для "${request.seats}" осіб.`);
+            // Майбутня логіка створення поїздки буде тут
+        }
+    });
+}
+
 
 // == ЛОГІКА ДЛЯ УНІВЕРСАЛЬНОГО ЛІЧИЛЬНИКА МІСЦЬ (+/-) ==
 function setupSeatCounter(minusBtnId, plusBtnId, displayId, maxSeats = 4) {
