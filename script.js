@@ -2217,22 +2217,29 @@ submitRatingBtn?.addEventListener('click', () => {
     }
 });
 
-// == ЧІТЕРСЬКА КНОПКА ДЛЯ ТЕСТУВАННЯ ==
-const devCreateTestTripBtn = document.getElementById('dev-create-test-trip');
-devCreateTestTripBtn?.addEventListener('click', () => {
-    const testTrip = {
-        id: Date.now(),
-        passengerName: 'Тестовий Пасажир',
-        passengerRating: 5.0,
-        from: 'Точка А',
-        to: 'Точка Б',
-        time: 'Зараз'
-    };
-    active_trips_database.length = 0;
-    active_trips_database.push(testTrip);
-    alert('Тестову поїздку створено!');
-    showDriverOrdersBtn.click();
+// == ЧІТЕРСЬКА ЛОГІКА ДЛЯ ШВИДКОЇ ЗМІНИ РОЛЕЙ (ДЛЯ ТЕСТУВАННЯ) ==
+const devSwitchToPassengerBtn = document.getElementById('dev-switch-to-passenger');
+const devSwitchToDriverBtn = document.getElementById('dev-switch-to-driver');
+
+devSwitchToPassengerBtn?.addEventListener('click', () => {
+    // Ховаємо все водійське
+    document.getElementById('driver-tab-bar').classList.add('hidden');
+    // Показуємо все пасажирське
+    document.getElementById('passenger-tab-bar').classList.remove('hidden');
+    navigateTo('passenger-home-screen');
+    updateHomeScreenView('passenger'); // <-- ОСЬ ЦЕЙ ВАЖЛИВИЙ РЯДОК
 });
+
+devSwitchToDriverBtn?.addEventListener('click', () => {
+    // Ховаємо все пасажирське
+    document.getElementById('passenger-tab-bar').classList.add('hidden');
+    // Показуємо все водійське
+    document.getElementById('driver-tab-bar').classList.remove('hidden');
+    navigateTo('driver-home-screen');
+    updateHomeScreenView('driver'); // <-- І ОСЬ ЦЕЙ
+    initDriverFabAnimation(); 
+});
+
 
 // =================================================================
 // == ОБ'ЄДНАНИЙ БЛОК КЕРУВАННЯ ХЕДЕРАМИ (НОВА ВЕРСІЯ) ==
