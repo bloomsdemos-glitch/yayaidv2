@@ -2049,40 +2049,61 @@ driverStartTripBtn?.addEventListener('click', () => {
 });
 
 driverFinishTripBtn?.addEventListener('click', () => {
-    // Знаходимо активну поїздку, щоб її завершити
-    if (active_trips_database.length === 0) return;
-    const finishedTrip = active_trips_database[0];
+    // Знаходимо, яка саме поїздка активна - таксі чи попутка
+    const taxiTripIndex = active_trips_database.length > 0 ? 0 : -1;
+    const vhTripIndex = vh_active_trips.length > 0 ? 0 : -1;
 
-    // Додаємо поїздку в архів водія
-    driver_archive.push(finishedTrip);
-    // І в архів пасажира
-    passenger_archive.push(finishedTrip);
+    let finishedTrip;
+    let passengerId;
 
-    // Видаляємо поїздку з активних
-    active_trips_database.splice(0, 1);
-
-    // Тут в майбутньому буде логіка, яка покаже пасажиру екран оцінки
-    // А поки що просто сповістимо його
-    const newNotification = {
-        id: Date.now(),
-        userId: 1, // ID пасажира "Віта"
-        text: `<strong>Поїздку завершено.</strong> Дякуємо, що обрали наш сервіс!`,
-        type: 'trip_finished',
-        isRead: false
-    };
-    notifications_database.push(newNotification);
-
-    const passengerBadge = document.getElementById('passenger-notification-badge');
-    if (passengerBadge) {
-        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === 1).length;
-        passengerBadge.textContent = unreadCount;
-        passengerBadge.classList.remove('hidden');
+    if (taxiTripIndex > -1) {
+        finishedTrip = active_trips_database[0];
+        passengerId = finishedTrip.passengerId || 1; // Беремо ID пасажира
+        // Додаємо поїздку в архів
+        driver_archive.push(finishedTrip);
+        passenger_archive.push(finishedTrip);
+        // Видаляємо поїздку з активних
+        active_trips_database.splice(taxiTripIndex, 1);
+    } else if (vhTripIndex > -1) {
+        finishedTrip = vh_active_trips[0];
+        passengerId = finishedTrip.passengerId; // Беремо ID пасажира
+        // Додаємо поїздку в архів
+        driver_archive.push(finishedTrip);
+        passenger_archive.push(finishedTrip);
+        // Видаляємо поїздку з активних
+        vh_active_trips.splice(vhTripIndex, 1);
     }
 
-    alert('Поїздку завершено!');
+    if (!finishedTrip) {
+        alert('Помилка: не знайдено активних поїздок для завершення.');
+        return;
+    }
+
+    // Надсилаємо сповіщення пасажиру
+    const passenger = passengers_database.find(p => p.id === passengerId);
+    if (passenger) {
+        const newNotification = {
+            id: Date.now(),
+            userId: passenger.id,
+            text: `<strong>Поїздку завершено.</strong> Дякуємо, що обрали наш сервіс! Не забудьте оцінити водія.`,
+            type: 'trip_finished',
+            isRead: false
+        };
+        notifications_database.push(newNotification);
+        // Тут можна додати оновлення значка сповіщень
+    }
+
+    alert('Поїздку успішно завершено!');
+
+    // Скидаємо кнопки керування до початкового стану
+    driverArrivedBtn.classList.remove('disabled');
+    driverStartTripBtn.classList.add('disabled');
+    driverFinishTripBtn.classList.add('disabled');
+
     // Повертаємо водія на його головний екран
     navigateTo('driver-home-screen');
 });
+
 
 
 // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
