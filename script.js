@@ -1483,29 +1483,38 @@ function displayNotifications(userType) {
     }
 }
 
-// Функція, яка показує/ховає картку активної поїздки для водія v2.0 (клікабельна)
+// Функція, яка показує/ховає картку активної поїздки для водія v3.0 (працює з двома типами поїздок)
 function displayDriverActiveTrip() {
     const activeTripCard = document.getElementById('driver-active-trip-card');
     const noOrdersMsg = document.getElementById('no-active-driver-orders');
 
-    if (active_trips_database.length > 0) {
-        const trip = active_trips_database[0];
+    // Перевіряємо, чи є якась активна поїздка (або таксі, або попутка)
+    const taxiTrip = active_trips_database.length > 0 ? active_trips_database[0] : null;
+    const vhTrip = vh_active_trips.length > 0 ? vh_active_trips[0] : null;
+    const trip = taxiTrip || vhTrip; // Беремо першу знайдену поїздку
 
+    if (trip) {
         // Заповнюємо картку-прев'ю в "Моїх замовленнях"
         document.getElementById('driver-active-passenger-name').textContent = trip.passengerName;
-        document.getElementById('driver-active-passenger-rating').innerHTML = `${trip.passengerRating} <i class="fa-solid fa-star"></i>`;
-        document.getElementById('driver-active-from-address').textContent = trip.from;
-        document.getElementById('driver-active-to-address').textContent = trip.to;
+
+        const ratingElement = document.getElementById('driver-active-passenger-rating');
+        ratingElement.innerHTML = trip.passengerRating ? `${trip.passengerRating} <i class="fa-solid fa-star"></i>` : '';
+
+        // Встановлюємо маршрут
+        document.getElementById('driver-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
+        document.getElementById('driver-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
 
         // Робимо картку клікабельною
         activeTripCard.onclick = () => {
             // Заповнюємо даними детальний екран активної поїздки
             document.getElementById('details-active-passenger-name').textContent = trip.passengerName;
-            document.getElementById('details-active-passenger-rating').innerHTML = `${trip.passengerRating} <i class="fa-solid fa-star"></i>`;
-            document.getElementById('details-active-from-address').textContent = trip.from;
-            document.getElementById('details-active-to-address').textContent = trip.to;
 
-            // Переходимо на детальний екран
+            const detailsRatingEl = document.getElementById('details-active-passenger-rating');
+            detailsRatingEl.innerHTML = trip.passengerRating ? `${trip.passengerRating} <i class="fa-solid fa-star"></i>` : '';
+
+            document.getElementById('details-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
+            document.getElementById('details-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
+
             navigateTo('driver-active-trip-details-screen');
         };
 
@@ -1513,10 +1522,11 @@ function displayDriverActiveTrip() {
         if(noOrdersMsg) noOrdersMsg.style.display = 'none';
     } else {
         if(activeTripCard) activeTripCard.style.display = 'none';
-        if(activeTripCard) activeTripCard.onclick = null; // Прибираємо обробник, якщо поїздок немає
+        if(activeTripCard) activeTripCard.onclick = null;
         if(noOrdersMsg) noOrdersMsg.style.display = 'block';
     }
 }
+
 
 // == ЛОГІКА КНОПОК ПІДТВЕРДЖЕННЯ/ВІДХИЛЕННЯ ЗАМОВЛЕННЯ В-Х ==
 const vhConfirmBtn = document.getElementById('vh-confirm-btn');
