@@ -2339,56 +2339,56 @@ if (requestListContainer) {
         const request = vh_requests_database.find(r => r.id == requestId);
         
         if (request) {
-    const passenger = passengers_database.find(p => p.id === request.passengerId);
-    const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
+            const passenger = passengers_database.find(p => p.id === request.passengerId);
+            const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
 
-    const driverAvailableSeats = 4;
-    if (request.seats > driverAvailableSeats) {
-        alert(`Недостатньо місць. Пасажиру потрібно ${request.seats}, а у вас є ${driverAvailableSeats}.`);
-        return;
-    }
-
-    const newActiveVhTrip = {
-        ...request,
-        driverId: 1,
-        passengerName: passengerName
-    };
-
-    vh_active_trips.push(newActiveVhTrip);
-
-    const requestIndex = vh_requests_database.findIndex(r => r.id == requestId);
-    if (requestIndex > -1) {
-        vh_requests_database.splice(requestIndex, 1);
-    }
-
-    if (passenger) {
-        const newNotification = {
-            id: Date.now(),
-            userId: passenger.id,
-            text: `<strong>Ваш запит прийнято!</strong> Водій <strong>Сергій</strong> погодився на поїздку.`,
-            type: 'trip_confirmed',
-            isRead: false
-        };
-        notifications_database.push(newNotification);
-        
-        const passengerBadge = document.getElementById('passenger-notification-badge-home');
-        if (passengerBadge) {
-            const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
-            if (unreadCount > 0) {
-               passengerBadge.textContent = unreadCount;
-               passengerBadge.classList.remove('hidden');
+            const driverAvailableSeats = 4;
+            if (request.seats > driverAvailableSeats) {
+                alert(`Недостатньо місць. Пасажиру потрібно ${request.seats}, а у вас є ${driverAvailableSeats}.`);
+                return;
             }
-        }
-    }
-    
-    alert('Запит прийнято! Поїздка з\'явиться у розділі "Мої замовлення".');
-    updateHomeScreenView('driver'); // <-- Додано виклик
-    displayVhRequests();
-    navigateTo('driver-home-screen');
-}
 
+            const newActiveVhTrip = {
+                ...request,
+                driverId: 1,
+                passengerName: passengerName
+            };
+
+            vh_active_trips.push(newActiveVhTrip);
+
+            const requestIndex = vh_requests_database.findIndex(r => r.id == requestId);
+            if (requestIndex > -1) {
+                vh_requests_database.splice(requestIndex, 1);
+            }
+
+            if (passenger) {
+                const newNotification = {
+                    id: Date.now(),
+                    userId: passenger.id,
+                    text: `<strong>Ваш запит прийнято!</strong> Водій <strong>Сергій</strong> погодився на поїздку.`,
+                    type: 'trip_confirmed',
+                    isRead: false
+                };
+                notifications_database.push(newNotification);
+                
+                const passengerBadge = document.getElementById('passenger-notification-badge-home');
+                if (passengerBadge) {
+                    const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
+                    if (unreadCount > 0) {
+                       passengerBadge.textContent = unreadCount;
+                       passengerBadge.classList.remove('hidden');
+                    }
+                }
+            }
+            
+            alert('Запит прийнято! Поїздка з\'явиться у розділі "Мої замовлення".');
+            updateHomeScreenView('driver'); // <-- ПРАВИЛЬНЕ МІСЦЕ
+            displayVhRequests();
+            navigateTo('driver-home-screen');
+        }
     });
 }
+
 
 
 // == ЛОГІКА ДЛЯ УНІВЕРСАЛЬНОГО ЛІЧИЛЬНИКА МІСЦЬ (+/-) ==
