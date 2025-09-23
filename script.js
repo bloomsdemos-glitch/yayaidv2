@@ -939,18 +939,18 @@ vhTimeChoiceButtons.forEach(button => {
     });
 });
 
-// --- Логіка для кнопки "Опублікувати запит" v2.0 (ПРАВИЛЬНА) ---
+// == ЛОГІКА ДЛЯ КНОПКИ "ОПУБЛІКУВАТИ ЗАПИТ" (ПАСАЖИР) - ОНОВЛЕНО ==
 const vhFormSubmitBtn = document.getElementById('vh-form-submit-btn-specific');
-
 vhFormSubmitBtn?.addEventListener('click', () => {
-    // 1. Збираємо дані з форми (новий, правильний спосіб)
-    const fromLocation = vhFromLocationSpan?.textContent || 'Н/Д';
-    const toLocation = vhToLocationSpan?.textContent || 'Н/Д';
+    // Збираємо дані з форми
+    const fromLocation = document.getElementById('vh-from-location')?.querySelector('span')?.textContent || 'Н/Д';
+    const toLocation = document.getElementById('vh-to-location')?.querySelector('span')?.textContent || 'Н/Д';
     const direction = `${fromLocation} - ${toLocation}`;
-    
+
     const fromSpecific = document.getElementById('vh-form-from-address-specific').value.trim();
     const toSpecific = document.getElementById('vh-form-to-address-specific').value.trim();
-    
+    const seats = document.getElementById('vh-pass-seats-display').textContent;
+
     let time;
     const activeTimeButton = document.querySelector('#vh-passenger-form-screen .btn-segment.active');
     if (activeTimeButton) {
@@ -958,17 +958,17 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         if (choice === 'now') {
             time = 'Зараз';
         } else {
-            time = vhPickerInput?.value;
+            time = document.getElementById('vh-form-datetime-picker-specific').value;
         }
     }
 
-    // 2. Робимо базову перевірку
-    if (!time) {
-        alert('Будь ласка, оберіть час поїздки.');
+    // Перевірка
+    if (!time || !seats) {
+        alert('Будь ласка, оберіть час поїздки та вкажіть кількість місць.');
         return;
     }
 
-    // 3. Створюємо об'єкт запиту
+    // Створюємо об'єкт
     const newRequest = {
         id: Date.now(),
         passengerId: 1,
@@ -976,17 +976,15 @@ vhFormSubmitBtn?.addEventListener('click', () => {
         fromSpecific: fromSpecific,
         toSpecific: toSpecific,
         time: time,
-        seats: seats
+        seats: parseInt(seats)
     };
 
-    // 4. Додаємо запит в нашу "базу даних"
+    // Додаємо в базу і даємо фідбек
     vh_requests_database.push(newRequest);
-    console.log('Новий запит В-Х додано:', newRequest);
-
-    // 5. Сповіщаємо користувача і повертаємо на екран-список
     alert('Ваш запит успішно опубліковано!');
     navigateTo('passenger-valky-kharkiv-screen');
 });
+
 
 // == ЛОГІКА ДЛЯ ФОРМИ "ВАЛКИ-ХАРКІВ" (ВОДІЙ) ==
 
