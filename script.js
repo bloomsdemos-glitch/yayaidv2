@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-
+document.addEventListener('DOMContentLoaded', () => {loadState(); 
 let globalOrderStatus = 'searching';
 let fakeUserHasCard = false;
 let fakeDriverAcceptsCard = false;
@@ -82,6 +81,30 @@ const active_trips_database = [];
 const custom_trips_database = []; // База для власних поїздок водіїв
 
 const vh_active_trips = []; // База для активних поїздок "Валки-Харків"
+
+// == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
+function saveState() {
+    const state = {
+        passenger_archive,
+        driver_archive,
+        orders_database,
+        notifications_database,
+        vh_requests_database,
+        vh_offers_database,
+        vh_active_trips,
+        active_trips_database
+    };
+    sessionStorage.setItem('appState', JSON.stringify(state));
+}
+
+function loadState() {
+    const savedState = sessionStorage.getItem('appState');
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        Object.assign(window, state); // Це магія, яка завантажує все назад
+    }
+}
+
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -986,6 +1009,7 @@ vhFormSubmitBtn?.addEventListener('click', () => {
 
     // Додаємо в базу і даємо фідбек
     vh_requests_database.push(newRequest);
+    saveState();
     alert('Ваш запит успішно опубліковано!');
     navigateTo('passenger-valky-kharkiv-screen');
 });
@@ -1077,6 +1101,7 @@ let time;
 
     // 4. Додаємо пропозицію в нашу "базу даних"
     vh_offers_database.push(newOffer);
+    saveState();
     console.log('Нову пропозицію В-Х додано:', newOffer);
     console.log('Поточний стан бази пропозицій:', vh_offers_database);
 
@@ -1180,6 +1205,7 @@ customTripSubmitBtn?.addEventListener('click', () => {
 
     // -- КРОК 4: "Зберігаємо" поїздку і даємо фідбек --
     custom_trips_database.push(newCustomTrip);
+    saveState();
     console.log('Створено нову власну поїздку:', newCustomTrip);
     console.log('Поточна база власних поїздок:', custom_trips_database);
 
@@ -2140,6 +2166,7 @@ driverFinishTripBtn?.addEventListener('click', () => {
             isRead: false
         };
         notifications_database.push(newNotification);
+        saveState();
     }
 
     alert('Поїздку успішно завершено!');
@@ -2356,7 +2383,7 @@ if (requestListContainer) {
         isRead: false
     };
     notifications_database.push(newNotification);
-    
+    saveState();
     const passengerBadge = document.getElementById('passenger-notification-badge-home');
     if (passengerBadge) {
         const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
