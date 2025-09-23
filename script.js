@@ -2362,24 +2362,27 @@ if (requestListContainer) {
             }
 
             if (passenger) {
-                const newNotification = {
-                    id: Date.now(),
-                    userId: passenger.id,
-                    text: `<strong>Ваш запит прийнято!</strong> Водій <strong>Сергій</strong> погодився на поїздку.`,
-                    type: 'trip_confirmed',
-                    isRead: false
-                };
-                notifications_database.push(newNotification);
-                
-                const passengerBadge = document.getElementById('passenger-notification-badge-home');
-                if (passengerBadge) {
-                    const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
-                    if (unreadCount > 0) {
-                       passengerBadge.textContent = unreadCount;
-                       passengerBadge.classList.remove('hidden');
-                    }
-                }
-            }
+    const newNotification = {
+        id: Date.now(),
+        userId: passenger.id,
+        text: `<strong>Ваш запит прийнято!</strong> Водій <strong>Сергій</strong> погодився на поїздку.`,
+        type: 'trip_confirmed',
+        isRead: false
+    };
+    notifications_database.push(newNotification);
+    
+    const passengerBadge = document.getElementById('passenger-notification-badge-home');
+    if (passengerBadge) {
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
+        if (unreadCount > 0) {
+           passengerBadge.textContent = unreadCount;
+           passengerBadge.classList.remove('hidden');
+        }
+    }
+    
+    updateHomeScreenView('passenger'); 
+}
+
             
             alert('Запит прийнято! Поїздка з\'явиться у розділі "Мої замовлення".');
             updateHomeScreenView('driver'); // <-- ПРАВИЛЬНЕ МІСЦЕ
