@@ -1,1 +1,2 @@
-# yayaidv2
+яЇду 2.0 (prototype)
+2025 
