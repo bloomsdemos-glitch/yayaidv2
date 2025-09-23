@@ -692,20 +692,20 @@ function displayAvailableDrivers() {
 // --- Навігація ---
 showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
 showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
-driverTelegramLoginBtn?.addEventListener('click', () => {
-    navigateTo('driver-home-screen'); // <-- Змінили на новий екран
-    // Показуємо Tab Bar для водія
-    document.getElementById('driver-tab-bar').classList.remove('hidden');
 
-    // Запускаємо нашу нову анімацію!
+driverTelegramLoginBtn?.addEventListener('click', () => {
+    navigateTo('driver-home-screen');
+    document.getElementById('driver-tab-bar').classList.remove('hidden');
     initDriverFabAnimation();
+    updateHomeScreenView('driver'); // <-- ДОДАНО
 });
 
 passengerTelegramLoginBtn?.addEventListener('click', () => {
-    navigateTo('passenger-home-screen'); // <-- Змінили на новий екран
-    // Тимчасово показуємо Tab Bar для пасажира
+    navigateTo('passenger-home-screen');
     document.getElementById('passenger-tab-bar').classList.remove('hidden');
+    updateHomeScreenView('passenger'); // <-- ДОДАНО
 });
+
 
 
 
@@ -794,24 +794,24 @@ showPassengerProfileBtn?.addEventListener('click', () => {
     const passengerTabBar = document.getElementById('passenger-tab-bar');
     const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
 
-    function handleTabClick(clickedItem) {
-        passengerTabItems.forEach(item => item.classList.remove('active'));
-        clickedItem.classList.add('active');
-        const targetScreen = clickedItem.dataset.target;
-        
-        if (targetScreen === 'passenger-profile-screen') {
-            // Заповнюємо дані перед переходом
-            displayPassengerProfile(1);
-        }
+  function handleTabClick(clickedItem) {
+    passengerTabItems.forEach(item => item.classList.remove('active'));
+    clickedItem.classList.add('active');
+    const targetScreen = clickedItem.dataset.target;
 
-        if (targetScreen) {
-            navigateTo(targetScreen);
-        }
-
-        if (targetScreen === 'passenger-home-screen') {
-            updateHomeScreenView('passenger');
-        }
+    // Спершу викликаємо потрібні функції для оновлення контенту
+    if (targetScreen === 'passenger-profile-screen') {
+        displayPassengerProfile(1);
+    } else if (targetScreen === 'passenger-home-screen') {
+        updateHomeScreenView('passenger');
     }
+    
+    // А потім завжди виконуємо навігацію
+    if (targetScreen) {
+        navigateTo(targetScreen);
+    }
+}
+
 
     passengerTabItems?.forEach(item => {
         item.addEventListener('click', () => {
@@ -1486,6 +1486,62 @@ function displayNotifications(userType) {
     }
 }
 
+function createActiveTripCardHTML(trip, userType) {
+    const isDriver = userType === 'driver';
+    const title = isDriver ? 'Активне замовлення' : 'Активна поїздка';
+    const personName = isDriver ? trip.passengerName : 'Сергій'; // Поки що хардкод для водія
+    const personRole = isDriver ? 'Пасажир' : 'Водій';
+
+    return `
+        <div class="order-card active-trip" style="margin: 0; box-shadow: none; border-radius: 0;">
+            <div class="order-header" style="padding-bottom: 8px;">
+                <h3 class="order-title">${title}</h3>
+            </div>
+            <div class="route-addresses" style="font-size: 16px;">
+                <div class="address-line">
+                    <i class="fa-solid fa-circle start-address-icon"></i>
+                    <span>${trip.from || trip.direction.split(' - ')[0]}</span>
+                </div>
+                <div class="address-line">
+                    <i class="fa-solid fa-location-dot end-address-icon"></i>
+                    <span>${trip.to || trip.direction.split(' - ')[1]}</span>
+                </div>
+            </div>
+            <div class="driver-info" style="padding-top: 8px; border-top: 1px solid var(--md-outline);">
+                <span><strong>${personRole}:</strong> ${personName}</span>
+            </div>
+            <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+        </div>
+    `;
+}
+
+function updateHomeScreenView(userType) {
+    const menuContainer = document.getElementById(`${userType}-home-menu-container`);
+    const activeTripContainer = document.getElementById(`${userType}-home-active-trip-container`);
+
+    const taxiTrip = active_trips_database.length > 0 ? active_trips_database[0] : null;
+    const vhTrip = vh_active_trips.length > 0 ? vh_active_trips[0] : null;
+    const trip = taxiTrip || vhTrip;
+
+    if (trip) {
+        menuContainer.style.display = 'none';
+        activeTripContainer.style.display = 'block';
+        activeTripContainer.innerHTML = createActiveTripCardHTML(trip, userType);
+
+        const card = activeTripContainer.querySelector('.order-card');
+        if (card) {
+            card.onclick = () => {
+                const targetScreen = userType === 'driver' ? 'driver-orders-screen' : 'passenger-orders-screen';
+                navigateTo(targetScreen);
+            };
+        }
+    } else {
+        menuContainer.style.display = 'block';
+        activeTripContainer.style.display = 'none';
+    }
+}
+
+
 // Функція, яка показує/ховає картку активної поїздки для водія v3.0 (працює з двома типами поїздок)
 function displayDriverActiveTrip() {
     const activeTripCard = document.getElementById('driver-active-trip-card');
@@ -2049,7 +2105,6 @@ driverStartTripBtn?.addEventListener('click', () => {
 });
 
 driverFinishTripBtn?.addEventListener('click', () => {
-    // Знаходимо, яка саме поїздка активна - таксі чи попутка
     const taxiTripIndex = active_trips_database.length > 0 ? 0 : -1;
     const vhTripIndex = vh_active_trips.length > 0 ? 0 : -1;
 
@@ -2058,19 +2113,15 @@ driverFinishTripBtn?.addEventListener('click', () => {
 
     if (taxiTripIndex > -1) {
         finishedTrip = active_trips_database[0];
-        passengerId = finishedTrip.passengerId || 1; // Беремо ID пасажира
-        // Додаємо поїздку в архів
+        passengerId = finishedTrip.passengerId || 1;
         driver_archive.push(finishedTrip);
         passenger_archive.push(finishedTrip);
-        // Видаляємо поїздку з активних
         active_trips_database.splice(taxiTripIndex, 1);
     } else if (vhTripIndex > -1) {
         finishedTrip = vh_active_trips[0];
-        passengerId = finishedTrip.passengerId; // Беремо ID пасажира
-        // Додаємо поїздку в архів
+        passengerId = finishedTrip.passengerId;
         driver_archive.push(finishedTrip);
         passenger_archive.push(finishedTrip);
-        // Видаляємо поїздку з активних
         vh_active_trips.splice(vhTripIndex, 1);
     }
 
@@ -2079,7 +2130,6 @@ driverFinishTripBtn?.addEventListener('click', () => {
         return;
     }
 
-    // Надсилаємо сповіщення пасажиру
     const passenger = passengers_database.find(p => p.id === passengerId);
     if (passenger) {
         const newNotification = {
@@ -2090,19 +2140,20 @@ driverFinishTripBtn?.addEventListener('click', () => {
             isRead: false
         };
         notifications_database.push(newNotification);
-        // Тут можна додати оновлення значка сповіщень
     }
 
     alert('Поїздку успішно завершено!');
-
-    // Скидаємо кнопки керування до початкового стану
+    
     driverArrivedBtn.classList.remove('disabled');
     driverStartTripBtn.classList.add('disabled');
     driverFinishTripBtn.classList.add('disabled');
-
-    // Повертаємо водія на його головний екран
+    
+    updateHomeScreenView('driver');
+    updateHomeScreenView('passenger');
+    
     navigateTo('driver-home-screen');
 });
+
 
 
 
@@ -2288,52 +2339,54 @@ if (requestListContainer) {
         const request = vh_requests_database.find(r => r.id == requestId);
         
         if (request) {
-            const passenger = passengers_database.find(p => p.id === request.passengerId);
-            const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
+    const passenger = passengers_database.find(p => p.id === request.passengerId);
+    const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
 
-            const driverAvailableSeats = 4;
-            if (request.seats > driverAvailableSeats) {
-                alert(`Недостатньо місць. Пасажиру потрібно ${request.seats}, а у вас є ${driverAvailableSeats}.`);
-                return;
+    const driverAvailableSeats = 4;
+    if (request.seats > driverAvailableSeats) {
+        alert(`Недостатньо місць. Пасажиру потрібно ${request.seats}, а у вас є ${driverAvailableSeats}.`);
+        return;
+    }
+
+    const newActiveVhTrip = {
+        ...request,
+        driverId: 1,
+        passengerName: passengerName
+    };
+
+    vh_active_trips.push(newActiveVhTrip);
+
+    const requestIndex = vh_requests_database.findIndex(r => r.id == requestId);
+    if (requestIndex > -1) {
+        vh_requests_database.splice(requestIndex, 1);
+    }
+
+    if (passenger) {
+        const newNotification = {
+            id: Date.now(),
+            userId: passenger.id,
+            text: `<strong>Ваш запит прийнято!</strong> Водій <strong>Сергій</strong> погодився на поїздку.`,
+            type: 'trip_confirmed',
+            isRead: false
+        };
+        notifications_database.push(newNotification);
+        
+        const passengerBadge = document.getElementById('passenger-notification-badge-home');
+        if (passengerBadge) {
+            const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
+            if (unreadCount > 0) {
+               passengerBadge.textContent = unreadCount;
+               passengerBadge.classList.remove('hidden');
             }
-
-            const newActiveVhTrip = {
-                ...request,
-                driverId: 1,
-                passengerName: passengerName
-            };
-
-            vh_active_trips.push(newActiveVhTrip);
-
-            const requestIndex = vh_requests_database.findIndex(r => r.id == requestId);
-            if (requestIndex > -1) {
-                vh_requests_database.splice(requestIndex, 1);
-            }
-
-            if (passenger) {
-                const newNotification = {
-                    id: Date.now(),
-                    userId: passenger.id,
-                    text: `<strong>Ваш запит прийнято!</strong> Водій <strong>Сергій</strong> погодився на поїздку.`,
-                    type: 'trip_confirmed',
-                    isRead: false
-                };
-                notifications_database.push(newNotification);
-                
-                const passengerBadge = document.getElementById('passenger-notification-badge-home');
-                if (passengerBadge) {
-                    const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === passenger.id).length;
-                    if (unreadCount > 0) {
-                       passengerBadge.textContent = unreadCount;
-                       passengerBadge.classList.remove('hidden');
-                    }
-                }
-            }
-            
-            alert('Запит прийнято! Поїздка з\'явиться у розділі "Мої замовлення".');
-            displayVhRequests();
-            navigateTo('driver-home-screen');
         }
+    }
+    
+    alert('Запит прийнято! Поїздка з\'явиться у розділі "Мої замовлення".');
+    updateHomeScreenView('driver'); // <-- Додано виклик
+    displayVhRequests();
+    navigateTo('driver-home-screen');
+}
+
     });
 }
 
