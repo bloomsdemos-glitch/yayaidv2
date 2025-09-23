@@ -2350,5 +2350,26 @@ setupSeatCounter('vh-pass-minus-btn', 'vh-pass-plus-btn', 'vh-pass-seats-display
 setupSeatCounter('custom-trip-minus-btn', 'custom-trip-plus-btn', 'custom-trip-seats-display');
 setupSeatCounter('vh-driver-minus-btn', 'vh-driver-plus-btn', 'vh-driver-seats-display');
 
+// == ЧІТЕРСЬКА ЛОГІКА ДЛЯ ШВИДКОЇ ЗМІНИ РОЛЕЙ (ДЛЯ ТЕСТУВАННЯ) ==
+const devSwitchToPassengerBtn = document.getElementById('dev-switch-to-passenger');
+const devSwitchToDriverBtn = document.getElementById('dev-switch-to-driver');
+
+devSwitchToPassengerBtn?.addEventListener('click', () => {
+    // Ховаємо все водійське
+    document.getElementById('driver-tab-bar').classList.add('hidden');
+    // Показуємо все пасажирське
+    document.getElementById('passenger-tab-bar').classList.remove('hidden');
+    navigateTo('passenger-home-screen');
+});
+
+devSwitchToDriverBtn?.addEventListener('click', () => {
+    // Ховаємо все пасажирське
+    document.getElementById('passenger-tab-bar').classList.add('hidden');
+    // Показуємо все водійське
+    document.getElementById('driver-tab-bar').classList.remove('hidden');
+    navigateTo('driver-home-screen');
+    initDriverFabAnimation(); // Повторно запускаємо анімацію FAB-кнопки
+});
+
 
 });
