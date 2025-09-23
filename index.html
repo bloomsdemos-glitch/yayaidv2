@@ -111,24 +111,27 @@
             <span id="driver-notification-badge-home" class="badge hidden"></span>
         </div>
     </header>
-    <main id="driver-home-content" class="main-menu">
-         <nav class="main-menu">
-                    <button class="menu-item" id="show-driver-orders-btn">
-                        <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
-                        <span class="badge">3</span>
-                    </button>
-                    <button class="menu-item" id="show-find-passengers-btn">
-                        <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
-                        <span class="badge">8</span>
-                    </button>
-                    <button class="menu-item" id="show-driver-valky-kharkiv-btn">
-                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
-                    </button>
-                </nav>
-                <button id="dev-create-test-trip" style="margin: 20px auto; padding: 10px; background-color: var(--md-error); color: white; border: none; border-radius: 8px; cursor: pointer;">
-                    DEV: Створити тестову поїздку
-                </button>
-        </main>
+    <main id="driver-home-content">
+    <div id="driver-home-active-trip-container" style="display: none; padding: 0;">
+        </div>
+
+    <div id="driver-home-menu-container">
+        <nav class="main-menu">
+            <button class="menu-item" id="show-driver-orders-btn">
+                <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
+                <span class="badge">3</span>
+            </button>
+            <button class="menu-item" id="show-find-passengers-btn">
+                <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
+                <span class="badge">8</span>
+            </button>
+            <button class="menu-item" id="show-driver-valky-kharkiv-btn">
+                <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+            </button>
+        </nav>
+    </div>
+</main>
+
 </div>
 
 <div id="driver-create-choice-screen" class="screen hidden">
@@ -193,30 +196,33 @@
             <span id="passenger-notification-badge-home" class="badge hidden"></span>
         </div>
     </header>
-    <main id="passenger-home-content" class="main-menu">
+    <main id="passenger-home-content">
+    <div id="passenger-home-active-trip-container" style="display: none; padding: 0;">
+        </div>
+
+    <div id="passenger-home-menu-container">
         <nav class="main-menu">
-                    <button class="menu-item" id="show-my-orders-btn">
-                        <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
-                        <span class="badge">1</span>
-                    </button>
-                    <button class="menu-item" id="show-quick-order-btn">
-                        <span><i class="fa-solid fa-bolt"></i> Швидке замовлення</span>
-                    </button>
-                    <button class="menu-item" id="find-driver-btn">
-                        <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
-                        <span class="badge online">5</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-valky-kharkiv-btn">
-                        <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-bus-schedule-btn">
-                        <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
-                    </button>  
-                </nav>
-                   <button id="dev-create-test-trip" style="margin: 20px auto; padding: 10px; background-color: var(--md-error); color: white; border: none; border-radius: 8px; cursor: pointer;">
-                    DEV: Створити тестову поїздку
-                </button>
-        </main>
+            <button class="menu-item" id="show-my-orders-btn">
+                <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
+                <span class="badge">1</span>
+            </button>
+            <button class="menu-item" id="show-quick-order-btn">
+                <span><i class="fa-solid fa-bolt"></i> Швидке замовлення</span>
+            </button>
+            <button class="menu-item" id="find-driver-btn">
+                <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
+                <span class="badge online">5</span>
+            </button>
+            <button class="menu-item" id="show-passenger-valky-kharkiv-btn">
+                <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+            </button>
+            <button class="menu-item" id="show-passenger-bus-schedule-btn">
+                <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
+            </button>
+        </nav>
+    </div>
+</main>
+
         
 </div>
 
