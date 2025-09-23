@@ -2449,6 +2449,7 @@ devSwitchToPassengerBtn?.addEventListener('click', () => {
     // Показуємо все пасажирське
     document.getElementById('passenger-tab-bar').classList.remove('hidden');
     navigateTo('passenger-home-screen');
+    updateHomeScreenView('passenger'); // <-- ОСЬ ЦЕЙ ВАЖЛИВИЙ РЯДОК
 });
 
 devSwitchToDriverBtn?.addEventListener('click', () => {
@@ -2457,8 +2458,8 @@ devSwitchToDriverBtn?.addEventListener('click', () => {
     // Показуємо все водійське
     document.getElementById('driver-tab-bar').classList.remove('hidden');
     navigateTo('driver-home-screen');
-    initDriverFabAnimation(); // Повторно запускаємо анімацію FAB-кнопки
+    updateHomeScreenView('driver'); // <-- І ОСЬ ЦЕЙ
+    initDriverFabAnimation(); 
 });
-
 
 });
