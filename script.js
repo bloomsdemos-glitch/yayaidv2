@@ -69,9 +69,9 @@ let passengers_database = [
 
 let vh_requests_database = [];
 let vh_offers_database = [];
-let active_trips_database = [];
 let custom_trips_database = [];
-let vh_active_trips = [];
+let active_trips = []; // Єдина база для ВСІХ активних поїздок
+
 
 // == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
 function saveState() {
@@ -1528,12 +1528,14 @@ function displayNotifications(userType) {
 
 function createActiveTripCardHTML(trip, userType) {
     const isDriver = userType === 'driver';
-    const title = isDriver ? 'Активне замовлення' : 'Активна поїздка';
-    const personName = isDriver ? trip.passengerName : 'Сергій'; // Поки що хардкод для водія
+    const title = 'Активна поїздка';
+    const driver = drivers_database.find(d => d.id === trip.driverId);
+    const driverName = driver ? driver.name : 'Водій';
+    const personName = isDriver ? trip.passengerName : driverName;
     const personRole = isDriver ? 'Пасажир' : 'Водій';
 
     return `
-        <div class="order-card active-trip" style="margin: 0; box-shadow: none; border-radius: 0;">
+        <div class="order-card active-trip" style="margin: 0; cursor: pointer;">
             <div class="order-header" style="padding-bottom: 8px;">
                 <h3 class="order-title">${title}</h3>
             </div>
@@ -1550,7 +1552,6 @@ function createActiveTripCardHTML(trip, userType) {
             <div class="driver-info" style="padding-top: 8px; border-top: 1px solid var(--md-outline);">
                 <span><strong>${personRole}:</strong> ${personName}</span>
             </div>
-            <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
         </div>
     `;
 }
@@ -1558,10 +1559,7 @@ function createActiveTripCardHTML(trip, userType) {
 function updateHomeScreenView(userType) {
     const menuContainer = document.getElementById(`${userType}-home-menu-container`);
     const activeTripContainer = document.getElementById(`${userType}-home-active-trip-container`);
-
-    const taxiTrip = active_trips_database.length > 0 ? active_trips_database[0] : null;
-    const vhTrip = vh_active_trips.length > 0 ? vh_active_trips[0] : null;
-    const trip = taxiTrip || vhTrip;
+    const trip = active_trips.length > 0 ? active_trips[0] : null;
 
     if (trip) {
         menuContainer.style.display = 'none';
@@ -1571,8 +1569,12 @@ function updateHomeScreenView(userType) {
         const card = activeTripContainer.querySelector('.order-card');
         if (card) {
             card.onclick = () => {
-                const targetScreen = userType === 'driver' ? 'driver-orders-screen' : 'passenger-orders-screen';
-                navigateTo(targetScreen);
+                if (userType === 'driver') {
+                    displayDriverActiveTrip();
+                    navigateTo('driver-orders-screen');
+                } else {
+                    showMyOrdersBtn.click();
+                }
             };
         }
     } else {
@@ -1581,50 +1583,31 @@ function updateHomeScreenView(userType) {
     }
 }
 
-
-// Функція, яка показує/ховає картку активної поїздки для водія v3.0 (працює з двома типами поїздок)
 function displayDriverActiveTrip() {
     const activeTripCard = document.getElementById('driver-active-trip-card');
     const noOrdersMsg = document.getElementById('no-active-driver-orders');
-
-    // Перевіряємо, чи є якась активна поїздка (або таксі, або попутка)
-    const taxiTrip = active_trips_database.length > 0 ? active_trips_database[0] : null;
-    const vhTrip = vh_active_trips.length > 0 ? vh_active_trips[0] : null;
-    const trip = taxiTrip || vhTrip; // Беремо першу знайдену поїздку
+    const trip = active_trips.length > 0 ? active_trips[0] : null;
 
     if (trip) {
-        // Заповнюємо картку-прев'ю в "Моїх замовленнях"
-        document.getElementById('driver-active-passenger-name').textContent = trip.passengerName;
-
-        const ratingElement = document.getElementById('driver-active-passenger-rating');
-        ratingElement.innerHTML = trip.passengerRating ? `${trip.passengerRating} <i class="fa-solid fa-star"></i>` : '';
-
-        // Встановлюємо маршрут
-        document.getElementById('driver-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
-        document.getElementById('driver-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
-
-        // Робимо картку клікабельною
+        activeTripCard.querySelector('#driver-active-passenger-name').textContent = trip.passengerName;
+        activeTripCard.querySelector('#driver-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
+        activeTripCard.querySelector('#driver-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
+        
         activeTripCard.onclick = () => {
-            // Заповнюємо даними детальний екран активної поїздки
             document.getElementById('details-active-passenger-name').textContent = trip.passengerName;
-
-            const detailsRatingEl = document.getElementById('details-active-passenger-rating');
-            detailsRatingEl.innerHTML = trip.passengerRating ? `${trip.passengerRating} <i class="fa-solid fa-star"></i>` : '';
-
             document.getElementById('details-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
             document.getElementById('details-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
-
             navigateTo('driver-active-trip-details-screen');
         };
-
-        if(activeTripCard) activeTripCard.style.display = 'block';
-        if(noOrdersMsg) noOrdersMsg.style.display = 'none';
+        
+        activeTripCard.style.display = 'block';
+        noOrdersMsg.style.display = 'none';
     } else {
-        if(activeTripCard) activeTripCard.style.display = 'none';
-        if(activeTripCard) activeTripCard.onclick = null;
-        if(noOrdersMsg) noOrdersMsg.style.display = 'block';
+        activeTripCard.style.display = 'none';
+        noOrdersMsg.style.display = 'block';
     }
 }
+
 
 
 // == ЛОГІКА КНОПОК ПІДТВЕРДЖЕННЯ/ВІДХИЛЕННЯ ЗАМОВЛЕННЯ В-Х ==
@@ -1867,23 +1850,27 @@ document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEvent
     toAddressInput.addEventListener('input', checkAddressInputs);
     fromVillageSelect.addEventListener('change', checkAddressInputs);
     toVillageSelect.addEventListener('change', checkAddressInputs);
-    addressNextBtn.addEventListener('click', () => {
-        if (addressNextBtn.classList.contains('disabled')) return;
-        const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
-        const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
-        if (fromType === 'village') {
-            let fromAddress = fromVillageSelect.value;
-            if (fromAddressInput.value.trim() !== '') { fromAddress += `, ${fromAddressInput.value.trim()}`; }
-            orderData.from = fromAddress;
-        } else { orderData.from = fromAddressInput.value.trim(); }
-        if (toType === 'village') {
-            let toAddress = toVillageSelect.value;
-            if (toAddressInput.value.trim() !== '') { toAddress += `, ${toAddressInput.value.trim()}`; }
-            orderData.to = toAddress;
-        } else { orderData.to = toAddressInput.value.trim(); }
-        updateSummary();
-        goToStep('time');
-    });
+addressNextBtn.addEventListener('click', () => {
+    if (addressNextBtn.classList.contains('disabled')) return;
+    const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
+    const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
+    
+    let fromAddress = fromAddressInput.value.trim();
+    if (fromType === 'village' && fromVillageSelect.value) {
+        fromAddress = `${fromVillageSelect.value}, ${fromAddress}`;
+    }
+    orderData.from = fromAddress;
+
+    let toAddress = toAddressInput.value.trim();
+    if (toType === 'village' && toVillageSelect.value) {
+        toAddress = `${toVillageSelect.value}, ${toAddress}`;
+    }
+    orderData.to = toAddress;
+
+    updateSummary();
+    goToStep('time');
+});
+
 
     // КРОК 2: ЧАС
     editTimeBtn.addEventListener('click', () => {
@@ -2112,16 +2099,13 @@ backButtons.forEach(button => {
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
 
-// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) v3.0 - ЗІ СТАТУСАМИ ===
+// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) v4.0 - УНІФІКОВАНО ===
 driverArrivedBtn?.addEventListener('click', () => {
-    const trip = vh_active_trips[0] || active_trips_database[0];
-    if (!trip) return;
-
-    // Оновлюємо статус поїздки і зберігаємо
-    trip.status = 'arrived';
+    if (active_trips.length === 0) return;
+    active_trips[0].status = 'arrived';
     saveState();
-
-    // Створюємо і зберігаємо сповіщення для пасажира
+    
+    const trip = active_trips[0];
     const newNotification = {
         id: Date.now(),
         userId: trip.passengerId || 1,
@@ -2130,9 +2114,8 @@ driverArrivedBtn?.addEventListener('click', () => {
         isRead: false
     };
     notifications_database.push(newNotification);
-    saveState(); // Зберігаємо ще раз після додавання сповіщення
+    saveState();
 
-    // Оновлюємо значок сповіщень у пасажира
     const passengerBadge = document.getElementById('passenger-notification-badge-home');
     if (passengerBadge) {
         const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === (trip.passengerId || 1)).length;
@@ -2148,45 +2131,26 @@ driverArrivedBtn?.addEventListener('click', () => {
 });
 
 driverStartTripBtn?.addEventListener('click', () => {
-    const trip = vh_active_trips[0] || active_trips_database[0];
-    if (!trip) return;
-
-    // Оновлюємо статус поїздки на "в дорозі" і зберігаємо
-    trip.status = 'in_progress';
+    if (active_trips.length === 0) return;
+    active_trips[0].status = 'in_progress';
     saveState();
-
     alert('Поїздку розпочато!');
     driverStartTripBtn.classList.add('disabled');
     driverFinishTripBtn.classList.remove('disabled');
 });
 
 driverFinishTripBtn?.addEventListener('click', () => {
-    const taxiTripIndex = active_trips_database.length > 0 ? 0 : -1;
-    const vhTripIndex = vh_active_trips.length > 0 ? 0 : -1;
-
-    let finishedTrip;
-    let passengerId;
-
-    if (taxiTripIndex > -1) {
-        finishedTrip = active_trips_database[0];
-        passengerId = finishedTrip.passengerId || 1;
-        driver_archive.push(finishedTrip);
-        passenger_archive.push(finishedTrip);
-        active_trips_database.splice(taxiTripIndex, 1);
-    } else if (vhTripIndex > -1) {
-        finishedTrip = vh_active_trips[0];
-        passengerId = finishedTrip.passengerId;
-        driver_archive.push(finishedTrip);
-        passenger_archive.push(finishedTrip);
-        vh_active_trips.splice(vhTripIndex, 1);
-    }
-
-    if (!finishedTrip) {
+    if (active_trips.length === 0) {
         alert('Помилка: не знайдено активних поїздок для завершення.');
         return;
     }
-
-    saveState(); // Зберігаємо стан ПІСЛЯ видалення поїздки з активних
+    const finishedTrip = active_trips[0];
+    const passengerId = finishedTrip.passengerId;
+    
+    driver_archive.push(finishedTrip);
+    passenger_archive.push(finishedTrip);
+    active_trips.splice(0, 1);
+    saveState();
 
     const passenger = passengers_database.find(p => p.id === passengerId);
     if (passenger) {
@@ -2198,7 +2162,7 @@ driverFinishTripBtn?.addEventListener('click', () => {
             isRead: false
         };
         notifications_database.push(newNotification);
-        saveState(); // Зберігаємо ще раз після додавання сповіщення
+        saveState();
     }
 
     alert('Поїздку успішно завершено!');
@@ -2212,6 +2176,7 @@ driverFinishTripBtn?.addEventListener('click', () => {
     
     navigateTo('driver-home-screen');
 });
+
 
 
 
@@ -2437,6 +2402,24 @@ if (requestListContainer) {
     });
 }
 
+const devCreateTestTripBtn = document.getElementById('dev-create-test-trip');
+devCreateTestTripBtn?.addEventListener('click', () => {
+    const testTrip = {
+        id: Date.now(),
+        passengerId: 1,
+        passengerName: 'Тестовий Пасажир',
+        passengerRating: 5.0,
+        from: 'Точка А (тест)',
+        to: 'Точка Б (тест)',
+        time: 'Зараз',
+        type: 'taxi' // Додаємо тип, щоб відрізняти
+    };
+    active_trips = [testTrip]; // Перезаписуємо базу, щоб була тільки одна тестова поїздка
+    saveState();
+    alert('Тестову поїздку створено!');
+    updateHomeScreenView('driver');
+    updateHomeScreenView('passenger');
+});
 
 
 // == ЛОГІКА ДЛЯ УНІВЕРСАЛЬНОГО ЛІЧИЛЬНИКА МІСЦЬ (+/-) ==
