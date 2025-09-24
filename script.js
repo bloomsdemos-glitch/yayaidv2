@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {loadState(); 
-let globalOrderStatus = 'searching';
 let fakeUserHasCard = false;
 let fakeDriverAcceptsCard = false;
 let passenger_archive = []; // Архів для пасажира
@@ -329,41 +328,6 @@ function resetQuickOrder() {
             addressNextBtn.classList.add('disabled');
         }
     }
-    // == ЛОГІКА ДЛЯ ЕКРАНУ "МОЇ ПОЇЗДКИ" (ПАСАЖИР) ==
-    function runActiveTripSimulation() {
-        if (window.tripInterval) clearInterval(window.tripInterval);
-        const activeCard = document.querySelector('#active-trip-card');
-        if (!activeCard || activeCard.style.display === 'none') return;
-        const statusIcon = activeCard.querySelector('#status-icon');
-        const statusText = activeCard.querySelector('#status-text');
-        const carIcon = activeCard.querySelector('#car-icon');
-        const dotsContainer = activeCard.querySelector('.dots-container');
-        const endPoint = activeCard.querySelector('#progress-end-point');
-        const totalDurationSeconds = 15;
-        let progress = 0;
-        statusIcon.className = 'fa-solid fa-spinner fa-spin';
-        statusText.textContent = 'Водій прямує до вас';
-        endPoint.classList.remove('arrived');
-        carIcon.style.left = '0%';
-        dotsContainer.innerHTML = '';
-        for (let i = 0; i < 18; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            dotsContainer.appendChild(dot);
-        }
-        window.tripInterval = setInterval(() => {
-            progress += (100 / (totalDurationSeconds * 4));
-            if (progress >= 100) {
-                clearInterval(window.tripInterval);
-                carIcon.style.left = '100%';
-                statusIcon.className = 'fa-solid fa-circle-check';
-                statusText.textContent = 'Водій прибув';
-                endPoint.classList.add('arrived');
-                return;
-            }
-            carIcon.style.left = `${progress}%`;
-        }, 500);
-    }
 
     // == ЛОГІКА ДЛЯ ЕКРАНУ "ШУКАЮТЬ ВОДІЯ" ==
 
@@ -435,42 +399,34 @@ function displayDriverOrders() {
     const acceptOrderBtn = document.getElementById('accept-order-btn');
     const declineOrderBtn = document.getElementById('decline-order-btn');
 
+// === ОНОВЛЕНА ЛОГІКА ПРИЙНЯТТЯ ЗВИЧАЙНОГО ЗАМОВЛЕННЯ ===
 if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
-    globalOrderStatus = 'trip_active';
+    // Створюємо повноцінний об'єкт поїздки
+    const newTaxiTrip = {
+        id: Date.now(),
+        driverId: 1, // Поки хардкод
+        passengerId: 1, // Поки хардкод
+        passengerName: 'Олена', // Поки хардкод
+        from: document.getElementById('details-from-address').textContent,
+        to: document.getElementById('details-to-address').textContent,
+        time: 'Зараз',
+        type: 'taxi'
+    };
 
-    // === НОВИЙ КОД: ОНОВЛЮЄМО ЕКРАН ПАСАЖИРА ===
-    const passengerSearchingCard = document.getElementById('searching-card');
-    const passengerActiveCard = document.getElementById('active-trip-card');
-    if (passengerSearchingCard && passengerActiveCard) {
-        passengerSearchingCard.style.display = 'none';
-        passengerActiveCard.style.display = 'block';
-        runActiveTripSimulation(); // Запускаємо анімацію машинки
-    }
-    // === КІНЕЦЬ НОВОГО КОДУ ===
+    // Додаємо його в ЄДИНУ базу активних поїздок
+    active_trips.push(newTaxiTrip);
+    saveState(); // Зберігаємо стан
 
-    const activeCard = document.getElementById('driver-active-trip-card');
-    if(activeCard) {
-        document.getElementById('driver-active-passenger-name').textContent = order.passengerName;
-        document.getElementById('driver-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
-        document.getElementById('driver-active-from-address').textContent = order.from;
-        document.getElementById('driver-active-to-address').textContent = order.to;
-        activeCard.style.display = 'block';
+    // Оновлюємо вигляд головних екранів
+    updateHomeScreenView('driver');
+    updateHomeScreenView('passenger');
 
-        activeCard.onclick = () => {
-            document.getElementById('details-active-passenger-name').textContent = order.passengerName;
-            document.getElementById('details-active-passenger-rating').innerHTML = `${order.rating} <i class="fa-solid fa-star"></i>`;
-            document.getElementById('details-active-from-address').textContent = order.from;
-            document.getElementById('details-active-to-address').textContent = order.to;
-            navigateTo('driver-active-trip-details-screen');
-        };
-    }
-
-    const noOrdersMsg = document.getElementById('no-active-driver-orders');
-    if(noOrdersMsg) noOrdersMsg.style.display = 'none';
-
-    navigateTo('driver-orders-screen'); 
+    // Переходимо на екран "Мої замовлення" водія
+    displayDriverActiveTrip();
+    navigateTo('driver-orders-screen');
     alert('Замовлення прийнято!');
 };
+
 
 if(declineOrderBtn) declineOrderBtn.onclick = () => {
     navigateTo('driver-find-passengers-screen');
@@ -2374,7 +2330,7 @@ if (requestListContainer) {
                 passengerName: passengerName
             };
 
-            vh_active_trips.push(newActiveVhTrip);
+            active_trips.push(newActiveVhTrip);
 
             const requestIndex = vh_requests_database.findIndex(r => r.id == requestId);
             if (requestIndex > -1) {
