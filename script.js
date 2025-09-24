@@ -9,8 +9,8 @@ let currentOfferIdForConfirmation = null;
 let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
 
 
-// Тимчасова база даних водіїв
-const drivers_database = [
+// Тимчасові бази даних (ВАЖЛИВО: всі через LET)
+let drivers_database = [
     {
         id: 1,
         name: 'Сергій Авдєєв',
@@ -45,42 +45,33 @@ const drivers_database = [
     {
         id: 3,
         name: 'Максим Новенький',
-        rating: 0, // Рейтинг 0, бо ще немає поїздок
-        trips: 3,  // Мало поїздок
+        rating: 0,
+        trips: 3,
         car: 'Daewoo Lanos, зелений',
         tags: [
             { icon: 'fa-solid fa-music', text: 'Поп-музика' }
         ],
-        reviews: [] // Відгуків ще немає
+        reviews: []
     }
 ];
 
-// Тимчасова база даних для всіх сповіщень
-const notifications_database = [];
+let notifications_database = [];
 
-
-// Тимчасова база даних пасажирів
-const passengers_database = [
+let passengers_database = [
     {
         id: 1,
         name: 'Віта Білецька',
         trips: 27,
         bio: 'Валки.',
-        reviews: [] // Поки що відгуків немає
+        reviews: []
     }
 ];
 
-// Тимчасова база даних запитів на поїздки Валки-Харків
-const vh_requests_database = [];
-// Тимчасова база даних пропозицій від водіїв на маршруті В-Х
-const vh_offers_database = [];
-
-// Тимчасова база даних для активних поїздок
-const active_trips_database = [];
-
-const custom_trips_database = []; // База для власних поїздок водіїв
-
-const vh_active_trips = []; // База для активних поїздок "Валки-Харків"
+let vh_requests_database = [];
+let vh_offers_database = [];
+let active_trips_database = [];
+let custom_trips_database = [];
+let vh_active_trips = [];
 
 // == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
 function saveState() {
