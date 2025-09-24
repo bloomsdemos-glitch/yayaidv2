@@ -725,68 +725,19 @@ passengerTelegramLoginBtn?.addEventListener('click', () => {
 
 // Кнопка на екрані підтвердження, яка веде в "Мої поїздки"
 goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
-
-// --- Навігація ПАСАЖИРА ---
-showMyOrdersBtn?.addEventListener('click', () => {
-    displayArchives(); // Оновлюємо архів, це правильно
-
-    // Знаходимо реальну активну поїздку (таксі або попутка)
-    const trip = vh_active_trips[0] || active_trips_database[0];
-    
-    const searchingCard = document.getElementById('searching-card');
-    const activeTripCard = document.getElementById('active-trip-card');
-    
-    if (trip) {
-        // Якщо поїздка є, показуємо картку і заповнюємо її РЕАЛЬНИМИ даними
-        searchingCard.style.display = 'none';
-        activeTripCard.style.display = 'block';
-
-        const statusIcon = activeTripCard.querySelector('#status-icon');
-        const statusText = activeTripCard.querySelector('#status-text');
-        const carIcon = activeTripCard.querySelector('#car-icon');
-        const endPoint = activeTripCard.querySelector('#progress-end-point');
-
-        // Оновлюємо вигляд картки залежно від статусу, який встановив водій
-        if (trip.status === 'in_progress') {
-            statusText.textContent = 'Ви в дорозі';
-            statusIcon.className = 'fa-solid fa-route';
-            carIcon.style.left = '50%';
-            endPoint.classList.remove('arrived');
-        } else if (trip.status === 'arrived') {
-            statusText.textContent = 'Водій прибув і очікує';
-            statusIcon.className = 'fa-solid fa-street-view';
-            carIcon.style.left = '100%';
-            endPoint.classList.add('arrived');
-        } else { // Статус за замовчуванням (водій прямує до вас)
-            statusText.textContent = 'Водій прямує до вас';
-            statusIcon.className = 'fa-solid fa-car-side';
-            carIcon.style.left = '0%';
-            endPoint.classList.remove('arrived');
-        }
-    } else {
-        // Якщо активних поїздок немає, ховаємо обидві картки
-        searchingCard.style.display = 'none';
-        activeTripCard.style.display = 'none';
-    }
-
-    navigateTo('passenger-orders-screen');
-});
-
-
-showPassengerValkyKharkivBtn?.addEventListener('click', () => {
-    // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.0 ==
-function displayVhOffers(filter = 'all') { // Додали параметр фільтру
+// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.2 ==
+// ПРИМІТКА: ми винесли цю функцію з обробника кліків, бо так правильно
+function displayVhOffers(filter = 'all') {
     const offerListContainer = document.getElementById('vh-driver-list');
     const placeholder = offerListContainer?.querySelector('.list-placeholder');
 
     if (!offerListContainer || !placeholder) return;
 
-    // Фільтруємо базу даних перед відображенням
     const filteredOffers = vh_offers_database.filter(offer => {
-        if (filter === 'all') {
-            return true; // Якщо фільтр 'all', показуємо всі
-        }
-        return offer.direction === filter; // Інакше - тільки ті, що збігаються
+        if (filter === 'all') return true;
+        if (filter === 'vk') return offer.direction.startsWith('Валки');
+        if (filter === 'kv') return offer.direction.startsWith('Харків');
+        return false;
     });
 
     offerListContainer.innerHTML = '';
@@ -797,7 +748,6 @@ function displayVhOffers(filter = 'all') { // Додали параметр фі
         placeholder.textContent = 'За цим напрямком пропозицій поки немає.';
     } else {
         placeholder.style.display = 'none';
-
         filteredOffers.forEach(offer => {
             const driver = drivers_database.find(d => d.id === offer.driverId);
             if (!driver) return;
@@ -810,15 +760,75 @@ function displayVhOffers(filter = 'all') { // Додали параметр фі
                 <div class="driver-info">
                     <h4>${driver.name}</h4>
                     <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
-                    <small class="status-available">${offer.time}</small>
+                    <small class="status-available">${offer.time} • <i class="fa-solid fa-user-group"></i> ${offer.seats} вільних</small>
                 </div>
-                <button class="btn-main-action accept" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
+                <button class="btn-main-action accept select-offer-btn" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
             `;
+
+            const selectBtn = li.querySelector('.select-offer-btn');
+            selectBtn.addEventListener('click', () => {
+                selectOffer(offer.id);
+            });
+
             offerListContainer.appendChild(li);
         });
     }
 }
 
+// --- Навігація ПАСАЖИРА (ПОВНА І ВИПРАВЛЕНА ВЕРСІЯ) ---
+showMyOrdersBtn?.addEventListener('click', () => {
+    displayArchives();
+    
+    const trip = active_trips.length > 0 ? active_trips[0] : null;
+    
+    const searchingCard = document.getElementById('searching-card');
+    const activeTripCard = document.getElementById('active-trip-card');
+    
+    if (trip) {
+        searchingCard.style.display = 'none';
+        activeTripCard.style.display = 'block';
+
+        const statusIcon = activeTripCard.querySelector('#status-icon');
+        const statusText = activeTripCard.querySelector('#status-text');
+        const carIcon = activeTripCard.querySelector('#car-icon');
+        const endPoint = activeTripCard.querySelector('#progress-end-point');
+
+        if (trip.status === 'in_progress') {
+            statusText.textContent = 'Ви в дорозі';
+            statusIcon.className = 'fa-solid fa-route';
+            carIcon.style.left = '50%';
+            endPoint.classList.remove('arrived');
+        } else if (trip.status === 'arrived') {
+            statusText.textContent = 'Водій прибув і очікує';
+            statusIcon.className = 'fa-solid fa-street-view';
+            carIcon.style.left = '100%';
+            endPoint.classList.add('arrived');
+        } else {
+            statusText.textContent = 'Водій прямує до вас';
+            statusIcon.className = 'fa-solid fa-car-side';
+            carIcon.style.left = '0%';
+            endPoint.classList.remove('arrived');
+        }
+    } else {
+        searchingCard.style.display = 'none';
+        activeTripCard.style.display = 'none';
+    }
+
+    navigateTo('passenger-orders-screen');
+});
+
+showQuickOrderBtn?.addEventListener('click', () => {
+    navigateTo('quick-order-screen');
+    resetQuickOrder();
+});
+
+findDriverBtn?.addEventListener('click', () => {
+    displayAvailableDrivers();
+    navigateTo('passenger-find-driver-screen');
+});
+
+showPassengerValkyKharkivBtn?.addEventListener('click', () => {
+    displayVhOffers(); // Тепер просто викликаємо функцію
     navigateTo('passenger-valky-kharkiv-screen');
 });
 
