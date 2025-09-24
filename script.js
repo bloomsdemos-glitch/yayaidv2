@@ -728,27 +728,50 @@ goToMyOrdersBtn?.addEventListener('click', () => showMyOrdersBtn.click());
 
 // --- Навігація ПАСАЖИРА ---
 showMyOrdersBtn?.addEventListener('click', () => {
-    displayArchives();
-    navigateTo('passenger-orders-screen');
+    displayArchives(); // Оновлюємо архів, це правильно
+
+    // Знаходимо реальну активну поїздку (таксі або попутка)
+    const trip = vh_active_trips[0] || active_trips_database[0];
+    
     const searchingCard = document.getElementById('searching-card');
     const activeTripCard = document.getElementById('active-trip-card');
-    if (globalOrderStatus === 'searching') {
-        if(searchingCard) searchingCard.style.display = 'block';
-        if(activeTripCard) activeTripCard.style.display = 'none';
+    
+    if (trip) {
+        // Якщо поїздка є, показуємо картку і заповнюємо її РЕАЛЬНИМИ даними
+        searchingCard.style.display = 'none';
+        activeTripCard.style.display = 'block';
+
+        const statusIcon = activeTripCard.querySelector('#status-icon');
+        const statusText = activeTripCard.querySelector('#status-text');
+        const carIcon = activeTripCard.querySelector('#car-icon');
+        const endPoint = activeTripCard.querySelector('#progress-end-point');
+
+        // Оновлюємо вигляд картки залежно від статусу, який встановив водій
+        if (trip.status === 'in_progress') {
+            statusText.textContent = 'Ви в дорозі';
+            statusIcon.className = 'fa-solid fa-route';
+            carIcon.style.left = '50%';
+            endPoint.classList.remove('arrived');
+        } else if (trip.status === 'arrived') {
+            statusText.textContent = 'Водій прибув і очікує';
+            statusIcon.className = 'fa-solid fa-street-view';
+            carIcon.style.left = '100%';
+            endPoint.classList.add('arrived');
+        } else { // Статус за замовчуванням (водій прямує до вас)
+            statusText.textContent = 'Водій прямує до вас';
+            statusIcon.className = 'fa-solid fa-car-side';
+            carIcon.style.left = '0%';
+            endPoint.classList.remove('arrived');
+        }
     } else {
-        if(searchingCard) searchingCard.style.display = 'none';
-        if(activeTripCard) activeTripCard.style.display = 'block';
-        runActiveTripSimulation();
+        // Якщо активних поїздок немає, ховаємо обидві картки
+        searchingCard.style.display = 'none';
+        activeTripCard.style.display = 'none';
     }
+
+    navigateTo('passenger-orders-screen');
 });
-showQuickOrderBtn?.addEventListener('click', () => {
-    navigateTo('quick-order-screen');
-    resetQuickOrder();
-});
-findDriverBtn?.addEventListener('click', () => {
-    displayAvailableDrivers(); // <-- Ось це ми додали
-    navigateTo('passenger-find-driver-screen');
-});
+
 
 showPassengerValkyKharkivBtn?.addEventListener('click', () => {
     // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ПРОПОЗИЦІЙ "В-Х" (ДЛЯ ПАСАЖИРА) v2.0 ==
@@ -2089,24 +2112,34 @@ backButtons.forEach(button => {
         pathDots.addEventListener('animationiteration', swapPinIcons);
     }
 
-// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) v2.0 ===
+// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) v3.0 - ЗІ СТАТУСАМИ ===
 driverArrivedBtn?.addEventListener('click', () => {
-    // Створюємо сповіщення для пасажира
+    const trip = vh_active_trips[0] || active_trips_database[0];
+    if (!trip) return;
+
+    // Оновлюємо статус поїздки і зберігаємо
+    trip.status = 'arrived';
+    saveState();
+
+    // Створюємо і зберігаємо сповіщення для пасажира
     const newNotification = {
         id: Date.now(),
-        userId: 1, // ID пасажира "Віта"
+        userId: trip.passengerId || 1,
         text: `<strong>Водій прибув!</strong> Ваш водій очікує на вас.`,
         type: 'driver_arrived',
         isRead: false
     };
     notifications_database.push(newNotification);
+    saveState(); // Зберігаємо ще раз після додавання сповіщення
 
     // Оновлюємо значок сповіщень у пасажира
-    const passengerBadge = document.getElementById('passenger-notification-badge');
+    const passengerBadge = document.getElementById('passenger-notification-badge-home');
     if (passengerBadge) {
-        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === 1).length;
-        passengerBadge.textContent = unreadCount;
-        passengerBadge.classList.remove('hidden');
+        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === (trip.passengerId || 1)).length;
+        if (unreadCount > 0) {
+            passengerBadge.textContent = unreadCount;
+            passengerBadge.classList.remove('hidden');
+        }
     }
 
     alert('Пасажира сповіщено, що ви прибули!');
@@ -2115,10 +2148,16 @@ driverArrivedBtn?.addEventListener('click', () => {
 });
 
 driverStartTripBtn?.addEventListener('click', () => {
+    const trip = vh_active_trips[0] || active_trips_database[0];
+    if (!trip) return;
+
+    // Оновлюємо статус поїздки на "в дорозі" і зберігаємо
+    trip.status = 'in_progress';
+    saveState();
+
     alert('Поїздку розпочато!');
     driverStartTripBtn.classList.add('disabled');
     driverFinishTripBtn.classList.remove('disabled');
-    // В майбутньому тут можна додати сповіщення для пасажира
 });
 
 driverFinishTripBtn?.addEventListener('click', () => {
@@ -2147,6 +2186,8 @@ driverFinishTripBtn?.addEventListener('click', () => {
         return;
     }
 
+    saveState(); // Зберігаємо стан ПІСЛЯ видалення поїздки з активних
+
     const passenger = passengers_database.find(p => p.id === passengerId);
     if (passenger) {
         const newNotification = {
@@ -2157,7 +2198,7 @@ driverFinishTripBtn?.addEventListener('click', () => {
             isRead: false
         };
         notifications_database.push(newNotification);
-        saveState();
+        saveState(); // Зберігаємо ще раз після додавання сповіщення
     }
 
     alert('Поїздку успішно завершено!');
