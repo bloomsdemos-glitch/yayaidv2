@@ -141,68 +141,52 @@ const choiceCreateTripBtn = document.getElementById('choice-create-trip');
 const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
 // =======================================================
-// == ЛОГІКА ДЛЯ "ЖИВОЇ" FAB-КНОПКИ ВОДІЯ (v5 - РОБОЧА) ==
+// == ЛОГІКА ДЛЯ FAB-КНОПКИ ВОДІЯ (v6 - спрощена) ==
 // =======================================================
 
 const driverFabBtn = document.getElementById('driver-fab-btn');
-const fabIconInitial = document.getElementById('fab-icon-initial');
-const fabIconAnim = document.getElementById('fab-icon-anim');
-const fabTextAnim = document.getElementById('fab-text-anim');
 
-let fabAnimationTimeout; // Змінна для контролю анімації
+// Функція для оновлення вигляду кнопки
+function updateFabButtonState() {
+    if (!driverFabBtn) return;
 
-// Функція, що запускає всю анімацію
-function initDriverFabAnimation() {
-    if (!driverFabBtn || driverStatus === 'online') return;
-
-    // Скидаємо все до початкового стану
-    clearTimeout(fabAnimationTimeout);
-    driverFabBtn.classList.remove('animate-loop', 'is-flipping');
-    driverFabBtn.style.background = '';
-    [fabIconAnim, fabTextAnim, fabIconOnline].forEach(el => el.style.opacity = '0');
-    fabIconInitial.style.opacity = '1';
-    fabIconInitial.style.transform = '';
-
-    // Запускаємо анімацію через 1 секунду
-    fabAnimationTimeout = setTimeout(() => {
-        if (driverStatus === 'offline') {
-            driverFabBtn.classList.add('is-flipping');
-        }
-        // Після спінера запускаємо цикл
-        fabAnimationTimeout = setTimeout(() => {
-            if (driverStatus === 'offline') {
-                driverFabBtn.classList.remove('is-flipping');
-                driverFabBtn.classList.add('animate-loop');
-            }
-        }, 500);
-    }, 1000);
+    if (driverStatus === 'online') {
+        driverFabBtn.classList.add('is-online');
+        driverFabBtn.classList.remove('is-pulsing');
+        driverFabBtn.style.background = 'var(--md-primary)';
+    } else { // offline
+        driverFabBtn.classList.remove('is-online');
+        driverFabBtn.classList.add('is-pulsing');
+        // Можна повернути інший колір, якщо треба, наприклад:
+        // driverFabBtn.style.background = 'var(--md-surface-variant)';
+    }
 }
 
 // Обробник кліку по FAB-кнопці
 driverFabBtn?.addEventListener('click', () => {
-    // Зупиняємо будь-які заплановані анімації
-    clearTimeout(fabAnimationTimeout);
-    
     if (driverStatus === 'offline') {
         driverStatus = 'online';
-        driverFabBtn.classList.remove('animate-loop', 'is-flipping');
-        
+        // Оновлюємо індикатор статусу в хедері
         const driverStatusIndicator = document.getElementById('driver-status-indicator-home');
         if (driverStatusIndicator) {
             driverStatusIndicator.classList.remove('offline');
             driverStatusIndicator.classList.add('online');
             driverStatusIndicator.querySelector('.status-text').textContent = 'Онлайн';
         }
-
-        driverFabBtn.style.background = 'var(--md-primary)';
-        fabIconInitial.style.opacity = '0';
-        fabIconAnim.style.opacity = '0';
-        fabTextAnim.style.opacity = '0';
-        fabIconOnline.style.opacity = '1';
-    } else {
+    } else { // Якщо вже онлайн, то відкриваємо екран вибору
         navigateTo('driver-create-choice-screen');
     }
+    
+    // В будь-якому випадку оновлюємо вигляд кнопки
+    updateFabButtonState();
 });
+
+// Також треба знайти, де ми переходимо на екран водія, і викликати оновлення
+// Наприклад, в обробнику кнопки driverTelegramLoginBtn. Я додам це в існуючий код.
+// Знайди цю функцію і додай в кінець виклик updateFabButtonState();
+
+// Ініціалізація початкового стану (додамо це пізніше, якщо буде потрібно)
+
 
     // == 3. ОСНОВНІ ФУНКЦІЇ І ЛОГІКА ==
 
@@ -666,9 +650,10 @@ showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-
 driverTelegramLoginBtn?.addEventListener('click', () => {
     navigateTo('driver-home-screen');
     document.getElementById('driver-tab-bar').classList.remove('hidden');
-    initDriverFabAnimation();
-    updateHomeScreenView('driver'); // <-- ДОДАНО
+    updateFabButtonState(); // <--- Замінили стару функцію на нову
+    updateHomeScreenView('driver');
 });
+
 
 passengerTelegramLoginBtn?.addEventListener('click', () => {
     navigateTo('passenger-home-screen');
