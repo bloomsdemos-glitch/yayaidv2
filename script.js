@@ -653,7 +653,7 @@ driverTelegramLoginBtn?.addEventListener('click', () => {
     navigateTo('driver-home-screen');
     document.getElementById('driver-tab-bar').classList.remove('hidden');
     updateFabButtonState(); // <--- Замінили стару функцію на нову
-    updateHomeScreenView('driver');
+    updateAllDriverTripViews();
 });
 
 
@@ -1509,55 +1509,54 @@ function createActiveTripCardHTML(trip, userType) {
     `;
 }
 
-function updateHomeScreenView(userType) {
-    const menuContainer = document.getElementById(`${userType}-home-menu-container`);
-    const activeTripContainer = document.getElementById(`${userType}-home-active-trip-container`);
+// =================================================================
+// == ЄДИНА ФУНКЦІЯ ОНОВЛЕННЯ ВИГЛЯДУ АКТИВНИХ ПОЇЗДОК ВОДІЯ ==
+// =================================================================
+function updateAllDriverTripViews() {
     const trip = active_trips.length > 0 ? active_trips[0] : null;
 
+    // Оновлюємо вигляд на ГОЛОВНОМУ екрані
+    const homeMenuContainer = document.getElementById('driver-home-menu-container');
+    const homeActiveTripContainer = document.getElementById('driver-home-active-trip-container');
+    
     if (trip) {
-        menuContainer.style.display = 'none';
-        activeTripContainer.style.display = 'block';
-        activeTripContainer.innerHTML = createActiveTripCardHTML(trip, userType);
-
-        const card = activeTripContainer.querySelector('.order-card');
-        if (card) {
-            card.onclick = () => {
-                if (userType === 'driver') {
-                    displayDriverActiveTrip();
-                    navigateTo('driver-orders-screen');
-                } else {
-                    showMyOrdersBtn.click();
-                }
-            };
+        if (homeMenuContainer) homeMenuContainer.style.display = 'none';
+        if (homeActiveTripContainer) {
+            homeActiveTripContainer.style.display = 'block';
+            homeActiveTripContainer.innerHTML = createActiveTripCardHTML(trip, 'driver');
+            const card = homeActiveTripContainer.querySelector('.order-card');
+            if (card) {
+                card.onclick = () => navigateTo('driver-orders-screen');
+            }
         }
     } else {
-        menuContainer.style.display = 'block';
-        activeTripContainer.style.display = 'none';
+        if (homeMenuContainer) homeMenuContainer.style.display = 'block';
+        if (homeActiveTripContainer) homeActiveTripContainer.style.display = 'none';
     }
-}
 
-function displayDriverActiveTrip() {
-    const activeTripCard = document.getElementById('driver-active-trip-card');
+    // Оновлюємо вигляд на екрані "МОЇ ЗАМОВЛЕННЯ"
+    const ordersActiveTripCard = document.getElementById('driver-active-trip-card');
     const noOrdersMsg = document.getElementById('no-active-driver-orders');
-    const trip = active_trips.length > 0 ? active_trips[0] : null;
 
-    if (trip) {
-        activeTripCard.querySelector('#driver-active-passenger-name').textContent = trip.passengerName;
-        activeTripCard.querySelector('#driver-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
-        activeTripCard.querySelector('#driver-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
-        
-        activeTripCard.onclick = () => {
-            document.getElementById('details-active-passenger-name').textContent = trip.passengerName;
-            document.getElementById('details-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
-            document.getElementById('details-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
-            navigateTo('driver-active-trip-details-screen');
-        };
-        
-        activeTripCard.style.display = 'block';
-        noOrdersMsg.style.display = 'none';
-    } else {
-        activeTripCard.style.display = 'none';
-        noOrdersMsg.style.display = 'block';
+    if (ordersActiveTripCard && noOrdersMsg) {
+        if (trip) {
+            ordersActiveTripCard.querySelector('#driver-active-passenger-name').textContent = trip.passengerName;
+            ordersActiveTripCard.querySelector('#driver-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
+            ordersActiveTripCard.querySelector('#driver-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
+            
+            ordersActiveTripCard.onclick = () => {
+                document.getElementById('details-active-passenger-name').textContent = trip.passengerName;
+                document.getElementById('details-active-from-address').textContent = trip.from || trip.direction.split(' - ')[0];
+                document.getElementById('details-active-to-address').textContent = trip.to || trip.direction.split(' - ')[1];
+                navigateTo('driver-active-trip-details-screen');
+            };
+            
+            ordersActiveTripCard.style.display = 'block';
+            noOrdersMsg.style.display = 'none';
+        } else {
+            ordersActiveTripCard.style.display = 'none';
+            noOrdersMsg.style.display = 'block';
+        }
     }
 }
 
@@ -1717,10 +1716,11 @@ passengerNotificationsBtn?.addEventListener('click', () => {
 
 // --- Навігація ВОДІЯ ---
 showDriverOrdersBtn?.addEventListener('click', () => {
-    displayDriverActiveTrip(); // <-- ОСЬ ТУТ викликаємо нашу нову функцію
+    updateAllDriverTripViews(); // <--- ЗАМІНА
     displayArchives();
     navigateTo('driver-orders-screen');
 });
+
 
 showFindPassengersBtn?.addEventListener('click', () => {
     navigateTo('driver-find-passengers-screen');
@@ -2124,8 +2124,8 @@ driverFinishTripBtn?.addEventListener('click', () => {
     driverStartTripBtn.classList.add('disabled');
     driverFinishTripBtn.classList.add('disabled');
     
-    updateHomeScreenView('driver');
-    updateHomeScreenView('passenger');
+    updateAllDriverTripViews();
+
     
     navigateTo('driver-home-screen');
 });
@@ -2427,13 +2427,11 @@ devSwitchToPassengerBtn?.addEventListener('click', () => {
 });
 
 devSwitchToDriverBtn?.addEventListener('click', () => {
-    // Ховаємо все пасажирське
-    document.getElementById('passenger-tab-bar').classList.add('hidden');
-    // Показуємо все водійське
-    document.getElementById('driver-tab-bar').classList.remove('hidden');
+    // ...
     navigateTo('driver-home-screen');
-    updateHomeScreenView('driver'); // <-- І ОСЬ ЦЕЙ
-    initDriverFabAnimation(); 
+    updateAllDriverTripViews(); // <--- ЗАМІНА
+    updateFabButtonState(); // <--- Теж оновимо кнопку
 });
+
 
 });
