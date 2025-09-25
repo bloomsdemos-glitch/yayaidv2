@@ -1,4 +1,10 @@
-Exclusively Human Experience
+Інструкція: 
+• глибокий огляд нового Exclusively Human Experience (2026) альбому музиканта Тото Бохіо / Toto Bokhio 
+• порівняння з хітами з минулих альбомів, чим новий альбом вирізняється 
+• загальне ревʼю   з оцінками 
+• формат: подкаст, мова - American English 
+
+Exclusively Human Experience (2026)
 
 TRACKLIST:
 01 Intro
@@ -1226,7 +1232,7 @@ dancing and smiling?
 Деякі хіти з минулих альбомів артиста, для порівняння з останнім:
 
 
-SUPERWEIRD (2018):
+//Album: SUPERWEIRD (2018) [genres: alt pop, synthpop, experimental electronic pop, pop]//
 
 "SUPERWEIRD" [genres: synthpop, avant-pop]
 LYRICS:
@@ -1737,13 +1743,352 @@ Chorus:
 
 
 
-HORTUS-22 (2022): [alt R&B, House influenced R&B, Psychedelic Neo Soul, Psychedelic Pop]
+//Album: the HORTUS-22 (2022): [alt R&B, House influenced R&B, Psychedelic Neo Soul, Psychedelic Pop]//
+
+I Talk To My Flowers [psychedelic pop, Neo-soul]
+Oh oh oh
+Yeah, I talk to my flowers
+They get me like no one else does
+And with the warm wind, 
+they breathe out 
+these fragrant echo- 
+echoes of days 
+gone by
+real quiet (real quiet)
+Gonna stay out here
+a little longer with the roses,
+drifting through a technicolor 
+flow of zinnias 
+until the stars, until the stars
+show up in the sky 
+
+They've seen the storms 
+in my eyes, in my eyes 
+They know I come here
+for some peace
+for the hush between my thoughts
+Waiting on the rain, 
+then for the sun to break through
+
+Yeah, I talk to my flowers
+They get me like no one else does
+And with the warm wind, 
+they breathe out 
+these fragrant echo- 
+echoes of days 
+gone by
+real quiet (real quiet)
+Gonna stay out here
+a little longer with the roses,
+drifting through a technicolor 
+flow of zinnias 
+until the stars, until the stars
+show up in the sky 
+
+Yeah, 
+I talk to my flowers
+Yeah, 
+I talk to my flowers
+Yeah, 
+I talk to my flowers
+Yeah, I talk to
+Yeah, 
+I talk to my flowers  
+(they’re always listening)
+Yeah, 
+I talk to my flowers
 
 
+It's So Hot [genres: dance R&B, chill wave, French house, neosoul,pop]
+Intro: 
+Oh It’s So Hot, 
+hot 
+So hot (hot)
+Oh
+
+Verse 1:
+Drifting through dreams of you
+My fantasy’s melting right onto my skin (skin)
+Drip, drip, drip 
+Cooling off with icy cocktails 
+But it don’t help, (dont help)
+It just makes it harder
+Yeah, it just makes it
+Hard (hard)
+
+Pre-chorus: 
+Caught in this blaze (so hot)
+Where are you, baby? 
+I’m melting im melting 
+away, cuz
+
+Chorus:
+It’s so hot (so hot)
+When you’re not here
+But I need you now (need you now)
+It’s so hot (so hot)
+I can’t control myself somehow
+It’s so hot (so hot) 
+Oh, sun, go burn away 
+These dirty thoughts I’ve got today
+I’m not Icarus but I’m real close
+Oh Send me clouds, oh 
+send me rain
+Cuz It’s so hot (so hot) 
+When the south of me 
+won’t let me be
+
+It’s so hot (so hot)
+It’s so hot (so hot)
+It’s so hot (so hot)
+Yeah It’s so hot (so hot)
+
+Verse 2: 
+Why’s it all tryin’ (to)
+To drive me mad in this heat?
+Call me up, (call me up)
+Touch me with a breeze 
+Kiss me with that sun-sick tease
+Damn, it don’t help
+It just makes it harder
+Yeah, it just makes it
+Hard (hard)
+
+Pre-chorus: 
+
+Chorus: 
+
+Bridge:
+Heat’s on, (heats on)
+I breathe the garden in,
+blooming in this paradise
+But baby, this heat’s 
+too cruel without you
+If I’m the bloom, 
+my roots are cracking
+Come water me, my gardener
+Come water me, oh baby
+Come 
+Come
+Come 
+water me
+
+Chorus: 
+
+Everything Changes [neo-soul, alternative r&b, funk, progressive r&b, neo-psychedelia]
+Verse 1:
+I feel like I’ve become 
+more peaceful inside (i i i)
+Don’t care if I don’t meet expectations (fuck it)
+I’m not aiming to be the best (best)
+Once anxiety consumed me about everything (every fucking thing)
+Now I’m learning to enjoy the little things again (little things)
+Forget about the petty worries (yeah)
+Look around!
+
+Pre-Chorus:
+We’ll end up in that place 
+Where the same flowers grow
+The same warm breeze
+And the sunlight
+Shimmers
+On the same wall,
+But a different color
+Everything changes
+We’re not the same
+Take a photo for the memory
+
+Chorus:
+Everything changes, 
+everything changes
+ch-ch-changes
+I’m not the same as I was ten years ago
+I’m changing (that’s okay)
+ch-ch-changes
+Everything changes, everything changes
+You’re not the same as you were ten years ago
+Isn’t that wonderful?
+Everything changes, everything changes
+It’s okay
+ch-ch-changes
+ch-ch-changes
+ch-ch-changes
+Everything changes 
+
+Verse 2:
+Someone died yesterday, someone was born today
+Time, time, I wish I could pause it like a player (time time time)
+The planet’s going crazy, but we hold on
+As long as I breathe and feel
+As long as I see the starry sky, I’m alive
+Maybe one of us
+Will turn into a spark
+Of light in the chaos of the universe
+That’s how I see death, I like it better this way
+No worries,
+everything changes
+
+Pre-Chorus:
+
+Chorus:
 
 
+Break:
+Take a photo for the memory
+This city will change
+You’ll get a new haircut
+And change your style
+You’ll become wiser
+Take a photo for the memory
+Take a photo for the memory
+Take a photo for the memory
+Memory
+Everything changes, and that’s okay!
 
-The Shining Club (2023): [Synthpop, EDM, Pop, R&B]
+Chorus:
+
+Late Night Talk (Show) [synthpop, indie pop, dream pop,ambient R&B]
+Verse 1:
+You were gone so long
+Feels like a century slipped by me
+Your voice was distant
+Like I was talking to someone else 
+Wrapped in your skin but not your soul
+Now it’s so bright, it’s really you
+Alive and chasing thrills again
+
+So tell me, how do you feel?
+What’s your heart saying 
+You know I’m always on your side
+Though I know trusting you 
+is just a lost cause
+
+Chorus: 
+But if you ever wanna talk, (talk talk)
+If you feel like you’ve been missing this…
+We could crack one open,
+And have our late-night talk (show)
+Late-night talk (show),
+Our late-night talk (show),
+Late-night talk,
+Some faded tunes, the night sky,
+talking 
+’bout your storms, 
+’bout my storms
+’bout your mess,
+’bout my mess (oh)
+Like we used to, ohhh
+Don’t you want that, baby? (Don’t you)
+Have a late-night talk (show),
+Tell me you don’t want that, babe
+Ohhh late-night talk
+L-l-late night talk 
+
+Verse 2: 
+Oh, baby 
+you’ve said that before
+it’s time to close that fucking chapter
+You know damn well
+I only want the best for you
+You know how tough it is to get
+That fucking inner peace,
+With all of this, with all of this 
+It’s all shifting in my mind
+I’m seeing things through 
+new eyes now
+
+
+So tell me, how do you feel?
+What’s your heart saying 
+You know I’m always on your side
+Though I know trusting you 
+is just a lost cause
+
+
+Bridge:
+You see, some things have changed
+Some things just don’t hit the same
+Joy’s a little quieter now
+After the storms you brought inside
+And I’m okay with that 
+Baby, im okay with that
+I don’t want to look back
+But that was you
+Yeah baby, it was you
+
+Chorus: 
+Verse 1:
+You were gone so long
+Feels like a century slipped by me
+Your voice was distant
+Like I was talking to someone else 
+Wrapped in your skin but not your soul
+Now it’s so bright, it’s really you
+Alive and chasing thrills again
+
+So tell me, how do you feel?
+What’s your heart saying 
+You know I’m always on your side
+Though I know trusting you 
+is just a lost cause
+
+Chorus: 
+But if you ever wanna talk, (talk talk)
+If you feel like you’ve been missing this…
+We could crack one open,
+And have our late-night talk (show)
+Late-night talk (show),
+Our late-night talk (show),
+Late-night talk,
+Some faded tunes, the night sky,
+talking 
+’bout your storms, 
+’bout my storms
+’bout your mess,
+’bout my mess (oh)
+Like we used to, ohhh
+Don’t you want that, baby? (Don’t you)
+Have a late-night talk (show),
+Tell me you don’t want that, babe
+Ohhh late-night talk
+L-l-late night talk 
+
+Verse 2: 
+Oh, baby 
+you’ve said that before
+it’s time to close that fucking chapter
+You know damn well
+I only want the best for you
+You know how tough it is to get
+That fucking inner peace,
+With all of this, with all of this 
+It’s all shifting in my mind
+I’m seeing things through 
+new eyes now
+
+
+So tell me, how do you feel?
+What’s your heart saying 
+You know I’m always on your side
+Though I know trusting you 
+is just a lost cause
+
+
+Bridge:
+You see, some things have changed
+Some things just don’t hit the same
+Joy’s a little quieter now
+After the storms you brought inside
+And I’m okay with that 
+Baby, im okay with that
+I don’t want to look back
+But that was you
+Yeah baby, it was you
+
+Chorus: 
+
+
+//Album: The Shining Club (2023): [Synthpop, EDM, Pop, R&B]//
 
 The Shining Club [genres: synthpop, pop-disco, pop]
 LYRICS:
@@ -1931,5 +2276,98 @@ Blue
 Blue 
 Blue 
 Chorus:
+
+LOVE IS WHEN Ü [genres: dance pop, electro pop, French house, French touch, indie pop]
+LYRICS:
+Verse 1:
+Oh oh oh 
+It’s magic, baby (oh)
+we’re still electric like this
+Time melts away, but we stay crystalline
+Thought we'd settle down, 
+maybe play it cool (cool)
+But we're still glowing, baby
+We’re still shining 
+
+Oh, we’ve wandered
+through the years in sync 
+can’t believe we’re still this radiant, 
+this wild, this bold (oh)
+I recall that starry night 
+when our eyes first met 
+it was cosmic, baby (oh)
+It was scripted by the universe, 
+We were so young and loud, 
+And when I’m drifting 
+in that timeless melody  
+I picture us, (I picture us)
+carried through the years (ohh)
+
+Pre-chorus:
+Don’t even ask me if I love you
+‘Cause you know the answer
+You said, “so tell me —
+what is love?
+and I said 
+
+Chorus:
+Love is when 
+you… 
+Love is when 
+you… 
+Love is when 
+you… 
+Oh oh Love is when you… 
+Love is when you (Love is)
+Love is when you 
+
+Bridge:
+look at me that way
+When your embrace feels like home 
+and I feel complete, alive.
+When we laugh and 
+the whole street
+feels high (high) on love 
+When you’re 
+just here 
+with me (oooh)
+
+Verse 2:
+Oh, we’re stargazers in sunglasses
+We’re extra dreamers floating in the current
+Some think we’re superfreaks, 
+some say we’re lost
+Some just don’t get us (ugh)
+Who cares, our hearts stay open
+We live it, oh we live it, We vibinʼ
+Every moment 
+Oh this wild and endless ride 
+
+Pre-chorus:
+
+Chorus:
+
+Bridge:
+
+
+Break:
+Reviviendo esos recuerdos,
+que en mi pecho se quedaron.
+Las fotos viejas me miran,
+como si el tiempo no pasara.
+Siempre supe que fue real.
+Así que bésame, bebé.
+Así que bésame, bebé.
+
+Chorus:
+Love is when 
+you… 
+
+Ooooooo, la la la la la la la la la la love
+Love love love Love love love Love love love 
+Ooooooo, that’s love
+Ooooooo, that’s true love
+Love is when u
+
 
 
