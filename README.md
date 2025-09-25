@@ -76,6 +76,7 @@ Trust your gut
 **Chorus:**
 
 03 Exclusively Human Experience [genres: coldwave, industrial hip-hop, R&B, shoegaze, electronica, djent]
+
 LYRICS:
 **Intro:**  
 In the vastness of the cosmos, where stars dance to the rhythm of unseen forces, the law of entropy quietly creeps into everything (everything)
@@ -1736,7 +1737,199 @@ Chorus:
 
 
 
-HORTUS-22 (2022): 
+HORTUS-22 (2022): [alt R&B, House influenced R&B, Psychedelic Neo Soul, Psychedelic Pop]
 
-The Shining Club (2023): 
+
+
+
+
+The Shining Club (2023): [Synthpop, EDM, Pop, R&B]
+
+The Shining Club [genres: synthpop, pop-disco, pop]
+LYRICS:
+Tah-tarah-tarah-tap (3x)
+
+[Verse 1]
+We’re in the hottest
+spot in town 
+Or we just land
+inside your fantasy?
+Left the fear in history
+No dress code
+No password
+Just promise:
+You’ll show up as you
+The glow wraps around
+figures, 
+shapes, 
+silhouettes
+You are a living artwork,
+You are a moment
+You don’t beg for space —
+You become the room (without walls)
+
+[Pre-chorus]
+You are the anthem
+They said tone it down
+You said volume up
+You know you’ve got it
+So let it 
+Let it 
+Let it shine! 
+
+[Chorus]
+You’re dancing 
+In the shining club (ohh)
+Shine (dont stop, dont stop)
+We own the dark, 
+we own the light
+Shine 
+All night long, all night long
+Shine 
+Oh-oh
+In the Shining Club
+You’re already a star
+Light the night (light the night)
+Cause’ Now you know how to
+Shine 
+Shine 
+Shine 
+
+[Verse 2]
+Who’s that beauty in headphones?
+Heels like daggers
+Eyes like sirens
+Dont talk to me couture 
+Look What a guy! 
+What a ma-cho ma-cho
+Silver jacket, tailored tight 
+Why he lookin’ sad?
+We’re loving that ‘stache 
+
+[Pre-chorus]
+
+[Chorus]
+
+[Break]
+You don’t-
+You don’t need- ah
+You don’t need permission to shine (shine)
+You made-
+You made it- ah
+You made it through the shine portal
+Welcome to The Shining Club
+Click-clack like it’s Studio 54
+inside your mind
+No gods here, only stars
+You’re the one, yeah, 
+you’re the one
+Used to shrink
+Now you shi-shimmer
+Left, right
+Freak, light
+You didn’t even need to speak
+Cause the light translated you
+The light translated you
+
+[Chorus]
+
+Blue Tonight [genres: synthpop, electro]
+
+Verse 1: 
+Ohhh blue blue blue 
+Day by day, 
+it feels like I’ve been on 
+some emotional diet, 
+It’s dragged on too long
+Guess I’m done with self-control
+Feel like letting halo slip
+Cravin’ something 
+they gonna judge,
+I’m their energy vampire, 
+feeding off their judgment
+I feel on top 
+when they’re mad (feel on top)
+
+Pre-chorus: 
+Hello? 
+Thought we could drive 
+nowhere
+just to escape this gloom
+‘Cause I don’t-
+
+Chorus: 
+Oh I don’t wanna be blue tonight (blue)
+Just wanna feel the wind on my skin
+As we speed through the midnight, 
+Destination unknown (destination unknown)
+
+I don’t wanna be blue tonight (blue)
+Sick of the same old, same old 
+Need something real, 
+something new 
+something heart-racing (heart-racing)
+
+I don’t wanna be blue tonight (blue tonight)
+Let’s break the loop, let it all go (let it all go) 
+‘Cause I don’t wanna be-
+I don’t wanna be-
+Blue- 
+I don’t wanna be blue tonight (tonight)
+
+Verse 2: 
+Nothing like being part 
+of these city lights
+Not that I’m trying 
+to find the ghost 
+of who I used to be 
+I just hate the way 
+I’ve been feelin’ lately 
+
+but then that song came on 
+while i was stuck at the red light  
+watching a smoky-eyed blonde
+angel balancing on broken 
+eight-inch heel 
+near the sinners’ 
+neon temple
+and it just hit me 
+like gospel:  
+it’s  
+time to live again,  
+time to shine again
+
+Pre-chorus: 
+
+
+Chorus: 
+
+Break: 
+I- i- i- I know what can help us 
+I-i-I don’t care if it’s 
+inappropriate (tonight)
+
+Slap 
+slap 
+slap 
+Parental Advisory Label us (label us)
+All over our skin (all over our skin)
+
+Metaphorically speaking 
+We better hit that 
+hit that
+factory reset button 
+
+And I 
+I 
+I 
+scream freedom in your face 
+
+
+B-b-blue 
+to-to-tonight
+Blue 
+Blue 
+Blue 
+Chorus:
+
 
