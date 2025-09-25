@@ -75,17 +75,19 @@ let active_trips = []; // Єдина база для ВСІХ активних �
 // == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
 function saveState() {
     const state = {
+        active_trips, // <-- Ось це ми додали
         passenger_archive,
         driver_archive,
         orders_database,
         notifications_database,
         vh_requests_database,
         vh_offers_database,
-        vh_active_trips,
+        // vh_active_trips, // Цей рядок поки можна видалити, він не використовується
         active_trips_database
     };
     sessionStorage.setItem('appState', JSON.stringify(state));
 }
+
 
 function loadState() {
     const savedState = sessionStorage.getItem('appState');
