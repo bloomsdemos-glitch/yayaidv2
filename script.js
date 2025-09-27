@@ -154,15 +154,12 @@ function displayDriverOrders() {
     if (!orderList) return;
     orderList.innerHTML = '';
 
-    // Правильний цикл forEach
     orders_database.forEach(order => {
         const cardElement = UI.createDriverOrderCard(order);
 
-
-        // Ця логіка має бути ВСЕРЕДИНІ циклу
         if (order.paymentMethod === 'card' && !fakeDriverAcceptsCard) {
             cardElement.classList.add('disabled-for-driver');
-         } else {
+        } else {
             cardElement.addEventListener('click', () => {
                 // Крок 1: Просимо UI намалювати деталі
                 UI.displayOrderDetails(order);
@@ -186,15 +183,15 @@ function displayDriverOrders() {
                     saveState();
                     updateAllDriverTripViews();
                     updateHomeScreenView('passenger');
-                    displayDriverActiveTrip();
                     navigateTo('driver-orders-screen');
                     alert('Замовлення прийнято!');
                 };
+
                 if(declineOrderBtn) declineOrderBtn.onclick = () => {
                     navigateTo('driver-find-passengers-screen');
                 };
 
-                // Крок 3: Переходимо на екран
+                // Крок 3: Переходимо на екран деталей ПІСЛЯ налаштування кнопок
                 navigateTo('driver-order-details-screen');
             });
         }
@@ -202,6 +199,7 @@ function displayDriverOrders() {
         orderList.appendChild(cardElement);
     });
 }
+
 
 // === ОНОВЛЕНА ЛОГІКА ПРИЙНЯТТЯ ЗВИЧАЙНОГО ЗАМОВЛЕННЯ ===
 if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
