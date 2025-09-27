@@ -1378,7 +1378,7 @@ function updateAllDriverTripViews() {
         if (homeMenuContainer) homeMenuContainer.style.display = 'none';
         if (homeActiveTripContainer) {
             homeActiveTripContainer.style.display = 'block';
-            homeActiveTripContainer.innerHTML = createActiveTripCardHTML(trip, 'driver');
+            homeActiveTripContainer.innerHTML = UI.createActiveTripCardHTML(trip, 'driver');
             const card = homeActiveTripContainer.querySelector('.order-card');
             if (card) {
                 card.onclick = () => navigateTo('driver-orders-screen');
