@@ -229,7 +229,8 @@ function displayDriverOrders() {
 
     // Правильний цикл forEach
     orders_database.forEach(order => {
-        const cardElement = createDriverOrderCard(order);
+        const cardElement = UI.createDriverOrderCard(order);
+
 
         // Ця логіка має бути ВСЕРЕДИНІ циклу
         if (order.paymentMethod === 'card' && !fakeDriverAcceptsCard) {
