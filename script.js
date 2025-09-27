@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {loadState(); 
 let fakeUserHasCard = false;
 let fakeDriverAcceptsCard = false;
-let passenger_archive = []; // Архів для пасажира
-let driver_archive = [];    // Архів для водія
-let orders_database = [];
 let currentOfferIdForConfirmation = null;
 let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
 
