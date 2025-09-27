@@ -261,3 +261,23 @@ UI.checkAddressInputs = function() {
         addressNextBtn.classList.add('disabled');
     }
 };
+
+UI.displayOrderDetails = function(order) {
+    if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
+    if(detailsPassengerRating) detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
+    if(detailsFromAddress) detailsFromAddress.textContent = order.from;
+    if(detailsToAddress) detailsToAddress.textContent = order.to;
+
+    const commission = Math.round(order.price * 0.05);
+    if(detailsTotalPrice) detailsTotalPrice.textContent = `${order.price} грн`;
+    if(detailsCommission) detailsCommission.textContent = `- ${commission} грн`;
+    if(detailsDriverEarning) detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
+
+    const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
+    if (Math.random() > 0.5) {
+        if(detailsCommentText) detailsCommentText.textContent = randomComment;
+        if(detailsCommentContainer) detailsCommentContainer.style.display = 'block';
+    } else {
+        if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
+    }
+};
