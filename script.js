@@ -406,27 +406,6 @@ const profilePassengerName = document.getElementById('profile-passenger-name');
 const profilePassengerTrips = document.getElementById('profile-passenger-trips');
 const profilePassengerBio = document.getElementById('profile-passenger-bio');
 
-function displayPassengerProfile(passengerId) {
-    const passenger = passengers_database.find(p => p.id === passengerId);
-
-    if (!passenger) {
-        console.error('Пасажира з ID', passengerId, 'не знайдено.');
-        return;
-    }
-
-    // Заповнюємо поля даними
-    profilePassengerNameHeader.textContent = `Профіль: ${passenger.name}`;
-    profilePassengerName.textContent = passenger.name;
-    profilePassengerTrips.textContent = passenger.trips;
-    profilePassengerBio.textContent = passenger.bio;
-// Заповнюємо плейсхолдер для оцінок від водіїв
-    document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>6 👍🏻 0 👎🏻</strong>`;
-
-    // Тут в майбутньому буде логіка для відгуків
-
-    navigateTo('passenger-profile-screen');
-}
-
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ СПИСКУ ДОСТУПНИХ ВОДІЇВ (ДЛЯ ПАСАЖИРА) ==
 function displayAvailableDrivers() {
@@ -596,30 +575,30 @@ showPassengerValkyKharkivBtn?.addEventListener('click', () => {
 
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
 showPassengerProfileBtn?.addEventListener('click', () => {
-    // Викликаємо функцію і передаємо ID нашого тестового пасажира (Віти)
-    displayPassengerProfile(1); 
+    UI.displayPassengerProfile(1);
+    navigateTo('passenger-profile-screen');
 });
+
     // == ЛОГІКА ДЛЯ TAB BAR (ПАСАЖИР) ==
     const passengerTabBar = document.getElementById('passenger-tab-bar');
     const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
 
-  function handleTabClick(clickedItem) {
+function handleTabClick(clickedItem) {
     passengerTabItems.forEach(item => item.classList.remove('active'));
     clickedItem.classList.add('active');
     const targetScreen = clickedItem.dataset.target;
-
     // Спершу викликаємо потрібні функції для оновлення контенту
     if (targetScreen === 'passenger-profile-screen') {
-        displayPassengerProfile(1);
+        UI.displayPassengerProfile(1); // Готуємо дані
+        navigateTo('passenger-profile-screen'); // Переходимо
     } else if (targetScreen === 'passenger-home-screen') {
         updateHomeScreenView('passenger');
-    }
-    
-    // А потім завжди виконуємо навігацію
-    if (targetScreen) {
+        navigateTo('passenger-home-screen'); // Додамо перехід і сюди
+    } else if (targetScreen) { // Для всіх інших кнопок
         navigateTo(targetScreen);
     }
 }
+
 
 
     passengerTabItems?.forEach(item => {
@@ -1987,17 +1966,20 @@ function showProfilePopup(userType) {
             navigateTo('driver-profile-screen');
             hideProfilePopup();
         };
-    } else { // passenger
-        const passenger = passengers_database[0];
-        popupAvatarIcon.className = 'fa-solid fa-user';
-        popupUserName.textContent = passenger.name;
-        popupUserDetails.textContent = `${passenger.trips} поїздок`;
-        popupViewProfileBtn.onclick = () => {
-            displayPassengerProfile(passenger.id);
-            navigateTo('passenger-profile-screen');
-            hideProfilePopup();
-        };
-    }
+
+} else { // пасажир 
+    const passenger = passengers_database[0];
+    popupAvatarIcon.className = 'fa-solid fa-user';
+    popupUserName.textContent = passenger.name;
+    popupUserDetails.textContent = `${passenger.trips} поїздок`;
+    popupViewProfileBtn.onclick = () => {
+        UI.displayPassengerProfile(passenger.id); // <--- Ось тут зміна
+        navigateTo('passenger-profile-screen');
+        hideProfilePopup();
+    };
+}
+
+
 
     // Робимо видимими і попап, і оверлей
     popupOverlay.classList.remove('hidden');
