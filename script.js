@@ -2005,25 +2005,7 @@ backButtons.forEach(button => {
         themeCheckbox.addEventListener('change', switchTheme);
     }
 
-    // === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
-    function createRipple(event) {
-        const button = event.currentTarget;
-        const circle = document.createElement("span");
-        const diameter = Math.max(button.clientWidth, button.clientHeight);
-        const radius = diameter / 2;
-        const existingRipple = button.querySelector(".ripple");
-        if (existingRipple) {
-            existingRipple.remove();
-        }
-        circle.style.width = circle.style.height = `${diameter}px`;
-        circle.style.left = `${event.clientX - (button.getBoundingClientRect().left + radius)}px`;
-        circle.style.top = `${event.clientY - (button.getBoundingClientRect().top + radius)}px`;
-        circle.classList.add("ripple");
-        button.appendChild(circle);
-    }
-    document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
-        button.addEventListener("click", createRipple);
-    });
+
 
     // === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
     const pin1 = document.getElementById('pin1');
