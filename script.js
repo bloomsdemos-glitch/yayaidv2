@@ -1645,10 +1645,13 @@ backButtons.forEach(button => {
 // === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) v4.0 - УНІФІКОВАНО ===
 driverArrivedBtn?.addEventListener('click', () => {
     if (active_trips.length === 0) return;
-    active_trips[0].status = 'arrived';
-    saveState();
-    
+
+    // 1. Змінюємо статус поїздки в базі даних
     const trip = active_trips[0];
+    trip.status = 'arrived';
+    saveState(); // Зберігаємо новий стан
+
+    // 2. Створюємо сповіщення для пасажира (це в тебе вже було і працює добре)
     const newNotification = {
         id: Date.now(),
         userId: trip.passengerId || 1,
@@ -1659,19 +1662,17 @@ driverArrivedBtn?.addEventListener('click', () => {
     notifications_database.push(newNotification);
     saveState();
 
-    const passengerBadge = document.getElementById('passenger-notification-badge-home');
-    if (passengerBadge) {
-        const unreadCount = notifications_database.filter(n => !n.isRead && n.userId === (trip.passengerId || 1)).length;
-        if (unreadCount > 0) {
-            passengerBadge.textContent = unreadCount;
-            passengerBadge.classList.remove('hidden');
-        }
-    }
+    // 3. Оновлюємо інтерфейс для ОБОХ користувачів
+    updateAllDriverTripViews(); // Оновлює вигляд для водія
+    updateHomeScreenView('passenger'); // Оновлює вигляд для пасажира
 
-    alert('Пасажира сповіщено, що ви прибули!');
+    // 4. Оновлюємо стан самих кнопок
     driverArrivedBtn.classList.add('disabled');
     driverStartTripBtn.classList.remove('disabled');
+
+    alert('Пасажира сповіщено, що ви прибули!');
 });
+
 
 driverStartTripBtn?.addEventListener('click', () => {
     if (active_trips.length === 0) return;
