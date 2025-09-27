@@ -121,4 +121,54 @@ UI.createActiveTripCardHTML = function(trip, userType) {
     `;
 };
 
-    
+UI.displayDriverProfile = function(driverId) {
+    const driver = drivers_database.find(d => d.id === driverId);
+    if (!driver) {
+        console.error('Водія з ID', driverId, 'не знайдено.');
+        return;
+    }
+    document.getElementById('profile-driver-name').textContent = driver.name;
+    document.getElementById('profile-driver-trips').textContent = driver.trips;
+    if (driver.trips < 5) {
+        document.getElementById('profile-driver-rating').innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
+    } else {
+        document.getElementById('profile-driver-rating').textContent = driver.rating.toFixed(1);
+    }
+};
+
+UI.displayDriverFullProfile = function(driverId) {
+    const driver = drivers_database.find(d => d.id === driverId);
+    if (!driver) return;
+    document.getElementById('profile-driver-name-header').textContent = `Профіль: ${driver.name}`;
+    document.getElementById('profile-driver-name-full').textContent = driver.name;
+    document.getElementById('profile-driver-trips-full').textContent = `${driver.trips} поїздки`;
+    document.getElementById('profile-driver-car').textContent = driver.car;
+    if (driver.trips < 5) {
+        document.getElementById('profile-driver-rating-full').innerHTML = `<small>Новий водій</small>`;
+    } else {
+        document.getElementById('profile-driver-rating-full').innerHTML = `<i class="fa-solid fa-star"></i> ${driver.rating.toFixed(1)}`;
+    }
+    const tagsContainer = document.getElementById('profile-driver-tags');
+    tagsContainer.innerHTML = '';
+    driver.tags.forEach(tag => {
+        tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
+    });
+    const reviewsContainer = document.getElementById('profile-driver-reviews');
+    const reviewsTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
+    reviewsTitle.textContent = `Відгуки (${driver.reviews.length})`;
+    reviewsContainer.innerHTML = '';
+    if (driver.reviews.length > 0) {
+        driver.reviews.forEach(review => {
+            reviewsContainer.innerHTML += `
+                <div class="review-card">
+                    <div class="review-header">
+                        <strong>${review.name}</strong>
+                        <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
+                    </div>
+                    <p class="review-text">${review.text}</p>
+                </div>`;
+        });
+    } else {
+        reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
+    }
+};
