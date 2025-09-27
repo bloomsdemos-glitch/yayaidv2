@@ -34,3 +34,49 @@ const screens = document.querySelectorAll('.screen');
     document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
         button.addEventListener("click", createRipple);
     });
+    
+     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
+        const body = document.body;
+        function switchTheme(e) {
+            if (e.target.checked) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        }
+        if (body.classList.contains('dark-theme')) {
+            themeCheckbox.checked = true;
+        }
+        themeCheckbox.addEventListener('change', switchTheme);
+    }
+
+
+
+    // === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
+    const pin1 = document.getElementById('pin1');
+    const pin2 = document.getElementById('pin2');
+    const pathDots = document.querySelector('.path-dots');
+    if (pin1 && pin2 && pathDots) {
+        function swapPinIcons() {
+            const isPin1Dot = pin1.classList.contains('fa-circle-dot');
+            if (isPin1Dot) {
+                pin1.classList.remove('fa-circle-dot');
+                pin1.classList.add('fa-location-dot');
+                pin2.classList.remove('fa-location-dot');
+                pin2.classList.add('fa-circle-dot');
+            } else {
+                pin1.classList.remove('fa-location-dot');
+                pin1.classList.add('fa-circle-dot');
+                pin2.classList.remove('fa-circle-dot');
+                pin2.classList.add('fa-location-dot');
+            }
+        }
+        pathDots.addEventListener('animationiteration', swapPinIcons);
+    }
+
+    
