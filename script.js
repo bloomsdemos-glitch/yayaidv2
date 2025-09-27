@@ -1887,57 +1887,57 @@ const popupUserName = document.getElementById('popup-user-name');
 const popupUserDetails = document.getElementById('popup-user-details');
 const popupViewProfileBtn = document.getElementById('popup-view-profile-btn');
 
-function showProfilePopup(userType) {
-    if (!profilePopup || !popupOverlay) return;
 
-    // Заповнюємо картку даними (логіка залишається та сама)
-    if (userType === 'driver') {
-        const driver = drivers_database[0];
-        popupAvatarIcon.className = 'fa-solid fa-user-tie';
-        popupUserName.textContent = driver.name;
-        popupUserDetails.textContent = `${driver.rating.toFixed(1)} ★ • ${driver.trips} поїздок`;
-        popupViewProfileBtn.onclick = () => {
-            UI.displayDriverProfile(driver.id);
-            navigateTo('driver-profile-screen');
-            hideProfilePopup();
-        };
-
-} else { // пасажир 
-    const passenger = passengers_database[0];
-    popupAvatarIcon.className = 'fa-solid fa-user';
-    popupUserName.textContent = passenger.name;
-    popupUserDetails.textContent = `${passenger.trips} поїздок`;
-    popupViewProfileBtn.onclick = () => {
-        UI.displayPassengerProfile(passenger.id); // <--- Ось тут зміна
-        navigateTo('passenger-profile-screen');
-        hideProfilePopup();
-    };
-}
-
-
-
-    // Робимо видимими і попап, і оверлей
-    popupOverlay.classList.remove('hidden');
-    profilePopup.classList.add('visible');
-}
-
-function hideProfilePopup() {
-    popupOverlay?.classList.add('hidden');
-    profilePopup?.classList.remove('visible');
-}
 
 // Обробники кліків на іконки в хедері
 driverProfileBadge?.addEventListener('click', () => {
-    // Якщо попап вже видимий - ховаємо, якщо ні - показуємо
-    profilePopup.classList.contains('visible') ? hideProfilePopup() : showProfilePopup('driver');
+    if (profilePopup.classList.contains('visible')) {
+        UI.hideProfilePopup();
+    } else {
+        const driver = drivers_database[0];
+        // 1. Готуємо дані для відображення
+        const driverData = {
+            icon: 'fa-solid fa-user-tie',
+            name: driver.name,
+            details: `${driver.rating.toFixed(1)} ★ • ${driver.trips} поїздок`
+        };
+        // 2. Просимо UI показати попап з цими даними
+        UI.showProfilePopup(driverData);
+
+        // 3. Налаштовуємо, що станеться при кліку на кнопку в попапі
+        popupViewProfileBtn.onclick = () => {
+            UI.displayDriverProfile(driver.id);
+            navigateTo('driver-profile-screen');
+            UI.hideProfilePopup();
+        };
+    }
 });
+
 
 passengerProfileBadge?.addEventListener('click', () => {
-    profilePopup.classList.contains('visible') ? hideProfilePopup() : showProfilePopup('passenger');
+    if (profilePopup.classList.contains('visible')) {
+        UI.hideProfilePopup();
+    } else {
+        const passenger = passengers_database[0];
+        const passengerData = {
+            icon: 'fa-solid fa-user',
+            name: passenger.name,
+            details: `${passenger.trips} поїздок`
+        };
+        UI.showProfilePopup(passengerData);
+
+        popupViewProfileBtn.onclick = () => {
+            UI.displayPassengerProfile(passenger.id);
+            navigateTo('passenger-profile-screen');
+            UI.hideProfilePopup();
+        };
+    }
 });
 
+
 // Нова, надійна логіка закриття: клік по оверлею = закрити все
-popupOverlay?.addEventListener('click', hideProfilePopup);
+popupOverlay?.addEventListener('click', UI.hideProfilePopup);
+
 
 // == ЛОГІКА ДЛЯ КНОПКИ "ВІДГУКНУТИСЬ" (ОПТИМАЛЬНА ВЕРСІЯ) ==
 if (requestListContainer) {
