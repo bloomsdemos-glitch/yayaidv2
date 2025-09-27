@@ -92,5 +92,33 @@ UI.createDriverOrderCard = function(order) {
     return li;
 };
 
+UI.createActiveTripCardHTML = function(trip, userType) {
+    const isDriver = userType === 'driver';
+    const title = 'Активна поїздка';
+    const driver = drivers_database.find(d => d.id === trip.driverId);
+    const driverName = driver ? driver.name : 'Водій';
+    const personName = isDriver ? trip.passengerName : driverName;
+    const personRole = isDriver ? 'Пасажир' : 'Водій';
+    return `
+        <div class="order-card active-trip" style="margin: 0; cursor: pointer;">
+            <div class="order-header" style="padding-bottom: 8px;">
+                <h3 class="order-title">${title}</h3>
+            </div>
+            <div class="route-addresses" style="font-size: 16px;">
+                <div class="address-line">
+                    <i class="fa-solid fa-circle start-address-icon"></i>
+                    <span>${trip.from || trip.direction.split(' - ')[0]}</span>
+                </div>
+                <div class="address-line">
+                    <i class="fa-solid fa-location-dot end-address-icon"></i>
+                    <span>${trip.to || trip.direction.split(' - ')[1]}</span>
+                </div>
+            </div>
+            <div class="driver-info" style="padding-top: 8px; border-top: 1px solid var(--md-outline);">
+                <span><strong>${personRole}:</strong> ${personName}</span>
+            </div>
+        </div>
+    `;
+};
 
     
