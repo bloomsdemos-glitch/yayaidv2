@@ -1676,32 +1676,49 @@ driverArrivedBtn?.addEventListener('click', () => {
 
 driverStartTripBtn?.addEventListener('click', () => {
     if (active_trips.length === 0) return;
-    active_trips[0].status = 'in_progress';
+
+    
+    const trip = active_trips[0];
+    trip.status = 'in_progress';
     saveState();
-    alert('Поїздку розпочато!');
+
+    
+    updateAllDriverTripViews();
+    updateHomeScreenView('passenger');
+
     driverStartTripBtn.classList.add('disabled');
     driverFinishTripBtn.classList.remove('disabled');
+
+    
+    alert('Поїздку розпочато!');
 });
+
 
 driverFinishTripBtn?.addEventListener('click', () => {
     if (active_trips.length === 0) {
         alert('Помилка: не знайдено активних поїздок для завершення.');
         return;
     }
+
+    // 1. Копіюємо поїздку, що завершується
     const finishedTrip = active_trips[0];
     const passengerId = finishedTrip.passengerId;
-    
+
+    // 2. Додаємо її в архіви обох користувачів
     driver_archive.push(finishedTrip);
     passenger_archive.push(finishedTrip);
-    active_trips.splice(0, 1);
-    saveState();
 
+    // 3. Видаляємо з масиву активних поїздок
+    active_trips.splice(0, 1);
+    saveState(); // Зберігаємо всі зміни в базах
+
+    // 4. Створюємо сповіщення для пасажира про оцінку
     const passenger = passengers_database.find(p => p.id === passengerId);
     if (passenger) {
         const newNotification = {
             id: Date.now(),
             userId: passenger.id,
-            text: `<strong>Поїздку завершено.</strong> Дякуємо, що обрали наш сервіс! Не забудьте оцінити водія.`,
+            text: `<strong>Поїздку завершено.</strong> Дякуємо! Не забудьте оцінити водія.`,
             type: 'trip_finished',
             isRead: false
         };
@@ -1709,20 +1726,18 @@ driverFinishTripBtn?.addEventListener('click', () => {
         saveState();
     }
 
-    alert('Поїздку успішно завершено!');
-    
+    // 5. Оновлюємо інтерфейс для обох, щоб їх екрани повернулись до початкового стану
+    updateAllDriverTripViews();
+    updateHomeScreenView('passenger'); // <-- ВАЖЛИВЕ ДОПОВНЕННЯ
+
+    // 6. Скидаємо стан кнопок керування до початкового
     driverArrivedBtn.classList.remove('disabled');
     driverStartTripBtn.classList.add('disabled');
     driverFinishTripBtn.classList.add('disabled');
-    
-    updateAllDriverTripViews();
 
-    
-    navigateTo('driver-home-screen');
+    alert('Поїздку успішно завершено!');
+    navigateTo('driver-home-screen'); // Повертаємо водія на головний екран
 });
-
-
-
 
 
 // === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
