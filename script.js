@@ -1153,63 +1153,46 @@ function selectOffer(offerId) {
 }
 
 
-// Функція, яка малює список сповіщень v2.2 (зберігає ID для підтвердження)
-function displayNotifications(userType) {
-    const listContainer = document.getElementById('notification-list');
-    const placeholder = listContainer.querySelector('.list-placeholder');
+// "Обробник": знає, що робити при кліку на сповіщення
+function handleNotificationInteraction(event) {
+    const notificationCard = event.target.closest('.notification-card');
+    const offerId = notificationCard?.dataset.offerId;
 
-    const backBtn = document.querySelector('#notifications-screen .btn-back');
-    if (userType === 'driver') {
-        backBtn.dataset.target = 'driver-home-screen';
-    } else {
-        backBtn.dataset.target = 'passenger-home-screen';
-    }
+    if (!offerId) return; // Якщо це не клікабельне сповіщення, нічого не робимо
 
-    listContainer.innerHTML = '';
-    listContainer.appendChild(placeholder);
+    const offer = vh_offers_database.find(o => o.id == offerId);
+    const passenger = passengers_database.find(p => p.id === 1); // Поки хардкод
+    if (!offer || !passenger) return;
 
-    const currentUserId = (userType === 'driver') ? 1 : 1; 
+    // Заповнюємо даними екран підтвердження
+    document.getElementById('vh-confirm-passenger-name').textContent = passenger.name;
+    document.getElementById('vh-confirm-passenger-rating').innerHTML = `4.8 <i class="fa-solid fa-star"></i> • 27 поїздок`;
+    document.getElementById('vh-confirm-direction').textContent = offer.direction;
+    document.getElementById('vh-confirm-specifics').textContent = `${offer.fromSpecific || 'Точка не вказана'} - ${offer.toSpecific || 'Точка не вказана'}`;
+    document.getElementById('vh-confirm-time').textContent = offer.time;
+
+    currentOfferIdForConfirmation = offer.id;
+    navigateTo('driver-vh-confirmation-screen');
+}
+
+// "Менеджер": керує процесом показу сповіщень
+function showUserNotifications(userType) {
+    const currentUserId = (userType === 'driver') ? 1 : 1;
     const userNotifications = notifications_database.filter(n => n.userId === currentUserId);
 
-    if (userNotifications.length === 0) {
-        placeholder.style.display = 'block';
-    } else {
-        placeholder.style.display = 'none';
-        userNotifications.slice().reverse().forEach(notif => {
-            const li = document.createElement('li');
-            li.className = 'notification-card';
-            if(notif.isRead) li.classList.add('is-read');
+    const backBtn = document.querySelector('#notifications-screen .btn-back');
+    backBtn.dataset.target = (userType === 'driver') ? 'driver-home-screen' : 'passenger-home-screen';
 
-            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-file-circle-info';
+    // Кажемо "Робітнику" намалювати список
+    UI.displayNotifications(userNotifications, userType);
 
-            li.innerHTML = `
-                <i class="notification-icon ${iconClass}"></i>
-                <p class="notification-text">${notif.text}</p>
-            `;
-
-            if (notif.type === 'new_order' && userType === 'driver') {
-                li.style.cursor = 'pointer';
-                li.addEventListener('click', () => {
-                    const offer = vh_offers_database.find(o => o.id === notif.offerId);
-                    const passenger = passengers_database.find(p => p.id === 1);
-                    if (!offer || !passenger) return;
-
-                    document.getElementById('vh-confirm-passenger-name').textContent = passenger.name;
-                    document.getElementById('vh-confirm-passenger-rating').innerHTML = `4.8 <i class="fa-solid fa-star"></i> • 27 поїздок`;
-                    document.getElementById('vh-confirm-direction').textContent = offer.direction;
-                    document.getElementById('vh-confirm-specifics').textContent = `${offer.fromSpecific || 'Точка не вказана'} - ${offer.toSpecific || 'Точка не вказана'}`;
-                    document.getElementById('vh-confirm-time').textContent = offer.time;
-
-                    // Ось цей рядок ми додаємо!
-                    currentOfferIdForConfirmation = notif.offerId; // ЗАПИСУЄМО ID В ПАМ'ЯТЬ
-
-                    navigateTo('driver-vh-confirmation-screen');
-                });
-            }
-
-            listContainer.appendChild(li);
-        });
+    const listContainer = document.getElementById('notification-list');
+    listContainer.removeEventListener('click', handleNotificationInteraction); // Чистимо старий обробник
+    if (userType === 'driver') {
+        listContainer.addEventListener('click', handleNotificationInteraction); // Вішаємо нового "Обробника"
     }
+
+    navigateTo('notifications-screen');
 }
 
 
@@ -1396,7 +1379,7 @@ driverNotificationsBtn?.addEventListener('click', () => {
     notifications_database.forEach(n => n.isRead = true);
 
     // Показуємо екран зі сповіщеннями
-    displayNotifications('driver');
+    showUserNotifications('driver');
     navigateTo('notifications-screen');
 });
 
@@ -1872,7 +1855,7 @@ function handleNotificationClick(userType) {
         }
     });
 
-    displayNotifications(userType);
+    showUserNotifications(userType);
     navigateTo('notifications-screen');
 }
 
