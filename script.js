@@ -233,7 +233,7 @@ if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
 if(declineOrderBtn) declineOrderBtn.onclick = () => {
     navigateTo('driver-find-passengers-screen');
 };
-}
+
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ v2.1 (клікабельно для всіх) ==
 function displayArchives() {
