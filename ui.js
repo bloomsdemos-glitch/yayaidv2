@@ -1,3 +1,6 @@
+const UI = {};
+
+
 const screens = document.querySelectorAll('.screen');
         function showScreen(screenId) {
         screens.forEach(screen => {
