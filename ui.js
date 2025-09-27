@@ -172,3 +172,18 @@ UI.displayDriverFullProfile = function(driverId) {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
 };
+
+UI.displayPassengerProfile = function(passengerId) {
+    const passenger = passengers_database.find(p => p.id === passengerId);
+    if (!passenger) {
+        console.error('Пасажира з ID', passengerId, 'не знайдено.');
+        return;
+    }
+
+    // Заповнюємо поля даними, звертаючись до них через document.getElementById
+    document.getElementById('profile-passenger-name-header').textContent = `Профіль: ${passenger.name}`;
+    document.getElementById('profile-passenger-name').textContent = passenger.name;
+    document.getElementById('profile-passenger-trips').textContent = passenger.trips;
+    document.getElementById('profile-passenger-bio').textContent = passenger.bio;
+    document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>6 👍🏻 0 👎🏻</strong>`;
+};
