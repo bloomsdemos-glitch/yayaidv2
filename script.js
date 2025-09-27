@@ -390,74 +390,10 @@ const profileDriverTags = document.getElementById('profile-driver-tags');
 const profileDriverReviews = document.getElementById('profile-driver-reviews');
 const profileRequestRideBtn = document.getElementById('profile-request-ride-btn');
 
-// == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛІВ ВОДІЇВ (РОЗДІЛЕНО) ==
-
-// Функція №1: Готує дані для проміжного екрану профілю
-function displayDriverProfile(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
-    if (!driver) {
-        console.error('Водія з ID', driverId, 'не знайдено.');
-        return;
-    }
-
-    // Заповнюємо ТІЛЬКИ елементи на екрані driver-profile-screen
-    document.getElementById('profile-driver-name').textContent = driver.name;
-    document.getElementById('profile-driver-trips').textContent = driver.trips;
-    
-    if (driver.trips < 5) {
-        document.getElementById('profile-driver-rating').innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
-    } else {
-        document.getElementById('profile-driver-rating').textContent = driver.rating.toFixed(1);
-    }
-}
-
-// Функція №2: Готує дані для ПОВНОГО екрану профілю
-function displayDriverFullProfile(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
-    if (!driver) return;
-
-    // Заповнюємо елементи на екрані driver-full-profile-screen
-    document.getElementById('profile-driver-name-header').textContent = `Профіль: ${driver.name}`;
-    document.getElementById('profile-driver-name-full').textContent = driver.name;
-    document.getElementById('profile-driver-trips-full').textContent = `${driver.trips} поїздки`;
-    document.getElementById('profile-driver-car').textContent = driver.car;
-
-    if (driver.trips < 5) {
-        document.getElementById('profile-driver-rating-full').innerHTML = `<small>Новий водій</small>`;
-    } else {
-        document.getElementById('profile-driver-rating-full').innerHTML = `<i class="fa-solid fa-star"></i> ${driver.rating.toFixed(1)}`;
-    }
-    
-    const tagsContainer = document.getElementById('profile-driver-tags');
-    tagsContainer.innerHTML = '';
-    driver.tags.forEach(tag => {
-        tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
-    });
-
-    const reviewsContainer = document.getElementById('profile-driver-reviews');
-    const reviewsTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
-    reviewsTitle.textContent = `Відгуки (${driver.reviews.length})`;
-    reviewsContainer.innerHTML = '';
-    
-    if (driver.reviews.length > 0) {
-        driver.reviews.forEach(review => {
-            reviewsContainer.innerHTML += `
-                <div class="review-card">
-                    <div class="review-header">
-                        <strong>${review.name}</strong>
-                        <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
-                    </div>
-                    <p class="review-text">${review.text}</p>
-                </div>`;
-        });
-    } else {
-        reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
-    }
-}
 
 // Оновлюємо обробник для кнопки "Переглянути профіль"
 document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
-    displayDriverFullProfile(1); // Спочатку готуємо дані для повного профілю
+    UI.displayDriverFullProfile(1);
     navigateTo('driver-full-profile-screen'); // А потім переходимо
 });
 
@@ -519,7 +455,7 @@ function displayAvailableDrivers() {
 
         // 3. Додаємо магію: обробник кліку, який відкриває профіль саме цього водія
         li.addEventListener('click', () => {
-            displayDriverProfile(driver.id);
+            UI.displayDriverProfile(driver.id);
         });
 
         // 4. Додаємо готову картку в список
@@ -734,7 +670,7 @@ driverTabItems.forEach(item => {
 
         // Новий, виправлений код:
 if (target === 'driver-profile-screen') {
-    displayDriverProfile(1);
+    UI.displayDriverProfile(1);
     navigateTo(target);
 } else if (target === 'driver-valky-kharkiv-screen') { // <-- Додаємо спеціальну перевірку
     displayVhRequests(); // <-- Викликаємо "кур'єра", щоб оновити список
@@ -2047,7 +1983,7 @@ function showProfilePopup(userType) {
         popupUserName.textContent = driver.name;
         popupUserDetails.textContent = `${driver.rating.toFixed(1)} ★ • ${driver.trips} поїздок`;
         popupViewProfileBtn.onclick = () => {
-            displayDriverProfile(driver.id);
+            UI.displayDriverProfile(driver.id);
             navigateTo('driver-profile-screen');
             hideProfilePopup();
         };
