@@ -1,4 +1,5 @@
-    function showScreen(screenId) {
+const screens = document.querySelectorAll('.screen');
+        function showScreen(screenId) {
         screens.forEach(screen => {
             screen.classList.add('hidden');
             screen.classList.remove('active');
