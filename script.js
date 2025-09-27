@@ -221,17 +221,6 @@ function resetQuickOrder() {
     const detailsCommission = document.getElementById('details-commission');
     const detailsDriverEarning = document.getElementById('details-driver-earning');
     
-    function createDriverOrderCard(order) {
-        const li = document.createElement('li');
-        li.className = 'order-card driver-view';
-        const timeIcon = order.time === 'Зараз' ? '<div class="status-dot online"></div>' : '<i class="fa-solid fa-clock"></i>';
-        li.innerHTML = `
-            <div class="order-main-info"><div class="passenger-info"><div class="avatar-convex"><i class="fa-solid fa-user"></i></div><div class="passenger-details"><strong>${order.passengerName}</strong><span>${order.rating} <i class="fa-solid fa-star"></i></span></div></div><div class="price-info"><span class="price-amount">~ ${order.price} грн</span><span class="price-label">Ваш дохід</span></div></div>
-            <div class="order-route-info"><div class="address-line"><i class="fa-solid fa-circle start-address-icon"></i><span>${order.from}</span></div><div class="address-line"><i class="fa-solid fa-location-dot end-address-icon"></i><span>${order.to}</span></div></div>
-            <div class="order-time-info">${timeIcon}<span>${order.time}</span></div>
-        `;
-        return li;
-    }
 
 function displayDriverOrders() {
     const orderList = document.getElementById('driver-order-list');
