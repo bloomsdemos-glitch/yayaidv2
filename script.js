@@ -133,80 +133,7 @@ driverFabBtn?.addEventListener('click', () => {
     const paymentCardBtn = document.getElementById('payment-card-btn');
     let orderData = {};
 
-    function updateSummary() {
-        if (orderData.from || orderData.to) { quickOrderSummaryCard.classList.remove('hidden'); }
-        if (orderData.from) { summaryFrom.textContent = orderData.from; summaryFromContainer.style.display = 'flex'; }
-        if (orderData.to) { summaryTo.textContent = orderData.to; summaryToContainer.style.display = 'flex'; }
-        if (orderData.time) { summaryTime.textContent = orderData.time; summaryTimeContainer.style.display = 'flex'; } 
-        else { summaryTimeContainer.style.display = 'none'; }
-    }
-
-function goToStep(stepToShow) {
-    addressStep.classList.remove('active');
-    timeStep.classList.remove('active');
-    paymentStep.classList.remove('active');
-
-    if (stepToShow === 'address') {
-        addressStep.classList.add('active');
-    } else if (stepToShow === 'time') {
-        timeStep.classList.add('active');
-    } else if (stepToShow === 'payment') {
-        paymentStep.classList.add('active');
-    }
-}
-
-
-
-
-function resetQuickOrder() {
-    orderData = {};
-    fromAddressInput.value = '';
-    toAddressInput.value = '';
-    document.getElementById('comment').value = '';
-    quickOrderSummaryCard.classList.add('hidden');
-    summaryFromContainer.style.display = 'none';
-    summaryToContainer.style.display = 'none';
-    summaryTimeContainer.style.display = 'none';
     
-    // Ховаємо блок з інфо про водія, якщо він був
-    document.getElementById('summary-driver-container').style.display = 'none'; 
-
-    addressNextBtn.classList.add('disabled');
-    document.getElementById('from-address-container').style.display = 'block';
-    fromVillageContainer.style.display = 'none';
-    document.getElementById('to-address-container').style.display = 'block';
-    toVillageContainer.style.display = 'none';
-    fromVillageSelect.selectedIndex = 0;
-    toVillageSelect.selectedIndex = 0;
-    settlementButtons.forEach(btn => {
-        if (btn.dataset.type === 'valky') btn.classList.add('active');
-        else btn.classList.remove('active');
-    });
-    timeChoiceContainer.style.display = 'flex';
-    timeResultContainer.style.display = 'none';
-    pickerInput.style.display = 'none';
-    goToStep('address');
-}
-
-
-    function showTimeResult(text) {
-        orderData.time = text;
-        timeResultText.textContent = text;
-        timeChoiceContainer.style.display = 'none';
-        timeResultContainer.style.display = 'flex';
-        updateSummary();
-    }
-    function checkAddressInputs() {
-        const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
-        const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
-        const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') || (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
-        const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') || (toType === 'village' && toVillageSelect.selectedIndex > 0);
-        if (isFromValid && isToValid) {
-            addressNextBtn.classList.remove('disabled');
-        } else {
-            addressNextBtn.classList.add('disabled');
-        }
-    }
 
     // == ЛОГІКА ДЛЯ ЕКРАНУ "ШУКАЮТЬ ВОДІЯ" ==
 
@@ -560,7 +487,7 @@ showMyOrdersBtn?.addEventListener('click', () => {
 
 showQuickOrderBtn?.addEventListener('click', () => {
     navigateTo('quick-order-screen');
-    resetQuickOrder();
+    UI.resetQuickOrder();
 });
 
 findDriverBtn?.addEventListener('click', () => {
@@ -1431,7 +1358,7 @@ confirmRideWithDriverBtn?.addEventListener('click', () => {
 
     // 2. Переходимо на екран Швидкого замовлення
     navigateTo('quick-order-screen');
-    resetQuickOrder();
+    UI.resetQuickOrder();
 
     // 3. Заповнюємо картку-саммарі даними про водія і показуємо її
     const summaryCard = document.getElementById('quick-order-summary-card');
@@ -1566,14 +1493,14 @@ document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEvent
             } else {
                 toVillageContainer.style.display = type === 'village' ? 'block' : 'none';
             }
-            checkAddressInputs();
+            UI.checkAddressInputs();
         });
     });
-    fromAddressInput.addEventListener('input', checkAddressInputs);
-    toAddressInput.addEventListener('input', checkAddressInputs);
-    fromVillageSelect.addEventListener('change', checkAddressInputs);
-    toVillageSelect.addEventListener('change', checkAddressInputs);
-addressNextBtn.addEventListener('click', () => {
+    fromAddressInput.addEventListener('input', UI.checkAddressInputs);
+    toAddressInput.addEventListener('input', UI.checkAddressInputs);
+    fromVillageSelect.addEventListener('change', UI.checkAddressInputs);
+    toVillageSelect.addEventListener('change', UI.checkAddressInputs);
+    addressNextBtn.addEventListener('click', () => {
     if (addressNextBtn.classList.contains('disabled')) return;
     const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
     const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
@@ -1590,8 +1517,8 @@ addressNextBtn.addEventListener('click', () => {
     }
     orderData.to = toAddress;
 
-    updateSummary();
-    goToStep('time');
+    UI.updateSummary();
+    UI.goToStep('time');
 });
 
 
@@ -1610,7 +1537,7 @@ addressNextBtn.addEventListener('click', () => {
             if (choice === 'now') {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
-                showTimeResult(`Зараз (${timeString})`);
+                UI.showTimeResult(`Зараз (${timeString})`);
             } else {
                 pickerInput.style.display = 'block';
                 let pickerOptions = {
@@ -1650,7 +1577,7 @@ timeNextBtn?.addEventListener('click', () => {
         paymentCardBtn.classList.add('disabled');
     }
     
-    goToStep('payment');
+    UI.goToStep('payment');
     submitOrderBtn.classList.add('disabled');
 });
 
@@ -1742,9 +1669,9 @@ backButtons.forEach(button => {
             const isOnPaymentStep = paymentStep.classList.contains('active');
 
             if (isOnTimeStep) {
-                goToStep('address'); // З кроку "Час" повертаємось на "Адресу"
+                UI.goToStep('address'); // З кроку "Час" повертаємось на "Адресу"
             } else if (isOnPaymentStep) {
-                goToStep('time'); // З кроку "Оплата" повертаємось на "Час"
+                UI.goToStep('time'); // З кроку "Оплата" повертаємось на "Час"
             } else {
                 // Якщо ми на першому кроці, показуємо алерт
                 if (confirm('Скасувати оформлення замовлення? Всі дані буде втрачено.')) {
