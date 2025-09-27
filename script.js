@@ -1921,10 +1921,12 @@ if (requestListContainer) {
             }
 
             const newActiveVhTrip = {
-                ...request,
-                driverId: 1,
-                passengerName: passengerName
-            };
+    ...request,
+    driverId: 1,
+    passengerName: passengerName,
+    status: 'pending' // <-- ДОДАЄМО ПОЧАТКОВИЙ СТАТУС
+};
+
 
             active_trips.push(newActiveVhTrip);
 
