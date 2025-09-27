@@ -66,7 +66,7 @@ let orders_database = [];
 
 
 // == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
-function saveState() {
+window.saveState = function() {
     const state = {
         active_trips,
         passenger_archive,
@@ -80,7 +80,7 @@ function saveState() {
     sessionStorage.setItem('appState', JSON.stringify(state));
 }
 
-function loadState() {
+window.loadState = function() {
     const savedState = sessionStorage.getItem('appState');
     if (savedState) {
         const state = JSON.parse(savedState);
