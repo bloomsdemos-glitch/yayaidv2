@@ -55,8 +55,6 @@ const screens = document.querySelectorAll('.screen');
         themeCheckbox.addEventListener('change', switchTheme);
     }
 
-
-
     // === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
     const pin1 = document.getElementById('pin1');
     const pin2 = document.getElementById('pin2');
