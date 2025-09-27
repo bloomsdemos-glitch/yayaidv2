@@ -162,9 +162,39 @@ function displayDriverOrders() {
         // Ця логіка має бути ВСЕРЕДИНІ циклу
         if (order.paymentMethod === 'card' && !fakeDriverAcceptsCard) {
             cardElement.classList.add('disabled-for-driver');
-        } else {
+         } else {
             cardElement.addEventListener('click', () => {
-                displayOrderDetails(order);
+                // Крок 1: Просимо UI намалювати деталі
+                UI.displayOrderDetails(order);
+
+                // Крок 2: Налаштовуємо логіку кнопок тут, в script.js
+                const acceptOrderBtn = document.getElementById('accept-order-btn');
+                const declineOrderBtn = document.getElementById('decline-order-btn');
+
+                if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
+                    const newTaxiTrip = {
+                        id: Date.now(),
+                        driverId: 1, 
+                        passengerId: 1, 
+                        passengerName: 'Олена',
+                        from: document.getElementById('details-from-address').textContent,
+                        to: document.getElementById('details-to-address').textContent,
+                        time: 'Зараз',
+                        type: 'taxi'
+                    };
+                    active_trips.push(newTaxiTrip);
+                    saveState();
+                    updateAllDriverTripViews();
+                    updateHomeScreenView('passenger');
+                    displayDriverActiveTrip();
+                    navigateTo('driver-orders-screen');
+                    alert('Замовлення прийнято!');
+                };
+                if(declineOrderBtn) declineOrderBtn.onclick = () => {
+                    navigateTo('driver-find-passengers-screen');
+                };
+
+                // Крок 3: Переходимо на екран
                 navigateTo('driver-order-details-screen');
             });
         }
@@ -172,28 +202,6 @@ function displayDriverOrders() {
         orderList.appendChild(cardElement);
     });
 }
-
-    function displayOrderDetails(order) {
-    if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
-    if(detailsPassengerRating) detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
-    if(detailsFromAddress) detailsFromAddress.textContent = order.from;
-    if(detailsToAddress) detailsToAddress.textContent = order.to;
-
-    const commission = Math.round(order.price * 0.05);
-    if(detailsTotalPrice) detailsTotalPrice.textContent = `${order.price} грн`;
-    if(detailsCommission) detailsCommission.textContent = `- ${commission} грн`;
-    if(detailsDriverEarning) detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
-
-    const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
-    if (Math.random() > 0.5) {
-        if(detailsCommentText) detailsCommentText.textContent = randomComment;
-        if(detailsCommentContainer) detailsCommentContainer.style.display = 'block';
-    } else {
-        if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
-    }
-
-    const acceptOrderBtn = document.getElementById('accept-order-btn');
-    const declineOrderBtn = document.getElementById('decline-order-btn');
 
 // === ОНОВЛЕНА ЛОГІКА ПРИЙНЯТТЯ ЗВИЧАЙНОГО ЗАМОВЛЕННЯ ===
 if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
