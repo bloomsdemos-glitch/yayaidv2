@@ -187,3 +187,77 @@ UI.displayPassengerProfile = function(passengerId) {
     document.getElementById('profile-passenger-bio').textContent = passenger.bio;
     document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>6 👍🏻 0 👎🏻</strong>`;
 };
+UI.updateSummary = function() {
+    if (orderData.from || orderData.to) { quickOrderSummaryCard.classList.remove('hidden');
+    }
+    if (orderData.from) { summaryFrom.textContent = orderData.from; summaryFromContainer.style.display = 'flex';
+    }
+    if (orderData.to) { summaryTo.textContent = orderData.to; summaryToContainer.style.display = 'flex';
+    }
+    if (orderData.time) { summaryTime.textContent = orderData.time; summaryTimeContainer.style.display = 'flex';
+    } 
+    else { summaryTimeContainer.style.display = 'none';
+    }
+};
+
+UI.goToStep = function(stepToShow) {
+    addressStep.classList.remove('active');
+    timeStep.classList.remove('active');
+    paymentStep.classList.remove('active');
+    if (stepToShow === 'address') {
+        addressStep.classList.add('active');
+    } else if (stepToShow === 'time') {
+        timeStep.classList.add('active');
+    } else if (stepToShow === 'payment') {
+        paymentStep.classList.add('active');
+    }
+};
+
+UI.resetQuickOrder = function() {
+    orderData = {};
+    fromAddressInput.value = '';
+    toAddressInput.value = '';
+    document.getElementById('comment').value = '';
+    quickOrderSummaryCard.classList.add('hidden');
+    summaryFromContainer.style.display = 'none';
+    summaryToContainer.style.display = 'none';
+    summaryTimeContainer.style.display = 'none';
+    document.getElementById('summary-driver-container').style.display = 'none';
+    addressNextBtn.classList.add('disabled');
+    document.getElementById('from-address-container').style.display = 'block';
+    fromVillageContainer.style.display = 'none';
+    document.getElementById('to-address-container').style.display = 'block';
+    toVillageContainer.style.display = 'none';
+    fromVillageSelect.selectedIndex = 0;
+    toVillageSelect.selectedIndex = 0;
+    settlementButtons.forEach(btn => {
+        if (btn.dataset.type === 'valky') btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    timeChoiceContainer.style.display = 'flex';
+    timeResultContainer.style.display = 'none';
+    pickerInput.style.display = 'none';
+    UI.goToStep('address'); // <-- Важливо: тут теж тепер UI.
+};
+
+UI.showTimeResult = function(text) {
+    orderData.time = text;
+    timeResultText.textContent = text;
+    timeChoiceContainer.style.display = 'none';
+    timeResultContainer.style.display = 'flex';
+    UI.updateSummary(); // <-- Важливо: і тут теж UI.
+};
+
+UI.checkAddressInputs = function() {
+    const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
+    const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
+    const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') ||
+    (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
+    const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') ||
+    (toType === 'village' && toVillageSelect.selectedIndex > 0);
+    if (isFromValid && isToValid) {
+        addressNextBtn.classList.remove('disabled');
+    } else {
+        addressNextBtn.classList.add('disabled');
+    }
+};
