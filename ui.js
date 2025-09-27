@@ -281,3 +281,18 @@ UI.displayOrderDetails = function(order) {
         if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
     }
 };
+
+UI.showProfilePopup = function(userData) {
+    // Ця функція тепер тільки заповнює поля даними, які їй передали
+    popupAvatarIcon.className = userData.icon;
+    popupUserName.textContent = userData.name;
+    popupUserDetails.textContent = userData.details;
+    
+    popupOverlay.classList.remove('hidden');
+    profilePopup.classList.add('visible');
+};
+
+UI.hideProfilePopup = function() {
+    popupOverlay?.classList.add('hidden');
+    profilePopup?.classList.remove('visible');
+};
