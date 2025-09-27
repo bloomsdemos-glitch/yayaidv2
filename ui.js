@@ -187,6 +187,7 @@ UI.displayPassengerProfile = function(passengerId) {
     document.getElementById('profile-passenger-bio').textContent = passenger.bio;
     document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>6 👍🏻 0 👎🏻</strong>`;
 };
+
 UI.updateSummary = function() {
     if (orderData.from || orderData.to) { quickOrderSummaryCard.classList.remove('hidden');
     }
@@ -295,4 +296,40 @@ UI.showProfilePopup = function(userData) {
 UI.hideProfilePopup = function() {
     popupOverlay?.classList.add('hidden');
     profilePopup?.classList.remove('visible');
+};
+
+UI.displayNotifications = function(notifications, userType) {
+    const listContainer = document.getElementById('notification-list');
+    const placeholder = listContainer.querySelector('.list-placeholder');
+
+    listContainer.innerHTML = '';
+    listContainer.appendChild(placeholder);
+
+    if (notifications.length === 0) {
+        placeholder.style.display = 'block';
+    } else {
+        placeholder.style.display = 'none';
+        notifications.slice().reverse().forEach(notif => {
+            const li = document.createElement('li');
+            li.className = 'notification-card';
+            if (notif.isRead) li.classList.add('is-read');
+
+            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-bell';
+            
+            // Зберігаємо важливі дані прямо на елементі
+            li.dataset.notificationId = notif.id;
+            if (notif.offerId) {
+                li.dataset.offerId = notif.offerId;
+            }
+            if (notif.type === 'new_order' && userType === 'driver') {
+                li.style.cursor = 'pointer';
+            }
+
+            li.innerHTML = `
+                <i class="notification-icon ${iconClass}"></i>
+                <p class="notification-text">${notif.text}</p>
+            `;
+            listContainer.appendChild(li);
+        });
+    }
 };
