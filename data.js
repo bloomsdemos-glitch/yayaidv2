@@ -44,8 +44,6 @@ let drivers_database = [
     }
 ];
 
-let notifications_database = [];
-
 let passengers_database = [
     {
         id: 1,
@@ -56,10 +54,15 @@ let passengers_database = [
     }
 ];
 
+// Оголошуємо ВСІ наші "бази" тут, і тільки тут
+let notifications_database = [];
 let vh_requests_database = [];
 let vh_offers_database = [];
 let custom_trips_database = [];
-let active_trips = []; // Єдина база для ВСІХ активних поїздок
+let active_trips = [];
+let passenger_archive = [];
+let driver_archive = [];
+let orders_database = [];
 
 
 // == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
@@ -92,5 +95,3 @@ function loadState() {
         custom_trips_database = state.custom_trips_database || [];
     }
 }
-
-
