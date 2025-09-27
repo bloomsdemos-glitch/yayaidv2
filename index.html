@@ -1095,18 +1095,11 @@
     </header>
     <main>
         <div id="quick-order-summary-card" class="order-summary-card hidden">
-    <h4>Ваше замовлення:</h4>
-    <div class="summary-item" id="summary-driver-container" style="display: none;">
-
-    <div class="summary-item" id="summary-driver-container" style="display: none;">
-        <span><i class="fa-solid fa-user-tie"></i> Водій:</span>
-        <strong id="summary-driver"></strong>
-    </div>
-
-    <div class="summary-item" id="summary-from-container" style="display: none;">
-        
-
-
+            <h4>Ваше замовлення:</h4>
+            <div class="summary-item" id="summary-driver-container" style="display: none;">
+                <span><i class="fa-solid fa-user-tie"></i> Водій:</span>
+                <strong id="summary-driver"></strong>
+            </div>
             <div class="summary-item" id="summary-from-container" style="display: none;">
                 <span><i class="fa-solid fa-circle-dot from-icon"></i> Звідки:</span>
                 <strong id="summary-from"></strong>
@@ -1115,7 +1108,7 @@
                 <span><i class="fa-solid fa-location-dot to-icon"></i> Куди:</span>
                 <strong id="summary-to"></strong>
             </div>
-             <div class="summary-item" id="summary-time-container" style="display: none;">
+            <div class="summary-item" id="summary-time-container" style="display: none;">
                 <span><i class="fa-solid fa-clock when-icon"></i> Коли:</span>
                 <strong id="summary-time"></strong>
             </div>
@@ -1131,56 +1124,34 @@
                 <div id="from-village-container" class="form-group" style="display: none;">
                     <select id="from-village-select" class="form-input">
                         <option selected disabled>Оберіть населений пункт...</option>
-                       <option>Харків</option>
-                <option>Ков'яги</option>
-                <option>Шарівка</option>
-                <option>Костів</option>
-                <option>Ясеневе</option>
-                <option>Високопілля</option>
-                <option>Сидоренкове</option>
-                <option>Сніжків</option>
-                <option>Баранове</option>
-                <option>Чутово</option>
-                <option>Полтава</option>
-                <option>Нова Водолага</option>
-                    </select>
+                        <option>Харків</option>
+                        <option>Ков'яги</option>
+                        </select>
                 </div>
                 <div id="from-address-container" class="form-group">
                     <div class="input-with-icon">
-                         <input type="text" id="from-address" class="form-input" placeholder="Введіть вулицю або місце">
-                         <i class="fa-solid fa-location-crosshairs input-icon"></i>
+                        <input type="text" id="from-address" class="form-input" placeholder="Введіть вулицю або місце">
+                        <i class="fa-solid fa-location-crosshairs input-icon"></i>
                     </div>
                 </div>
             </div>
-
             <div class="address-block">
                 <label class="section-label">Куди</label>
                 <div class="settlement-choice">
                     <button class="btn-settlement active" data-group="to" data-type="valky">Валки</button>
                     <button class="btn-settlement" data-group="to" data-type="village">Інший н.п.</button>
                 </div>
-        <div id="to-village-container" class="form-group" style="display: none;">
-            <select id="to-village-select" class="form-input">
-                <option selected disabled>Оберіть населений пункт...</option>
-                <option>Харків</option>
-                <option>Ков'яги</option>
-                <option>Шарівка</option>
-                <option>Костів</option>
-                <option>Ясеневе</option>
-                <option>Високопілля</option>
-                <option>Сидоренкове</option>
-                <option>Сніжків</option>
-                <option>Баранове</option>
-                <option>Чутово</option>
-                <option>Полтава</option>
-                <option>Нова Водолага</option>
-                    </select>
+                <div id="to-village-container" class="form-group" style="display: none;">
+                    <select id="to-village-select" class="form-input">
+                        <option selected disabled>Оберіть населений пункт...</option>
+                        <option>Харків</option>
+                        <option>Ков'яги</option>
+                        </select>
                 </div>
                 <div id="to-address-container" class="form-group">
                     <input type="text" id="to-address" class="form-input" placeholder="Введіть вулицю або місце">
                 </div>
             </div>
-            
             <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
         </div>
 
@@ -1206,36 +1177,16 @@
         <div id="payment-step" class="step-container">
             <label class="section-label">Спосіб оплати</label>
             <div class="button-group-vertical">
-                <button type="button" id="payment-cash-btn" class="btn-segment" data-payment-choice="cash">
-                    <i class="fa-solid fa-money-bill-wave"></i> Готівка
-                </button>
-                <button type="button" id="payment-card-btn" class="btn-segment" data-payment-choice="card">
-                    <i class="fa-solid fa-credit-card"></i> Картка
-                </button>
+                <button type="button" id="payment-cash-btn" class="btn-segment" data-payment-choice="cash"><i class="fa-solid fa-money-bill-wave"></i> Готівка</button>
+                <button type="button" id="payment-card-btn" class="btn-segment" data-payment-choice="card"><i class="fa-solid fa-credit-card"></i> Картка</button>
             </div>
             <div id="card-payment-note" style="display: none; font-size: 13px; text-align: center; color: var(--md-on-surface-variant);">
                  <i class="fa-solid fa-circle-info"></i> Оплата буде списана з вашої картки після завершення поїздки.
             </div>
             <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
         </div>
-
     </main>
 </div>
-
-<div id="order-confirmation-screen" class="screen hidden">
-    <main class="content-center">
-        <div class="confirmation-card">
-            <h3 class="conf-title">Замовлення #4273</h3>
-            <p class="conf-text">⚡️ Прийнято! Вже шукаємо для вас вільних водіїв! Очікуйте на сповіщення від водія про прийняття вашого замовлення.</p>
-            <div class="spinner"></div>
-            <p class="conf-note"><i class="fa-solid fa-circle-info"></i> Ви можете відслідковувати і скасувати поточне замовлення в розділі «Мої поїздки».</p>
-            <button id="go-to-my-orders-btn" class="btn-main">Мої поїздки</button>
-        </div>
-    </main>
-</div>
-
-
-
 
         <div id="help-screen" class="screen hidden">
             <header>
