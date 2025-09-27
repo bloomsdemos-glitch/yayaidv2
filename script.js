@@ -75,17 +75,18 @@ let active_trips = []; // Єдина база для ВСІХ активних �
 // == ЛОГІКА ЗБЕРЕЖЕННЯ СТАНУ (ПАМ'ЯТЬ ДОДАТКУ) ==
 function saveState() {
     const state = {
-        active_trips, // <-- Ось головний фікс
+        active_trips,
         passenger_archive,
         driver_archive,
         orders_database,
         notifications_database,
         vh_requests_database,
         vh_offers_database,
-        active_trips_database
+        custom_trips_database
     };
     sessionStorage.setItem('appState', JSON.stringify(state));
 }
+
 
 
 
@@ -93,9 +94,18 @@ function loadState() {
     const savedState = sessionStorage.getItem('appState');
     if (savedState) {
         const state = JSON.parse(savedState);
-        Object.assign(window, state); // Це магія, яка завантажує все назад
+        // Явно присвоюємо кожну змінну для надійності
+        active_trips = state.active_trips || [];
+        passenger_archive = state.passenger_archive || [];
+        driver_archive = state.driver_archive || [];
+        orders_database = state.orders_database || [];
+        notifications_database = state.notifications_database || [];
+        vh_requests_database = state.vh_requests_database || [];
+        vh_offers_database = state.vh_offers_database || [];
+        custom_trips_database = state.custom_trips_database || [];
     }
 }
+
 
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
