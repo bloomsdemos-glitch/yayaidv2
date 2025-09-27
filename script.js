@@ -200,41 +200,6 @@ function displayDriverOrders() {
     });
 }
 
-
-// === ОНОВЛЕНА ЛОГІКА ПРИЙНЯТТЯ ЗВИЧАЙНОГО ЗАМОВЛЕННЯ ===
-if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
-    // Створюємо повноцінний об'єкт поїздки
-    const newTaxiTrip = {
-        id: Date.now(),
-        driverId: 1, // Поки хардкод
-        passengerId: 1, // Поки хардкод
-        passengerName: 'Олена', // Поки хардкод
-        from: document.getElementById('details-from-address').textContent,
-        to: document.getElementById('details-to-address').textContent,
-        time: 'Зараз',
-        type: 'taxi'
-    };
-
-    // Додаємо його в ЄДИНУ базу активних поїздок
-    active_trips.push(newTaxiTrip);
-    saveState(); // Зберігаємо стан
-
-    // Оновлюємо вигляд головних екранів
-    updateHomeScreenView('driver');
-    updateHomeScreenView('passenger');
-
-    // Переходимо на екран "Мої замовлення" водія
-    displayDriverActiveTrip();
-    navigateTo('driver-orders-screen');
-    alert('Замовлення прийнято!');
-};
-
-
-if(declineOrderBtn) declineOrderBtn.onclick = () => {
-    navigateTo('driver-find-passengers-screen');
-};
-
-
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ АРХІВІВ v2.1 (клікабельно для всіх) ==
 function displayArchives() {
     // --- Архів пасажира ---
