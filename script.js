@@ -1844,9 +1844,6 @@ const popupOverlay = document.getElementById('popup-overlay'); // Наш нов�
 const driverProfileBadge = document.querySelector('#driver-home-screen .profile-badge');
 const passengerProfileBadge = document.querySelector('#passenger-home-screen .profile-badge');
 
-const popupAvatarIcon = document.getElementById('popup-avatar-icon');
-const popupUserName = document.getElementById('popup-user-name');
-const popupUserDetails = document.getElementById('popup-user-details');
 const popupViewProfileBtn = document.getElementById('popup-view-profile-btn');
 
 
