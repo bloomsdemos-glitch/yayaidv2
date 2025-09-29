@@ -1,5 +1,8 @@
 const UI = {};
 
+const popupAvatarIcon = document.getElementById('popup-avatar-icon');
+const popupUserName = document.getElementById('popup-user-name');
+const popupUserDetails = document.getElementById('popup-user-details');
 
 const screens = document.querySelectorAll('.screen');
         function showScreen(screenId) {
