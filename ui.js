@@ -287,7 +287,17 @@ UI.displayOrderDetails = function(order) {
 };
 
 UI.showProfilePopup = function(userData) {
-    // Ця функція тепер тільки заповнює поля даними, які їй передали
+    const popupAvatarIcon = document.getElementById('popup-avatar-icon');
+    const popupUserName = document.getElementById('popup-user-name');
+    const popupUserDetails = document.getElementById('popup-user-details');
+    const profilePopup = document.getElementById('profile-popup');
+    const popupOverlay = document.getElementById('popup-overlay');
+    
+    if (!popupAvatarIcon || !popupUserName || !popupUserDetails) {
+        console.error('Елементи поп-апу не знайдено');
+        return;
+    }
+    
     popupAvatarIcon.className = userData.icon;
     popupUserName.textContent = userData.name;
     popupUserDetails.textContent = userData.details;
@@ -297,6 +307,9 @@ UI.showProfilePopup = function(userData) {
 };
 
 UI.hideProfilePopup = function() {
+    const profilePopup = document.getElementById('profile-popup');
+    const popupOverlay = document.getElementById('popup-overlay');
+    
     popupOverlay?.classList.add('hidden');
     profilePopup?.classList.remove('visible');
 };
