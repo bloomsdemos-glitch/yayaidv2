@@ -471,6 +471,31 @@ showPassengerValkyKharkivBtn?.addEventListener('click', () => {
     navigateTo('passenger-valky-kharkiv-screen');
 });
 
+// === ЛОГІКА ДЛЯ КАРТОК-ШАБЛОНІВ ===
+document.querySelectorAll('.template-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const template = card.dataset.template;
+        
+        if (template === 'vk') {
+            // Автозаповнення для Валки → Харків
+            document.getElementById('vh-from-location').querySelector('span').textContent = 'Валки';
+            document.getElementById('vh-to-location').querySelector('span').textContent = 'Харків';
+            navigateTo('vh-passenger-form-screen');
+            
+        } else if (template === 'kv') {
+            // Автозаповнення для Харків → Валки
+            document.getElementById('vh-from-location').querySelector('span').textContent = 'Харків';
+            document.getElementById('vh-to-location').querySelector('span').textContent = 'Валки';
+            navigateTo('vh-passenger-form-screen');
+            
+        } else if (template === 'custom') {
+            // Для інших маршрутів — відкриваємо форму створення власного запиту
+            // (поки що просто відкриваємо стандартну форму, пізніше можна зробити окрему)
+            navigateTo('vh-passenger-form-screen');
+        }
+    });
+});
+
 showPassengerBusScheduleBtn?.addEventListener('click', () => navigateTo('passenger-bus-schedule-screen'));
 showPassengerProfileBtn?.addEventListener('click', () => {
     UI.displayPassengerProfile(1);
