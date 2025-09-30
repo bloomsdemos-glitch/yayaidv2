@@ -1211,25 +1211,50 @@
         <h2>Поїздка: Валки-Харків</h2>
         <div class="header-placeholder"></div>
     </header>
-    <main class="list-view-main">
-        <button id="vh-passenger-create-request-btn" class="btn-main-action accept">
-            <i class="fa-solid fa-plus"></i>
-            Створити запит на поїздку
-        </button>
+   <main class="list-view-main">
+        <!-- НОВІ КАРТКИ-ШАБЛОНИ -->
+        <div class="template-cards-container">
+            <button class="template-card" data-template="vk">
+                <div class="template-card-icon">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <div class="template-card-content">
+                    <h4>Валки → Харків</h4>
+                    <small>Швидке створення запиту</small>
+                </div>
+            </button>
 
-        <div class="list-header">
+            <button class="template-card" data-template="kv">
+                <div class="template-card-icon">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </div>
+                <div class="template-card-content">
+                    <h4>Харків → Валки</h4>
+                    <small>Швидке створення запиту</small>
+                </div>
+            </button>
+
+            <button class="template-card" data-template="custom">
+                <div class="template-card-icon">
+                    <i class="fa-solid fa-route"></i>
+                </div>
+                <div class="template-card-content">
+                    <h4>Інші маршрути</h4>
+                    <small>Створити власний запит</small>
+                </div>
+            </button>
+        </div>
+
+        <div class="list-header" style="margin-top: 24px;">
             <h4><i class="fa-solid fa-car-on"></i> Актуальні пропозиції від водіїв</h4>
         </div>
         
         <div class="filter-group">
-    <button class="btn-filter active" data-direction="all">Всі</button>
-    <button class="btn-filter" data-direction="vk">Валки → Харків</button>
-    <button class="btn-filter" data-direction="kv">Харків → Валки</button>
-</div>
+            <button class="btn-filter active" data-direction="all">Всі</button>
+            <button class="btn-filter" data-direction="vk">Валки → Харків</button>
+            <button class="btn-filter" data-direction="kv">Харків → Валки</button>
+        </div>
 
-
-
-        
         <ul id="vh-driver-list" class="driver-list">
             <p class="list-placeholder">Наразі немає активних водіїв за цим маршрутом. Створіть свій запит, і водії його побачать!</p>
         </ul>
