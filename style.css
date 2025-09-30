@@ -2011,3 +2011,57 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     color: var(--md-on-surface);
     user-select: none; /* Щоб не можна було виділити текст */
 }
+/* === КАРТКИ-ШАБЛОНИ ДЛЯ ПОПУТКИ === */
+.template-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+}
+
+.template-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--md-surface-container-low);
+    border: 1px solid var(--md-outline);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.template-card:active {
+    transform: scale(0.98);
+    background: var(--md-surface-container);
+}
+
+.template-card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    border-radius: 12px;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.template-card-content {
+    flex: 1;
+}
+
+.template-card-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--md-on-surface);
+}
+
+.template-card-content small {
+    font-size: 13px;
+    color: var(--md-on-surface-variant);
+}
