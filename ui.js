@@ -353,3 +353,197 @@ UI.displayNotifications = function(notifications, userType) {
         });
     }
 };
+
+// === ГРАФІК РОБОТИ ===
+UI.renderScheduleEditor = function() {
+    const container = document.getElementById('schedule-days-list');
+    if (!container) return;
+    
+    const driver = drivers_database[0];
+    const schedule = driver.schedule || {};
+    
+    const days = [
+        {code: 'mon', name: 'Понеділок'},
+        {code: 'tue', name: 'Вівторок'},
+        {code: 'wed', name: 'Середа'},
+        {code: 'thu', name: 'Четвер'},
+        {code: 'fri', name: "П'ятниця"},
+        {code: 'sat', name: 'Субота'},
+        {code: 'sun', name: 'Неділя'}
+    ];
+    
+    container.innerHTML = '';
+    
+    days.forEach(day => {
+        const savedTime = schedule[day.code];
+        const [timeFrom, timeTo] = savedTime ? savedTime.split('-') : ['', ''];
+        const isEnabled = !!savedTime;
+        
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'schedule-day-editor';
+        dayDiv.innerHTML = `
+            <input type="checkbox" id="schedule-${day.code}-enabled" ${isEnabled ? 'checked' : ''}>
+            <label for="schedule-${day.code}-enabled">${day.name}</label>
+            <input type="time" id="schedule-${day.code}-from" value="${timeFrom}" ${!isEnabled ? 'disabled' : ''}>
+            <span style="color: var(--md-on-surface-variant);">—</span>
+            <input type="time" id="schedule-${day.code}-to" value="${timeTo}" ${!isEnabled ? 'disabled' : ''}>
+        `;
+        
+        const checkbox = dayDiv.querySelector('input[type="checkbox"]');
+        const timeInputs = dayDiv.querySelectorAll('input[type="time"]');
+        
+        checkbox.addEventListener('change', () => {
+            timeInputs.forEach(input => input.disabled = !checkbox.checked);
+        });
+        
+        container.appendChild(dayDiv);
+    });
+};
+
+// === ВІДОБРАЖЕННЯ ГРАФІКУ В ПРОФІЛІ ===
+UI.displayDriverSchedule = function(driverId) {
+    const driver = drivers_database.find(d => d.id === driverId);
+    const container = document.getElementById('profile-driver-schedule');
+    if (!container || !driver) return;
+    
+    const schedule = driver.schedule;
+    
+    if (!schedule || Object.keys(schedule).length === 0) {
+        container.innerHTML = '<p class="no-schedule-placeholder">Графік не встановлено</p>';
+        return;
+    }
+    
+    const dayNames = {
+        mon: 'Пн', tue: 'Вт', wed: 'Ср', 
+        thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд'
+    };
+    
+    container.innerHTML = '';
+    Object.keys(schedule).forEach(dayCode => {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'schedule-day-item';
+        dayDiv.innerHTML = `
+            <span class="schedule-day-name">${dayNames[dayCode]}</span>
+            <span class="schedule-day-time">${schedule[dayCode]}</span>
+        `;
+        container.appendChild(dayDiv);
+    });
+};
+
+// === ЗАПЛАНОВАНІ МАРШРУТИ ===
+UI.renderPlannedRoutesEditor = function() {
+    const container = document.getElementById('planned-routes-list');
+    if (!container) return;
+    
+    const driver = drivers_database[0];
+    const routes = driver.plannedRoutes || [];
+    
+    container.innerHTML = '';
+    
+    if (routes.length === 0) {
+        container.innerHTML = '<p class="no-routes-placeholder">У вас поки немає запланованих маршрутів</p>';
+        return;
+    }
+    
+    const dayNames = {
+        mon: 'Пн', tue: 'Вт', wed: 'Ср', 
+        thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд'
+    };
+    
+    routes.forEach(route => {
+        const routeDiv = document.createElement('div');
+        routeDiv.className = 'planned-route-edit-card';
+        
+        const daysHtml = route.days.map(d => `<span class="planned-route-day-tag">${dayNames[d]}</span>`).join('');
+        
+        routeDiv.innerHTML = `
+            <button class="btn-icon-action" data-route-id="${route.id}">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+            <div class="planned-route-direction">${route.from} → ${route.to}</div>
+            <div class="planned-route-time"><i class="fa-solid fa-clock"></i> ${route.time}</div>
+            <div class="planned-route-time"><i class="fa-solid fa-user-group"></i> ${route.seats} місць</div>
+            <div class="planned-route-days">${daysHtml}</div>
+        `;
+        
+        const deleteBtn = routeDiv.querySelector('.btn-icon-action');
+        deleteBtn.addEventListener('click', () => {
+            if (confirm(`Видалити маршрут ${route.from} → ${route.to}?`)) {
+                const index = driver.plannedRoutes.findIndex(r => r.id === route.id);
+                if (index > -1) {
+                    driver.plannedRoutes.splice(index, 1);
+                    saveState();
+                    UI.renderPlannedRoutesEditor();
+                }
+            }
+        });
+        
+        container.appendChild(routeDiv);
+    });
+};
+
+// === ВІДОБРАЖЕННЯ ЗАПЛАНОВАНИХ МАРШРУТІВ У ПРОФІЛІ ===
+UI.displayDriverPlannedRoutes = function(driverId) {
+    const driver = drivers_database.find(d => d.id === driverId);
+    const container = document.getElementById('profile-driver-routes');
+    if (!container || !driver) return;
+    
+    const routes = driver.plannedRoutes || [];
+    
+    if (routes.length === 0) {
+        container.innerHTML = '<p class="no-routes-placeholder">Маршрутів поки немає</p>';
+        return;
+    }
+    
+    const dayNames = {
+        mon: 'Пн', tue: 'Вт', wed: 'Ср', 
+        thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд'
+    };
+    
+    container.innerHTML = '';
+    routes.forEach(route => {
+        const routeDiv = document.createElement('div');
+        routeDiv.className = 'planned-route-card';
+        
+        const daysHtml = route.days.map(d => `<span class="planned-route-day-tag">${dayNames[d]}</span>`).join('');
+        
+        routeDiv.innerHTML = `
+            <div class="planned-route-direction">${route.from} → ${route.to}</div>
+            <div class="planned-route-time"><i class="fa-solid fa-clock"></i> ${route.time} • <i class="fa-solid fa-user-group"></i> ${route.seats} місць</div>
+            <div class="planned-route-days">${daysHtml}</div>
+        `;
+        
+        container.appendChild(routeDiv);
+    });
+};
+
+// === СЕЛЕКТОР ДНІВ ТИЖНЯ ===
+UI.renderWeekdaySelector = function() {
+    const container = document.getElementById('planned-route-days');
+    if (!container) return;
+    
+    const days = [
+        {code: 'mon', short: 'Пн'},
+        {code: 'tue', short: 'Вт'},
+        {code: 'wed', short: 'Ср'},
+        {code: 'thu', short: 'Чт'},
+        {code: 'fri', short: 'Пт'},
+        {code: 'sat', short: 'Сб'},
+        {code: 'sun', short: 'Нд'}
+    ];
+    
+    container.innerHTML = '';
+    days.forEach(day => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'weekday-btn';
+        btn.dataset.day = day.code;
+        btn.textContent = day.short;
+        
+        btn.addEventListener('click', () => {
+            btn.classList.toggle('active');
+        });
+        
+        container.appendChild(btn);
+    });
+};
