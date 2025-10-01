@@ -919,6 +919,19 @@
                         <span id="profile-driver-rating-full">...</span> <span id="profile-driver-trips-full">...</span> </div>
                 </div>
 
+  <div class="details-section">
+                    <h4><i class="fa-solid fa-calendar-days"></i> Графік роботи</h4>
+                    <div id="profile-driver-schedule" class="schedule-container">
+                        <p class="no-schedule-placeholder">Графік не встановлено</p>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h4><i class="fa-solid fa-map-location-dot"></i> Заплановані маршрути</h4>
+                    <div id="profile-driver-routes" class="planned-routes-container">
+                        <p class="no-routes-placeholder">Маршрутів поки немає</p>
+                    </div>
+                </div>
                 <div class="details-section">
                     <h4><i class="fa-solid fa-car-side"></i> Автомобіль</h4>
                     <div class="details-card">
@@ -968,6 +981,12 @@
             </button>
             <button class="menu-item" id="show-driver-settings-tariff-btn">
                 <span><i class="fa-solid fa-hryvnia-sign"></i> Встановити тариф</span>
+            </button>
+             <button class="menu-item" id="show-driver-settings-schedule-btn">
+                <span><i class="fa-solid fa-calendar-days"></i> Налаштувати графік</span>
+            </button>
+            <button class="menu-item" id="show-driver-settings-routes-btn">
+                <span><i class="fa-solid fa-map-location-dot"></i> Заплановані маршрути</span>
             </button>
             <button class="menu-item" id="show-driver-settings-payment-btn">
                 <span><i class="fa-solid fa-credit-card"></i> Онлайн-платежі</span>
@@ -1020,7 +1039,88 @@
                 <p>Тут буде калькулятор або форма для встановлення тарифу.</p>
             </main>
         </div>
+        
+        <div id="driver-settings-schedule-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Графік роботи</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="main-form">
+                <p class="form-help-text">Вкажіть свій робочий графік (необов'язково). Це допоможе пасажирам розуміти, коли ви доступні.</p>
+                
+                <div id="schedule-days-list" class="schedule-days-list">
+                    <!-- Дні тижня будуть додані через JS -->
+                </div>
 
+                <button id="save-schedule-btn" class="btn-main-action accept">Зберегти графік</button>
+                <button id="clear-schedule-btn" class="btn-main-action decline">Очистити графік</button>
+            </main>
+        </div>
+
+        <div id="driver-settings-routes-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Заплановані маршрути</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="main-form">
+                <p class="form-help-text">Створіть до 3 постійних маршрутів, які повторюються щотижня.</p>
+                
+                <div id="planned-routes-list" class="planned-routes-edit-list">
+                    <!-- Маршрути будуть додані через JS -->
+                </div>
+
+                <button id="add-planned-route-btn" class="btn-main-action accept" style="margin-top: 16px;">
+                    <i class="fa-solid fa-plus"></i> Додати маршрут
+                </button>
+            </main>
+        </div>
+
+        <div id="driver-create-planned-route-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-settings-routes-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Новий запланований маршрут</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="main-form">
+                <div class="form-step">
+                    <label class="section-label">Маршрут</label>
+                    <div class="form-group">
+                        <input type="text" id="planned-route-from" class="form-input" placeholder="Звідки (напр. Валки)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="planned-route-to" class="form-input" placeholder="Куди (напр. Харків)">
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <label class="section-label">Дні тижня</label>
+                    <div id="planned-route-days" class="weekday-selector">
+                        <!-- Дні будуть додані через JS -->
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <label class="section-label">Час відправлення</label>
+                    <div class="form-group">
+                        <input type="time" id="planned-route-time" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-step">
+                    <label class="section-label">Кількість місць</label>
+                    <div class="seat-counter">
+                        <button type="button" id="planned-route-minus-btn" class="seat-counter-btn">-</button>
+                        <span id="planned-route-seats-display" class="seat-counter-display">3</span>
+                        <button type="button" id="planned-route-plus-btn" class="seat-counter-btn">+</button>
+                    </div>
+                </div>
+
+                <button id="save-planned-route-btn" class="btn-main-action accept">Зберегти маршрут</button>
+            </main>
+        </div>
+        
         <div id="driver-settings-payment-screen" class="screen hidden">
             <header>
                 <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
