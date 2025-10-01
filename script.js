@@ -1419,6 +1419,103 @@ vhDriverCreateOfferBtn?.addEventListener('click', () => {
     navigateTo('vh-driver-form-screen');
 });
 
+// === ОБРОБНИКИ ДЛЯ ГРАФІКУ ТА МАРШРУТІВ ===
+document.getElementById('show-driver-settings-schedule-btn')?.addEventListener('click', () => {
+    UI.renderScheduleEditor();
+    navigateTo('driver-settings-schedule-screen');
+});
+
+document.getElementById('show-driver-settings-routes-btn')?.addEventListener('click', () => {
+    UI.renderPlannedRoutesEditor();
+    navigateTo('driver-settings-routes-screen');
+});
+
+// Збереження графіку
+document.getElementById('save-schedule-btn')?.addEventListener('click', () => {
+    const schedule = {};
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    
+    days.forEach(day => {
+        const checkbox = document.getElementById(`schedule-${day}-enabled`);
+        const timeFrom = document.getElementById(`schedule-${day}-from`);
+        const timeTo = document.getElementById(`schedule-${day}-to`);
+        
+        if (checkbox?.checked && timeFrom?.value && timeTo?.value) {
+            schedule[day] = `${timeFrom.value}-${timeTo.value}`;
+        }
+    });
+    
+    const driver = drivers_database[0];
+    driver.schedule = Object.keys(schedule).length > 0 ? schedule : null;
+    saveState();
+    
+    alert('Графік збережено!');
+    navigateTo('driver-settings-screen');
+});
+
+// Очищення графіку
+document.getElementById('clear-schedule-btn')?.addEventListener('click', () => {
+    if (confirm('Видалити весь графік роботи?')) {
+        const driver = drivers_database[0];
+        driver.schedule = null;
+        saveState();
+        alert('Графік очищено');
+        navigateTo('driver-settings-screen');
+    }
+});
+
+// Додавання нового маршруту
+document.getElementById('add-planned-route-btn')?.addEventListener('click', () => {
+    const driver = drivers_database[0];
+    if (driver.plannedRoutes.length >= 3) {
+        alert('Ви можете створити максимум 3 заплановані маршрути');
+        return;
+    }
+    UI.renderWeekdaySelector();
+    setupSeatCounter('planned-route-minus-btn', 'planned-route-plus-btn', 'planned-route-seats-display');
+    navigateTo('driver-create-planned-route-screen');
+});
+
+// Збереження запланованого маршруту
+document.getElementById('save-planned-route-btn')?.addEventListener('click', () => {
+    const from = document.getElementById('planned-route-from')?.value.trim();
+    const to = document.getElementById('planned-route-to')?.value.trim();
+    const time = document.getElementById('planned-route-time')?.value;
+    const seats = document.getElementById('planned-route-seats-display')?.textContent;
+    
+    const selectedDays = [];
+    document.querySelectorAll('.weekday-btn.active').forEach(btn => {
+        selectedDays.push(btn.dataset.day);
+    });
+    
+    if (!from || !to || !time || selectedDays.length === 0) {
+        alert('Заповніть всі поля: маршрут, дні тижня та час');
+        return;
+    }
+    
+    const driver = drivers_database[0];
+    if (driver.plannedRoutes.length >= 3) {
+        alert('Максимум 3 маршрути');
+        return;
+    }
+    
+    const newRoute = {
+        id: Date.now(),
+        from: from,
+        to: to,
+        days: selectedDays,
+        time: time,
+        seats: parseInt(seats)
+    };
+    
+    driver.plannedRoutes.push(newRoute);
+    saveState();
+    
+    alert('Маршрут збережено!');
+    navigateTo('driver-settings-routes-screen');
+    UI.renderPlannedRoutesEditor();
+});
+
 // == ЛОГІКА ДЛЯ НОВОГО ЕКРАНУ ВИБОРУ ДІЇ ВОДІЯ ==
 choiceCreateTripBtn?.addEventListener('click', () => {
     // Ведемо на новий екран вибору типу поїздки
