@@ -1,4 +1,3 @@
-// Тимчасові бази даних (ВАЖЛИВО: всі через LET)
 let drivers_database = [
     {
         id: 1,
@@ -15,7 +14,9 @@ let drivers_database = [
             { name: 'Вікторія', rating: 5.0, text: 'Дуже приємний водій, комфортна поїздка. Дякую!' },
             { name: 'Олексій', rating: 5.0, text: 'Все супер, швидко і безпечно.' },
             { name: 'Марина', rating: 4.0, text: 'В салоні був трохи дивний запах, але в цілому нормально.' }
-        ]
+        ],
+        schedule: null,
+        plannedRoutes: []
     },
     {
         id: 2,
@@ -29,7 +30,9 @@ let drivers_database = [
         ],
         reviews: [
             { name: 'Іван', rating: 5.0, text: 'Найкраща водійка в місті!' }
-        ]
+        ],
+        schedule: null,
+        plannedRoutes: []
     },
     {
         id: 3,
@@ -40,19 +43,9 @@ let drivers_database = [
         tags: [
             { icon: 'fa-solid fa-music', text: 'Поп-музика' }
         ],
-        reviews: []
-    }
-    schedule: null, // або об'єкт типу {mon: '9:00-18:00', tue: '9:00-18:00'}
-        plannedRoutes: [] // масив запланованих маршрутів
-];
-
-let passengers_database = [
-    {
-        id: 1,
-        name: 'Віта Білецька',
-        trips: 27,
-        bio: 'Валки.',
-        reviews: []
+        reviews: [],
+        schedule: null,
+        plannedRoutes: []
     }
 ];
 
