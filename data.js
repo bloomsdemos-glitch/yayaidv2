@@ -42,6 +42,8 @@ let drivers_database = [
         ],
         reviews: []
     }
+    schedule: null, // або об'єкт типу {mon: '9:00-18:00', tue: '9:00-18:00'}
+        plannedRoutes: [] // масив запланованих маршрутів
 ];
 
 let passengers_database = [
