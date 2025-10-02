@@ -175,17 +175,17 @@ UI.displayDriverFullProfile = function(driverId) {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
     
-    // Відображаємо графік та маршрути
-    UI.displayDriverSchedule(driverId);
-    UI.displayDriverPlannedRoutes(driverId);
-};
-
+    
 UI.displayPassengerProfile = function(passengerId) {
     const passenger = passengers_database.find(p => p.id === passengerId);
     if (!passenger) {
         console.error('Пасажира з ID', passengerId, 'не знайдено.');
         return;
     }
+// Відображаємо графік та маршрути
+    UI.displayDriverSchedule(driverId);
+    UI.displayDriverPlannedRoutes(driverId);
+};
 
     // Заповнюємо поля даними, звертаючись до них через document.getElementById
     document.getElementById('profile-passenger-name-header').textContent = `Профіль: ${passenger.name}`;
