@@ -171,9 +171,16 @@ UI.displayDriverFullProfile = function(driverId) {
                     <p class="review-text">${review.text}</p>
                 </div>`;
         });
-    } else {
+      } else {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
+    
+    // Відображаємо графік та маршрути
+    UI.displayDriverSchedule(driverId);
+    UI.displayDriverPlannedRoutes(driverId);
+};
+
+UI.displayPassengerProfile = function(passengerId) {
     
     
 UI.displayPassengerProfile = function(passengerId) {
