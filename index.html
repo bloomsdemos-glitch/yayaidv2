@@ -691,13 +691,41 @@
         <h2>Запити: Валки-Харків</h2>
         <div class="header-placeholder"></div>
     </header>
-    <main class="list-view-main">
-        <button id="vh-driver-create-offer-btn" class="btn-main-action accept">
-            <i class="fa-solid fa-bullhorn"></i>
-            Запропонувати поїздку
-        </button>
+      <main class="list-view-main">
+        <!-- КАРТКИ-ШАБЛОНИ ДЛЯ ВОДІЯ -->
+        <div class="template-cards-container">
+            <button class="template-card" data-driver-template="vk">
+                <div class="template-card-icon">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <div class="template-card-content">
+                    <h4>Валки → Харків</h4>
+                    <small>Швидка пропозиція поїздки</small>
+                </div>
+            </button>
 
-        <div class="list-header">
+            <button class="template-card" data-driver-template="kv">
+                <div class="template-card-icon">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </div>
+                <div class="template-card-content">
+                    <h4>Харків → Валки</h4>
+                    <small>Швидка пропозиція поїздки</small>
+                </div>
+            </button>
+
+            <button class="template-card" data-driver-template="custom">
+                <div class="template-card-icon">
+                    <i class="fa-solid fa-route"></i>
+                </div>
+                <div class="template-card-content">
+                    <h4>Інші маршрути</h4>
+                    <small>Створити власну пропозицію</small>
+                </div>
+            </button>
+        </div>
+
+        <div class="list-header" style="margin-top: 8px;">
             <h4><i class="fa-solid fa-user-clock"></i> Пасажири шукають водія</h4>
         </div>
         
