@@ -1988,7 +1988,7 @@ driverProfileBadge?.addEventListener('click', () => {
         // 3. Налаштовуємо, що станеться при кліку на кнопку в попапі
         popupViewProfileBtn.onclick = () => {
             UI.displayDriverProfile(driver.id);
-            navigateTo('driver-profile-screen');
+            navigateTo('driver-full-profile-screen');
             UI.hideProfilePopup();
         };
     }
@@ -2009,7 +2009,7 @@ passengerProfileBadge?.addEventListener('click', () => {
 
         popupViewProfileBtn.onclick = () => {
             UI.displayPassengerProfile(passenger.id);
-            navigateTo('passenger-profile-screen');
+            navigateTo('passenger-full-profile-screen');
             UI.hideProfilePopup();
         };
     }
