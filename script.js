@@ -512,12 +512,18 @@ function handleTabClick(clickedItem) {
     const targetScreen = clickedItem.dataset.target;
     // Спершу викликаємо потрібні функції для оновлення контенту
     if (targetScreen === 'passenger-profile-screen') {
-        UI.displayPassengerProfile(1); // Готуємо дані
-        navigateTo('passenger-profile-screen'); // Переходимо
+        UI.displayPassengerProfile(1);
+        navigateTo('passenger-profile-screen');
     } else if (targetScreen === 'passenger-home-screen') {
         updateHomeScreenView('passenger');
-        navigateTo('passenger-home-screen'); // Додамо перехід і сюди
-    } else if (targetScreen) { // Для всіх інших кнопок
+        navigateTo('passenger-home-screen');
+    } else if (targetScreen === 'passenger-valky-kharkiv-screen') {
+        displayVhOffers();
+        navigateTo('passenger-valky-kharkiv-screen');
+    } else if (targetScreen === 'passenger-find-driver-screen') {
+        displayAvailableDrivers();
+        navigateTo(targetScreen);
+    } else if (targetScreen) {
         navigateTo(targetScreen);
     }
 }
