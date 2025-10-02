@@ -1407,7 +1407,26 @@ showDriverValkyKharkivBtn?.addEventListener('click', () => {
     navigateTo('driver-valky-kharkiv-screen');
 });
 
-
+// === ЛОГІКА ДЛЯ КАРТОК-ШАБЛОНІВ ВОДІЯ ===
+document.querySelectorAll('.template-card[data-driver-template]').forEach(card => {
+    card.addEventListener('click', () => {
+        const template = card.dataset.driverTemplate;
+        
+        if (template === 'vk') {
+            document.getElementById('vh-driver-from-location').querySelector('span').textContent = 'Валки';
+            document.getElementById('vh-driver-to-location').querySelector('span').textContent = 'Харків';
+            navigateTo('vh-driver-form-screen');
+            
+        } else if (template === 'kv') {
+            document.getElementById('vh-driver-from-location').querySelector('span').textContent = 'Харків';
+            document.getElementById('vh-driver-to-location').querySelector('span').textContent = 'Валки';
+            navigateTo('vh-driver-form-screen');
+            
+        } else if (template === 'custom') {
+            navigateTo('driver-create-custom-trip-screen');
+        }
+    });
+});
 
 
 showDriverHelpBtn?.addEventListener('click', () => navigateTo('driver-help-screen'));
