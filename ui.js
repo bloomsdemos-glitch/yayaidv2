@@ -141,7 +141,6 @@ UI.displayDriverProfile = function(driverId) {
 
 UI.displayDriverFullProfile = function(driverId) {
     // ПОВНІСТЮ ВІДНОВЛЮЄМО ЕКРАН ДО ПОЧАТКОВОГО СТАНУ
-document.getElementById('driver-full-profile-screen').innerHTML = originalDriverProfileContent;
     const driver = drivers_database.find(d => d.id === driverId);
     if (!driver) return;
 
