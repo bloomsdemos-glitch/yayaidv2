@@ -139,68 +139,38 @@ UI.displayDriverProfile = function(driverId) {
     }
 };
 
-UI.displayDriverFullProfile = function(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
-    if (!driver) return;
-    document.getElementById('profile-driver-name-header').textContent = `Профіль: ${driver.name}`;
-    document.getElementById('profile-driver-name-full').textContent = driver.name;
-    document.getElementById('profile-driver-trips-full').textContent = `${driver.trips} поїздки`;
-    document.getElementById('profile-driver-car').textContent = driver.car;
-    if (driver.trips < 5) {
-        document.getElementById('profile-driver-rating-full').innerHTML = `<small>Новий водій</small>`;
-    } else {
-        document.getElementById('profile-driver-rating-full').innerHTML = `<i class="fa-solid fa-star"></i> ${driver.rating.toFixed(1)}`;
-    }
-    const tagsContainer = document.getElementById('profile-driver-tags');
-    tagsContainer.innerHTML = '';
-    driver.tags.forEach(tag => {
-        tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
-    });
-    const reviewsContainer = document.getElementById('profile-driver-reviews');
-    const reviewsTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
-    reviewsTitle.textContent = `Відгуки (${driver.reviews.length})`;
-    reviewsContainer.innerHTML = '';
-    if (driver.reviews.length > 0) {
-        driver.reviews.forEach(review => {
-            reviewsContainer.innerHTML += `
-                <div class="review-card">
-                    <div class="review-header">
-                        <strong>${review.name}</strong>
-                        <span class="review-rating">${review.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
-                    </div>
-                    <p class="review-text">${review.text}</p>
-                </div>`;
-        });
-      } else {
-        reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
-    }
-    
-    // Відображаємо графік та маршрути
-    UI.displayDriverSchedule(driverId);
-    UI.displayDriverPlannedRoutes(driverId);
-};
-
 UI.displayPassengerProfile = function(passengerId) {
-    
-    
-UI.displayPassengerProfile = function(passengerId) {
+    // Знаходимо пасажира в базі даних
     const passenger = passengers_database.find(p => p.id === passengerId);
     if (!passenger) {
         console.error('Пасажира з ID', passengerId, 'не знайдено.');
         return;
     }
-// Відображаємо графік та маршрути
-    UI.displayDriverSchedule(driverId);
-    UI.displayDriverPlannedRoutes(driverId);
+
+    // Заповнюємо дані на екрані "Профіль" (коротка версія)
+    document.getElementById('profile-passenger-name').textContent = passenger.name;
+    document.getElementById('profile-passenger-trips').textContent = `${passenger.trips} поїздок`;
+    // Заглушка для лайків/дизлайків, яка запрацює на наступному кроці
+    if (passenger.feedback) {
+        document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
+    }
+
+    // Заповнюємо дані на екрані "Повний профіль"
+    document.getElementById('profile-passenger-name-header').textContent = `Профіль: ${passenger.name}`;
+    document.getElementById('profile-passenger-name-full').textContent = passenger.name;
+    document.getElementById('profile-passenger-trips-full').textContent = `${passenger.trips} поїздок`;
+    if (passenger.feedback) {
+        document.getElementById('passenger-feedback-placeholder-full').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
+    }
+    document.getElementById('profile-passenger-bio').textContent = passenger.bio;
+
+    // Логіка для відгуків водіїв (поки що просто заглушка)
+    const reviewsContainer = document.querySelector('#passenger-full-profile-screen .review-list');
+    if (reviewsContainer) {
+         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
+    }
 };
 
-    // Заповнюємо поля даними, звертаючись до них через document.getElementById
-    document.getElementById('profile-passenger-name-header').textContent = `Профіль: ${passenger.name}`;
-    document.getElementById('profile-passenger-name').textContent = passenger.name;
-    document.getElementById('profile-passenger-trips').textContent = passenger.trips;
-    document.getElementById('profile-passenger-bio').textContent = passenger.bio;
-    document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>6 👍🏻 0 👎🏻</strong>`;
-};
 
 UI.updateSummary = function() {
     if (orderData.from || orderData.to) { quickOrderSummaryCard.classList.remove('hidden');
