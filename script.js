@@ -289,11 +289,29 @@ const profileDriverReviews = document.getElementById('profile-driver-reviews');
 const profileRequestRideBtn = document.getElementById('profile-request-ride-btn');
 
 
-// Оновлюємо обробник для кнопки "Переглянути профіль"
-document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
-    UI.displayDriverFullProfile(1);
-    navigateTo('driver-full-profile-screen');
-});
+// ДІАГНОСТИКА: Тимчасово замінюємо обробник, щоб знайти проблему
+const driverProfileBtn = document.getElementById('show-full-driver-profile-btn');
+
+if (driverProfileBtn) {
+    alert("Кнопка 'Переглянути профіль' успішно знайдена при завантаженні скрипта! (ЖУЧОК №1)");
+
+    driverProfileBtn.addEventListener('click', () => {
+        alert("Клік по кнопці зареєстровано! (ЖУЧОК №2)");
+
+        try {
+            UI.displayDriverFullProfile(1);
+            alert("Функція UI.displayDriverFullProfile(1) відпрацювала. (ЖУЧОК №3)");
+
+            navigateTo('driver-full-profile-screen');
+            // Якщо цей алерт не з'явиться, значить проблема в navigateTo
+        } catch (e) {
+            alert("ПОМИЛКА! Щось зламалось всередині функції. Текст помилки: " + e.message); // ЖУЧОК №4
+        }
+    });
+} else {
+    alert("ПОМИЛКА! Кнопка 'show-full-driver-profile-btn' НЕ знайдена! (ЖУЧОК №5)");
+}
+
 
 
 
