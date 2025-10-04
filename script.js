@@ -289,11 +289,23 @@ const profileDriverReviews = document.getElementById('profile-driver-reviews');
 const profileRequestRideBtn = document.getElementById('profile-request-ride-btn');
 
 
-// Оновлюємо обробник для кнопки "Переглянути профіль"
+// ДІАГНОСТИКА №2: Перевіряємо, що бачить скрипт в момент кліку
 document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
-    UI.displayDriverFullProfile(1);
-    navigateTo('driver-full-profile-screen');
+    alert("Клік! Зараз перевіримо, чи існує функція.");
+
+    if (typeof UI.displayDriverFullProfile === 'function') {
+        alert("Функція UI.displayDriverFullProfile ІСНУЄ. Спроба виконати.");
+        try {
+            UI.displayDriverFullProfile(1);
+            navigateTo('driver-full-profile-screen');
+        } catch (e) {
+            alert("Помилка під час виконання: " + e.message);
+        }
+    } else {
+        alert("КРИТИЧНА ПОМИЛКА! Функція UI.displayDriverFullProfile НЕ ІСНУЄ або не є функцією. Її тип: " + typeof UI.displayDriverFullProfile);
+    }
 });
+
 
 
 
