@@ -140,7 +140,6 @@ UI.displayDriverProfile = function(driverId) {
 };
 
 UI.displayDriverFullProfile = function(driverId) {
-    // ПОВНІСТЮ ВІДНОВЛЮЄМО ЕКРАН ДО ПОЧАТКОВОГО СТАНУ
     const driver = drivers_database.find(d => d.id === driverId);
     if (!driver) return;
 
@@ -161,9 +160,13 @@ UI.displayDriverFullProfile = function(driverId) {
         tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
     });
 
+    // ОСЬ ТУТ БУЛА ПОМИЛКА, ТЕПЕР ВИПРАВЛЕНО:
     const reviewsContainer = document.getElementById('profile-driver-reviews');
-    // Зверни увагу: тут ми шукаємо заголовок відгуків всередині конкретного екрану, щоб уникнути конфліктів
-    const reviewsTitle = document.querySelector('#driver-full-profile-screen .details-section h4');
+    // Спочатку знаходимо батьківську секцію саме для відгуків
+    const reviewsSection = reviewsContainer.closest('.details-section'); 
+    // І вже всередині цієї секції шукаємо її заголовок h4
+    const reviewsTitle = reviewsSection.querySelector('h4'); 
+
     if (reviewsTitle) {
         reviewsTitle.textContent = `Відгуки (${driver.reviews.length})`;
     }
@@ -184,7 +187,6 @@ UI.displayDriverFullProfile = function(driverId) {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
 
-    // Відображаємо графік та маршрути
     UI.displayDriverSchedule(driverId);
     UI.displayDriverPlannedRoutes(driverId);
 };
