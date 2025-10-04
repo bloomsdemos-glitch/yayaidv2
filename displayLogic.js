@@ -190,6 +190,7 @@ function displayVhOffers(filter = 'all') {
     }
 }
 function displayVhRequests() {
+    const requestListContainer = document.getElementById('vh-passenger-request-list');
     const placeholder = requestListContainer?.querySelector('.list-placeholder');
 
     if (!requestListContainer || !placeholder) return;
