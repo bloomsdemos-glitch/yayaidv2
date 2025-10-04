@@ -292,8 +292,10 @@ const profileRequestRideBtn = document.getElementById('profile-request-ride-btn'
 // Оновлюємо обробник для кнопки "Переглянути профіль"
 document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
     UI.displayDriverFullProfile(1);
-    navigateTo('driver-full-profile-screen'); // А потім переходимо
+    navigateTo('driver-full-profile-screen');
 });
+
+
 
 
 // == ЛОГІКА ДЛЯ ВІДОБРАЖЕННЯ ПРОФІЛЮ ПАСАЖИРА ==
