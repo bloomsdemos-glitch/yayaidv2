@@ -49,6 +49,21 @@ let drivers_database = [
     }
 ];
 
+let passengers_database = [
+    {
+        id: 1,
+        name: 'Віта',
+        trips: 27,
+        bio: 'Люблю подорожувати з комфортом та гарною музикою.',
+        feedback: {
+            likes: 12,
+            dislikes: 1
+        },
+        reviews: []
+    }
+];
+
+
 // Оголошуємо ВСІ наші "бази" тут, і тільки тут
 let notifications_database = [];
 let vh_requests_database = [];
