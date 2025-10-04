@@ -1,6 +1,4 @@
-let originalDriverProfileContent;
 document.addEventListener('DOMContentLoaded', () => {loadState(); // Зберігаємо початковий, чистий HTML екрану повного профілю водія
-originalDriverProfileContent = document.getElementById('driver-full-profile-screen').innerHTML;
 let fakeUserHasCard = false;
 let fakeDriverAcceptsCard = false;
 let currentOfferIdForConfirmation = null;
