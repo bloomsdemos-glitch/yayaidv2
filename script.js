@@ -599,11 +599,6 @@ if (target === 'driver-profile-screen') {
     document.getElementById('show-passenger-settings-btn-from-profile')?.addEventListener('click', () => navigateTo('passenger-settings-screen'));
     document.getElementById('show-help-btn-from-profile')?.addEventListener('click', () => navigateTo('help-screen'));
     document.getElementById('show-passenger-support-btn-from-profile')?.addEventListener('click', () => navigateTo('passenger-support-screen'));
-
-    // --- Водій ---
-    document.getElementById('show-full-driver-profile-btn')?.addEventListener('click', () => {
-        navigateTo('driver-full-profile-screen');
-    });
     document.getElementById('show-driver-settings-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-settings-screen'));
     document.getElementById('show-driver-help-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-help-screen'));
     document.getElementById('show-driver-support-btn-from-profile')?.addEventListener('click', () => navigateTo('driver-support-screen'));
