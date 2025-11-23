@@ -1230,6 +1230,8 @@ document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEvent
                 flatpickr(pickerInput, pickerOptions).open();
             }
         });
+        
+    });
 
 // Новий обробник для кнопки "Далі" на кроці вибору часу
 timeNextBtn?.addEventListener('click', () => {
