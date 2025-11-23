@@ -287,18 +287,49 @@ UI.showTimeResult = function(text) {
 };
 
 UI.checkAddressInputs = function() {
-    const fromType = document.querySelector('.btn-settlement[data-group="from"].active').dataset.type;
-    const toType = document.querySelector('.btn-settlement[data-group="to"].active').dataset.type;
-    const isFromValid = (fromType === 'valky' && fromAddressInput.value.trim() !== '') ||
-    (fromType === 'village' && fromVillageSelect.selectedIndex > 0);
-    const isToValid = (toType === 'valky' && toAddressInput.value.trim() !== '') ||
-    (toType === 'village' && toVillageSelect.selectedIndex > 0);
+    // 1. Знаходимо активні кнопки типу (Валки/Село)
+    const fromBtn = document.querySelector('.btn-settlement[data-group="from"].active');
+    const toBtn = document.querySelector('.btn-settlement[data-group="to"].active');
+
+    if (!fromBtn || !toBtn) return;
+
+    const fromType = fromBtn.dataset.type;
+    const toType = toBtn.dataset.type;
+
+    // 2. ОТРИМУЄМО ЕЛЕМЕНТИ ПРЯМО ТУТ (це вирішує проблему!)
+    const fromInputVal = document.getElementById('from-address').value.trim();
+    const fromVillageVal = document.getElementById('from-village-select').value;
+    
+    const toInputVal = document.getElementById('to-address').value.trim();
+    const toVillageVal = document.getElementById('to-village-select').value;
+
+    // 3. Перевірка "Звідки"
+    let isFromValid = false;
+    if (fromType === 'valky') {
+        // Сувора перевірка: має бути хоча б 1 символ
+        isFromValid = fromInputVal.length > 0;
+    } else if (fromType === 'village') {
+        // Має бути обрано щось, що не є дефолтним текстом
+        isFromValid = fromVillageVal && fromVillageVal !== 'Оберіть населений пункт...';
+    }
+
+    // 4. Перевірка "Куди"
+    let isToValid = false;
+    if (toType === 'valky') {
+        isToValid = toInputVal.length > 0;
+    } else if (toType === 'village') {
+        isToValid = toVillageVal && toVillageVal !== 'Оберіть населений пункт...';
+    }
+
+    // 5. Розблокування кнопки
+    const nextBtn = document.getElementById('address-next-btn');
     if (isFromValid && isToValid) {
-        addressNextBtn.classList.remove('disabled');
+        nextBtn.classList.remove('disabled');
     } else {
-        addressNextBtn.classList.add('disabled');
+        nextBtn.classList.add('disabled');
     }
 };
+
 
 UI.displayOrderDetails = function(order) {
     if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
