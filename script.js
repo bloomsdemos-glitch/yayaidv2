@@ -1164,45 +1164,74 @@ document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEvent
 
 
     // КРОК 2: ЧАС
+    const editTimeBtn = document.getElementById('edit-time-btn');
+    const timeChoiceContainer = document.getElementById('time-choice-container');
+    const timeResultContainer = document.getElementById('time-result-container'); // Виправлено ID (було time-result-result...)
+    const timeResultText = document.getElementById('time-result-text');
+    
     editTimeBtn.addEventListener('click', () => {
-        orderData.time = null;
+        orderData.time = null; // Скидаємо час
         timeChoiceContainer.style.display = 'flex';
         timeResultContainer.style.display = 'none';
         pickerInput.style.display = 'none';
-        updateSummary();
+        UI.updateSummary(); // Оновлюємо картку (вона сховається, бо часу немає)
     });
+
     timeChoiceButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const choice = e.currentTarget.dataset.timeChoice;
-            timeChoiceContainer.style.display = 'none';
+            
             if (choice === 'now') {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
-                UI.showTimeResult(`Зараз (${timeString})`);
+                const finalTime = `Зараз (${timeString})`;
+                
+                // 1. ВАЖЛИВО: Зберігаємо дані ТУТ
+                orderData.time = finalTime;
+                
+                // 2. Оновлюємо інтерфейс
+                UI.showTimeResult(finalTime);
+                UI.updateSummary(); 
+                
             } else {
                 pickerInput.style.display = 'block';
+                // Ховаємо кнопки вибору, щоб не заважали
+                timeChoiceContainer.style.display = 'none'; 
+                
                 let pickerOptions = {
-                    enableTime: true, minDate: "today", time_24hr: true,
+                    enableTime: true, 
+                    minDate: "today", 
+                    time_24hr: true,
                     onClose: function(selectedDates, dateStr) {
-                        if (selectedDates.length > 0) { showTimeResult(dateStr); } 
-                        else { editTimeBtn.click(); }
-                        pickerInput.style.display = 'none';
+                        if (selectedDates.length > 0) { 
+                            // 1. ВАЖЛИВО: Зберігаємо дані ТУТ
+                            orderData.time = dateStr;
+                            
+                            // 2. Оновлюємо інтерфейс
+                            UI.showTimeResult(dateStr); 
+                            UI.updateSummary();
+                        } else { 
+                            // Якщо нічого не обрали і закрили - повертаємо кнопки
+                            timeChoiceContainer.style.display = 'flex';
+                            pickerInput.style.display = 'none';
+                        }
                     }
                 };
+                
                 if (choice === 'today') {
                     pickerOptions.noCalendar = true;
                     pickerOptions.defaultDate = new Date();
                     pickerOptions.dateFormat = "H:i";
-                    timeResultText.textContent = "Оберіть час на сьогодні...";
+                    // Якщо треба змінити текст в UI перед відкриттям, робимо це тут вручну, а не через showTimeResult
                 } else {
                     pickerOptions.dateFormat = "d.m.Y H:i";
-                    timeResultText.textContent = "Оберіть дату та час...";
                 }
-                timeResultContainer.style.display = 'flex';
+                
                 flatpickr(pickerInput, pickerOptions).open();
             }
         });
     });
+
 // Новий обробник для кнопки "Далі" на кроці вибору часу
 timeNextBtn?.addEventListener('click', () => {
     if (!orderData.time) {
