@@ -124,6 +124,7 @@ function displayAvailableDrivers() {
     const driverListContainer = document.querySelector('#passenger-find-driver-screen .driver-list');
     if (!driverListContainer) return;
     driverListContainer.innerHTML = '';
+    
     drivers_database.forEach(driver => {
         const li = document.createElement('li');
         li.className = 'driver-card online';
@@ -137,12 +138,24 @@ function displayAvailableDrivers() {
             </div>
             <div class="status-dot online"></div>
         `;
+        
+        // --- ВИПРАВЛЕННЯ ТУТ ---
         li.addEventListener('click', () => {
+            // 1. Заповнюємо дані профілю
             UI.displayDriverProfile(driver.id);
+            
+            // 2. (НОВЕ) Переходимо на екран повного профілю
+            navigateTo('passenger-full-profile-screen');
+            
+            // 3. (ВАЖЛИВО) Треба переконатися, що на екрані профілю є кнопка "Поїхати"
+            // і їй присвоєно правильний ID водія.
+            // Можна додати тимчасовий хак тут, або зробити це в UI.displayDriverProfile
         });
+        
         driverListContainer.appendChild(li);
     });
 }
+
 function displayVhOffers(filter = 'all') {
     const offerListContainer = document.getElementById('vh-driver-list');
     const placeholder = offerListContainer?.querySelector('.list-placeholder');
