@@ -47,7 +47,6 @@ function displayDriverOrders() {
 }
 
 function displayArchives() {
-    // --- Архів пасажира ---
     const passengerArchiveList = document.querySelector('#passenger-orders-screen .order-list.passenger');
     if (passengerArchiveList) {
         passengerArchiveList.innerHTML = '';
@@ -64,7 +63,17 @@ function displayArchives() {
                 const li = document.createElement('li');
                 li.className = 'order-card archived';
                 li.style.cursor = 'pointer';
-                li.innerHTML = `...`; // (весь HTML картки, залишаємо як є)
+                li.innerHTML = `
+                    <div class="archived-info">
+                        <span class="archived-date">${new Date(order.id).toLocaleDateString('uk-UA')}</span>
+                        <div class="route">
+                            <span><i class="fa-solid fa-circle"></i> ${order.from}</span>
+                            <span><i class="fa-solid fa-location-dot"></i> ${order.to}</span>
+                        </div>
+                        <div class="driver-details">Водій: ${driverName}</div>
+                    </div>
+                    <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
+                `;
                 li.addEventListener('click', () => {
                     document.getElementById('archived-details-date').textContent = new Date(order.id).toLocaleString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     document.getElementById('archived-details-from').textContent = order.from;
@@ -81,7 +90,6 @@ function displayArchives() {
         }
     }
 
-    // --- Архів водія ---
     const driverArchiveList = document.querySelector('#driver-orders-screen .order-list.driver');
     if (driverArchiveList) {
         driverArchiveList.innerHTML = '';
@@ -120,11 +128,11 @@ function displayArchives() {
         }
     }
 }
+
 function displayAvailableDrivers() {
     const driverListContainer = document.querySelector('#passenger-find-driver-screen .driver-list');
     if (!driverListContainer) return;
     driverListContainer.innerHTML = '';
-    
     drivers_database.forEach(driver => {
         const li = document.createElement('li');
         li.className = 'driver-card online';
@@ -138,20 +146,11 @@ function displayAvailableDrivers() {
             </div>
             <div class="status-dot online"></div>
         `;
-        
-        // --- ВИПРАВЛЕННЯ ТУТ ---
         li.addEventListener('click', () => {
-            // 1. Заповнюємо дані профілю
             UI.displayDriverProfile(driver.id);
-            
-            // 2. (НОВЕ) Переходимо на екран повного профілю
+            // ДОДАНО: Перехід на екран профілю
             navigateTo('passenger-full-profile-screen');
-            
-            // 3. (ВАЖЛИВО) Треба переконатися, що на екрані профілю є кнопка "Поїхати"
-            // і їй присвоєно правильний ID водія.
-            // Можна додати тимчасовий хак тут, або зробити це в UI.displayDriverProfile
         });
-        
         driverListContainer.appendChild(li);
     });
 }
@@ -202,6 +201,7 @@ function displayVhOffers(filter = 'all') {
         });
     }
 }
+
 function displayVhRequests() {
     const requestListContainer = document.getElementById('vh-passenger-request-list');
     const placeholder = requestListContainer?.querySelector('.list-placeholder');
