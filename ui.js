@@ -226,30 +226,63 @@ UI.displayPassengerProfile = function(passengerId) {
 
 
 UI.updateSummary = function() {
-    if (orderData.from || orderData.to) { quickOrderSummaryCard.classList.remove('hidden');
+    // 1. Знаходимо елементи САМІ, бо змінні з script.js тут недоступні
+    const summaryCard = document.getElementById('quick-order-summary-card');
+    const sumFrom = document.getElementById('summary-from');
+    const sumTo = document.getElementById('summary-to');
+    const sumTime = document.getElementById('summary-time');
+    
+    const sumFromCont = document.getElementById('summary-from-container');
+    const sumToCont = document.getElementById('summary-to-container');
+    const sumTimeCont = document.getElementById('summary-time-container');
+
+    // 2. Логіка відображення
+    if (orderData.from || orderData.to) { 
+        summaryCard.classList.remove('hidden');
     }
-    if (orderData.from) { summaryFrom.textContent = orderData.from; summaryFromContainer.style.display = 'flex';
+
+    if (orderData.from) { 
+        sumFrom.textContent = orderData.from; 
+        sumFromCont.style.display = 'flex';
     }
-    if (orderData.to) { summaryTo.textContent = orderData.to; summaryToContainer.style.display = 'flex';
+
+    if (orderData.to) { 
+        sumTo.textContent = orderData.to; 
+        sumToCont.style.display = 'flex';
     }
-    if (orderData.time) { summaryTime.textContent = orderData.time; summaryTimeContainer.style.display = 'flex';
-    } 
-    else { summaryTimeContainer.style.display = 'none';
+
+    if (orderData.time) { 
+        sumTime.textContent = orderData.time; 
+        sumTimeCont.style.display = 'flex';
+    } else { 
+        sumTimeCont.style.display = 'none';
     }
 };
 
+
 UI.goToStep = function(stepToShow) {
-    addressStep.classList.remove('active');
-    timeStep.classList.remove('active');
-    paymentStep.classList.remove('active');
+    // 1. Знову знаходимо блоки кроків за ID
+    const stepAddress = document.getElementById('address-step');
+    const stepTime = document.getElementById('time-step');
+    const stepPayment = document.getElementById('payment-step');
+
+    if (!stepAddress || !stepTime || !stepPayment) return;
+
+    // 2. Ховаємо всі
+    stepAddress.classList.remove('active');
+    stepTime.classList.remove('active');
+    stepPayment.classList.remove('active');
+
+    // 3. Показуємо потрібний
     if (stepToShow === 'address') {
-        addressStep.classList.add('active');
+        stepAddress.classList.add('active');
     } else if (stepToShow === 'time') {
-        timeStep.classList.add('active');
+        stepTime.classList.add('active');
     } else if (stepToShow === 'payment') {
-        paymentStep.classList.add('active');
+        stepPayment.classList.add('active');
     }
 };
+
 
 UI.resetQuickOrder = function() {
     orderData = {};
