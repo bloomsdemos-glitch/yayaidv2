@@ -312,12 +312,21 @@ UI.resetQuickOrder = function() {
 };
 
 UI.showTimeResult = function(text) {
-    orderData.time = text;
-    timeResultText.textContent = text;
-    timeChoiceContainer.style.display = 'none';
-    timeResultContainer.style.display = 'flex';
-    UI.updateSummary(); // <-- Важливо: і тут теж UI.
+    // 1. Знаходимо елементи САМІ
+    const timeChoiceCont = document.getElementById('time-choice-container');
+    const timeResultCont = document.getElementById('time-result-container');
+    const timeResText = document.getElementById('time-result-text');
+
+    if (!timeChoiceCont || !timeResultCont || !timeResText) return;
+
+    // 2. Оновлюємо вигляд
+    timeResText.textContent = text;
+    timeChoiceCont.style.display = 'none';
+    timeResultCont.style.display = 'flex';
+    
+    // ПРИМІТКА: Ми більше не чіпаємо тут orderData, це зробить script.js
 };
+
 
 UI.checkAddressInputs = function() {
     // 1. Знаходимо активні кнопки типу (Валки/Село)
