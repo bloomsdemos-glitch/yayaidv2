@@ -1,94 +1,100 @@
 const UI = {};
 
+// Глобальні змінні для поп-апу (вони мають бути тут)
 const popupAvatarIcon = document.getElementById('popup-avatar-icon');
 const popupUserName = document.getElementById('popup-user-name');
 const popupUserDetails = document.getElementById('popup-user-details');
 
 const screens = document.querySelectorAll('.screen');
-        function showScreen(screenId) {
-        screens.forEach(screen => {
-            screen.classList.add('hidden');
-            screen.classList.remove('active');
-        });
-        const activeScreen = document.getElementById(screenId);
-        if (activeScreen) {
-            activeScreen.classList.remove('hidden');
-            activeScreen.classList.add('active');
-        }
-    }
 
-    function navigateTo(screenId) {
-        setTimeout(() => showScreen(screenId), 250);
+function showScreen(screenId) {
+    screens.forEach(screen => {
+        screen.classList.add('hidden');
+        screen.classList.remove('active');
+    });
+    const activeScreen = document.getElementById(screenId);
+    if (activeScreen) {
+        activeScreen.classList.remove('hidden');
+        activeScreen.classList.add('active');
     }
-    
-    // === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
-    function createRipple(event) {
-        const button = event.currentTarget;
-        const circle = document.createElement("span");
-        const diameter = Math.max(button.clientWidth, button.clientHeight);
-        const radius = diameter / 2;
-        const existingRipple = button.querySelector(".ripple");
-        if (existingRipple) {
-            existingRipple.remove();
-        }
-        circle.style.width = circle.style.height = `${diameter}px`;
-        circle.style.left = `${event.clientX - (button.getBoundingClientRect().left + radius)}px`;
-        circle.style.top = `${event.clientY - (button.getBoundingClientRect().top + radius)}px`;
-        circle.classList.add("ripple");
-        button.appendChild(circle);
+}
+
+function navigateTo(screenId) {
+    setTimeout(() => showScreen(screenId), 250);
+}
+
+// === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
+function createRipple(event) {
+    const button = event.currentTarget;
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+    const existingRipple = button.querySelector(".ripple");
+    if (existingRipple) {
+        existingRipple.remove();
     }
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${event.clientX - (button.getBoundingClientRect().left + radius)}px`;
+    circle.style.top = `${event.clientY - (button.getBoundingClientRect().top + radius)}px`;
+    circle.classList.add("ripple");
+    button.appendChild(circle);
+}
+// Ініціалізація ripple після завантаження DOM
+document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
         button.addEventListener("click", createRipple);
     });
-    
-     // === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
-        const body = document.body;
-        function switchTheme(e) {
-            if (e.target.checked) {
-                body.classList.remove('light-theme');
-                body.classList.add('dark-theme');
-            } else {
-                body.classList.remove('dark-theme');
-                body.classList.add('light-theme');
-            }
-        }
-        if (body.classList.contains('dark-theme')) {
-            themeCheckbox.checked = true;
-        }
-        themeCheckbox.addEventListener('change', switchTheme);
-    }
+});
 
-    // === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
-    const pin1 = document.getElementById('pin1');
-    const pin2 = document.getElementById('pin2');
-    const pathDots = document.querySelector('.path-dots');
-    if (pin1 && pin2 && pathDots) {
-        function swapPinIcons() {
-            const isPin1Dot = pin1.classList.contains('fa-circle-dot');
-            if (isPin1Dot) {
-                pin1.classList.remove('fa-circle-dot');
-                pin1.classList.add('fa-location-dot');
-                pin2.classList.remove('fa-location-dot');
-                pin2.classList.add('fa-circle-dot');
-            } else {
-                pin1.classList.remove('fa-location-dot');
-                pin1.classList.add('fa-circle-dot');
-                pin2.classList.remove('fa-circle-dot');
-                pin2.classList.add('fa-location-dot');
-            }
+// === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
+const themeToggle = document.getElementById('theme-toggle');
+if (themeToggle) {
+    const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
+    const body = document.body;
+    function switchTheme(e) {
+        if (e.target.checked) {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
         }
-        pathDots.addEventListener('animationiteration', swapPinIcons);
     }
-    
+    if (body.classList.contains('dark-theme')) {
+        themeCheckbox.checked = true;
+    }
+    themeCheckbox.addEventListener('change', switchTheme);
+}
+
+// === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
+const pin1 = document.getElementById('pin1');
+const pin2 = document.getElementById('pin2');
+const pathDots = document.querySelector('.path-dots');
+if (pin1 && pin2 && pathDots) {
+    function swapPinIcons() {
+        const isPin1Dot = pin1.classList.contains('fa-circle-dot');
+        if (isPin1Dot) {
+            pin1.classList.remove('fa-circle-dot');
+            pin1.classList.add('fa-location-dot');
+            pin2.classList.remove('fa-location-dot');
+            pin2.classList.add('fa-circle-dot');
+        } else {
+            pin1.classList.remove('fa-location-dot');
+            pin1.classList.add('fa-circle-dot');
+            pin2.classList.remove('fa-circle-dot');
+            pin2.classList.add('fa-location-dot');
+        }
+    }
+    pathDots.addEventListener('animationiteration', swapPinIcons);
+}
+
+// === КАРТКИ ===
 UI.createDriverOrderCard = function(order) {
     const li = document.createElement('li');
     li.className = 'order-card driver-view';
     const timeIcon = order.time === 'Зараз' ? '<div class="status-dot online"></div>' : '<i class="fa-solid fa-clock"></i>';
     li.innerHTML = `
-        <div class="order-main-info"><div class="passenger-info"><div class="avatar-convex"><i class="fa-solid fa-user"></i></div><div class="passenger-details"><strong>${order.passengerName}</strong><span>${order.rating} <i class="fa-solid fa-star"></i></span></div></div><div class="price-info"><span class="price-amount">~ ${order.price} грн</span><span class="price-label">Ваш дохід</span></div></div>
+        <div class="order-main-info"><div class="passenger-info"><div class="avatar-convex"><i class="fa-solid fa-user"></i></div><div class="passenger-details"><strong>${order.passengerName}</strong><span>${order.rating} <i class="fa-solid fa-star"></i></span></div></div><div class="price-info"><span class="price-amount">~ ${order.price || '---'} грн</span><span class="price-label">Ваш дохід</span></div></div>
         <div class="order-route-info"><div class="address-line"><i class="fa-solid fa-circle start-address-icon"></i><span>${order.from}</span></div><div class="address-line"><i class="fa-solid fa-location-dot end-address-icon"></i><span>${order.to}</span></div></div>
         <div class="order-time-info">${timeIcon}<span>${order.time}</span></div>
     `;
@@ -110,11 +116,11 @@ UI.createActiveTripCardHTML = function(trip, userType) {
             <div class="route-addresses" style="font-size: 16px;">
                 <div class="address-line">
                     <i class="fa-solid fa-circle start-address-icon"></i>
-                    <span>${trip.from || trip.direction.split(' - ')[0]}</span>
+                    <span>${trip.from || (trip.direction ? trip.direction.split(' - ')[0] : '???')}</span>
                 </div>
                 <div class="address-line">
                     <i class="fa-solid fa-location-dot end-address-icon"></i>
-                    <span>${trip.to || trip.direction.split(' - ')[1]}</span>
+                    <span>${trip.to || (trip.direction ? trip.direction.split(' - ')[1] : '???')}</span>
                 </div>
             </div>
             <div class="driver-info" style="padding-top: 8px; border-top: 1px solid var(--md-outline);">
@@ -124,18 +130,23 @@ UI.createActiveTripCardHTML = function(trip, userType) {
     `;
 };
 
+// === ПРОФІЛІ ===
 UI.displayDriverProfile = function(driverId) {
     const driver = drivers_database.find(d => d.id === driverId);
-    if (!driver) {
-        console.error('Водія з ID', driverId, 'не знайдено.');
-        return;
-    }
-    document.getElementById('profile-driver-name').textContent = driver.name;
-    document.getElementById('profile-driver-trips').textContent = driver.trips;
-    if (driver.trips < 5) {
-        document.getElementById('profile-driver-rating').innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
-    } else {
-        document.getElementById('profile-driver-rating').textContent = driver.rating.toFixed(1);
+    if (!driver) return;
+    const nameEl = document.getElementById('profile-driver-name');
+    if(nameEl) nameEl.textContent = driver.name;
+    
+    const tripsEl = document.getElementById('profile-driver-trips');
+    if(tripsEl) tripsEl.textContent = driver.trips;
+    
+    const ratingEl = document.getElementById('profile-driver-rating');
+    if (ratingEl) {
+        if (driver.trips < 5) {
+            ratingEl.innerHTML = `<small style="font-weight: 400; font-size: 14px;">Рейтинг формується</small>`;
+        } else {
+            ratingEl.textContent = driver.rating.toFixed(1);
+        }
     }
 };
 
@@ -148,10 +159,11 @@ UI.displayDriverFullProfile = function(driverId) {
     document.getElementById('profile-driver-trips-full').textContent = `${driver.trips} поїздки`;
     document.getElementById('profile-driver-car').textContent = driver.car;
 
+    const ratingFull = document.getElementById('profile-driver-rating-full');
     if (driver.trips < 5) {
-        document.getElementById('profile-driver-rating-full').innerHTML = `<small>Новий водій</small>`;
+        ratingFull.innerHTML = `<small>Новий водій</small>`;
     } else {
-        document.getElementById('profile-driver-rating-full').innerHTML = `<i class="fa-solid fa-star"></i> ${driver.rating.toFixed(1)}`;
+        ratingFull.innerHTML = `<i class="fa-solid fa-star"></i> ${driver.rating.toFixed(1)}`;
     }
 
     const tagsContainer = document.getElementById('profile-driver-tags');
@@ -160,11 +172,8 @@ UI.displayDriverFullProfile = function(driverId) {
         tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
     });
 
-    // ОСЬ ТУТ БУЛА ПОМИЛКА, ТЕПЕР ВИПРАВЛЕНО:
     const reviewsContainer = document.getElementById('profile-driver-reviews');
-    // Спочатку знаходимо батьківську секцію саме для відгуків
     const reviewsSection = reviewsContainer.closest('.details-section'); 
-    // І вже всередині цієї секції шукаємо її заголовок h4
     const reviewsTitle = reviewsSection.querySelector('h4'); 
 
     if (reviewsTitle) {
@@ -187,46 +196,39 @@ UI.displayDriverFullProfile = function(driverId) {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
 
-    UI.displayDriverSchedule(driverId);
-    UI.displayDriverPlannedRoutes(driverId);
+    if(UI.displayDriverSchedule) UI.displayDriverSchedule(driverId);
+    if(UI.displayDriverPlannedRoutes) UI.displayDriverPlannedRoutes(driverId);
 };
 
-
 UI.displayPassengerProfile = function(passengerId) {
-    // Знаходимо пасажира в базі даних
     const passenger = passengers_database.find(p => p.id === passengerId);
-    if (!passenger) {
-        console.error('Пасажира з ID', passengerId, 'не знайдено.');
-        return;
-    }
+    if (!passenger) return;
 
-    // Заповнюємо дані на екрані "Профіль" (коротка версія)
-    document.getElementById('profile-passenger-name').textContent = passenger.name;
-    document.getElementById('profile-passenger-trips').textContent = `${passenger.trips} поїздок`;
-    // Заглушка для лайків/дизлайків, яка запрацює на наступному кроці
+    const nameEl = document.getElementById('profile-passenger-name');
+    if(nameEl) nameEl.textContent = passenger.name;
+    
+    const tripsEl = document.getElementById('profile-passenger-trips');
+    if(tripsEl) tripsEl.textContent = `${passenger.trips} поїздок`;
+
     if (passenger.feedback) {
-        document.getElementById('passenger-feedback-placeholder').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
+        const fbEl = document.getElementById('passenger-feedback-placeholder');
+        if(fbEl) fbEl.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
     }
 
-    // Заповнюємо дані на екрані "Повний профіль"
     document.getElementById('profile-passenger-name-header').textContent = `Профіль: ${passenger.name}`;
     document.getElementById('profile-passenger-name-full').textContent = passenger.name;
     document.getElementById('profile-passenger-trips-full').textContent = `${passenger.trips} поїздок`;
+    
     if (passenger.feedback) {
-        document.getElementById('passenger-feedback-placeholder-full').innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
+        const fbFullEl = document.getElementById('passenger-feedback-placeholder-full');
+        if(fbFullEl) fbFullEl.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
     }
     document.getElementById('profile-passenger-bio').textContent = passenger.bio;
-
-    // Логіка для відгуків водіїв (поки що просто заглушка)
-    const reviewsContainer = document.querySelector('#passenger-full-profile-screen .review-list');
-    if (reviewsContainer) {
-         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
-    }
 };
 
+// === ЛОГІКА ШВИДКОГО ЗАМОВЛЕННЯ (ВИПРАВЛЕНО) ===
 
 UI.updateSummary = function() {
-    // 1. Знаходимо елементи САМІ, бо змінні з script.js тут недоступні
     const summaryCard = document.getElementById('quick-order-summary-card');
     const sumFrom = document.getElementById('summary-from');
     const sumTo = document.getElementById('summary-to');
@@ -236,7 +238,9 @@ UI.updateSummary = function() {
     const sumToCont = document.getElementById('summary-to-container');
     const sumTimeCont = document.getElementById('summary-time-container');
 
-    // 2. Логіка відображення
+    // Перевіряємо наявність глобальної змінної orderData
+    if (typeof orderData === 'undefined') return;
+
     if (orderData.from || orderData.to) { 
         summaryCard.classList.remove('hidden');
     }
@@ -259,21 +263,17 @@ UI.updateSummary = function() {
     }
 };
 
-
 UI.goToStep = function(stepToShow) {
-    // 1. Знову знаходимо блоки кроків за ID
     const stepAddress = document.getElementById('address-step');
     const stepTime = document.getElementById('time-step');
     const stepPayment = document.getElementById('payment-step');
 
     if (!stepAddress || !stepTime || !stepPayment) return;
 
-    // 2. Ховаємо всі
     stepAddress.classList.remove('active');
     stepTime.classList.remove('active');
     stepPayment.classList.remove('active');
 
-    // 3. Показуємо потрібний
     if (stepToShow === 'address') {
         stepAddress.classList.add('active');
     } else if (stepToShow === 'time') {
@@ -283,53 +283,64 @@ UI.goToStep = function(stepToShow) {
     }
 };
 
-
 UI.resetQuickOrder = function() {
-    orderData = {};
-    fromAddressInput.value = '';
-    toAddressInput.value = '';
+    // Звертаємось до глобальної orderData
+    if (typeof orderData !== 'undefined') {
+        // Очищаємо поля об'єкта, не замінюючи посилання
+        for (const key in orderData) delete orderData[key];
+    }
+    
+    document.getElementById('from-address').value = '';
+    document.getElementById('to-address').value = '';
     document.getElementById('comment').value = '';
-    quickOrderSummaryCard.classList.add('hidden');
-    summaryFromContainer.style.display = 'none';
-    summaryToContainer.style.display = 'none';
-    summaryTimeContainer.style.display = 'none';
+    
+    document.getElementById('quick-order-summary-card').classList.add('hidden');
+    document.getElementById('summary-from-container').style.display = 'none';
+    document.getElementById('summary-to-container').style.display = 'none';
+    document.getElementById('summary-time-container').style.display = 'none';
     document.getElementById('summary-driver-container').style.display = 'none';
-    addressNextBtn.classList.add('disabled');
+    
+    document.getElementById('address-next-btn').classList.add('disabled');
+    
     document.getElementById('from-address-container').style.display = 'block';
-    fromVillageContainer.style.display = 'none';
+    document.getElementById('from-village-container').style.display = 'none';
     document.getElementById('to-address-container').style.display = 'block';
-    toVillageContainer.style.display = 'none';
-    fromVillageSelect.selectedIndex = 0;
-    toVillageSelect.selectedIndex = 0;
-    settlementButtons.forEach(btn => {
+    document.getElementById('to-village-container').style.display = 'none';
+    
+    const fromVillageSelect = document.getElementById('from-village-select');
+    const toVillageSelect = document.getElementById('to-village-select');
+    if(fromVillageSelect) fromVillageSelect.selectedIndex = 0;
+    if(toVillageSelect) toVillageSelect.selectedIndex = 0;
+    
+    document.querySelectorAll('.btn-settlement').forEach(btn => {
         if (btn.dataset.type === 'valky') btn.classList.add('active');
         else btn.classList.remove('active');
     });
-    timeChoiceContainer.style.display = 'flex';
-    timeResultContainer.style.display = 'none';
-    pickerInput.style.display = 'none';
-    UI.goToStep('address'); // <-- Важливо: тут теж тепер UI.
+    
+    const timeChoiceCont = document.getElementById('time-choice-container');
+    const timeResultCont = document.getElementById('time-result-container');
+    const picker = document.getElementById('datetime-picker');
+    
+    if(timeChoiceCont) timeChoiceCont.style.display = 'flex';
+    if(timeResultCont) timeResultCont.style.display = 'none';
+    if(picker) picker.style.display = 'none';
+    
+    UI.goToStep('address');
 };
 
 UI.showTimeResult = function(text) {
-    // 1. Знаходимо елементи САМІ
     const timeChoiceCont = document.getElementById('time-choice-container');
     const timeResultCont = document.getElementById('time-result-container');
     const timeResText = document.getElementById('time-result-text');
 
     if (!timeChoiceCont || !timeResultCont || !timeResText) return;
 
-    // 2. Оновлюємо вигляд
     timeResText.textContent = text;
     timeChoiceCont.style.display = 'none';
     timeResultCont.style.display = 'flex';
-    
-    // ПРИМІТКА: Ми більше не чіпаємо тут orderData, це зробить script.js
 };
 
-
 UI.checkAddressInputs = function() {
-    // 1. Знаходимо активні кнопки типу (Валки/Село)
     const fromBtn = document.querySelector('.btn-settlement[data-group="from"].active');
     const toBtn = document.querySelector('.btn-settlement[data-group="to"].active');
 
@@ -338,24 +349,18 @@ UI.checkAddressInputs = function() {
     const fromType = fromBtn.dataset.type;
     const toType = toBtn.dataset.type;
 
-    // 2. ОТРИМУЄМО ЕЛЕМЕНТИ ПРЯМО ТУТ (це вирішує проблему!)
     const fromInputVal = document.getElementById('from-address').value.trim();
     const fromVillageVal = document.getElementById('from-village-select').value;
-    
     const toInputVal = document.getElementById('to-address').value.trim();
     const toVillageVal = document.getElementById('to-village-select').value;
 
-    // 3. Перевірка "Звідки"
     let isFromValid = false;
     if (fromType === 'valky') {
-        // Сувора перевірка: має бути хоча б 1 символ
         isFromValid = fromInputVal.length > 0;
     } else if (fromType === 'village') {
-        // Має бути обрано щось, що не є дефолтним текстом
         isFromValid = fromVillageVal && fromVillageVal !== 'Оберіть населений пункт...';
     }
 
-    // 4. Перевірка "Куди"
     let isToValid = false;
     if (toType === 'valky') {
         isToValid = toInputVal.length > 0;
@@ -363,7 +368,6 @@ UI.checkAddressInputs = function() {
         isToValid = toVillageVal && toVillageVal !== 'Оберіть населений пункт...';
     }
 
-    // 5. Розблокування кнопки
     const nextBtn = document.getElementById('address-next-btn');
     if (isFromValid && isToValid) {
         nextBtn.classList.remove('disabled');
@@ -372,21 +376,31 @@ UI.checkAddressInputs = function() {
     }
 };
 
-
 UI.displayOrderDetails = function(order) {
+    const detailsPassengerName = document.getElementById('details-passenger-name');
+    const detailsPassengerRating = document.getElementById('details-passenger-rating');
+    const detailsFromAddress = document.getElementById('details-from-address');
+    const detailsToAddress = document.getElementById('details-to-address');
+    const detailsTotalPrice = document.getElementById('details-total-price');
+    const detailsCommission = document.getElementById('details-commission');
+    const detailsDriverEarning = document.getElementById('details-driver-earning');
+    const detailsCommentText = document.getElementById('details-comment-text');
+    const detailsCommentContainer = document.getElementById('details-comment-container');
+
     if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
     if(detailsPassengerRating) detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
     if(detailsFromAddress) detailsFromAddress.textContent = order.from;
     if(detailsToAddress) detailsToAddress.textContent = order.to;
 
-    const commission = Math.round(order.price * 0.05);
-    if(detailsTotalPrice) detailsTotalPrice.textContent = `${order.price} грн`;
+    const price = order.price || 130; // Дефолтна ціна, якщо немає
+    const commission = Math.round(price * 0.05);
+    
+    if(detailsTotalPrice) detailsTotalPrice.textContent = `${price} грн`;
     if(detailsCommission) detailsCommission.textContent = `- ${commission} грн`;
-    if(detailsDriverEarning) detailsDriverEarning.textContent = `~ ${order.price - commission} грн`;
+    if(detailsDriverEarning) detailsDriverEarning.textContent = `~ ${price - commission} грн`;
 
-    const randomComment = "Буду з дитиною 6 років, потрібно автокрісло.";
-    if (Math.random() > 0.5) {
-        if(detailsCommentText) detailsCommentText.textContent = randomComment;
+    if (order.comment) {
+        if(detailsCommentText) detailsCommentText.textContent = order.comment;
         if(detailsCommentContainer) detailsCommentContainer.style.display = 'block';
     } else {
         if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
@@ -400,10 +414,7 @@ UI.showProfilePopup = function(userData) {
     const profilePopup = document.getElementById('profile-popup');
     const popupOverlay = document.getElementById('popup-overlay');
     
-    if (!popupAvatarIcon || !popupUserName || !popupUserDetails) {
-        console.error('Елементи поп-апу не знайдено');
-        return;
-    }
+    if (!popupAvatarIcon || !popupUserName || !popupUserDetails) return;
     
     popupAvatarIcon.className = userData.icon;
     popupUserName.textContent = userData.name;
@@ -416,7 +427,6 @@ UI.showProfilePopup = function(userData) {
 UI.hideProfilePopup = function() {
     const profilePopup = document.getElementById('profile-popup');
     const popupOverlay = document.getElementById('popup-overlay');
-    
     popupOverlay?.classList.add('hidden');
     profilePopup?.classList.remove('visible');
 };
@@ -439,7 +449,6 @@ UI.displayNotifications = function(notifications, userType) {
 
             const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-bell';
             
-            // Зберігаємо важливі дані прямо на елементі
             li.dataset.notificationId = notif.id;
             if (notif.offerId) {
                 li.dataset.offerId = notif.offerId;
@@ -457,7 +466,7 @@ UI.displayNotifications = function(notifications, userType) {
     }
 };
 
-// === ГРАФІК РОБОТИ ===
+// === ГРАФІК РОБОТИ (SCHEDULE) ===
 UI.renderScheduleEditor = function() {
     const container = document.getElementById('schedule-days-list');
     if (!container) return;
@@ -503,7 +512,6 @@ UI.renderScheduleEditor = function() {
     });
 };
 
-// === ВІДОБРАЖЕННЯ ГРАФІКУ В ПРОФІЛІ ===
 UI.displayDriverSchedule = function(driverId) {
     const driver = drivers_database.find(d => d.id === driverId);
     const container = document.getElementById('profile-driver-schedule');
@@ -585,7 +593,6 @@ UI.renderPlannedRoutesEditor = function() {
     });
 };
 
-// === ВІДОБРАЖЕННЯ ЗАПЛАНОВАНИХ МАРШРУТІВ У ПРОФІЛІ ===
 UI.displayDriverPlannedRoutes = function(driverId) {
     const driver = drivers_database.find(d => d.id === driverId);
     const container = document.getElementById('profile-driver-routes');
@@ -620,7 +627,6 @@ UI.displayDriverPlannedRoutes = function(driverId) {
     });
 };
 
-// === СЕЛЕКТОР ДНІВ ТИЖНЯ ===
 UI.renderWeekdaySelector = function() {
     const container = document.getElementById('planned-route-days');
     if (!container) return;
