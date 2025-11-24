@@ -1724,6 +1724,4 @@ devSwitchToDriverBtn?.addEventListener('click', () => {
     updateAllDriverTripViews(); // <--- ЗАМІНА
     updateFabButtonState(); // <--- Теж оновимо кнопку
 });
-
-
 });
