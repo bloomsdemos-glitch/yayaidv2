@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {loadState(); // Зберігаємо початковий, чистий HTML екрану повного профілю водія
+let orderData = {};
+document.addEventListener('DOMContentLoaded', () => {loadState(); 
+    // Зберігаємо початковий, чистий HTML екрану повного профілю водія
 let fakeUserHasCard = false;
 let fakeDriverAcceptsCard = false;
 let currentOfferIdForConfirmation = null;
 let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
-
-
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
