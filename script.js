@@ -1249,45 +1249,51 @@ timeNextBtn?.addEventListener('click', () => {
 
 
 // Оновлений обробник для фінальної кнопки "Відправити замовлення"
+// Оновлений обробник: ТЕПЕР ВЕДЕ НА CONFIRMATION SCREEN
 submitOrderBtn.addEventListener('click', () => {
-    // Додаємо базові дані
+    // 1. Формуємо дані
     orderData.passengerName = "Віта"; 
     orderData.rating = 4.8;
     orderData.id = Date.now();
+    orderData.status = 'searching';
 
-    // А тепер перевіряємо, чи був обраний конкретний водій
+    // Перевірка на конкретного водія
     const driverIdString = currentOfferIdForConfirmation?.replace('driver_', '');
     if (driverIdString) {
         const driverId = parseInt(driverIdString);
-        const driver = drivers_database.find(d => d.id === driverId);
-        if (driver) {
-            // Якщо так, додаємо ID водія до замовлення
-            orderData.specificDriverId = driverId;
-
-            // І змінюємо текст на екрані підтвердження!
-            const confTitle = document.querySelector('#order-confirmation-screen .conf-title');
-            const confText = document.querySelector('#order-confirmation-screen .conf-text');
-            if(confTitle) confTitle.textContent = `Замовлення для ${driver.name}`;
-            if(confText) confText.textContent = `⚡️ Запит надіслано! Очікуйте на підтвердження від водія.`;
-        }
-    } else {
-        // Якщо водія не обрано, залишаємо стандартний текст
-        const confTitle = document.querySelector('#order-confirmation-screen .conf-title');
-        const confText = document.querySelector('#order-confirmation-screen .conf-text');
-        if(confTitle) confTitle.textContent = `Замовлення #${orderData.id.toString().slice(-4)}`;
-        if(confText) confText.textContent = `⚡️ Прийнято! Вже шукаємо для вас вільних водіїв!`;
+        orderData.specificDriverId = driverId;
     }
 
+    // 2. Додаємо в базу
     orders_database.push(orderData);
-    console.log('НОВЕ ЗАМОВЛЕННЯ ДОДАНО:', orders_database);
-
-    // Скидаємо "пам'ять" про обраного водія
+    saveState();
+    
+    // 3. Скидаємо "пам'ять"
     currentOfferIdForConfirmation = null;
 
-    showScreen('order-confirmation-screen');
+    // 4. Оновлюємо текст на екрані підтвердження (динамічно)
+    const confTitle = document.querySelector('.conf-title');
+    const confText = document.querySelector('.conf-text');
+    
+    if (confTitle) confTitle.textContent = `Замовлення #${orderData.id.toString().slice(-4)}`;
+    
+    // 5. Очищаємо форму
+    UI.resetQuickOrder();
+
+    // 6. ПОКАЗУЄМО ЕКРАН ПІДТВЕРДЖЕННЯ (Тепер він існує!)
+    navigateTo('order-confirmation-screen');
 });
 
-
+// І не забудь додати обробник для кнопки всередині цього екрану:
+document.getElementById('go-to-my-orders-btn')?.addEventListener('click', () => {
+    // Готуємо екран "Мої поїздки"
+    const searchingCard = document.getElementById('searching-card');
+    const activeTripCard = document.getElementById('active-trip-card');
+    if(searchingCard) searchingCard.style.display = 'block';
+    if(activeTripCard) activeTripCard.style.display = 'none';
+    
+    navigateTo('passenger-orders-screen');
+});
 
 // --- Обробники для вибору способу оплати (Додано новий блок з Кроку Б) ---
 function handlePaymentChoice(choice) {
@@ -1322,6 +1328,21 @@ paymentCardBtn?.addEventListener('click', () => {
     handlePaymentChoice('card');
 });
 
+// === ЛОГІКА КНОПКИ "МОЇ ПОЇЗДКИ" НА ЕКРАНІ ПІДТВЕРДЖЕННЯ ===
+const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
+
+goToMyOrdersBtn?.addEventListener('click', () => {
+    // 1. Готуємо екран "Мої поїздки"
+    // (Показуємо картку пошуку, бо ми ж щойно замовили)
+    const searchingCard = document.getElementById('searching-card');
+    const activeTripCard = document.getElementById('active-trip-card');
+    
+    if (searchingCard) searchingCard.style.display = 'block';
+    if (activeTripCard) activeTripCard.style.display = 'none';
+
+    // 2. Переходимо на екран
+    navigateTo('passenger-orders-screen');
+});
 
 
 // Розумна кнопка "Назад"
