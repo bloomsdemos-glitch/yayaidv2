@@ -20,8 +20,10 @@ function showScreen(screenId) {
 }
 
 function navigateTo(screenId) {
-    setTimeout(() => showScreen(screenId), 250);
+    // Прибираємо штучну затримку. Нехай перемикає миттєво!
+    showScreen(screenId); 
 }
+
 
 // === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
 function createRipple(event) {
