@@ -2243,3 +2243,56 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     color: var(--md-on-surface-variant);
     margin-bottom: 20px;
 }
+
+/* === СТИЛІ ДЛЯ ЕКРАНУ ПІДТВЕРДЖЕННЯ (Відновлено) === */
+.confirmation-card {
+    text-align: center;
+    background-color: var(--md-surface);
+    padding: 32px 24px;
+    border-radius: 24px;
+    box-shadow: var(--elevation-3);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+.conf-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--md-success);
+}
+
+.conf-text {
+    font-size: 16px;
+    color: var(--md-on-surface);
+    line-height: 1.5;
+}
+
+.spinner-container {
+    padding: 20px;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid var(--md-surface-variant);
+    border-top: 5px solid var(--md-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.conf-note {
+    font-size: 13px;
+    color: var(--md-on-surface-variant);
+    background-color: var(--md-surface-variant);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
