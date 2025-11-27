@@ -1,12 +1,37 @@
 let orderData = {};
 
+// === 1. FIREBASE CONFIGURATION (Твій ключ до інтернету) ===
+const firebaseConfig = {
+  apiKey: "AIzaSyAvgDO3ZB7FChDFuXgx5lErIVhui-nkW-s",
+  authDomain: "yayidu-d743d.firebaseapp.com",
+  databaseURL: "https://yayidu-d743d-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "yayidu-d743d",
+  storageBucket: "yayidu-d743d.firebasestorage.app",
+  messagingSenderId: "330892131306",
+  appId: "1:330892131306:web:9b8f63ec738177c06e5093"
+};
+
+// Глобальні змінні для бази даних
+let app, db;
+
+// Ініціалізуємо Firebase (безпечно)
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    app = firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+    console.log("🔥 Firebase підключено успішно!");
+} else if (typeof firebase !== 'undefined') {
+    app = firebase.app();
+    db = firebase.database();
+} else {
+    console.error("❌ Помилка: Бібліотека Firebase не підключена в index.html");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // === TELEGRAM WEB APP CONFIG ===
-    // Цей блок розтягує додаток на весь екран
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Розтягує на фул-скрін
-        tg.ready();  // Каже Телеграму "Я готовий!"
+        tg.expand(); 
+        tg.ready();
     }
     // ===============================
 
