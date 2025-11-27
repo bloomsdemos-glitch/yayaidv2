@@ -412,25 +412,32 @@ const profilePassengerName = document.getElementById('profile-passenger-name');
 const profilePassengerTrips = document.getElementById('profile-passenger-trips');
 const profilePassengerBio = document.getElementById('profile-passenger-bio');
 
-
-// --- Навігація ---
+// --- Навігація (ЦЕ ЗАЛИШАЄМО) ---
 showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
 showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
 
+// --- Логіка Входу/Реєстрації (ЦЕ МІНЯЄМО) ---
+
+// Кнопка "Увійти через Telegram" (Водій)
 driverTelegramLoginBtn?.addEventListener('click', () => {
-    navigateTo('driver-home-screen');
-    document.getElementById('driver-tab-bar').classList.remove('hidden');
-    updateFabButtonState(); // <--- Замінили стару функцію на нову
-    updateAllDriverTripViews();
+    // Якщо юзер вже залогінений (наприклад, натиснув випадково) - просто йдемо далі
+    if (currentUser) {
+        routeUserToScreen();
+    } else {
+        // Якщо ні - реєструємо як ВОДІЯ
+        registerUser('driver');
+    }
 });
 
-
+// Кнопка "Увійти через Telegram" (Пасажир)
 passengerTelegramLoginBtn?.addEventListener('click', () => {
-    navigateTo('passenger-home-screen');
-    document.getElementById('passenger-tab-bar').classList.remove('hidden');
-    updateHomeScreenView('passenger'); // <-- ДОДАНО
+    if (currentUser) {
+        routeUserToScreen();
+    } else {
+        // Реєструємо як ПАСАЖИРА
+        registerUser('passenger');
+    }
 });
-
 
 
 
