@@ -223,15 +223,149 @@ function getUserColor(userId) {
 }
 
 
+// === 3. REALTIME UPDATES (СЕРЦЕ ДОДАТКУ) ===
 function startLiveUpdates() {
-    console.log("📡 Realtime updates active...");
+    console.log("📡 Connecting to Live Data...");
+
+    // 1. СЛУХАЄМО КОРИСТУВАЧІВ (Хто водій, хто пасажир)
+    db.ref('users').on('value', (snapshot) => {
+        drivers_database = [];
+        passengers_database = [];
+        const users = snapshot.val();
+
+        if (users) {
+            Object.values(users).forEach(u => {
+                if (u.role === 'driver') {
+                    // Додаємо трохи фейкових даних для краси (машина, рейтинг), якщо їх немає в базі
+                    if (!u.car) u.car = "Daewoo Lanos, Сірий"; 
+                    if (!u.rating) u.rating = 5.0;
+                    drivers_database.push(u);
+                } else {
+                    passengers_database.push(u);
+                }
+            });
+        }
+        
+        console.log(`👥 Updated: ${drivers_database.length} Drivers, ${passengers_database.length} Passengers`);
+        
+        // Оновлюємо списки на екранах, якщо ми на них дивимось
+        if (currentUser.role === 'passenger') displayAvailableDrivers();
+    });
+
+    // 2. СЛУХАЄМО АКТИВНІ ПОЇЗДКИ
+    db.ref('active_trips').on('value', (snapshot) => {
+        const data = snapshot.val();
+        // Перетворюємо об'єкт Firebase {id1: {}, id2: {}} в масив [{id:1...}, {id:2...}]
+        const allTrips = data ? Object.values(data) : [];
+        
+        // Фільтруємо: нам потрібні тільки ті поїздки, де фігурує наш юзер
+        if (currentUser.role === 'driver') {
+            active_trips = allTrips.filter(t => t.driverId == currentUser.id);
+            updateAllDriverTripViews(); // Оновлюємо UI водія
+        } else {
+            active_trips = allTrips.filter(t => t.passengerId == currentUser.id);
+            updateHomeScreenView('passenger'); // Оновлюємо UI пасажира
+            
+            // Якщо ми чекаємо на екрані "Мої поїздки" - оновлюємо його
+            const searchingCard = document.getElementById('searching-card');
+            if (searchingCard && searchingCard.offsetParent !== null) {
+                document.getElementById('show-my-orders-btn').click(); // Трюк для оновлення
+            }
+        }
+    });
+
+    // 3. СЛУХАЄМО "ВАЛКИ-ХАРКІВ" (ПРОПОЗИЦІЇ ВОДІЇВ)
+    db.ref('vh_offers').on('value', (snapshot) => {
+        const data = snapshot.val();
+        vh_offers_database = data ? Object.values(data) : [];
+        
+        // Оновлюємо список, якщо пасажир зараз на цьому екрані
+        const vhScreen = document.getElementById('passenger-valky-kharkiv-screen');
+        if (vhScreen && vhScreen.classList.contains('active')) {
+            displayVhOffers();
+        }
+    });
+
+    // 4. СЛУХАЄМО "ВАЛКИ-ХАРКІВ" (ЗАПИТИ ПАСАЖИРІВ)
+    db.ref('vh_requests').on('value', (snapshot) => {
+        const data = snapshot.val();
+        vh_requests_database = data ? Object.values(data) : [];
+        
+        // Оновлюємо список для водія
+        const vhDriverScreen = document.getElementById('driver-valky-kharkiv-screen');
+        if (vhDriverScreen && vhDriverScreen.classList.contains('active')) {
+            displayVhRequests();
+        }
+    });
+
+    // 5. СЛУХАЄМО СПОВІЩЕННЯ (Персональні)
+    db.ref('notifications').on('value', (snapshot) => {
+        const data = snapshot.val();
+        const allNotifs = data ? Object.values(data) : [];
+        
+        // Фільтруємо тільки наші
+        notifications_database = allNotifs.filter(n => n.userId == currentUser.id);
+        
+        // Оновлюємо бейджі (червоні кружечки)
+        const unreadCount = notifications_database.filter(n => !n.isRead).length;
+        
+        ['driver', 'passenger'].forEach(type => {
+            const badgeHome = document.getElementById(`${type}-notification-badge-home`);
+            const badgeMain = document.getElementById(`${type}-notification-badge`);
+            
+            if (unreadCount > 0) {
+                if(badgeHome) { badgeHome.textContent = unreadCount; badgeHome.classList.remove('hidden'); }
+                if(badgeMain) { badgeMain.textContent = unreadCount; badgeMain.classList.remove('hidden'); }
+            } else {
+                if(badgeHome) badgeHome.classList.add('hidden');
+                if(badgeMain) badgeMain.classList.add('hidden');
+            }
+        });
+        
+        // Якщо відкритий екран сповіщень - оновлюємо список
+        const notifScreen = document.getElementById('notifications-screen');
+        if (notifScreen && notifScreen.classList.contains('active')) {
+            UI.displayNotifications(notifications_database, currentUser.role);
+        }
+    });
 }
 
+
+// === ФУНКЦІЯ ЗБЕРЕЖЕННЯ (Тепер пише в Firebase) ===
 function saveState() {
-    console.log("💾 saveState disabled. Using Realtime DB.");
+    // 1. Зберігаємо активні поїздки
+    // Перетворюємо масив назад в об'єкт для Firebase, використовуючи ID як ключ
+    const tripsObj = {};
+    active_trips.forEach(t => tripsObj[t.id] = t);
+    db.ref('active_trips').update(tripsObj); 
+
+    // 2. Зберігаємо пропозиції В-Х
+    const vhOffersObj = {};
+    vh_offers_database.forEach(o => vhOffersObj[o.id] = o);
+    db.ref('vh_offers').set(vhOffersObj); // Тут можна set, бо ми перезаписуємо список
+
+    // 3. Зберігаємо запити В-Х
+    const vhRequestsObj = {};
+    vh_requests_database.forEach(r => vhRequestsObj[r.id] = r);
+    db.ref('vh_requests').set(vhRequestsObj);
+
+    // 4. Зберігаємо сповіщення (тут треба обережно, щоб не затерти чужі)
+    // В ідеалі сповіщення треба додавати через push(), але для MVP:
+    notifications_database.forEach(n => {
+        db.ref('notifications/' + n.id).set(n);
+    });
+    
+    // 5. Оновлюємо дані поточного юзера (наприклад, рейтинг або кількість поїздок)
+    if (currentUser) {
+        db.ref('users/' + currentUser.id).update({
+            trips: currentUser.trips,
+            rating: currentUser.rating
+        });
+    }
+
+    console.log("☁️ Data synced to Firebase");
 }
 
-// ... (тут закінчується функція saveState)
 
 // === ЗАПУСК (Коли сторінка завантажилась) ===
 document.addEventListener('DOMContentLoaded', () => {
