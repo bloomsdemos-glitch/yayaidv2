@@ -1164,11 +1164,6 @@ document.querySelector('#driver-active-trip-details-screen .btn-back')?.addEvent
 
 
     // КРОК 2: ЧАС
-    const editTimeBtn = document.getElementById('edit-time-btn');
-    const timeChoiceContainer = document.getElementById('time-choice-container');
-    const timeResultContainer = document.getElementById('time-result-container'); // Виправлено ID (було time-result-result...)
-    const timeResultText = document.getElementById('time-result-text');
-    
     editTimeBtn.addEventListener('click', () => {
         orderData.time = null; // Скидаємо час
         timeChoiceContainer.style.display = 'flex';
