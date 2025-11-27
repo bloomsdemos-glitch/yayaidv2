@@ -44,6 +44,9 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 
 // === 2. ГОЛОВНА ЛОГІКА СТАРТУ (TELEGRAM + FIREBASE) ===
 
+// Тут ми тимчасово потримаємо дані з Телеграму, поки юзер не натисне кнопку
+let tempTelegramUser = null; 
+
 document.addEventListener('DOMContentLoaded', () => {
     initApp(); 
 });
@@ -53,100 +56,114 @@ function initApp() {
     tg.expand(); 
     tg.ready();
 
-    // 1. Отримуємо ID та ДАНІ користувача
-    let userId;
-    let userData = {};
-
+    // 1. Отримуємо дані (але поки нікуди не пишемо!)
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        // Ми в Телеграмі
-        userData = tg.initDataUnsafe.user;
-        userId = userData.id.toString(); 
-        console.log("📲 Telegram User Detected:", userData);
+        tempTelegramUser = tg.initDataUnsafe.user;
+        console.log("📲 Telegram User Detected:", tempTelegramUser);
     } else {
-        // Ми в браузері (Тест)
-        console.warn("⚠️ Web Browser Detected. Using DEBUG ID.");
-        userId = "test_user_12345"; 
-        userData = { 
+        // Тестовий юзер для браузера
+        console.warn("⚠️ Browser Mode. Using Mock Data.");
+        tempTelegramUser = { 
+            id: "test_user_12345", 
             first_name: "Test", 
             last_name: "User", 
             username: "tester",
-            photo_url: null // У тестового юзера фотки немає
+            photo_url: null 
         };
     }
 
-    // 2. Стукаємо в Firebase
+    // 2. Перевіряємо, чи цей перець вже є в базі
+    const userId = tempTelegramUser.id.toString();
     const userRef = db.ref('users/' + userId);
 
     userRef.once('value').then((snapshot) => {
         if (snapshot.exists()) {
-            // -- ЮЗЕР Є --
-            console.log("✅ User found in DB.");
+            // -- ЮЗЕР ВЖЕ ЗАРЕЄСТРОВАНИЙ --
+            console.log("✅ Welcome back! Auto-login...");
             currentUser = snapshot.val();
             
-            // Оновлюємо фото та ім'я, якщо вони змінились в ТГ
-            let updates = {};
-            let needsUpdate = false;
+            // Оновлюємо актуальні дані (ім'я/фото), якщо змінились
+            updateUserInfoIfNeeded(userRef, tempTelegramUser);
 
-            // Збираємо актуальне ім'я
-            const actualName = [userData.first_name, userData.last_name].join(' ').trim();
-            
-            if (currentUser.name !== actualName) {
-                updates.name = actualName;
-                currentUser.name = actualName;
-                needsUpdate = true;
-            }
-            if (currentUser.photoUrl !== (userData.photo_url || null)) {
-                updates.photoUrl = userData.photo_url || null;
-                currentUser.photoUrl = updates.photoUrl;
-                needsUpdate = true;
-            }
-
-            if (needsUpdate) userRef.update(updates);
-
+            // Одразу кидаємо на його екран
             routeUserToScreen();
+            startLiveUpdates();
         } else {
-            // -- ЮЗЕРА НЕМАЄ (РЕЄСТРАЦІЯ) --
-            console.log("🆕 New User! Creating profile...");
-            const newUser = {
-                id: userId,
-                name: [userData.first_name, userData.last_name].join(' ').trim() || "Користувач",
-                username: userData.username || "",
-                photoUrl: userData.photo_url || null, // <--- ЗБЕРІГАЄМО ФОТО
-                phone: "Не вказано",
-                role: "passenger",
-                rating: 5.0,
-                trips: 0,
-                registrationDate: new Date().toISOString()
-            };
-
-            userRef.set(newUser).then(() => {
-                currentUser = newUser;
-                console.log("🎉 User Created.");
-                routeUserToScreen();
-            }).catch(error => {
-                console.error("Firebase Write Error:", error);
-                alert("Помилка реєстрації! Перевірте інтернет.");
-            });
+            // -- ЮЗЕР НОВИЙ --
+            console.log("🆕 New User. Waiting for role selection...");
+            // Ми НІЧОГО не робимо. Юзер бачить стартовий екран (home-screen).
+            // Реєстрація відбудеться, коли він натисне кнопку в інтерфейсі.
         }
-        
-        startLiveUpdates();
     });
 }
 
+// Функція реєстрації (викликається кнопками)
+function registerUser(selectedRole) {
+    if (!tempTelegramUser) {
+        alert("Помилка: Немає даних Telegram!");
+        return;
+    }
+
+    const userId = tempTelegramUser.id.toString();
+    const userRef = db.ref('users/' + userId);
+
+    console.log(`📝 Registering as ${selectedRole}...`);
+
+    const newUser = {
+        id: userId,
+        name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
+        username: tempTelegramUser.username || "",
+        photoUrl: tempTelegramUser.photo_url || null,
+        phone: "Не вказано",
+        role: selectedRole, // <--- ОСЬ ТУТ МИ ФІКСУЄМО ВИБІР
+        rating: 5.0,
+        trips: 0,
+        registrationDate: new Date().toISOString()
+    };
+
+    userRef.set(newUser).then(() => {
+        currentUser = newUser;
+        console.log("🎉 Registration Successful!");
+        routeUserToScreen();
+        startLiveUpdates();
+    }).catch(error => {
+        console.error("Firebase Error:", error);
+        alert("Помилка реєстрації. Спробуйте ще раз.");
+    });
+}
+
+// Хелпер: оновлення інфо існуючого юзера
+function updateUserInfoIfNeeded(userRef, tgData) {
+    let updates = {};
+    const actualName = [tgData.first_name, tgData.last_name].join(' ').trim();
+    
+    if (currentUser.name !== actualName) {
+        currentUser.name = actualName;
+        updates.name = actualName;
+    }
+    if (currentUser.photoUrl !== (tgData.photo_url || null)) {
+        currentUser.photoUrl = tgData.photo_url || null;
+        updates.photoUrl = tgData.photo_url || null;
+    }
+    
+    if (Object.keys(updates).length > 0) userRef.update(updates);
+}
+
 function routeUserToScreen() {
-    // Приховуємо екрани логіну та сплеш (home-screen тут як сплеш)
+    // Приховуємо всі стартові екрани
+    document.getElementById('home-screen').classList.add('hidden');
     document.getElementById('login-screen-driver').classList.add('hidden');
     document.getElementById('login-screen-passenger').classList.add('hidden');
-    document.getElementById('home-screen').classList.add('hidden');
 
+    // Визначаємо куди йти
     if (currentUser.role === 'driver') {
         navigateTo('driver-home-screen');
         document.getElementById('driver-tab-bar').classList.remove('hidden');
-        updateHeaderWithAvatar('driver-home-screen'); // <--- Оновлена функція
+        updateHeaderWithAvatar('driver-home-screen');
     } else {
         navigateTo('passenger-home-screen');
         document.getElementById('passenger-tab-bar').classList.remove('hidden');
-        updateHeaderWithAvatar('passenger-home-screen'); // <--- Оновлена функція
+        updateHeaderWithAvatar('passenger-home-screen');
     }
 }
 
