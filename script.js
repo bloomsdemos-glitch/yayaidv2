@@ -1,10 +1,21 @@
 let orderData = {};
-document.addEventListener('DOMContentLoaded', () => {loadState(); 
+
+document.addEventListener('DOMContentLoaded', () => {
+    // === TELEGRAM WEB APP CONFIG ===
+    // Цей блок розтягує додаток на весь екран
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Розтягує на фул-скрін
+        tg.ready();  // Каже Телеграму "Я готовий!"
+    }
+    // ===============================
+
+    loadState(); 
     // Зберігаємо початковий, чистий HTML екрану повного профілю водія
-let fakeUserHasCard = false;
-let fakeDriverAcceptsCard = false;
-let currentOfferIdForConfirmation = null;
-let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
+    let fakeUserHasCard = false;
+    let fakeDriverAcceptsCard = false;
+    let currentOfferIdForConfirmation = null;
+    let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
@@ -12,11 +23,13 @@ let driverStatus = 'offline'; // Можливі статуси: 'online', 'offli
     const backButtons = document.querySelectorAll('.btn-back');
     const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
     const fabIconOnline = document.getElementById('fab-icon-online');
-// -- Елементи керування поїздкою водія --
+    
+    // -- Елементи керування поїздкою водія --
     const driverArrivedBtn = document.getElementById('driver-arrived-btn');
     const driverStartTripBtn = document.getElementById('driver-start-trip-btn');
     const driverFinishTripBtn = document.getElementById('driver-finish-trip-btn');
-// -- Елементи екрану оцінки --
+    
+    // -- Елементи екрану оцінки --
     const ratingStars = document.querySelectorAll('.rating-stars i');
     const submitRatingBtn = document.getElementById('submit-rating-btn');
 
@@ -46,15 +59,16 @@ let driverStatus = 'offline'; // Можливі статуси: 'online', 'offli
     const showDriverHelpBtn = document.getElementById('show-driver-help-btn');
     const showDriverSupportBtn = document.getElementById('show-driver-support-btn');
     const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
+    
     // -- Елементи екрану вибору дії водія --
-const choiceCreateTripBtn = document.getElementById('choice-create-trip');
-const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
+    const choiceCreateTripBtn = document.getElementById('choice-create-trip');
+    const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
-// =======================================================
-// == ЛОГІКА ДЛЯ FAB-КНОПКИ ВОДІЯ (v6 - спрощена) ==
-// =======================================================
+    // =======================================================
+    // == ЛОГІКА ДЛЯ FAB-КНОПКИ ВОДІЯ (v6 - спрощена) ==
+    // =======================================================
 
-const driverFabBtn = document.getElementById('driver-fab-btn');
+    const driverFabBtn = document.getElementById('driver-fab-btn');
 
 // Функція для оновлення вигляду кнопки
 function updateFabButtonState() {
