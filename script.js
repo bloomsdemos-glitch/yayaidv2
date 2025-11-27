@@ -1343,7 +1343,6 @@ paymentCardBtn?.addEventListener('click', () => {
 });
 
 // === ЛОГІКА КНОПКИ "МОЇ ПОЇЗДКИ" НА ЕКРАНІ ПІДТВЕРДЖЕННЯ ===
-const goToMyOrdersBtn = document.getElementById('go-to-my-orders-btn');
 
 goToMyOrdersBtn?.addEventListener('click', () => {
     // 1. Готуємо екран "Мої поїздки"
