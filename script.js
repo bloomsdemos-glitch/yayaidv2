@@ -365,7 +365,7 @@ driverFabBtn?.addEventListener('click', () => {
     const timeNextBtn = document.getElementById('time-next-btn');
     const paymentCashBtn = document.getElementById('payment-cash-btn');
     const paymentCardBtn = document.getElementById('payment-card-btn');
-    let orderData = {};
+    
 
     
 
