@@ -1,6 +1,24 @@
-let orderData = {};
+// === ГЛОБАЛЬНІ ЗМІННІ (БАЗА ДАНИХ У ОПЕРАТИВЦІ) ===
+let currentUser = null; 
+let globalOrderStatus = 'idle'; 
 
-// === 1. FIREBASE CONFIGURATION (Твій ключ до інтернету) ===
+// "Кошик" для створення нового замовлення (ТЕ ЩО ТИ ПИТАВ)
+let orderData = {}; 
+
+// Тимчасові "кишені" для даних
+let active_trips = [];
+let notifications_database = [];
+let vh_requests_database = [];
+let vh_offers_database = [];
+let driver_archive = [];
+let passenger_archive = [];
+let drivers_database = [];
+let passengers_database = [];
+let orders_database = [];
+
+
+
+// === 1. FIREBASE CONFIGURATION ===
 const firebaseConfig = {
   apiKey: "AIzaSyAvgDO3ZB7FChDFuXgx5lErIVhui-nkW-s",
   authDomain: "yayidu-d743d.firebaseapp.com",
@@ -11,36 +29,196 @@ const firebaseConfig = {
   appId: "1:330892131306:web:9b8f63ec738177c06e5093"
 };
 
-// Глобальні змінні для бази даних
+// Ініціалізуємо Firebase
 let app, db;
-
-// Ініціалізуємо Firebase (безпечно)
 if (typeof firebase !== 'undefined' && !firebase.apps.length) {
     app = firebase.initializeApp(firebaseConfig);
     db = firebase.database();
-    console.log("🔥 Firebase підключено успішно!");
+    console.log("🔥 Firebase: Connected!");
 } else if (typeof firebase !== 'undefined') {
     app = firebase.app();
     db = firebase.database();
 } else {
-    console.error("❌ Помилка: Бібліотека Firebase не підключена в index.html");
+    console.error("❌ CRITICAL: Firebase SDK missing.");
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // === TELEGRAM WEB APP CONFIG ===
-    if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-        tg.expand(); 
-        tg.ready();
-    }
-    // ===============================
+// === 2. ГОЛОВНА ЛОГІКА СТАРТУ (TELEGRAM + FIREBASE) ===
 
-    loadState(); 
-    // Зберігаємо початковий, чистий HTML екрану повного профілю водія
-    let fakeUserHasCard = false;
-    let fakeDriverAcceptsCard = false;
-    let currentOfferIdForConfirmation = null;
-    let driverStatus = 'offline'; // Можливі статуси: 'online', 'offline'
+document.addEventListener('DOMContentLoaded', () => {
+    initApp(); 
+});
+
+function initApp() {
+    const tg = window.Telegram.WebApp;
+    tg.expand(); 
+    tg.ready();
+
+    // 1. Отримуємо ID та ДАНІ користувача
+    let userId;
+    let userData = {};
+
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        // Ми в Телеграмі
+        userData = tg.initDataUnsafe.user;
+        userId = userData.id.toString(); 
+        console.log("📲 Telegram User Detected:", userData);
+    } else {
+        // Ми в браузері (Тест)
+        console.warn("⚠️ Web Browser Detected. Using DEBUG ID.");
+        userId = "test_user_12345"; 
+        userData = { 
+            first_name: "Test", 
+            last_name: "User", 
+            username: "tester",
+            photo_url: null // У тестового юзера фотки немає
+        };
+    }
+
+    // 2. Стукаємо в Firebase
+    const userRef = db.ref('users/' + userId);
+
+    userRef.once('value').then((snapshot) => {
+        if (snapshot.exists()) {
+            // -- ЮЗЕР Є --
+            console.log("✅ User found in DB.");
+            currentUser = snapshot.val();
+            
+            // Оновлюємо фото та ім'я, якщо вони змінились в ТГ
+            let updates = {};
+            let needsUpdate = false;
+
+            // Збираємо актуальне ім'я
+            const actualName = [userData.first_name, userData.last_name].join(' ').trim();
+            
+            if (currentUser.name !== actualName) {
+                updates.name = actualName;
+                currentUser.name = actualName;
+                needsUpdate = true;
+            }
+            if (currentUser.photoUrl !== (userData.photo_url || null)) {
+                updates.photoUrl = userData.photo_url || null;
+                currentUser.photoUrl = updates.photoUrl;
+                needsUpdate = true;
+            }
+
+            if (needsUpdate) userRef.update(updates);
+
+            routeUserToScreen();
+        } else {
+            // -- ЮЗЕРА НЕМАЄ (РЕЄСТРАЦІЯ) --
+            console.log("🆕 New User! Creating profile...");
+            const newUser = {
+                id: userId,
+                name: [userData.first_name, userData.last_name].join(' ').trim() || "Користувач",
+                username: userData.username || "",
+                photoUrl: userData.photo_url || null, // <--- ЗБЕРІГАЄМО ФОТО
+                phone: "Не вказано",
+                role: "passenger",
+                rating: 5.0,
+                trips: 0,
+                registrationDate: new Date().toISOString()
+            };
+
+            userRef.set(newUser).then(() => {
+                currentUser = newUser;
+                console.log("🎉 User Created.");
+                routeUserToScreen();
+            }).catch(error => {
+                console.error("Firebase Write Error:", error);
+                alert("Помилка реєстрації! Перевірте інтернет.");
+            });
+        }
+        
+        startLiveUpdates();
+    });
+}
+
+function routeUserToScreen() {
+    // Приховуємо екрани логіну та сплеш (home-screen тут як сплеш)
+    document.getElementById('login-screen-driver').classList.add('hidden');
+    document.getElementById('login-screen-passenger').classList.add('hidden');
+    document.getElementById('home-screen').classList.add('hidden');
+
+    if (currentUser.role === 'driver') {
+        navigateTo('driver-home-screen');
+        document.getElementById('driver-tab-bar').classList.remove('hidden');
+        updateHeaderWithAvatar('driver-home-screen'); // <--- Оновлена функція
+    } else {
+        navigateTo('passenger-home-screen');
+        document.getElementById('passenger-tab-bar').classList.remove('hidden');
+        updateHeaderWithAvatar('passenger-home-screen'); // <--- Оновлена функція
+    }
+}
+
+// === МАГІЯ АВАТАРОК 🪄 ===
+function updateHeaderWithAvatar(screenId) {
+    const screen = document.getElementById(screenId);
+    if (!screen) return;
+
+    // Оновлюємо ім'я
+    const nameEl = screen.querySelector('h3');
+    if (nameEl) nameEl.textContent = currentUser.name;
+
+    // Знаходимо контейнер аватарки
+    const avatarContainer = screen.querySelector('.avatar-convex');
+    if (avatarContainer) {
+        if (currentUser.photoUrl) {
+            // Варіант 1: Є фото з Телеграм
+            avatarContainer.innerHTML = `<img src="${currentUser.photoUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+            avatarContainer.style.background = 'none';
+            avatarContainer.style.display = 'flex';
+            avatarContainer.style.overflow = 'hidden'; // Щоб кути не стирчали
+        } else {
+            // Варіант 2: Генеруємо ініціали та колір
+            const initials = getInitials(currentUser.name);
+            const color = getUserColor(currentUser.id); // Генеруємо колір по ID
+            
+            avatarContainer.innerHTML = `<span style="color:white; font-weight:bold; font-size:18px;">${initials}</span>`;
+            avatarContainer.style.background = color;
+            avatarContainer.style.display = 'flex';
+            avatarContainer.style.alignItems = 'center';
+            avatarContainer.style.justifyContent = 'center';
+        }
+    }
+}
+
+// Хелпер для ініціалів (Антон Шевченко -> АШ)
+function getInitials(name) {
+    if (!name) return '??';
+    return name.split(' ')
+        .map(word => word[0])
+        .join('')
+        .substring(0, 2)
+        .toUpperCase();
+}
+
+// Хелпер для кольору (щоб у Тошика завжди був один колір, а у Віти інший)
+function getUserColor(userId) {
+    const colors = [
+        '#e17076', '#7bc862', '#65aadd', '#a695e7', '#ee7aae', '#6ec9cb', '#faa774'
+    ];
+    // Простий хеш з ID
+    let hash = 0;
+    const str = userId.toString();
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    // Беремо колір по модулю
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+}
+
+
+function startLiveUpdates() {
+    console.log("📡 Realtime updates active...");
+}
+
+function saveState() {
+    console.log("💾 saveState disabled. Using Realtime DB.");
+}
+
+// =======================================================
+
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
