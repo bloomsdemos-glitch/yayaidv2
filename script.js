@@ -47,9 +47,6 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 // Тут ми тимчасово потримаємо дані з Телеграму, поки юзер не натисне кнопку
 let tempTelegramUser = null; 
 
-document.addEventListener('DOMContentLoaded', () => {
-    initApp(); 
-});
 
 function initApp() {
     const tg = window.Telegram.WebApp;
@@ -234,8 +231,11 @@ function saveState() {
     console.log("💾 saveState disabled. Using Realtime DB.");
 }
 
-// =======================================================
+// ... (тут закінчується функція saveState)
 
+// === ЗАПУСК (Коли сторінка завантажилась) ===
+document.addEventListener('DOMContentLoaded', () => {
+    initApp(); // <-- Запускаємо додаток тут!
 
     // == 2. ЗБІР ЕЛЕМЕНТІВ DOM ==
     const screens = document.querySelectorAll('.screen');
