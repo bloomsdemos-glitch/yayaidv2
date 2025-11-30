@@ -2098,5 +2098,3 @@ deleteAccountBtns.forEach(btn => {
         }
     });
 });
-
-});
