@@ -6,7 +6,7 @@ function displayDriverOrders() {
     orders_database.forEach(order => {
         const cardElement = UI.createDriverOrderCard(order);
 
-        if (order.paymentMethod === 'card' && !fakeDriverAcceptsCard) {
+                if (order.paymentMethod === 'card' && !driverAcceptsOnlinePayment) {
             cardElement.classList.add('disabled-for-driver');
         } else {
             cardElement.addEventListener('click', () => {
