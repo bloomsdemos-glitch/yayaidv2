@@ -4,9 +4,9 @@ let globalOrderStatus = 'idle';
 let driverStatus = 'offline';
 let currentOfferIdForConfirmation = null;
 
-// Заглушки для оплати
-let fakeUserHasCard = false; 
-let fakeDriverAcceptsCard = false; 
+// Статус оплати (поки вимкнено, бо не підключено еквайринг)
+let userHasLinkedCard = false; 
+let driverAcceptsOnlinePayment = false; 
 
 // Тимчасові сховища даних
 let orderData = {}; 
