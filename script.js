@@ -1613,12 +1613,14 @@ timeNextBtn?.addEventListener('click', () => {
     }
     orderData.comment = document.getElementById('comment').value.trim();
     
+    
     // Перевіряємо, чи є у юзера картка
-    if (fakeUserHasCard) {
+    if (userHasLinkedCard) {
         paymentCardBtn.classList.remove('disabled');
     } else {
         paymentCardBtn.classList.add('disabled');
     }
+
     
     UI.goToStep('payment');
     submitOrderBtn.classList.add('disabled');
