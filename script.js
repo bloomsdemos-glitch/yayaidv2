@@ -342,16 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const vhPassengerCreateRequestBtn = document.getElementById('vh-passenger-create-request-btn');
 
     const showFindPassengersBtn = document.getElementById('show-find-passengers-btn');
-    const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
-    const showDriverValkyKharkivBtn = document.getElementById('show-driver-valky-kharkiv-btn');
-    const showDriverProfileBtn = document.getElementById('show-driver-profile-btn');
-    const showDriverHelpBtn = document.getElementById('show-driver-help-btn');
-    const showDriverSupportBtn = document.getElementById('show-driver-support-btn');
-    const showDriverSettingsBtn = document.getElementById('show-driver-settings-btn');
     
-    const choiceCreateTripBtn = document.getElementById('choice-create-trip');
-    const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
-
+    
     // -- Елементи водія --
     const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
     const showDriverValkyKharkivBtn = document.getElementById('show-driver-valky-kharkiv-btn');
