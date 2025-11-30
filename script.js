@@ -57,17 +57,12 @@ function initApp() {
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
         tempTelegramUser = tg.initDataUnsafe.user;
         console.log("📲 Telegram User Detected:", tempTelegramUser);
-    } else {
-        // Тестовий юзер для браузера
-        console.warn("⚠️ Browser Mode. Using Mock Data.");
-        tempTelegramUser = { 
-            id: "test_user_12345", 
-            first_name: "Test", 
-            last_name: "User", 
-            username: "tester",
-            photo_url: null 
-        };
+   
+      } else {
+        alert("Помилка: Відкрийте додаток через Telegram!");
+        return; 
     }
+
 
     // 2. Перевіряємо, чи цей перець вже є в базі
     const userId = tempTelegramUser.id.toString();
@@ -2070,48 +2065,38 @@ if (requestListContainer) {
     });
 }
 
-const devCreateTestTripBtn = document.getElementById('dev-create-test-trip');
-devCreateTestTripBtn?.addEventListener('click', () => {
-    const testTrip = {
-        id: Date.now(),
-        passengerId: 1,
-        passengerName: 'Тестовий Пасажир',
-        passengerRating: 5.0,
-        from: 'Точка А (тест)',
-        to: 'Точка Б (тест)',
-        time: 'Зараз',
-        type: 'taxi' // Додаємо тип, щоб відрізняти
-    };
-    active_trips = [testTrip]; // Перезаписуємо базу, щоб була тільки одна тестова поїздка
-    saveState();
-    alert('Тестову поїздку створено!');
-    updateHomeScreenView('driver');
-    updateHomeScreenView('passenger');
+
 });
 
+// === ЛОГІКА ВИДАЛЕННЯ АКАУНТУ (REAL) ===
+const deleteAccountBtns = [
+    document.getElementById('show-driver-settings-delete-btn'),
+    document.getElementById('show-passenger-settings-delete-btn')
+];
 
-// Ініціалізуємо всі наші лічильники
-setupSeatCounter('vh-pass-minus-btn', 'vh-pass-plus-btn', 'vh-pass-seats-display');
-setupSeatCounter('custom-trip-minus-btn', 'custom-trip-plus-btn', 'custom-trip-seats-display');
-setupSeatCounter('vh-driver-minus-btn', 'vh-driver-plus-btn', 'vh-driver-seats-display');
+deleteAccountBtns.forEach(btn => {
+    btn?.addEventListener('click', () => {
+        if (confirm("Ви точно хочете видалити свій профіль? Всі ваші дані та рейтинг будуть втрачені назавжди.")) {
+            if (!currentUser) return;
 
-// == ЧІТЕРСЬКА ЛОГІКА ДЛЯ ШВИДКОЇ ЗМІНИ РОЛЕЙ (ДЛЯ ТЕСТУВАННЯ) ==
-const devSwitchToPassengerBtn = document.getElementById('dev-switch-to-passenger');
-const devSwitchToDriverBtn = document.getElementById('dev-switch-to-driver');
-
-devSwitchToPassengerBtn?.addEventListener('click', () => {
-    // Ховаємо все водійське
-    document.getElementById('driver-tab-bar').classList.add('hidden');
-    // Показуємо все пасажирське
-    document.getElementById('passenger-tab-bar').classList.remove('hidden');
-    navigateTo('passenger-home-screen');
-    updateHomeScreenView('passenger'); // <-- ОСЬ ЦЕЙ ВАЖЛИВИЙ РЯДОК
+            // 1. Видаляємо з Firebase
+            db.ref('users/' + currentUser.id).remove()
+                .then(() => {
+                    console.log("User deleted from Firebase");
+                    
+                    // 2. Очищаємо локальні дані
+                    currentUser = null;
+                    
+                    // 3. Перезавантажуємо додаток
+                    alert("Ваш профіль видалено. Для повторної реєстрації перезапустіть бота.");
+                    window.location.reload(); 
+                })
+                .catch((error) => {
+                    console.error("Delete error:", error);
+                    alert("Помилка видалення: " + error.message);
+                });
+        }
+    });
 });
 
-devSwitchToDriverBtn?.addEventListener('click', () => {
-    // ...
-    navigateTo('driver-home-screen');
-    updateAllDriverTripViews(); // <--- ЗАМІНА
-    updateFabButtonState(); // <--- Теж оновимо кнопку
-});
 });
