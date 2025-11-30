@@ -1,11 +1,15 @@
-// === ГЛОБАЛЬНІ ЗМІННІ (БАЗА ДАНИХ У ОПЕРАТИВЦІ) ===
+// === ГЛОБАЛЬНІ ЗМІННІ ===
 let currentUser = null; 
 let globalOrderStatus = 'idle'; 
+let driverStatus = 'offline';
+let currentOfferIdForConfirmation = null;
 
-// "Кошик" для створення нового замовлення (ТЕ ЩО ТИ ПИТАВ)
+// Заглушки для оплати
+let fakeUserHasCard = false; 
+let fakeDriverAcceptsCard = false; 
+
+// Тимчасові сховища даних
 let orderData = {}; 
-
-// Тимчасові "кишені" для даних
 let active_trips = [];
 let notifications_database = [];
 let vh_requests_database = [];
@@ -15,6 +19,9 @@ let passenger_archive = [];
 let drivers_database = [];
 let passengers_database = [];
 let orders_database = [];
+let custom_trips_database = [];
+let active_trips_database = [];
+
 
 
 
