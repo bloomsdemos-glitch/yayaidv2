@@ -353,7 +353,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const choiceFindPassengersBtn = document.getElementById('choice-find-passengers');
 
     // -- Елементи водія --
-    const showFindPassengersBtn = document.getElementById('show-find-passengers-btn');
     const showDriverOrdersBtn = document.getElementById('show-driver-orders-btn');
     const showDriverValkyKharkivBtn = document.getElementById('show-driver-valky-kharkiv-btn');
     const showDriverProfileBtn = document.getElementById('show-driver-profile-btn');
