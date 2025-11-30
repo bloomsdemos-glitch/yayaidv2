@@ -1199,16 +1199,17 @@ submitOrderBtn.addEventListener('click', () => {
         orderData.specificDriverId = driverIdString; 
     }
 
-    // 2. Додаємо в базу
+        // 2. Додаємо в базу
     orders_database.push(orderData);
     saveState();
     
     // 3. Скидаємо "пам'ять"
     currentOfferIdForConfirmation = null;
 
-    // 4. Оновлюємо текст на екрані підтвердження
+    // 4. Оновлюємо текст на екрані підтвердження (динамічно)
     const confTitle = document.querySelector('.conf-title');
     const confText = document.querySelector('.conf-text');
+    
     if (confTitle) confTitle.textContent = `Замовлення #${orderData.id.toString().slice(-4)}`;
     
     // 5. Очищаємо форму
@@ -1218,12 +1219,14 @@ submitOrderBtn.addEventListener('click', () => {
     navigateTo('order-confirmation-screen');
 });
 
+// === ЛОГІКА КНОПКИ "МОЇ ПОЇЗДКИ" НА ЕКРАНІ ПІДТВЕРДЖЕННЯ ===
 document.getElementById('go-to-my-orders-btn')?.addEventListener('click', () => {
     const searchingCard = document.getElementById('searching-card');
     const activeTripCard = document.getElementById('active-trip-card');
-    if(searchingCard) searchingCard.style.display = 'block';
-    if(activeTripCard) activeTripCard.style.display = 'none';
     
+    if (searchingCard) searchingCard.style.display = 'block';
+    if (activeTripCard) activeTripCard.style.display = 'none';
+
     navigateTo('passenger-orders-screen');
 });
 
@@ -1254,17 +1257,6 @@ paymentCardBtn?.addEventListener('click', () => {
     handlePaymentChoice('card');
 });
 
-// === ЛОГІКА КНОПКИ "МОЇ ПОЇЗДКИ" НА ЕКРАНІ ПІДТВЕРДЖЕННЯ ===
-goToMyOrdersBtn?.addEventListener('click', () => {
-    const searchingCard = document.getElementById('searching-card');
-    const activeTripCard = document.getElementById('active-trip-card');
-    
-    if (searchingCard) searchingCard.style.display = 'block';
-    if (activeTripCard) activeTripCard.style.display = 'none';
-
-    navigateTo('passenger-orders-screen');
-});
-
 // Розумна кнопка "Назад"
 backButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -1454,7 +1446,7 @@ function handleNotificationClick(userType) {
     navigateTo('notifications-screen');
 }
 
-// == ЛОГІКА ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) v2.0 ==
+// == ЛОГІКА ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) ==
 const profilePopup = document.getElementById('profile-popup');
 const popupOverlay = document.getElementById('popup-overlay'); 
 const driverProfileBadge = document.querySelector('#driver-home-screen .profile-badge');
@@ -1465,9 +1457,7 @@ driverProfileBadge?.addEventListener('click', () => {
     if (profilePopup.classList.contains('visible')) {
         UI.hideProfilePopup();
     } else {
-        // Беремо реального водія
         const driver = drivers_database.find(d => d.id === currentUser.id) || currentUser;
-        
         const driverData = {
             icon: 'fa-solid fa-user-tie',
             name: driver.name,
@@ -1505,355 +1495,7 @@ passengerProfileBadge?.addEventListener('click', () => {
 
 popupOverlay?.addEventListener('click', UI.hideProfilePopup);
 
-// == ЛОГІКА ДЛЯ КНОПКИ "ВІДГУКНУТИСЬ" (ОПТИМАЛЬНА ВЕРСІЯ) ==
-if (requestListContainer) {
-    requestListContainer.addEventListener('click', (event) => {
-        const targetButton = event.target.closest('.btn-main-action.accept[data-request-id]');
-        if (!targetButton) return;
-
-        const requestId = targetButton.dataset.requestId;
-        const request = vh_requests_database.find(r => r.id == requestId);
-        
-        if (request) {
-            const passenger = passengers_database.find(p => p.id === request.passengerId);
-            const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
-
-            const driverAvailableSeats = 4;
-            if (request.seats > driverAvailableSeats) {
-                alert(`Недостатньо місць. Пасажиру потрібно ${request.seats}, а у вас є ${driverAvailableSeats}.`);
-                return;
-            }
-
-            const newActiveVhTrip = {
-                ...request,
-                driverId: currentUser.id, // ID водія (поточного юзера)
-                passengerName: passengerName,
-                status: 'pending' 
-            };
-
-            active_trips.push(newActiveVhTrip);
-
-            const requestIndex = vh_requests_database.findIndex(r => r.id == requestId);
-            if (requestIndex > -1) {
-                vh_requests_database.splice(requestIndex, 1);
-            }
-
-            if (passenger) {
-                const newNotification = {
-                    id: Date.now(),
-                    userId: passenger.id,
-                    text: `<strong>Ваш запит прийнято!</strong> Водій <strong>${currentUser.name}</strong> погодився на поїздку.`,
-                    type: 'trip_confirmed',
-                    isRead: false
-                };
-                notifications_database.push(newNotification);
-                saveState();
-                
-                // Це краще оновлювати в realtime listener, але для швидкості можна і тут
-                const passengerBadge = document.getElementById('passenger-notification-badge-home');
-                if (passengerBadge) {
-                   passengerBadge.classList.remove('hidden'); // Спрощено
-                }
-            }
-            
-            alert('Запит прийнято! Поїздка з\'явиться у розділі "Мої замовлення".');
-            updateHomeScreenView('driver'); 
-            displayVhRequests();
-            navigateTo('driver-home-screen');
-        }
-    });
-}
-
-// Ініціалізуємо всі наші лічильники
-setupSeatCounter('vh-pass-minus-btn', 'vh-pass-plus-btn', 'vh-pass-seats-display');
-setupSeatCounter('custom-trip-minus-btn', 'custom-trip-plus-btn', 'custom-trip-seats-display');
-setupSeatCounter('vh-driver-minus-btn', 'vh-driver-plus-btn', 'vh-driver-seats-display');
-
-// == ЛОГІКА ВИДАЛЕННЯ АКАУНТУ (REAL) ==
-const deleteAccountBtns = [
-    document.getElementById('show-driver-settings-delete-btn'),
-    document.getElementById('show-passenger-settings-delete-btn')
-];
-
-deleteAccountBtns.forEach(btn => {
-    btn?.addEventListener('click', () => {
-        if (confirm("Ви точно хочете видалити свій профіль? Всі ваші дані та рейтинг будуть втрачені назавжди.")) {
-            if (!currentUser) return;
-
-            // 1. Видаляємо з Firebase
-            db.ref('users/' + currentUser.id).remove()
-                .then(() => {
-                    console.log("User deleted from Firebase");
-                    
-                    // 2. Очищаємо локальні дані
-                    currentUser = null;
-                    
-                    // 3. Перезавантажуємо додаток
-                    alert("Ваш профіль видалено. Для повторної реєстрації перезапустіть бота.");
-                    window.location.reload(); 
-                })
-                .catch((error) => {
-                    console.error("Delete error:", error);
-                    alert("Помилка видалення: " + error.message);
-                });
-        }
-    });
-});
-
-}); // Кінець DOMContentLoaded
-
-
-    // === ЛОГІКА КНОПКИ "МОЇ ПОЇЗДКИ" НА ЕКРАНІ ПІДТВЕРДЖЕННЯ ===
-goToMyOrdersBtn?.addEventListener('click', () => {
-    const searchingCard = document.getElementById('searching-card');
-    const activeTripCard = document.getElementById('active-trip-card');
-    
-    if (searchingCard) searchingCard.style.display = 'block';
-    if (activeTripCard) activeTripCard.style.display = 'none';
-
-    navigateTo('passenger-orders-screen');
-});
-
-// Розумна кнопка "Назад"
-backButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const currentScreen = button.closest('.screen');
-
-        if (currentScreen && currentScreen.id === 'quick-order-screen') {
-            const isOnTimeStep = timeStep.classList.contains('active');
-            const isOnPaymentStep = paymentStep.classList.contains('active');
-
-            if (isOnTimeStep) {
-                UI.goToStep('address'); 
-            } else if (isOnPaymentStep) {
-                UI.goToStep('time'); 
-            } else {
-                if (confirm('Скасувати оформлення замовлення? Всі дані буде втрачено.')) {
-                    navigateTo('passenger-home-screen'); 
-                }
-            }
-        } else {
-            const target = button.dataset.target || 'home-screen'; 
-            navigateTo(target);
-        }
-    });
-});
-
-// === ЛОГІКА КЕРУВАННЯ ПОЇЗДКОЮ (ВОДІЙ) ===
-driverArrivedBtn?.addEventListener('click', () => {
-    if (active_trips.length === 0) return;
-
-    const trip = active_trips[0];
-    trip.status = 'arrived';
-    saveState(); 
-
-    const newNotification = {
-        id: Date.now(),
-        userId: trip.passengerId,
-        text: `<strong>Водій прибув!</strong> Ваш водій очікує на вас.`,
-        type: 'driver_arrived',
-        isRead: false
-    };
-    notifications_database.push(newNotification);
-    saveState();
-
-    updateAllDriverTripViews(); 
-    updateHomeScreenView('passenger'); 
-
-    driverArrivedBtn.classList.add('disabled');
-    driverStartTripBtn.classList.remove('disabled');
-
-    alert('Пасажира сповіщено, що ви прибули!');
-});
-
-driverStartTripBtn?.addEventListener('click', () => {
-    if (active_trips.length === 0) return;
-    
-    const trip = active_trips[0];
-    trip.status = 'in_progress';
-    saveState();
-    
-    updateAllDriverTripViews();
-    updateHomeScreenView('passenger');
-
-    driverStartTripBtn.classList.add('disabled');
-    driverFinishTripBtn.classList.remove('disabled');
-    
-    alert('Поїздку розпочато!');
-});
-
-driverFinishTripBtn?.addEventListener('click', () => {
-    if (active_trips.length === 0) {
-        alert('Помилка: не знайдено активних поїздок для завершення.');
-        return;
-    }
-
-    const finishedTrip = active_trips[0];
-    const passengerId = finishedTrip.passengerId;
-
-    driver_archive.push(finishedTrip);
-    passenger_archive.push(finishedTrip);
-
-    active_trips.splice(0, 1);
-    saveState();
-
-    const passenger = passengers_database.find(p => p.id === passengerId);
-    if (passenger) {
-        const newNotification = {
-            id: Date.now(),
-            userId: passenger.id,
-            text: `<strong>Поїздку завершено.</strong> Дякуємо! Не забудьте оцінити водія.`,
-            type: 'trip_finished',
-            isRead: false
-        };
-        notifications_database.push(newNotification);
-        saveState();
-    }
-
-    updateAllDriverTripViews();
-    updateHomeScreenView('passenger');
-
-    driverArrivedBtn.classList.remove('disabled');
-    driverStartTripBtn.classList.add('disabled');
-    driverFinishTripBtn.classList.add('disabled');
-
-    alert('Поїздку успішно завершено!');
-    navigateTo('driver-home-screen');
-});
-
-// === ЛОГІКА ЕКРАНУ ОЦІНКИ ПОЇЗДКИ ===
-let currentRating = 0;
-
-function updateStars(rating) {
-    ratingStars.forEach(star => {
-        if (star.dataset.value <= rating) {
-            star.classList.add('fa-solid');
-            star.classList.remove('fa-regular');
-        } else {
-            star.classList.add('fa-regular');
-            star.classList.remove('fa-solid');
-        }
-    });
-}
-
-ratingStars.forEach(star => {
-    star.addEventListener('mouseover', () => {
-        updateStars(star.dataset.value);
-    });
-
-    star.addEventListener('mouseout', () => {
-        updateStars(currentRating); 
-    });
-
-    star.addEventListener('click', () => {
-        currentRating = star.dataset.value;
-        if(submitRatingBtn) submitRatingBtn.classList.remove('disabled'); 
-        updateStars(currentRating);
-    });
-});
-
-submitRatingBtn?.addEventListener('click', () => {
-    if (currentRating > 0) {
-        const comment = document.getElementById('trip-comment').value.trim();
-        alert(`Дякуємо за оцінку! Ваш рейтинг: ${currentRating} зірок. Коментар: "${comment}"`);
-
-        const finishedOrder = { ...orderData }; 
-        passenger_archive.push(finishedOrder);
-        driver_archive.push(finishedOrder); 
-
-        globalOrderStatus = 'searching';
-
-        const searchingCard = document.getElementById('searching-card');
-        const activeTripCard = document.getElementById('active-trip-card');
-        if(searchingCard) searchingCard.style.display = 'block';
-        if(activeTripCard) activeTripCard.style.display = 'none';
-
-        currentRating = 0;
-        updateStars(0);
-        document.getElementById('trip-comment').value = '';
-        submitRatingBtn.classList.add('disabled');
-        navigateTo('passenger-home-screen');
-    }
-});
-
-// --- Клікабельні дзвіночки в хедері ---
-document.getElementById('passenger-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('passenger'));
-document.getElementById('driver-notifications-btn-home')?.addEventListener('click', () => handleNotificationClick('driver'));
-
-function handleNotificationClick(userType) {
-    const badgeHome = document.getElementById(`${userType}-notification-badge-home`);
-    const badgeMain = document.getElementById(`${userType}-notification-badge`);
-
-    if (badgeHome) {
-        badgeHome.classList.add('hidden');
-        badgeHome.textContent = '';
-    }
-    if (badgeMain) {
-        badgeMain.classList.add('hidden');
-        badgeMain.textContent = '';
-    }
-    
-    notifications_database.forEach(n => {
-        if (n.userId === currentUser.id) { 
-            n.isRead = true;
-        }
-    });
-
-    showUserNotifications(userType);
-    navigateTo('notifications-screen');
-}
-
-// == ЛОГІКА ДЛЯ МІНІ-КАРТКИ ПРОФІЛЮ (ПОПАП) v2.0 ==
-const profilePopup = document.getElementById('profile-popup');
-const popupOverlay = document.getElementById('popup-overlay'); 
-const driverProfileBadge = document.querySelector('#driver-home-screen .profile-badge');
-const passengerProfileBadge = document.querySelector('#passenger-home-screen .profile-badge');
-const popupViewProfileBtn = document.getElementById('popup-view-profile-btn');
-
-driverProfileBadge?.addEventListener('click', () => {
-    if (profilePopup.classList.contains('visible')) {
-        UI.hideProfilePopup();
-    } else {
-        const driver = drivers_database.find(d => d.id === currentUser.id) || currentUser;
-        
-        const driverData = {
-            icon: 'fa-solid fa-user-tie',
-            name: driver.name,
-            details: `${driver.rating ? driver.rating.toFixed(1) : 0} ★ • ${driver.trips} поїздок`
-        };
-        UI.showProfilePopup(driverData);
-
-        popupViewProfileBtn.onclick = () => {
-            UI.displayDriverProfile(driver.id);
-            navigateTo('driver-full-profile-screen');
-            UI.hideProfilePopup();
-        };
-    }
-});
-
-passengerProfileBadge?.addEventListener('click', () => {
-    if (profilePopup.classList.contains('visible')) {
-        UI.hideProfilePopup();
-    } else {
-        const passenger = currentUser;
-        const passengerData = {
-            icon: 'fa-solid fa-user',
-            name: passenger.name,
-            details: `${passenger.trips} поїздок`
-        };
-        UI.showProfilePopup(passengerData);
-
-        popupViewProfileBtn.onclick = () => {
-            UI.displayPassengerProfile(passenger.id);
-            navigateTo('passenger-full-profile-screen');
-            UI.hideProfilePopup();
-        };
-    }
-});
-
-popupOverlay?.addEventListener('click', UI.hideProfilePopup);
-
-// == ЛОГІКА ДЛЯ КНОПКИ "ВІДГУКНУТИСЬ" (ОПТИМАЛЬНА ВЕРСІЯ) ==
+// == ЛОГІКА ДЛЯ КНОПКИ "ВІДГУКНУТИСЬ" ==
 if (requestListContainer) {
     requestListContainer.addEventListener('click', (event) => {
         const targetButton = event.target.closest('.btn-main-action.accept[data-request-id]');
