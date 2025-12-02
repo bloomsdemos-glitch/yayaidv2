@@ -199,13 +199,17 @@ function startLiveUpdates() {
 
         if (users) {
             Object.values(users).forEach(u => {
-                if (u.role === 'driver') {
+                                if (u.role === 'driver') {
+                    // Фільтр: не показувати тестових юзерів
+                    if (u.name.includes('Test') || u.name === 'User') return;
+
                     if (!u.car) u.car = "Не вказано"; 
                     if (!u.rating) u.rating = 0.0;
                     drivers_database.push(u);
                 } else {
                     passengers_database.push(u);
                 }
+
             });
         }
         
