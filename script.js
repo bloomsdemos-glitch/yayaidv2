@@ -199,17 +199,16 @@ function startLiveUpdates() {
 
         if (users) {
             Object.values(users).forEach(u => {
-                                if (u.role === 'driver') {
-                    // Фільтр: не показувати тестових юзерів
-                    if (u.name.includes('Test') || u.name === 'User') return;
+                // Глобальний фільтр: ігноруємо тестових юзерів (і водіїв, і пасажирів)
+                if (u.name && (u.name.includes('Test') || u.name === 'User')) return;
 
+                if (u.role === 'driver') {
                     if (!u.car) u.car = "Не вказано"; 
                     if (!u.rating) u.rating = 0.0;
                     drivers_database.push(u);
                 } else {
                     passengers_database.push(u);
                 }
-
             });
         }
         
@@ -271,9 +270,11 @@ function startLiveUpdates() {
             const badgeMain = document.getElementById(`${type}-notification-badge`);
             
             if (unreadCount > 0) {
+                // Прибираємо клас hidden -> спрацьовує CSS display: flex
                 if(badgeHome) { badgeHome.textContent = unreadCount; badgeHome.classList.remove('hidden'); }
                 if(badgeMain) { badgeMain.textContent = unreadCount; badgeMain.classList.remove('hidden'); }
             } else {
+                // Додаємо клас hidden -> спрацьовує CSS display: none
                 if(badgeHome) badgeHome.classList.add('hidden');
                 if(badgeMain) badgeMain.classList.add('hidden');
             }
@@ -285,6 +286,7 @@ function startLiveUpdates() {
         }
     });
 }
+
 
 // === ФУНКЦІЯ ЗБЕРЕЖЕННЯ ===
 function saveState() {
