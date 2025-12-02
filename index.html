@@ -925,23 +925,21 @@
 
     </div>
     
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
     <script type="module">
         import { initApp } from './auth.js';
         import { state } from './state.js';
-        
+        import './main.js'; // <--- Оцей рядок магічним чином підключає всі твої кнопки!
+
         // Запускаємо додаток
         window.addEventListener('load', () => {
-            console.log("🚀 App Starting via Modules...");
-            // Якщо initApp існує (ми її створили в auth.js), запускаємо
-            if (typeof initApp === 'function') {
-                initApp();
-            }
+            console.log("🚀 System Launched via Modules");
+            initApp();
         });
 
-        // Для дебагу
+        // Залишаємо це для дебагу, щоб ти міг в консолі написати debugState і глянути дані
         window.debugState = state;
     </script>
 </body>
