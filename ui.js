@@ -225,10 +225,10 @@ UI.displayPassengerProfile = function(passengerId) {
         const fbFullEl = document.getElementById('passenger-feedback-placeholder-full');
         if(fbFullEl) fbFullEl.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
     }
-    document.getElementById('profile-passenger-bio').textContent = passenger.bio;
+    document.getElementById('profile-passenger-bio').textContent = passenger.bio || 'Інформація відсутня';
 };
 
-// === ЛОГІКА ШВИДКОГО ЗАМОВЛЕННЯ (ВИПРАВЛЕНО) ===
+// === ЛОГІКА ШВИДКОГО ЗАМОВЛЕННЯ ===
 
 UI.updateSummary = function() {
     const summaryCard = document.getElementById('quick-order-summary-card');
@@ -240,7 +240,6 @@ UI.updateSummary = function() {
     const sumToCont = document.getElementById('summary-to-container');
     const sumTimeCont = document.getElementById('summary-time-container');
 
-    // Перевіряємо наявність глобальної змінної orderData
     if (typeof orderData === 'undefined') return;
 
     if (orderData.from || orderData.to) { 
@@ -286,9 +285,7 @@ UI.goToStep = function(stepToShow) {
 };
 
 UI.resetQuickOrder = function() {
-    // Звертаємось до глобальної orderData
     if (typeof orderData !== 'undefined') {
-        // Очищаємо поля об'єкта, не замінюючи посилання
         for (const key in orderData) delete orderData[key];
     }
     
@@ -390,11 +387,11 @@ UI.displayOrderDetails = function(order) {
     const detailsCommentContainer = document.getElementById('details-comment-container');
 
     if(detailsPassengerName) detailsPassengerName.textContent = order.passengerName;
-    if(detailsPassengerRating) detailsPassengerRating.innerHTML = `${order.rating} <i class="fa-solid fa-star"></i> • ${Math.floor(Math.random() * 50) + 5} поїздок`;
+    if(detailsPassengerRating) detailsPassengerRating.innerHTML = `${(order.rating || 5.0).toFixed(1)} <i class="fa-solid fa-star"></i>`;
     if(detailsFromAddress) detailsFromAddress.textContent = order.from;
     if(detailsToAddress) detailsToAddress.textContent = order.to;
 
-    const price = order.price || 130; // Дефолтна ціна, якщо немає
+    const price = order.price || 130; 
     const commission = Math.round(price * 0.05);
     
     if(detailsTotalPrice) detailsTotalPrice.textContent = `${price} грн`;
@@ -408,6 +405,7 @@ UI.displayOrderDetails = function(order) {
         if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
     }
 };
+
 
 UI.showProfilePopup = function(userData) {
     const popupAvatarIcon = document.getElementById('popup-avatar-icon');
@@ -473,7 +471,10 @@ UI.renderScheduleEditor = function() {
     const container = document.getElementById('schedule-days-list');
     if (!container) return;
     
-    const driver = drivers_database[0];
+    // Беремо поточного юзера (водія)
+    const driver = currentUser;
+    if (!driver) return; // Захист
+
     const schedule = driver.schedule || {};
     
     const days = [
@@ -515,7 +516,9 @@ UI.renderScheduleEditor = function() {
 };
 
 UI.displayDriverSchedule = function(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
+    // Тут шукаємо будь-якого водія за ID (для публічного перегляду)
+    const driver = drivers_database.find(d => d.id == driverId) || (currentUser && currentUser.id == driverId ? currentUser : null);
+    
     const container = document.getElementById('profile-driver-schedule');
     if (!container || !driver) return;
     
@@ -548,8 +551,13 @@ UI.renderPlannedRoutesEditor = function() {
     const container = document.getElementById('planned-routes-list');
     if (!container) return;
     
-    const driver = drivers_database[0];
-    const routes = driver.plannedRoutes || [];
+    // Редагуємо свої маршрути
+    const driver = currentUser;
+    if (!driver) return;
+
+    // Якщо plannedRoutes undefined, ініціалізуємо порожнім масивом
+    if (!driver.plannedRoutes) driver.plannedRoutes = [];
+    const routes = driver.plannedRoutes;
     
     container.innerHTML = '';
     
@@ -585,7 +593,10 @@ UI.renderPlannedRoutesEditor = function() {
                 const index = driver.plannedRoutes.findIndex(r => r.id === route.id);
                 if (index > -1) {
                     driver.plannedRoutes.splice(index, 1);
-                    saveState();
+                    // Оновлюємо базу даних
+                    db.ref('users/' + currentUser.id + '/plannedRoutes').set(driver.plannedRoutes);
+                    
+                    // Перемальовуємо список
                     UI.renderPlannedRoutesEditor();
                 }
             }
@@ -596,7 +607,8 @@ UI.renderPlannedRoutesEditor = function() {
 };
 
 UI.displayDriverPlannedRoutes = function(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
+    const driver = drivers_database.find(d => d.id == driverId) || (currentUser && currentUser.id == driverId ? currentUser : null);
+    
     const container = document.getElementById('profile-driver-routes');
     if (!container || !driver) return;
     
