@@ -1,13 +1,14 @@
-const UI = {};
+// ui.js 
+import { state } from './state.js';
+import { db } from './firebase-init.js'; // Додали для роботи з базою
+import { ref, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js"; // Функції Firebase
 
-// Глобальні змінні для поп-апу (вони мають бути тут)
-const popupAvatarIcon = document.getElementById('popup-avatar-icon');
-const popupUserName = document.getElementById('popup-user-name');
-const popupUserDetails = document.getElementById('popup-user-details');
 
+// Глобальні змінні DOM (вони локальні для цього модуля)
 const screens = document.querySelectorAll('.screen');
 
-function showScreen(screenId) {
+// === НАВІГАЦІЯ ===
+export function showScreen(screenId) {
     screens.forEach(screen => {
         screen.classList.add('hidden');
         screen.classList.remove('active');
@@ -19,13 +20,11 @@ function showScreen(screenId) {
     }
 }
 
-function navigateTo(screenId) {
-    // Прибираємо штучну затримку. Нехай перемикає миттєво!
+export function navigateTo(screenId) {
     showScreen(screenId); 
 }
 
-
-// === ЛОГІКА ДЛЯ RIPPLE EFFECT ===
+// === ВІЗУАЛЬНІ ЕФЕКТИ (RIPPLE) ===
 function createRipple(event) {
     const button = event.currentTarget;
     const circle = document.createElement("span");
@@ -41,57 +40,64 @@ function createRipple(event) {
     circle.classList.add("ripple");
     button.appendChild(circle);
 }
-// Ініціалізація ripple після завантаження DOM
-document.addEventListener('DOMContentLoaded', () => {
+
+// Функція ініціалізації UI (викличемо її при старті)
+export function initUIListeners() {
+    // Ripple
     document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
         button.addEventListener("click", createRipple);
     });
-});
 
-// === ЛОГІКА ПЕРЕМИКАННЯ ТЕМ ===
-const themeToggle = document.getElementById('theme-toggle');
-if (themeToggle) {
-    const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
-    const body = document.body;
-    function switchTheme(e) {
-        if (e.target.checked) {
-            body.classList.remove('light-theme');
-            body.classList.add('dark-theme');
-        } else {
-            body.classList.remove('dark-theme');
-            body.classList.add('light-theme');
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
+        const body = document.body;
+        
+        // Встановлюємо початковий стан
+        if (body.classList.contains('dark-theme')) {
+            themeCheckbox.checked = true;
         }
+
+        themeCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+            }
+        });
     }
-    if (body.classList.contains('dark-theme')) {
-        themeCheckbox.checked = true;
+
+    // Pin Animation
+    const pathDots = document.querySelector('.path-dots');
+    if (pathDots) {
+        pathDots.addEventListener('animationiteration', swapPinIcons);
     }
-    themeCheckbox.addEventListener('change', switchTheme);
 }
 
-// === ЛОГІКА ЗМІНИ ІКОНОК ПІНІВ ===
-const pin1 = document.getElementById('pin1');
-const pin2 = document.getElementById('pin2');
-const pathDots = document.querySelector('.path-dots');
-if (pin1 && pin2 && pathDots) {
-    function swapPinIcons() {
-        const isPin1Dot = pin1.classList.contains('fa-circle-dot');
-        if (isPin1Dot) {
-            pin1.classList.remove('fa-circle-dot');
-            pin1.classList.add('fa-location-dot');
-            pin2.classList.remove('fa-location-dot');
-            pin2.classList.add('fa-circle-dot');
-        } else {
-            pin1.classList.remove('fa-location-dot');
-            pin1.classList.add('fa-circle-dot');
-            pin2.classList.remove('fa-circle-dot');
-            pin2.classList.add('fa-location-dot');
-        }
+function swapPinIcons() {
+    const pin1 = document.getElementById('pin1');
+    const pin2 = document.getElementById('pin2');
+    if (!pin1 || !pin2) return;
+
+    const isPin1Dot = pin1.classList.contains('fa-circle-dot');
+    if (isPin1Dot) {
+        pin1.classList.remove('fa-circle-dot');
+        pin1.classList.add('fa-location-dot');
+        pin2.classList.remove('fa-location-dot');
+        pin2.classList.add('fa-circle-dot');
+    } else {
+        pin1.classList.remove('fa-location-dot');
+        pin1.classList.add('fa-circle-dot');
+        pin2.classList.remove('fa-circle-dot');
+        pin2.classList.add('fa-location-dot');
     }
-    pathDots.addEventListener('animationiteration', swapPinIcons);
 }
 
 // === КАРТКИ ===
-UI.createDriverOrderCard = function(order) {
+export function createDriverOrderCard(order) {
     const li = document.createElement('li');
     li.className = 'order-card driver-view';
     const timeIcon = order.time === 'Зараз' ? '<div class="status-dot online"></div>' : '<i class="fa-solid fa-clock"></i>';
@@ -101,15 +107,17 @@ UI.createDriverOrderCard = function(order) {
         <div class="order-time-info">${timeIcon}<span>${order.time}</span></div>
     `;
     return li;
-};
+}
 
-UI.createActiveTripCardHTML = function(trip, userType) {
+export function createActiveTripCardHTML(trip, userType) {
     const isDriver = userType === 'driver';
     const title = 'Активна поїздка';
-    const driver = drivers_database.find(d => d.id === trip.driverId);
+    // БЕРЕМО ДАНІ ЗІ STATE!
+    const driver = state.drivers_database.find(d => d.id === trip.driverId);
     const driverName = driver ? driver.name : 'Водій';
     const personName = isDriver ? trip.passengerName : driverName;
     const personRole = isDriver ? 'Пасажир' : 'Водій';
+    
     return `
         <div class="order-card active-trip" style="margin: 0; cursor: pointer;">
             <div class="order-header" style="padding-bottom: 8px;">
@@ -130,12 +138,14 @@ UI.createActiveTripCardHTML = function(trip, userType) {
             </div>
         </div>
     `;
-};
+}
 
 // === ПРОФІЛІ ===
-UI.displayDriverProfile = function(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
+export function displayDriverProfile(driverId) {
+    // БЕРЕМО ДАНІ ЗІ STATE!
+    const driver = state.drivers_database.find(d => d.id === driverId);
     if (!driver) return;
+    
     const nameEl = document.getElementById('profile-driver-name');
     if(nameEl) nameEl.textContent = driver.name;
     
@@ -150,10 +160,11 @@ UI.displayDriverProfile = function(driverId) {
             ratingEl.textContent = driver.rating.toFixed(1);
         }
     }
-};
+}
 
-UI.displayDriverFullProfile = function(driverId) {
-    const driver = drivers_database.find(d => d.id === driverId);
+export function displayDriverFullProfile(driverId) {
+    // БЕРЕМО ДАНІ ЗІ STATE!
+    const driver = state.drivers_database.find(d => d.id === driverId);
     if (!driver) return;
 
     document.getElementById('profile-driver-name-header').textContent = `Профіль: ${driver.name}`;
@@ -170,20 +181,22 @@ UI.displayDriverFullProfile = function(driverId) {
 
     const tagsContainer = document.getElementById('profile-driver-tags');
     tagsContainer.innerHTML = '';
-    driver.tags.forEach(tag => {
-        tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
-    });
+    if (driver.tags) {
+        driver.tags.forEach(tag => {
+            tagsContainer.innerHTML += `<span class="tag"><i class="${tag.icon}"></i> ${tag.text}</span>`;
+        });
+    }
 
     const reviewsContainer = document.getElementById('profile-driver-reviews');
     const reviewsSection = reviewsContainer.closest('.details-section'); 
     const reviewsTitle = reviewsSection.querySelector('h4'); 
 
     if (reviewsTitle) {
-        reviewsTitle.textContent = `Відгуки (${driver.reviews.length})`;
+        reviewsTitle.textContent = `Відгуки (${driver.reviews ? driver.reviews.length : 0})`;
     }
 
     reviewsContainer.innerHTML = '';
-    if (driver.reviews.length > 0) {
+    if (driver.reviews && driver.reviews.length > 0) {
         driver.reviews.forEach(review => {
             reviewsContainer.innerHTML += `
                 <div class="review-card">
@@ -198,12 +211,14 @@ UI.displayDriverFullProfile = function(driverId) {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
 
-    if(UI.displayDriverSchedule) UI.displayDriverSchedule(driverId);
-    if(UI.displayDriverPlannedRoutes) UI.displayDriverPlannedRoutes(driverId);
-};
+    // ТУТ ВАЖЛИВО: Ці функції мають бути визначені або імпортовані, якщо вони в 2 частині
+    if(typeof displayDriverSchedule === 'function') displayDriverSchedule(driverId);
+    if(typeof displayDriverPlannedRoutes === 'function') displayDriverPlannedRoutes(driverId);
+}
 
-UI.displayPassengerProfile = function(passengerId) {
-    const passenger = passengers_database.find(p => p.id === passengerId);
+export function displayPassengerProfile(passengerId) {
+    // БЕРЕМО ДАНІ ЗІ STATE!
+    const passenger = state.passengers_database.find(p => p.id === passengerId);
     if (!passenger) return;
 
     const nameEl = document.getElementById('profile-passenger-name');
@@ -226,11 +241,11 @@ UI.displayPassengerProfile = function(passengerId) {
         if(fbFullEl) fbFullEl.innerHTML = `<i class="fa-solid fa-thumbs-up"></i> <strong>${passenger.feedback.likes} 👍🏻 ${passenger.feedback.dislikes} 👎🏻</strong>`;
     }
     document.getElementById('profile-passenger-bio').textContent = passenger.bio || 'Інформація відсутня';
-};
+}
 
 // === ЛОГІКА ШВИДКОГО ЗАМОВЛЕННЯ ===
 
-UI.updateSummary = function() {
+export function updateSummary() {
     const summaryCard = document.getElementById('quick-order-summary-card');
     const sumFrom = document.getElementById('summary-from');
     const sumTo = document.getElementById('summary-to');
@@ -240,31 +255,32 @@ UI.updateSummary = function() {
     const sumToCont = document.getElementById('summary-to-container');
     const sumTimeCont = document.getElementById('summary-time-container');
 
-    if (typeof orderData === 'undefined') return;
+    // БЕРЕМО ORDERDATA ЗІ STATE!
+    if (!state.orderData) return;
 
-    if (orderData.from || orderData.to) { 
+    if (state.orderData.from || state.orderData.to) { 
         summaryCard.classList.remove('hidden');
     }
 
-    if (orderData.from) { 
-        sumFrom.textContent = orderData.from; 
+    if (state.orderData.from) { 
+        sumFrom.textContent = state.orderData.from; 
         sumFromCont.style.display = 'flex';
     }
 
-    if (orderData.to) { 
-        sumTo.textContent = orderData.to; 
+    if (state.orderData.to) { 
+        sumTo.textContent = state.orderData.to; 
         sumToCont.style.display = 'flex';
     }
 
-    if (orderData.time) { 
-        sumTime.textContent = orderData.time; 
+    if (state.orderData.time) { 
+        sumTime.textContent = state.orderData.time; 
         sumTimeCont.style.display = 'flex';
     } else { 
         sumTimeCont.style.display = 'none';
     }
-};
+}
 
-UI.goToStep = function(stepToShow) {
+export function goToStep(stepToShow) {
     const stepAddress = document.getElementById('address-step');
     const stepTime = document.getElementById('time-step');
     const stepPayment = document.getElementById('payment-step');
@@ -282,11 +298,12 @@ UI.goToStep = function(stepToShow) {
     } else if (stepToShow === 'payment') {
         stepPayment.classList.add('active');
     }
-};
+}
 
-UI.resetQuickOrder = function() {
-    if (typeof orderData !== 'undefined') {
-        for (const key in orderData) delete orderData[key];
+export function resetQuickOrder() {
+    // ЧИСТИМО ORDERDATA В STATE
+    if (state.orderData) {
+        for (const key in state.orderData) delete state.orderData[key];
     }
     
     document.getElementById('from-address').value = '';
@@ -324,10 +341,13 @@ UI.resetQuickOrder = function() {
     if(timeResultCont) timeResultCont.style.display = 'none';
     if(picker) picker.style.display = 'none';
     
-    UI.goToStep('address');
-};
+    goToStep('address');
+}
 
-UI.showTimeResult = function(text) {
+
+
+// === РЕЗУЛЬТАТИ ЧАСУ ===
+export function showTimeResult(text) {
     const timeChoiceCont = document.getElementById('time-choice-container');
     const timeResultCont = document.getElementById('time-result-container');
     const timeResText = document.getElementById('time-result-text');
@@ -337,9 +357,10 @@ UI.showTimeResult = function(text) {
     timeResText.textContent = text;
     timeChoiceCont.style.display = 'none';
     timeResultCont.style.display = 'flex';
-};
+}
 
-UI.checkAddressInputs = function() {
+// === ВАЛІДАЦІЯ АДРЕС ===
+export function checkAddressInputs() {
     const fromBtn = document.querySelector('.btn-settlement[data-group="from"].active');
     const toBtn = document.querySelector('.btn-settlement[data-group="to"].active');
 
@@ -373,9 +394,10 @@ UI.checkAddressInputs = function() {
     } else {
         nextBtn.classList.add('disabled');
     }
-};
+}
 
-UI.displayOrderDetails = function(order) {
+// === ДЕТАЛІ ЗАМОВЛЕННЯ ===
+export function displayOrderDetails(order) {
     const detailsPassengerName = document.getElementById('details-passenger-name');
     const detailsPassengerRating = document.getElementById('details-passenger-rating');
     const detailsFromAddress = document.getElementById('details-from-address');
@@ -404,10 +426,10 @@ UI.displayOrderDetails = function(order) {
     } else {
         if(detailsCommentContainer) detailsCommentContainer.style.display = 'none';
     }
-};
+}
 
-
-UI.showProfilePopup = function(userData) {
+// === ПОПАПИ ===
+export function showProfilePopup(userData) {
     const popupAvatarIcon = document.getElementById('popup-avatar-icon');
     const popupUserName = document.getElementById('popup-user-name');
     const popupUserDetails = document.getElementById('popup-user-details');
@@ -422,16 +444,17 @@ UI.showProfilePopup = function(userData) {
     
     popupOverlay.classList.remove('hidden');
     profilePopup.classList.add('visible');
-};
+}
 
-UI.hideProfilePopup = function() {
+export function hideProfilePopup() {
     const profilePopup = document.getElementById('profile-popup');
     const popupOverlay = document.getElementById('popup-overlay');
     popupOverlay?.classList.add('hidden');
     profilePopup?.classList.remove('visible');
-};
+}
 
-UI.displayNotifications = function(notifications, userType) {
+// === СПОВІЩЕННЯ ===
+export function displayNotifications(notifications, userType) {
     const listContainer = document.getElementById('notification-list');
     const placeholder = listContainer.querySelector('.list-placeholder');
 
@@ -464,16 +487,16 @@ UI.displayNotifications = function(notifications, userType) {
             listContainer.appendChild(li);
         });
     }
-};
+}
 
 // === ГРАФІК РОБОТИ (SCHEDULE) ===
-UI.renderScheduleEditor = function() {
+export function renderScheduleEditor() {
     const container = document.getElementById('schedule-days-list');
     if (!container) return;
     
-    // Беремо поточного юзера (водія)
-    const driver = currentUser;
-    if (!driver) return; // Захист
+    // Беремо поточного юзера зі STATE
+    const driver = state.currentUser;
+    if (!driver) return; 
 
     const schedule = driver.schedule || {};
     
@@ -513,11 +536,12 @@ UI.renderScheduleEditor = function() {
         
         container.appendChild(dayDiv);
     });
-};
+}
 
-UI.displayDriverSchedule = function(driverId) {
-    // Тут шукаємо будь-якого водія за ID (для публічного перегляду)
-    const driver = drivers_database.find(d => d.id == driverId) || (currentUser && currentUser.id == driverId ? currentUser : null);
+export function displayDriverSchedule(driverId) {
+    // Шукаємо у STATE
+    const driver = state.drivers_database.find(d => d.id == driverId) || 
+                  (state.currentUser && state.currentUser.id == driverId ? state.currentUser : null);
     
     const container = document.getElementById('profile-driver-schedule');
     if (!container || !driver) return;
@@ -544,18 +568,16 @@ UI.displayDriverSchedule = function(driverId) {
         `;
         container.appendChild(dayDiv);
     });
-};
+}
 
 // === ЗАПЛАНОВАНІ МАРШРУТИ ===
-UI.renderPlannedRoutesEditor = function() {
+export function renderPlannedRoutesEditor() {
     const container = document.getElementById('planned-routes-list');
     if (!container) return;
     
-    // Редагуємо свої маршрути
-    const driver = currentUser;
+    const driver = state.currentUser;
     if (!driver) return;
 
-    // Якщо plannedRoutes undefined, ініціалізуємо порожнім масивом
     if (!driver.plannedRoutes) driver.plannedRoutes = [];
     const routes = driver.plannedRoutes;
     
@@ -593,21 +615,22 @@ UI.renderPlannedRoutesEditor = function() {
                 const index = driver.plannedRoutes.findIndex(r => r.id === route.id);
                 if (index > -1) {
                     driver.plannedRoutes.splice(index, 1);
-                    // Оновлюємо базу даних
-                    db.ref('users/' + currentUser.id + '/plannedRoutes').set(driver.plannedRoutes);
+                    // ТУТ ВАЖЛИВО: Оновлюємо базу через імпортовані функції
+                    const routeRef = ref(db, 'users/' + driver.id + '/plannedRoutes');
+                    set(routeRef, driver.plannedRoutes);
                     
-                    // Перемальовуємо список
-                    UI.renderPlannedRoutesEditor();
+                    renderPlannedRoutesEditor(); // Рекурсивно перемальовуємо
                 }
             }
         });
         
         container.appendChild(routeDiv);
     });
-};
+}
 
-UI.displayDriverPlannedRoutes = function(driverId) {
-    const driver = drivers_database.find(d => d.id == driverId) || (currentUser && currentUser.id == driverId ? currentUser : null);
+export function displayDriverPlannedRoutes(driverId) {
+    const driver = state.drivers_database.find(d => d.id == driverId) || 
+                  (state.currentUser && state.currentUser.id == driverId ? state.currentUser : null);
     
     const container = document.getElementById('profile-driver-routes');
     if (!container || !driver) return;
@@ -639,9 +662,9 @@ UI.displayDriverPlannedRoutes = function(driverId) {
         
         container.appendChild(routeDiv);
     });
-};
+}
 
-UI.renderWeekdaySelector = function() {
+export function renderWeekdaySelector() {
     const container = document.getElementById('planned-route-days');
     if (!container) return;
     
@@ -669,4 +692,4 @@ UI.renderWeekdaySelector = function() {
         
         container.appendChild(btn);
     });
-};
+}
