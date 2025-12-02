@@ -1,13 +1,15 @@
-// ui.js 
+// ui.js (FULL VERSION)
 import { state } from './state.js';
-import { db } from './firebase-init.js'; // Додали для роботи з базою
-import { ref, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js"; // Функції Firebase
+import { db } from './firebase-init.js';
+import { ref, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
-
-// Глобальні змінні DOM (вони локальні для цього модуля)
+// Глобальні змінні DOM
 const screens = document.querySelectorAll('.screen');
 
-// === НАВІГАЦІЯ ===
+// ==========================================
+// 1. НАВІГАЦІЯ ТА ЕФЕКТИ
+// ==========================================
+
 export function showScreen(screenId) {
     screens.forEach(screen => {
         screen.classList.add('hidden');
@@ -17,14 +19,16 @@ export function showScreen(screenId) {
     if (activeScreen) {
         activeScreen.classList.remove('hidden');
         activeScreen.classList.add('active');
+        window.scrollTo(0, 0);
+    } else {
+        console.error(`Screen not found: ${screenId}`);
     }
 }
 
 export function navigateTo(screenId) {
-    showScreen(screenId); 
+    showScreen(screenId);
 }
 
-// === ВІЗУАЛЬНІ ЕФЕКТИ (RIPPLE) ===
 function createRipple(event) {
     const button = event.currentTarget;
     const circle = document.createElement("span");
@@ -41,9 +45,8 @@ function createRipple(event) {
     button.appendChild(circle);
 }
 
-// Функція ініціалізації UI (викличемо її при старті)
 export function initUIListeners() {
-    // Ripple
+    // Ripple effect
     document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
         button.addEventListener("click", createRipple);
     });
@@ -54,7 +57,6 @@ export function initUIListeners() {
         const themeCheckbox = themeToggle.querySelector('.toggle-checkbox');
         const body = document.body;
         
-        // Встановлюємо початковий стан
         if (body.classList.contains('dark-theme')) {
             themeCheckbox.checked = true;
         }
@@ -96,7 +98,10 @@ function swapPinIcons() {
     }
 }
 
-// === КАРТКИ ===
+// ==========================================
+// 2. КАРТКИ (Drivers & Trips)
+// ==========================================
+
 export function createDriverOrderCard(order) {
     const li = document.createElement('li');
     li.className = 'order-card driver-view';
@@ -112,7 +117,6 @@ export function createDriverOrderCard(order) {
 export function createActiveTripCardHTML(trip, userType) {
     const isDriver = userType === 'driver';
     const title = 'Активна поїздка';
-    // БЕРЕМО ДАНІ ЗІ STATE!
     const driver = state.drivers_database.find(d => d.id === trip.driverId);
     const driverName = driver ? driver.name : 'Водій';
     const personName = isDriver ? trip.passengerName : driverName;
@@ -140,9 +144,11 @@ export function createActiveTripCardHTML(trip, userType) {
     `;
 }
 
-// === ПРОФІЛІ ===
+// ==========================================
+// 3. ПРОФІЛІ ТА ПОПАПИ
+// ==========================================
+
 export function displayDriverProfile(driverId) {
-    // БЕРЕМО ДАНІ ЗІ STATE!
     const driver = state.drivers_database.find(d => d.id === driverId);
     if (!driver) return;
     
@@ -163,7 +169,6 @@ export function displayDriverProfile(driverId) {
 }
 
 export function displayDriverFullProfile(driverId) {
-    // БЕРЕМО ДАНІ ЗІ STATE!
     const driver = state.drivers_database.find(d => d.id === driverId);
     if (!driver) return;
 
@@ -211,13 +216,11 @@ export function displayDriverFullProfile(driverId) {
         reviewsContainer.innerHTML = '<p class="no-reviews-placeholder">Відгуків поки що немає.</p>';
     }
 
-    // ТУТ ВАЖЛИВО: Ці функції мають бути визначені або імпортовані, якщо вони в 2 частині
-    if(typeof displayDriverSchedule === 'function') displayDriverSchedule(driverId);
-    if(typeof displayDriverPlannedRoutes === 'function') displayDriverPlannedRoutes(driverId);
+    displayDriverSchedule(driverId);
+    displayDriverPlannedRoutes(driverId);
 }
 
 export function displayPassengerProfile(passengerId) {
-    // БЕРЕМО ДАНІ ЗІ STATE!
     const passenger = state.passengers_database.find(p => p.id === passengerId);
     if (!passenger) return;
 
@@ -243,7 +246,33 @@ export function displayPassengerProfile(passengerId) {
     document.getElementById('profile-passenger-bio').textContent = passenger.bio || 'Інформація відсутня';
 }
 
-// === ЛОГІКА ШВИДКОГО ЗАМОВЛЕННЯ ===
+export function showProfilePopup(userData) {
+    const popupAvatarIcon = document.getElementById('popup-avatar-icon');
+    const popupUserName = document.getElementById('popup-user-name');
+    const popupUserDetails = document.getElementById('popup-user-details');
+    const profilePopup = document.getElementById('profile-popup');
+    const popupOverlay = document.getElementById('popup-overlay');
+    
+    if (!popupAvatarIcon || !popupUserName || !popupUserDetails) return;
+    
+    popupAvatarIcon.className = userData.icon;
+    popupUserName.textContent = userData.name;
+    popupUserDetails.textContent = userData.details;
+    
+    popupOverlay.classList.remove('hidden');
+    profilePopup.classList.add('visible');
+}
+
+export function hideProfilePopup() {
+    const profilePopup = document.getElementById('profile-popup');
+    const popupOverlay = document.getElementById('popup-overlay');
+    popupOverlay?.classList.add('hidden');
+    profilePopup?.classList.remove('visible');
+}
+
+// ==========================================
+// 4. ШВИДКЕ ЗАМОВЛЕННЯ
+// ==========================================
 
 export function updateSummary() {
     const summaryCard = document.getElementById('quick-order-summary-card');
@@ -255,7 +284,6 @@ export function updateSummary() {
     const sumToCont = document.getElementById('summary-to-container');
     const sumTimeCont = document.getElementById('summary-time-container');
 
-    // БЕРЕМО ORDERDATA ЗІ STATE!
     if (!state.orderData) return;
 
     if (state.orderData.from || state.orderData.to) { 
@@ -301,27 +329,48 @@ export function goToStep(stepToShow) {
 }
 
 export function resetQuickOrder() {
-    // ЧИСТИМО ORDERDATA В STATE
     if (state.orderData) {
         for (const key in state.orderData) delete state.orderData[key];
     }
     
-    document.getElementById('from-address').value = '';
-    document.getElementById('to-address').value = '';
-    document.getElementById('comment').value = '';
+    const fromAddr = document.getElementById('from-address');
+    if(fromAddr) fromAddr.value = '';
     
-    document.getElementById('quick-order-summary-card').classList.add('hidden');
-    document.getElementById('summary-from-container').style.display = 'none';
-    document.getElementById('summary-to-container').style.display = 'none';
-    document.getElementById('summary-time-container').style.display = 'none';
-    document.getElementById('summary-driver-container').style.display = 'none';
+    const toAddr = document.getElementById('to-address');
+    if(toAddr) toAddr.value = '';
     
-    document.getElementById('address-next-btn').classList.add('disabled');
+    const comment = document.getElementById('comment');
+    if(comment) comment.value = '';
     
-    document.getElementById('from-address-container').style.display = 'block';
-    document.getElementById('from-village-container').style.display = 'none';
-    document.getElementById('to-address-container').style.display = 'block';
-    document.getElementById('to-village-container').style.display = 'none';
+    const summary = document.getElementById('quick-order-summary-card');
+    if(summary) summary.classList.add('hidden');
+    
+    const summaryFromCont = document.getElementById('summary-from-container');
+    if(summaryFromCont) summaryFromCont.style.display = 'none';
+    
+    const summaryToCont = document.getElementById('summary-to-container');
+    if(summaryToCont) summaryToCont.style.display = 'none';
+    
+    const summaryTimeCont = document.getElementById('summary-time-container');
+    if(summaryTimeCont) summaryTimeCont.style.display = 'none';
+    
+    const summaryDriverCont = document.getElementById('summary-driver-container');
+    if(summaryDriverCont) summaryDriverCont.style.display = 'none';
+    
+    const nextBtn = document.getElementById('address-next-btn');
+    if(nextBtn) nextBtn.classList.add('disabled');
+    
+    const fromAddrCont = document.getElementById('from-address-container');
+    if(fromAddrCont) fromAddrCont.style.display = 'block';
+    
+    const fromVillCont = document.getElementById('from-village-container');
+    if(fromVillCont) fromVillCont.style.display = 'none';
+    
+    const toAddrCont = document.getElementById('to-address-container');
+    if(toAddrCont) toAddrCont.style.display = 'block';
+    
+    const toVillCont = document.getElementById('to-village-container');
+    if(toVillCont) toVillCont.style.display = 'none';
     
     const fromVillageSelect = document.getElementById('from-village-select');
     const toVillageSelect = document.getElementById('to-village-select');
@@ -344,9 +393,6 @@ export function resetQuickOrder() {
     goToStep('address');
 }
 
-
-
-// === РЕЗУЛЬТАТИ ЧАСУ ===
 export function showTimeResult(text) {
     const timeChoiceCont = document.getElementById('time-choice-container');
     const timeResultCont = document.getElementById('time-result-container');
@@ -359,7 +405,6 @@ export function showTimeResult(text) {
     timeResultCont.style.display = 'flex';
 }
 
-// === ВАЛІДАЦІЯ АДРЕС ===
 export function checkAddressInputs() {
     const fromBtn = document.querySelector('.btn-settlement[data-group="from"].active');
     const toBtn = document.querySelector('.btn-settlement[data-group="to"].active');
@@ -369,10 +414,17 @@ export function checkAddressInputs() {
     const fromType = fromBtn.dataset.type;
     const toType = toBtn.dataset.type;
 
-    const fromInputVal = document.getElementById('from-address').value.trim();
-    const fromVillageVal = document.getElementById('from-village-select').value;
-    const toInputVal = document.getElementById('to-address').value.trim();
-    const toVillageVal = document.getElementById('to-village-select').value;
+    const fromInput = document.getElementById('from-address');
+    const fromVillage = document.getElementById('from-village-select');
+    const toInput = document.getElementById('to-address');
+    const toVillage = document.getElementById('to-village-select');
+
+    if(!fromInput || !fromVillage || !toInput || !toVillage) return;
+
+    const fromInputVal = fromInput.value.trim();
+    const fromVillageVal = fromVillage.value;
+    const toInputVal = toInput.value.trim();
+    const toVillageVal = toVillage.value;
 
     let isFromValid = false;
     if (fromType === 'valky') {
@@ -389,14 +441,15 @@ export function checkAddressInputs() {
     }
 
     const nextBtn = document.getElementById('address-next-btn');
-    if (isFromValid && isToValid) {
-        nextBtn.classList.remove('disabled');
-    } else {
-        nextBtn.classList.add('disabled');
+    if (nextBtn) {
+        if (isFromValid && isToValid) {
+            nextBtn.classList.remove('disabled');
+        } else {
+            nextBtn.classList.add('disabled');
+        }
     }
 }
 
-// === ДЕТАЛІ ЗАМОВЛЕННЯ ===
 export function displayOrderDetails(order) {
     const detailsPassengerName = document.getElementById('details-passenger-name');
     const detailsPassengerRating = document.getElementById('details-passenger-rating');
@@ -428,73 +481,14 @@ export function displayOrderDetails(order) {
     }
 }
 
-// === ПОПАПИ ===
-export function showProfilePopup(userData) {
-    const popupAvatarIcon = document.getElementById('popup-avatar-icon');
-    const popupUserName = document.getElementById('popup-user-name');
-    const popupUserDetails = document.getElementById('popup-user-details');
-    const profilePopup = document.getElementById('profile-popup');
-    const popupOverlay = document.getElementById('popup-overlay');
-    
-    if (!popupAvatarIcon || !popupUserName || !popupUserDetails) return;
-    
-    popupAvatarIcon.className = userData.icon;
-    popupUserName.textContent = userData.name;
-    popupUserDetails.textContent = userData.details;
-    
-    popupOverlay.classList.remove('hidden');
-    profilePopup.classList.add('visible');
-}
+// ==========================================
+// 5. ГРАФІК РОБОТИ (Schedule)
+// ==========================================
 
-export function hideProfilePopup() {
-    const profilePopup = document.getElementById('profile-popup');
-    const popupOverlay = document.getElementById('popup-overlay');
-    popupOverlay?.classList.add('hidden');
-    profilePopup?.classList.remove('visible');
-}
-
-// === СПОВІЩЕННЯ ===
-export function displayNotifications(notifications, userType) {
-    const listContainer = document.getElementById('notification-list');
-    const placeholder = listContainer.querySelector('.list-placeholder');
-
-    listContainer.innerHTML = '';
-    listContainer.appendChild(placeholder);
-
-    if (notifications.length === 0) {
-        placeholder.style.display = 'block';
-    } else {
-        placeholder.style.display = 'none';
-        notifications.slice().reverse().forEach(notif => {
-            const li = document.createElement('li');
-            li.className = 'notification-card';
-            if (notif.isRead) li.classList.add('is-read');
-
-            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-bell';
-            
-            li.dataset.notificationId = notif.id;
-            if (notif.offerId) {
-                li.dataset.offerId = notif.offerId;
-            }
-            if (notif.type === 'new_order' && userType === 'driver') {
-                li.style.cursor = 'pointer';
-            }
-
-            li.innerHTML = `
-                <i class="notification-icon ${iconClass}"></i>
-                <p class="notification-text">${notif.text}</p>
-            `;
-            listContainer.appendChild(li);
-        });
-    }
-}
-
-// === ГРАФІК РОБОТИ (SCHEDULE) ===
 export function renderScheduleEditor() {
     const container = document.getElementById('schedule-days-list');
     if (!container) return;
     
-    // Беремо поточного юзера зі STATE
     const driver = state.currentUser;
     if (!driver) return; 
 
@@ -539,7 +533,6 @@ export function renderScheduleEditor() {
 }
 
 export function displayDriverSchedule(driverId) {
-    // Шукаємо у STATE
     const driver = state.drivers_database.find(d => d.id == driverId) || 
                   (state.currentUser && state.currentUser.id == driverId ? state.currentUser : null);
     
@@ -570,7 +563,10 @@ export function displayDriverSchedule(driverId) {
     });
 }
 
-// === ЗАПЛАНОВАНІ МАРШРУТИ ===
+// ==========================================
+// 6. ЗАПЛАНОВАНІ МАРШРУТИ
+// ==========================================
+
 export function renderPlannedRoutesEditor() {
     const container = document.getElementById('planned-routes-list');
     if (!container) return;
@@ -615,11 +611,11 @@ export function renderPlannedRoutesEditor() {
                 const index = driver.plannedRoutes.findIndex(r => r.id === route.id);
                 if (index > -1) {
                     driver.plannedRoutes.splice(index, 1);
-                    // ТУТ ВАЖЛИВО: Оновлюємо базу через імпортовані функції
+                    // Оновлення бази
                     const routeRef = ref(db, 'users/' + driver.id + '/plannedRoutes');
                     set(routeRef, driver.plannedRoutes);
                     
-                    renderPlannedRoutesEditor(); // Рекурсивно перемальовуємо
+                    renderPlannedRoutesEditor(); 
                 }
             }
         });
@@ -692,4 +688,45 @@ export function renderWeekdaySelector() {
         
         container.appendChild(btn);
     });
+}
+
+// ==========================================
+// 7. СПОВІЩЕННЯ
+// ==========================================
+
+export function displayNotifications(notifications, userType) {
+    const listContainer = document.getElementById('notification-list');
+    if(!listContainer) return;
+    
+    const placeholder = listContainer.querySelector('.list-placeholder');
+
+    listContainer.innerHTML = '';
+    if(placeholder) listContainer.appendChild(placeholder);
+
+    if (!notifications || notifications.length === 0) {
+        if(placeholder) placeholder.style.display = 'block';
+    } else {
+        if(placeholder) placeholder.style.display = 'none';
+        notifications.slice().reverse().forEach(notif => {
+            const li = document.createElement('li');
+            li.className = 'notification-card';
+            if (notif.isRead) li.classList.add('is-read');
+
+            const iconClass = notif.type === 'new_order' ? 'fa-solid fa-file-circle-plus' : 'fa-solid fa-bell';
+            
+            li.dataset.notificationId = notif.id;
+            if (notif.offerId) {
+                li.dataset.offerId = notif.offerId;
+            }
+            if (notif.type === 'new_order' && userType === 'driver') {
+                li.style.cursor = 'pointer';
+            }
+
+            li.innerHTML = `
+                <i class="notification-icon ${iconClass}"></i>
+                <p class="notification-text">${notif.text}</p>
+            `;
+            listContainer.appendChild(li);
+        });
+    }
 }
