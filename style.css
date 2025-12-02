@@ -293,15 +293,24 @@ footer {
     border-radius: 10px;
     font-size: 12px;
     font-weight: var(--font-weight-medium);
-    display: flex;
+    
+    /* ЗМІНА: За замовчуванням бейдж схований */
+    display: none;
+    
     justify-content: center;
     align-items: center;
     padding: 0 6px;
 }
 
+/* ЗМІНА: Показуємо бейдж (Flex), тільки коли у нього НЕМАЄ класу hidden */
+.badge:not(.hidden) {
+    display: flex;
+}
+
 .badge.online {
     background-color: var(--md-success);
 }
+
 
 
 /* --- Status Dots --- */
