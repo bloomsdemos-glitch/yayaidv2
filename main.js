@@ -76,12 +76,33 @@ Object.keys(menuButtons).forEach(btnId => {
     }
 });
 
-// Кнопки профілю в таб-барі
-const profileTabs = document.querySelectorAll('.tab-item[data-target*="profile"]');
-profileTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        const target = tab.dataset.target; // driver-profile-screen або passenger-profile-screen
-        navigateTo(target);
-        // Тут потім додамо оновлення даних профілю
+// =========================================================
+// ЛОГІКА ТАБ-БАРУ (НИЖНЄ МЕНЮ)
+// =========================================================
+const allTabButtons = document.querySelectorAll('.tab-item');
+
+allTabButtons.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        // 1. Забираємо активний клас у всіх кнопок
+        allTabButtons.forEach(t => t.classList.remove('active'));
+        
+        // 2. Робимо активною натиснуту кнопку (через currentTarget, щоб зловити клік по іконці теж)
+        const clickedTab = e.currentTarget;
+        clickedTab.classList.add('active');
+
+        // 3. Дивимось, куди вона має вести
+        const targetScreenId = clickedTab.dataset.target;
+        
+        if (targetScreenId) {
+            console.log(`🔘 Tab Clicked: Go to ${targetScreenId}`);
+            navigateTo(targetScreenId);
+        } else {
+            console.warn("⚠️ Кнопка меню не має data-target!");
+            // Тимчасовий фікс для центральної кнопки водія (якщо вона без target)
+            if (clickedTab.id === 'driver-fab-btn') {
+                console.log("Fab button clicked");
+                // Тут можна викликати логіку створення поїздки
+            }
+        }
     });
 });
