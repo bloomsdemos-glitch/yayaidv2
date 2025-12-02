@@ -3,10 +3,20 @@ function displayDriverOrders() {
     if (!orderList) return;
     orderList.innerHTML = '';
 
+    // Якщо список порожній - показуємо заглушку (треба перевірити, чи є вона в HTML, але тут це не завадить)
+    if (orders_database.length === 0) {
+        orderList.innerHTML = '<p class="list-placeholder">Замовлень поки немає.</p>';
+        return;
+    }
+
     orders_database.forEach(order => {
+        // Пропускаємо замовлення, які вже взяті кимось іншим (якщо ми раптом не відфільтрували їх раніше)
+        if (order.status !== 'searching') return;
+
         const cardElement = UI.createDriverOrderCard(order);
 
-                if (order.paymentMethod === 'card' && !driverAcceptsOnlinePayment) {
+        // Перевірка на тип оплати (використовуємо правильну змінну)
+        if (order.paymentMethod === 'card' && !driverAcceptsOnlinePayment) {
             cardElement.classList.add('disabled-for-driver');
         } else {
             cardElement.addEventListener('click', () => {
@@ -16,22 +26,34 @@ function displayDriverOrders() {
                 const declineOrderBtn = document.getElementById('decline-order-btn');
 
                 if(acceptOrderBtn) acceptOrderBtn.onclick = () => {
+                    // Створюємо РЕАЛЬНУ поїздку
                     const newTaxiTrip = {
                         id: Date.now(),
-                        driverId: 1, 
-                        passengerId: 1, 
-                        passengerName: 'Олена',
-                        from: document.getElementById('details-from-address').textContent,
-                        to: document.getElementById('details-to-address').textContent,
+                        driverId: currentUser.id, // ID поточного водія
+                        passengerId: order.passengerId, // ID пасажира із замовлення
+                        passengerName: order.passengerName, // Ім'я пасажира із замовлення
+                        from: order.from,
+                        to: order.to,
                         time: 'Зараз',
+                        status: 'in_progress', // Змінюємо статус на активний
                         type: 'taxi'
                     };
+                    
+                    // Додаємо в активні
                     active_trips.push(newTaxiTrip);
+                    
+                    // Видаляємо це замовлення зі списку доступних (або змінюємо статус)
+                    const orderIndex = orders_database.indexOf(order);
+                    if (orderIndex > -1) orders_database.splice(orderIndex, 1);
+
                     saveState();
+                    
+                    // Оновлюємо вигляд
                     updateAllDriverTripViews();
-                    updateHomeScreenView('passenger');
+                    updateHomeScreenView('passenger'); // Це оновить екран пасажиру (через Firebase listener)
+                    
                     navigateTo('driver-orders-screen');
-                    alert('Замовлення прийнято!');
+                    alert('Замовлення прийнято! Рушайте до пасажира.');
                 };
 
                 if(declineOrderBtn) declineOrderBtn.onclick = () => {
@@ -47,6 +69,7 @@ function displayDriverOrders() {
 }
 
 function displayArchives() {
+    // --- АРХІВ ПАСАЖИРА ---
     const passengerArchiveList = document.querySelector('#passenger-orders-screen .order-list.passenger');
     if (passengerArchiveList) {
         passengerArchiveList.innerHTML = '';
@@ -55,11 +78,13 @@ function displayArchives() {
             li.innerHTML = `<p class="list-placeholder" style="font-style: italic; text-align: center; color: var(--md-on-surface-variant);">Архів поїздок порожній.</p>`;
             passengerArchiveList.appendChild(li);
         } else {
-            passenger_archive.forEach(order => {
-                const driver = drivers_database.find(d => d.id === (order.driverId || 1));
-                const driverName = driver ? driver.name : 'Водій';
+            passenger_archive.slice().reverse().forEach(order => { // reverse щоб нові були зверху
+                // Шукаємо водія за ID
+                const driver = drivers_database.find(d => d.id == order.driverId);
+                const driverName = driver ? driver.name : 'Невідомий водій';
                 const driverCar = driver ? driver.car : '';
-                const driverRating = driver ? driver.rating.toFixed(1) : 'N/A';
+                const driverRating = driver ? (driver.rating || 5.0).toFixed(1) : 'N/A';
+                
                 const li = document.createElement('li');
                 li.className = 'order-card archived';
                 li.style.cursor = 'pointer';
@@ -78,7 +103,7 @@ function displayArchives() {
                     document.getElementById('archived-details-date').textContent = new Date(order.id).toLocaleString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     document.getElementById('archived-details-from').textContent = order.from;
                     document.getElementById('archived-details-to').textContent = order.to;
-                    document.getElementById('archived-details-price').textContent = `~ ${order.price || 125} грн`;
+                    document.getElementById('archived-details-price').textContent = `~ ${order.price || '---'} грн`; // Ціна поки динамічна
                     document.getElementById('archived-details-payment').textContent = order.paymentMethod === 'card' ? 'Картка' : 'Готівка';
                     document.getElementById('archived-details-driver-name').textContent = driverName;
                     document.getElementById('archived-details-driver-car').textContent = driverCar;
@@ -90,6 +115,7 @@ function displayArchives() {
         }
     }
 
+    // --- АРХІВ ВОДІЯ ---
     const driverArchiveList = document.querySelector('#driver-orders-screen .order-list.driver');
     if (driverArchiveList) {
         driverArchiveList.innerHTML = '';
@@ -98,10 +124,11 @@ function displayArchives() {
             li.innerHTML = `<p class="list-placeholder" style="font-style: italic; text-align: center; color: var(--md-on-surface-variant);">Архів поїздок порожній.</p>`;
             driverArchiveList.appendChild(li);
         } else {
-            driver_archive.forEach(order => {
-                const passenger = passengers_database.find(p => p.id === (order.passengerId || 1));
-                const passengerName = passenger ? passenger.name : 'Пасажир';
-                const passengerRating = passenger ? '4.8 <i class="fa-solid fa-star"></i>' : 'N/A';
+            driver_archive.slice().reverse().forEach(order => {
+                const passenger = passengers_database.find(p => p.id == order.passengerId);
+                const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
+                const passengerRating = passenger ? `${(passenger.rating || 5.0).toFixed(1)} <i class="fa-solid fa-star"></i>` : 'N/A';
+                
                 const li = document.createElement('li');
                 li.className = 'order-card archived';
                 li.style.cursor = 'pointer';
@@ -133,7 +160,15 @@ function displayAvailableDrivers() {
     const driverListContainer = document.querySelector('#passenger-find-driver-screen .driver-list');
     if (!driverListContainer) return;
     driverListContainer.innerHTML = '';
+    
+    // Перевіряємо, чи є взагалі водії
+    if (drivers_database.length === 0) {
+        driverListContainer.innerHTML = '<p class="list-placeholder">Немає доступних водіїв.</p>';
+        return;
+    }
+
     drivers_database.forEach(driver => {
+        // Можна додати фільтр: показувати тільки тих, хто "online" (якщо ми це реалізуємо в базі)
         const li = document.createElement('li');
         li.className = 'driver-card online';
 
@@ -141,15 +176,14 @@ function displayAvailableDrivers() {
             <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
             <div class="driver-info">
                 <h4>${driver.name}</h4>
-                <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i></span>
+                <span>${(driver.rating || 0).toFixed(1)} <i class="fa-solid fa-star"></i></span>
                 <small class="status-available">Доступний</small>
             </div>
             <div class="status-dot online"></div>
         `;
         li.addEventListener('click', () => {
             UI.displayDriverProfile(driver.id);
-            // ДОДАНО: Перехід на екран профілю
-            navigateTo('passenger-full-profile-screen');
+            navigateTo('passenger-full-profile-screen'); // Тут ми використовуємо універсальний екран профілю
         });
         driverListContainer.appendChild(li);
     });
@@ -176,17 +210,21 @@ function displayVhOffers(filter = 'all') {
     } else {
         placeholder.style.display = 'none';
         filteredOffers.forEach(offer => {
-            const driver = drivers_database.find(d => d.id === offer.driverId);
+            // Використовуємо == для безпеки (string vs number)
+            const driver = drivers_database.find(d => d.id == offer.driverId);
             if (!driver) return;
 
             const li = document.createElement('li');
             li.className = 'driver-card online';
 
+            // Безпечна перевірка рейтингу
+            const rating = driver.rating ? driver.rating.toFixed(1) : '0.0';
+
             li.innerHTML = `
                 <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
                 <div class="driver-info">
                     <h4>${driver.name}</h4>
-                    <span>${driver.rating.toFixed(1)} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
+                    <span>${rating} <i class="fa-solid fa-star"></i> • ${offer.direction}</span>
                     <small class="status-available">${offer.time} • <i class="fa-solid fa-user-group"></i> ${offer.seats} вільних</small>
                 </div>
                 <button class="btn-main-action accept select-offer-btn" style="padding: 10px 16px; font-size: 14px;">Обрати</button>
@@ -217,7 +255,8 @@ function displayVhRequests() {
         placeholder.style.display = 'none';
 
         vh_requests_database.forEach(request => {
-            const passenger = passengers_database.find(p => p.id === request.passengerId);
+            // Використовуємо == для безпеки
+            const passenger = passengers_database.find(p => p.id == request.passengerId);
             const passengerName = passenger ? passenger.name : 'Невідомий пасажир';
 
             const li = document.createElement('li');
