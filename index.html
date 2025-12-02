@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="uk">
-    
 <head>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>яЇду: Валки</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=assistant_navigation" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
 </head>
 <body class="light-theme">
 
     <div id="app-container">
 
-             <div id="home-screen" class="screen active">
+        <div id="home-screen" class="screen active">
             <div class="route-container">
                 <i class="fa-solid fa-circle-dot pin" id="pin1"></i>
                 <i class="fa-solid fa-location-dot pin" id="pin2"></i>
@@ -59,8 +55,7 @@
             </footer>
         </div>
 
-    
-                <div id="login-screen-driver" class="screen hidden">
+        <div id="login-screen-driver" class="screen hidden">
             <header>
                 <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2>Вхід для водія</h2>
@@ -86,179 +81,149 @@
             </main>
         </div>
 
-        
-        <!-- HOME SCREEN Водія-->
-<div id="driver-home-screen" class="screen hidden">
-    <header>
-        <div class="profile-badge">
-            <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
-            <h3>Сергій</h3>
-        </div>
-        <div id="driver-status-indicator-home" class="driver-status online">
-            <span class="status-dot"></span>
-            <span class="status-text">Онлайн</span>
-        </div>
-        
-            <button id="driver-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
-            <span id="driver-notification-badge-home" class="badge hidden"></span>
-        </div>
-        
-    </header>
-    <main id="driver-home-content">
-    <div id="driver-home-active-trip-container" style="display: none; padding: 0;">
+        <div id="driver-home-screen" class="screen hidden">
+            <header>
+                <div class="profile-badge">
+                    <div class="avatar-convex"><i class="fa-solid fa-car"></i></div>
+                    <h3>Водій</h3> </div>
+                <div id="driver-status-indicator-home" class="driver-status offline"> <span class="status-dot"></span>
+                    <span class="status-text">Офлайн</span>
+                </div>
+                <div class="header-icon-wrapper">
+                    <button id="driver-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+                    <span id="driver-notification-badge-home" class="badge hidden"></span>
+                </div>
+            </header>
+            <main id="driver-home-content">
+                <div id="driver-home-active-trip-container" style="display: none; padding: 0;"></div>
+
+                <div id="driver-home-menu-container">
+                    <nav class="main-menu">
+                        <button class="menu-item" id="show-driver-orders-btn">
+                            <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
+                            <span class="badge"></span>
+                        </button>
+                        <button class="menu-item" id="show-find-passengers-btn">
+                            <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
+                            <span class="badge"></span>
+                        </button>
+                        <button class="menu-item" id="show-driver-valky-kharkiv-btn">
+                            <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                        </button>
+                    </nav>
+                </div>
+            </main>
         </div>
 
-    <div id="driver-home-menu-container">
-        <nav class="main-menu">
-            <button class="menu-item" id="show-driver-orders-btn">
-                <span><i class="fa-solid fa-list-check"></i> Мої замовлення</span>
-                <span class="badge">3</span>
-            </button>
-            <button class="menu-item" id="show-find-passengers-btn">
-                <span><i class="fa-solid fa-users-line"></i> Шукають водія</span>
-                <span class="badge">8</span>
-            </button>
-            <button class="menu-item" id="show-driver-valky-kharkiv-btn">
-                <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
-            </button>
-        </nav>
-    </div>
-</main>
-
-</div>
-
-<div id="driver-create-choice-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Що бажаєте зробити?</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="main-menu" style="justify-content: center; gap: 24px;">
-    <button class="menu-item" id="choice-find-passengers">
-        <div class="menu-item-content">
-            <span><i class="fa-solid fa-users-line fa-fw"></i> Знайти пасажирів зараз</span>
-            <small>Переглянути список активних замовлень</small>
+        <div id="driver-create-choice-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Що бажаєте зробити?</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="main-menu" style="justify-content: center; gap: 24px;">
+                <button class="menu-item" id="choice-find-passengers">
+                    <div class="menu-item-content">
+                        <span><i class="fa-solid fa-users-line fa-fw"></i> Знайти пасажирів зараз</span>
+                        <small>Переглянути список активних замовлень</small>
+                    </div>
+                </button>
+                <button class="menu-item" id="choice-create-trip">
+                    <div class="menu-item-content">
+                        <span><i class="fa-solid fa-calendar-plus fa-fw"></i> Запланувати поїздку</span>
+                        <small>Для поїздок Валки-Харків або за власним маршрутом</small>
+                    </div>
+                </button>
+            </main>
         </div>
-    </button>
-    <button class="menu-item" id="choice-create-trip">
-        <div class="menu-item-content">
-            <span><i class="fa-solid fa-calendar-plus fa-fw"></i> Запланувати поїздку</span>
-            <small>Для поїздок Валки-Харків або за власним маршрутом</small>
+
+        <div id="driver-create-trip-choice-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-create-choice-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Оберіть тип поїздки</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="main-menu" style="justify-content: center; gap: 24px;">
+                <button class="menu-item" id="choice-valky-kharkiv">
+                    <div class="menu-item-content">
+                        <span><i class="fa-solid fa-route fa-fw"></i> Валки-Харків</span>
+                        <small>Створити стандартну поїздку між містами</small>
+                    </div>
+                </button>
+                <button class="menu-item" id="choice-custom-route">
+                    <div class="menu-item-content">
+                        <span><i class="fa-solid fa-map-signs fa-fw"></i> Власний маршрут</span>
+                        <small>Створити поїздку за будь-яким напрямком</small>
+                    </div>
+                </button>
+            </main>
         </div>
-    </button>
-</main>
 
-</div>
-
-<div id="driver-create-trip-choice-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-create-choice-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Оберіть тип поїздки</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="main-menu" style="justify-content: center; gap: 24px;">
-        <button class="menu-item" id="choice-valky-kharkiv">
-            <div class="menu-item-content">
-                <span><i class="fa-solid fa-route fa-fw"></i> Валки-Харків</span>
-                <small>Створити стандартну поїздку між містами</small>
-            </div>
-        </button>
-        <button class="menu-item" id="choice-custom-route">
-            <div class="menu-item-content">
-                <span><i class="fa-solid fa-map-signs fa-fw"></i> Власний маршрут</span>
-                <small>Створити поїздку за будь-яким напрямком</small>
-            </div>
-        </button>
-    </main>
-</div>
-
-         
-        <!-- HOME SCREEN Пасажира-->
         <div id="passenger-home-screen" class="screen hidden">
-    <header>
-        <div class="profile-badge">
-            <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-            <h3>Віта</h3>
-        </div>
-        <div id="passenger-status-indicator" class="driver-status online" style="display: none;"> <span class="status-dot"></span>
-            <span class="status-text">Онлайн</span>
-        </div>
-        <button id="dev-switch-to-driver" class="btn-icon" title="Перемкнутись на водія"><i class="fa-solid fa-retweet"></i></button>
-        <div class="header-icon-wrapper">
-            <button id="passenger-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
-            <span id="passenger-notification-badge-home" class="badge hidden"></span>
-        </div>
-    </header>
-    <main id="passenger-home-content">
-    <div id="passenger-home-active-trip-container" style="display: none; padding: 0;">
-        </div>
-
-    <div id="passenger-home-menu-container">
-        <nav class="main-menu">
-            <button class="menu-item" id="show-my-orders-btn">
-                <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
-                <span class="badge">1</span>
-            </button>
-            <button class="menu-item" id="show-quick-order-btn">
-                <span><i class="fa-solid fa-bolt"></i> Швидке замовлення</span>
-            </button>
-            <button class="menu-item" id="find-driver-btn">
-                <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
-                <span class="badge online">5</span>
-            </button>
-            <button class="menu-item" id="show-passenger-valky-kharkiv-btn">
-                <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
-            </button>
-            <button class="menu-item" id="show-passenger-bus-schedule-btn">
-                <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
-            </button>
-        </nav>
-    </div>
-</main>
-
-        
-</div>
-
-<div id="passenger-orders-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Мої поїздки</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-
-        <div id="searching-card" class="order-card-container">
-            <div class="order-card active-search">
-                <div class="card-header">
-                    <h3 class="order-title">Замовлення #4273</h3>
-                    <p class="order-timestamp">11.09.25 • 21:52</p>
+            <header>
+                <div class="profile-badge">
+                    <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
+                    <h3>Пасажир</h3> </div>
+                <div class="header-icon-wrapper">
+                    <button id="passenger-notifications-btn-home" class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+                    <span id="passenger-notification-badge-home" class="badge hidden"></span>
                 </div>
-                <div class="order-status-visual">
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-                    <p>Шукаємо водія. Очікуйте...</p>
+            </header>
+            <main id="passenger-home-content">
+                <div id="passenger-home-active-trip-container" style="display: none; padding: 0;"></div>
+
+                <div id="passenger-home-menu-container">
+                    <nav class="main-menu">
+                        <button class="menu-item" id="show-my-orders-btn">
+                            <span><i class="fa-solid fa-list-check"></i> Мої поїздки</span>
+                            <span class="badge"></span>
+                        </button>
+                        <button class="menu-item" id="show-quick-order-btn">
+                            <span><i class="fa-solid fa-bolt"></i> Швидке замовлення</span>
+                        </button>
+                        <button class="menu-item" id="find-driver-btn">
+                            <span><i class="fa-solid fa-magnifying-glass"></i> Знайти водія</span>
+                            <span class="badge online"></span>
+                        </button>
+                        <button class="menu-item" id="show-passenger-valky-kharkiv-btn">
+                            <span><i class="fa-solid fa-route"></i> Валки-Харків</span>
+                        </button>
+                        <button class="menu-item" id="show-passenger-bus-schedule-btn">
+                            <span><i class="fa-solid fa-bus"></i> Розклад автобусів</span>
+                        </button>
+                    </nav>
                 </div>
-                <div class="route-addresses">
-                    <div class="address-line">
-                        <i class="fa-solid fa-circle start-address-icon"></i>
-                        <span>вул. Зоряна, 31</span>
-                    </div>
-                    <div class="address-line">
-                        <i class="fa-solid fa-location-dot end-address-icon"></i>
-                        <span>Залізничний вокзал</span>
+            </main>
+        </div>
+
+        <div id="passenger-orders-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Мої поїздки</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <div id="searching-card" class="order-card-container" style="display: none;">
+                    <div class="order-card active-search">
+                        <div class="card-header">
+                            <h3 class="order-title">Шукаємо водія...</h3>
+                        </div>
+                        <div class="order-status-visual">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <p>Очікуйте, ваш запит обробляється.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div id="active-trip-card" class="order-card-container" style="display: none;">
+              <div id="active-trip-card" class="order-card-container" style="display: none;">
             <div class="order-card active-trip">
                 <div class="order-header">
-                    <h3 class="order-title">Активне замовлення #1247</h3>
-                    <p class="order-timestamp">11.09.25 • 21:55</p>
+                    <h3 class="order-title">Активне замовлення</h3>
+                    <p class="order-timestamp">...</p>
                 </div>
                 <div class="order-status-visual">
                     <i id="status-icon" class="fa-solid fa-spinner fa-spin"></i>
-                    <p id="status-text">Водій прямує до вас</p>
+                    <p id="status-text">Очікування оновлення...</p>
                 </div>
                 <div class="progress-tracker">
                     <i class="fa-solid fa-circle-dot progress-start-point"></i>
@@ -269,8 +234,8 @@
                     <i id="progress-end-point" class="fa-solid fa-location-pin progress-end-point"></i>
                 </div>
                 <div class="driver-info">
-                    <span><strong>Водій:</strong> Дмитро</span>
-                    <span><i class="fa-solid fa-car"></i> Skoda Octavia, сірий</span>
+                    <span id="active-card-driver"><strong>Водій:</strong> ...</span>
+                    <span id="active-card-car"><i class="fa-solid fa-car"></i> ...</span>
                 </div>
                 <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
             </div>
@@ -280,8 +245,7 @@
             <i class="fa-solid fa-box-archive"></i>
             <span>Архів поїздок</span>
         </div>
-        <ul class="order-list passenger">
-           </ul>
+        <ul class="order-list passenger"></ul>
         
     </main>
 </div>
@@ -294,32 +258,33 @@
             </header>
             <main class="main-content-wrapper">
                 <div class="top-content">
-                    <div class="map-placeholder"><p>Тут буде карта з трекером водія</p></div>
+                    <div class="map-placeholder"><p>Тут буде карта</p></div>
+                    
                     <div class="eta-block glass-card">
                         <i class="fa-solid fa-clock eta-icon"></i>
-                        <span>Прибуде приблизно через 4 хвилини. Очікуйте.</span>
+                        <span id="trip-eta-text">Розрахунок часу прибуття...</span>
                     </div>
+                    
                     <div class="details-card">
                         <div class="driver-card-full">
                             <div class="avatar-convex"><i class="fa-solid fa-steering-wheel"></i></div>
                             <div class="driver-info">
-                                <h4>Андрій</h4>
-                                <span>Skoda Octavia, сірий</span>
+                                <h4 id="details-driver-name">Водій</h4>
+                                <span id="details-driver-car">Автомобіль</span>
                             </div>
-                            <div class="driver-rating">5.0 <i class="fa-solid fa-star"></i></div>
+                            <div id="details-driver-rating" class="driver-rating"></div>
                         </div>
                         <div class="trip-summary">
                             <div class="summary-item">
                                 <i class="fa-solid fa-road"></i>
-                                <span>~ 5.1 км</span>
-                            </div>
+                                <span>~ км</span> </div>
                             <div class="summary-item">
                                 <i class="fa-solid fa-hryvnia-sign"></i>
-                                <span>~ 117 грн</span>
+                                <span id="details-trip-price">...</span>
                             </div>
                             <div class="summary-item">
                                 <i class="fa-solid fa-money-bill-wave"></i>
-                                <span>Картка</span>
+                                <span id="details-trip-payment">...</span>
                             </div>
                         </div>
                     </div>
@@ -333,89 +298,89 @@
                         <span>Я вже чекаю</span>
                     </button>
                     <div class="waiting-note">
-                        <small>Натискайте цю кнопку лише у крайніх випадках — наприклад, коли водій запізнюється більше, ніж на 5 хвилин.</small>
+                        <small>Натискайте цю кнопку лише коли водій вже на місці.</small>
                     </div>
                 </div>
             </main>
         </div>
+
         <div id="archived-trip-details-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Деталі поїздки</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <div class="details-card">
-            <div class="trip-summary" style="padding-bottom: 16px; border-bottom: 1px solid var(--md-outline);">
-                <div class="summary-item">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <span id="archived-details-date">Дата</span>
+            <header>
+                <button class="btn-back" data-target="passenger-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Деталі поїздки</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <div class="details-card">
+                    <div class="trip-summary" style="padding-bottom: 16px; border-bottom: 1px solid var(--md-outline);">
+                        <div class="summary-item">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span id="archived-details-date">Дата</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fa-solid fa-hryvnia-sign"></i>
+                            <span id="archived-details-price">...</span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                            <span id="archived-details-payment">...</span>
+                        </div>
+                    </div>
+                    <div class="order-route-info" style="margin-top: 16px; padding: 0;">
+                        <div class="address-line">
+                            <i class="fa-solid fa-circle start-address-icon"></i>
+                            <span id="archived-details-from">Звідки</span>
+                        </div>
+                        <div class="address-line">
+                            <i class="fa-solid fa-location-dot end-address-icon"></i>
+                            <span id="archived-details-to">Куди</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="summary-item">
-                    <i class="fa-solid fa-hryvnia-sign"></i>
-                    <span id="archived-details-price">~ 117 грн</span>
+                <div class="details-card" style="margin-top: 16px;">
+                     <div class="driver-card-full">
+                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="driver-info">
+                            <h4 id="archived-details-driver-name">Водій</h4>
+                            <span id="archived-details-driver-car">Автомобіль</span>
+                        </div>
+                        <div id="archived-details-driver-rating" class="driver-rating"></div>
+                    </div>
                 </div>
-                <div class="summary-item">
-                    <i class="fa-solid fa-money-bill-wave"></i>
-                    <span id="archived-details-payment">Картка</span>
-                </div>
-            </div>
-            <div class="order-route-info" style="margin-top: 16px; padding: 0;">
-                <div class="address-line">
-                    <i class="fa-solid fa-circle start-address-icon"></i>
-                    <span id="archived-details-from">Звідки</span>
-                </div>
-                <div class="address-line">
-                    <i class="fa-solid fa-location-dot end-address-icon"></i>
-                    <span id="archived-details-to">Куди</span>
-                </div>
-            </div>
+            </main>
         </div>
-        <div class="details-card" style="margin-top: 16px;">
-             <div class="driver-card-full">
-                <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
-                <div class="driver-info">
-                    <h4 id="archived-details-driver-name">Водій</h4>
-                    <span id="archived-details-driver-car">Автомобіль</span>
+
+        <div id="driver-archived-trip-details-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Деталі поїздки</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <div class="details-card">
+                     <div class="passenger-info">
+                        <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong id="driver-archived-passenger-name">Пасажир</strong>
+                            <span id="driver-archived-passenger-rating">...</span>
+                        </div>
+                    </div>
                 </div>
-                <div id="archived-details-driver-rating" class="driver-rating">5.0 <i class="fa-solid fa-star"></i></div>
-            </div>
+                <div class="details-card" style="margin-top: 16px;">
+                    <div class="order-route-info" style="padding: 0;">
+                        <div class="address-line">
+                            <i class="fa-solid fa-circle start-address-icon"></i>
+                            <span id="driver-archived-from">Звідки</span>
+                        </div>
+                        <div class="address-line">
+                            <i class="fa-solid fa-location-dot end-address-icon"></i>
+                            <span id="driver-archived-to">Куди</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
-    </main>
-</div>
 
-    <div id="driver-archived-trip-details-screen" class="screen hidden">
-        <header>
-            <button class="btn-back" data-target="driver-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2>Деталі поїздки</h2>
-            <div class="header-placeholder"></div>
-        </header>
-        <main>
-            <div class="details-card">
-                 <div class="passenger-info">
-                    <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-                    <div class="passenger-details">
-                        <strong id="driver-archived-passenger-name">Ім'я пасажира</strong>
-                        <span id="driver-archived-passenger-rating">Рейтинг</span>
-                    </div>
-                </div>
-            </div>
-            <div class="details-card" style="margin-top: 16px;">
-                <div class="order-route-info" style="padding: 0;">
-                    <div class="address-line">
-                        <i class="fa-solid fa-circle start-address-icon"></i>
-                        <span id="driver-archived-from">Звідки</span>
-                    </div>
-                    <div class="address-line">
-                        <i class="fa-solid fa-location-dot end-address-icon"></i>
-                        <span id="driver-archived-to">Куди</span>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-        
         <div id="passenger-find-driver-screen" class="screen hidden">
             <header>
                 <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
@@ -425,407 +390,12 @@
             <main>
                 <p class="list-header-note">Оберіть водія</p>
                 <ul class="driver-list">
-                    <li class="driver-card online">
-                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
-                        <div class="driver-info">
-                            <h4>Максим Шевченко</h4>
-                            <span>4.9 <i class="fa-solid fa-star"></i></span>
-                            <small class="status-available">Доступний</small>
-                        </div>
-                        <div class="status-dot online"></div>
-                    </li>
-                    <li class="driver-card online">
-                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
-                        <div class="driver-info">
-                            <h4>Олена Петренко</h4>
-                            <span>5.0 <i class="fa-solid fa-star"></i></span>
-                            <small class="status-available">Доступний</small>
-                        </div>
-                        <div class="status-dot online"></div>
-                    </li>
-                    <li class="driver-card busy">
-                        <div class="avatar-convex"><i class="fa-solid fa-user-tie"></i></div>
-                        <div class="driver-info">
-                            <h4>Ігор Коваленко</h4>
-                            <span>4.7 <i class="fa-solid fa-star"></i></span>
-                            <small>буде вільним через 5 хв.</small>
-                        </div>
-                        <div class="status-dot busy"></div>
-                    </li>
+                    <p class="list-placeholder">Завантаження...</p>
                 </ul>
             </main>
         </div>
-<div id="passenger-rating-trip-screen" class="screen hidden">
-    <header>
-        <div class="header-placeholder"></div>
-        <h2>Оцініть поїздку</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="content-center">
-        <div class="rating-card">
-            <p class="rating-prompt">Ваша поїздка з водієм <strong>Дмитром</strong> завершена.</p>
-            <div class="driver-avatar-large">
-                <i class="fa-solid fa-user-tie"></i>
-            </div>
-            <p class="rating-prompt">Наскільки ви задоволені?</p>
-            <div class="rating-stars">
-                <i class="fa-regular fa-star" data-value="1"></i>
-                <i class="fa-regular fa-star" data-value="2"></i>
-                <i class="fa-regular fa-star" data-value="3"></i>
-                <i class="fa-regular fa-star" data-value="4"></i>
-                <i class="fa-regular fa-star" data-value="5"></i>
-            </div>
-            <textarea id="trip-comment" class="form-input" rows="3" placeholder="Залиште відгук (необов'язково)"></textarea>
-            <button id="submit-rating-btn" class="btn-main-action disabled">Відправити оцінку</button>
-        </div>
-    </main>
-</div>
 
-     <div id="driver-find-passengers-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Шукають водія</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <ul id="driver-order-list" class="order-list driver">
-            <li class="order-card driver-view">
-                <div class="order-main-info">
-                    <div class="passenger-info">
-                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-                        <div class="passenger-details">
-                            <strong>Олена</strong>
-                            <span>4.9 <i class="fa-solid fa-star"></i></span>
-                        </div>
-                    </div>
-                    <div class="price-info">
-                        <span class="price-amount">~ 115 грн</span>
-                        <span class="price-label">Ваш дохід</span>
-                    </div>
-                </div>
-                <div class="order-route-info">
-                    <div class="address-line">
-                        <i class="fa-solid fa-circle start-address-icon"></i>
-                        <span>вул. Зоряна, 31</span>
-                    </div>
-                    <div class="address-line">
-                        <i class="fa-solid fa-location-dot end-address-icon"></i>
-                        <span>Залізничний вокзал</span>
-                    </div>
-                </div>
-                <div class="order-time-info">
-                    <i class="fa-solid fa-clock"></i>
-                    <span>Зараз</span>
-                </div>
-            </li>
-            </ul>
-    </main>
-</div>
-
-<div id="driver-order-details-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-find-passengers-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Деталі замовлення</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <div class="map-placeholder"><p>Тут буде карта маршруту</p></div>
-        
-        <div class="details-card driver">
-            <div class="passenger-info">
-                <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-                <div class="passenger-details">
-                    <strong id="details-passenger-name">Олена</strong>
-                    <span id="details-passenger-rating">4.9 <i class="fa-solid fa-star"></i> • 15 поїздок</span>
-                </div>
-            </div>
-            <div class="order-route-info">
-                <div class="address-line">
-                    <i class="fa-solid fa-circle start-address-icon"></i>
-                    <span id="details-from-address">вул. Зоряна, 31</span>
-                </div>
-                <div class="address-line">
-                    <i class="fa-solid fa-location-dot end-address-icon"></i>
-                    <span id="details-to-address">Залізничний вокзал</span>
-                </div>
-            </div>
-            <div id="details-comment-container" class="comment-block">
-                <strong>Коментар пасажира:</strong>
-                <p id="details-comment-text">Буду з дитиною 6 років.</p>
-            </div>
-            <div class="price-details-block">
-                <div class="price-item">
-                    <span>Вартість поїздки:</span>
-                    <strong id="details-total-price">135 грн</strong>
-                </div>
-                <div class="price-item">
-                    <span>Комісія сервісу (5%):</span>
-                    <span id="details-commission">- 7 грн</span>
-                </div>
-                <div class="price-item total">
-                    <span>Ваш дохід:</span>
-                    <strong id="details-driver-earning">~ 128 грн</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="order-actions">
-            <button id="decline-order-btn" class="btn-main-action decline">Відхилити</button>
-            <button id="accept-order-btn" class="btn-main-action accept">Прийняти замовлення</button>
-        </div>
-    </main>
-</div>
-<div id="driver-orders-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Мої замовлення</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <div id="driver-active-trip-card" class="order-card-container" style="display: none;">
-            <div class="order-card active-trip">
-                <div class="order-header">
-                    <h3 class="order-title">Активне замовлення</h3>
-                </div>
-                <div class="map-placeholder"><p>Тут буде карта маршруту до пасажира</p></div>
-                <div class="details-card driver" style="box-shadow: none; padding: 0;">
-                     <div class="passenger-info">
-                        <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-                        <div class="passenger-details">
-                            <strong id="driver-active-passenger-name">Олена</strong>
-                            <span id="driver-active-passenger-rating">4.9 <i class="fa-solid fa-star"></i></span>
-                        </div>
-                    </div>
-                    <div class="order-route-info" style="margin-top: 10px;">
-                        <div class="address-line">
-                            <i class="fa-solid fa-circle start-address-icon"></i>
-                            <span id="driver-active-from-address">вул. Зоряна, 31</span>
-                        </div>
-                        <div class="address-line">
-                            <i class="fa-solid fa-location-dot end-address-icon"></i>
-                            <span id="driver-active-to-address">Залізничний вокзал</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="order-actions" style="padding: 10px 0 0 0;">
-                     <button class="btn-main-action decline" style="flex: 1;">Скасувати</button>
-                     <button class="btn-main-action accept" style="flex: 1;">Відкрити</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="no-active-driver-orders" style="text-align: center; color: var(--md-on-surface-variant); padding: 20px;">
-            <p>У вас немає активних замовлень.</p>
-        </div>
-
-        <div class="archive-separator">
-            <i class="fa-solid fa-box-archive"></i>
-            <span>Архів поїздок</span>
-        </div>
-        <ul class="order-list driver">
-            <li class="order-card archived">
-                <div class="archived-info">
-                    <span class="archived-date">24.08.2025</span>
-                    <div class="route">
-                        <span><i class="fa-solid fa-circle"></i> с. Ков'яги</span>
-                        <span><i class="fa-solid fa-location-dot"></i> Центр</span>
-                    </div>
-                    <div class="driver-details">Пасажир: Максим</div>
-                </div>
-                <button class="details-btn-arrow"><i class="fa-solid fa-circle-chevron-right"></i></button>
-            </li>
-        </ul>
-    </main>
-</div>
-
-<div id="driver-active-trip-details-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-orders-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Активна поїздка</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main style="display: flex; flex-direction: column;">
-        <div class="map-placeholder" style="flex-shrink: 0;"><p>Тут буде карта з маршрутом</p></div>
-        
-        <div class="details-card driver" style="margin-top: 16px;">
-             <div class="passenger-info">
-                <div class="avatar-convex"><i class="fa-solid fa-user"></i></div>
-                <div class="passenger-details">
-                    <strong id="details-active-passenger-name">Олена</strong>
-                    <span id="details-active-passenger-rating">4.9 <i class="fa-solid fa-star"></i></span>
-                </div>
-            </div>
-            <div class="order-route-info" style="margin-top: 10px;">
-                <div class="address-line">
-                    <i class="fa-solid fa-circle start-address-icon"></i>
-                    <span id="details-active-from-address">вул. Зоряна, 31</span>
-                </div>
-                <div class="address-line">
-                    <i class="fa-solid fa-location-dot end-address-icon"></i>
-                    <span id="details-active-to-address">Залізничний вокзал</span>
-                </div>
-            </div>
-        </div>
-        
-        <div id="driver-trip-controls" class="button-group-vertical" style="margin-top: auto; padding-top: 20px;">
-            <button id="driver-arrived-btn" class="btn-main-action accept">Я на місці</button>
-            <button id="driver-start-trip-btn" class="btn-main-action disabled">Почати поїздку</button>
-            <button id="driver-finish-trip-btn" class="btn-main-action decline disabled">Завершити поїздку</button>
-        </div>
-    </main>
-</div>
-
-
-<div id="driver-valky-kharkiv-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Запити: Валки-Харків</h2>
-        <div class="header-placeholder"></div>
-    </header>
-      <main class="list-view-main">
-        <!-- КАРТКИ-ШАБЛОНИ ДЛЯ ВОДІЯ -->
-        <div class="template-cards-container">
-            <button class="template-card" data-driver-template="vk">
-                <div class="template-card-icon">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <div class="template-card-content">
-                    <h4>Валки → Харків</h4>
-                    <small>Швидка пропозиція поїздки</small>
-                </div>
-            </button>
-
-            <button class="template-card" data-driver-template="kv">
-                <div class="template-card-icon">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </div>
-                <div class="template-card-content">
-                    <h4>Харків → Валки</h4>
-                    <small>Швидка пропозиція поїздки</small>
-                </div>
-            </button>
-
-            <button class="template-card" data-driver-template="custom">
-                <div class="template-card-icon">
-                    <i class="fa-solid fa-route"></i>
-                </div>
-                <div class="template-card-content">
-                    <h4>Інші маршрути</h4>
-                    <small>Створити власну пропозицію</small>
-                </div>
-            </button>
-        </div>
-
-        <div class="list-header" style="margin-top: 8px;">
-            <h4><i class="fa-solid fa-user-clock"></i> Пасажири шукають водія</h4>
-        </div>
-        
-        <ul id="vh-passenger-request-list" class="order-list driver">
-            <p class="list-placeholder">Наразі немає активних запитів від пасажирів.</p>
-        </ul>
-    </main>
-</div>
-
-<div id="vh-driver-form-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-valky-kharkiv-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Створити пропозицію</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="main-form">
-        <div class="form-step">
-            <label class="section-label">Напрямок</label>
-            <div class="route-swap-container">
-                <div class="route-display-field" id="vh-driver-from-location">
-                    <i class="fa-solid fa-circle-dot"></i>
-                    <span>Валки</span>
-                </div>
-                <button id="vh-driver-swap-route-btn" class="btn-icon-action">
-                    <i class="fa-solid fa-right-left"></i>
-                </button>
-                <div class="route-display-field" id="vh-driver-to-location">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>Харків</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-step">
-            <label class="section-label">Місце (необов'язково)</label>
-            <div class="form-group">
-                <input type="text" id="vh-driver-form-from-specific" class="form-input" placeholder="Звідки конкретно? (напр. Біля музею)">
-            </div>
-        </div>
-        
-        <div class="form-group-checkbox">
-            <input type="checkbox" id="vh-driver-flexible-route">
-            <label for="vh-driver-flexible-route">Готовий заїхати за пасажиром</label>
-        </div>
-
-        <div class="form-step">
-            <label class="section-label">Коли?</label>
-            <div class="button-group-vertical">
-                <button class="btn-segment" data-time-choice="now">Зараз</button>
-                <button class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
-                <button class="btn-segment" data-time-choice="date">Обрати дату</button>
-            </div>
-            <input type="text" id="vh-driver-form-datetime-picker" class="form-input" style="display: none;">
-        </div>
-        
-        <div class="form-step">
-            <label class="section-label">Деталі поїздки</label>
-            <div class="form-group">
-                <div class="seat-counter">
-                    <button type="button" id="vh-driver-minus-btn" class="seat-counter-btn">-</button>
-                    <span id="vh-driver-seats-display" class="seat-counter-display">1</span>
-                    <button type="button" id="vh-driver-plus-btn" class="seat-counter-btn">+</button>
-                </div>
-            </div>
-        </div>
-
-        <button id="vh-driver-form-submit-btn" class="btn-main-action accept">Опублікувати пропозицію</button>
-    </main>
-</div>
-
-
-<div id="driver-create-custom-trip-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-create-trip-choice-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Створити власну поїздку</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="main-form">
-    <div class="form-step">
-    <label class="section-label">Маршрут</label>
-
-    <div class="address-block" style="padding: 12px 12px 0 12px; border: none; background: none;">
-        <div class="settlement-choice">
-            <button class="btn-settlement active" data-group="custom-from" data-type="manual">Ввести вручну</button>
-            <button class="btn-settlement" data-group="custom-from" data-type="village">Обрати зі списку</button>
-        </div>
-        <div id="custom-from-village-container" class="form-group" style="display: none; margin-top: 12px;">
-            <select id="custom-from-village-select" class="form-input">
-                <option selected disabled>Оберіть населений пункт...</option>
-                <option>Харків</option>
-                <option>Ков'яги</option>
-                <option>Шарівка</option>
-                <option>Костів</option>
-                <option>Ясеневе</option>
-                <option>Високопілля</option>
-                <option>Сидоренкове</option>
-                <option>Сніжків</option>
-                <option>Баранове</option>
-                <option>Чутово</option>
-                <option>Полтава</option>
-                <option>Нова Водолага</option>
-            </select>
-        </div>
-        <div id="custom-from-manual-container" class="form-group" style="margin-top: 12px;">
-            <input type="text" id="custom-trip-from" class="form-input" placeholder="Місто, село, вулиця...">
-        </div>
-    </div>
-
-    <div id="intermediate-stops-container"></div>
+                    <div id="intermediate-stops-container"></div>
 
     <div class="address-block" style="padding: 12px 12px 0 12px; border: none; background: none;">
         <div class="settlement-choice">
@@ -888,8 +458,6 @@
     </main>
 </div>
 
-
-
     <div id="driver-profile-screen" class="screen hidden">
         <header>
             <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
@@ -897,167 +465,76 @@
             <div class="header-placeholder"></div>
         </header>
         <main class="profile-main">
-    <div class="profile-content-wrapper">
-        <div class="details-card profile-header-card">
-            <div class="avatar-convex large"><i class="fa-solid fa-user-tie"></i></div>
-            <h3 id="profile-driver-name">Сергій М.</h3>
-            <div class="profile-rating-summary">
-                <span><i class="fa-solid fa-star"></i> <strong id="profile-driver-rating">4.9</strong></span>
-                <span><i class="fa-solid fa-route"></i> <strong id="profile-driver-trips">152</strong> поїздки</span>
-            </div>
-            <button id="show-full-driver-profile-btn" class="btn-main-action accept" style="width: 100%; margin-top: 16px;">Переглянути профіль</button>
-        </div>
-    </div>
-
-    <nav class="main-menu" style="margin-top: 16px;">
-        <button class="menu-item" id="show-driver-settings-btn-from-profile">
-            <span><i class="fa-solid fa-gear"></i> Налаштування</span>
-        </button>
-        <button class="menu-item" id="show-driver-help-btn-from-profile">
-            <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
-        </button>
-        <button class="menu-item" id="show-driver-support-btn-from-profile">
-            <span><i class="fa-solid fa-headset"></i> Підтримка</span>
-        </button>
-    </nav>
-</main>
-
-    </div>
-
-
-    <div id="driver-full-profile-screen" class="screen hidden">
-        <header>
-            <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button> <h2 id="profile-driver-name-header">Профіль водія</h2>
-            <div class="header-placeholder"></div>
-        </header>
-        <main class="profile-main">
             <div class="profile-content-wrapper">
                 <div class="details-card profile-header-card">
                     <div class="avatar-convex large"><i class="fa-solid fa-user-tie"></i></div>
-                    <h3 id="profile-driver-name-full">Сергій М.</h3> <div class="profile-rating-summary">
-                        <span id="profile-driver-rating-full">...</span> <span id="profile-driver-trips-full">...</span> </div>
-                </div>
-
-  <div class="details-section">
-                    <h4><i class="fa-solid fa-calendar-days"></i> Графік роботи</h4>
-                    <div id="profile-driver-schedule" class="schedule-container">
-                        <p class="no-schedule-placeholder">Графік не встановлено</p>
+                    <h3 id="profile-driver-name">...</h3>
+                    <div class="profile-rating-summary">
+                        <span><i class="fa-solid fa-star"></i> <strong id="profile-driver-rating">...</strong></span>
+                        <span><i class="fa-solid fa-route"></i> <strong id="profile-driver-trips">...</strong> поїздки</span>
                     </div>
+                    <button id="show-full-driver-profile-btn" class="btn-main-action accept" style="width: 100%; margin-top: 16px;">Переглянути профіль</button>
                 </div>
-
-                <div class="details-section">
-                    <h4><i class="fa-solid fa-map-location-dot"></i> Заплановані маршрути</h4>
-                    <div id="profile-driver-routes" class="planned-routes-container">
-                        <p class="no-routes-placeholder">Маршрутів поки немає</p>
-                    </div>
-                </div>
-                <div class="details-section">
-                    <h4><i class="fa-solid fa-car-side"></i> Автомобіль</h4>
-                    <div class="details-card">
-                        <p id="profile-driver-car">Skoda Octavia, сірий</p>
-                    </div>
-                </div>
-
-                <div class="details-section">
-                    <h4><i class="fa-solid fa-circle-info"></i> Про мене</h4>
-                    <div id="profile-driver-tags" class="tag-list">
-                        <span class="tag"><i class="fa-solid fa-music"></i> Радіо</span>
-                        <span class="tag"><i class="fa-solid fa-paw"></i> Можна з тваринами</span>
-                        <span class="tag"><i class="fa-solid fa-ban-smoking"></i> Не палю</span>
-                    </div>
-                </div>
-
-                <div class="details-section">
-                    <h4><i class="fa-solid fa-comments"></i> Відгуки (3)</h4>
-                    <div id="profile-driver-reviews" class="review-list">
-                        </div>
-                </div>
-                
             </div>
-            
-            <div class="profile-action-button">
-                 <button id="edit-driver-profile-btn" class="btn-main-action">Редагувати профіль</button>
-            </div>
+
+            <nav class="main-menu" style="margin-top: 16px;">
+                <button class="menu-item" id="show-driver-settings-btn-from-profile">
+                    <span><i class="fa-solid fa-gear"></i> Налаштування</span>
+                </button>
+                <button class="menu-item" id="show-driver-help-btn-from-profile">
+                    <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
+                </button>
+                <button class="menu-item" id="show-driver-support-btn-from-profile">
+                    <span><i class="fa-solid fa-headset"></i> Підтримка</span>
+                </button>
+            </nav>
         </main>
     </div>
 
 
-
-
-<div id="driver-settings-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Налаштування</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <nav class="main-menu">
-            <button class="menu-item" id="show-driver-settings-photo-btn">
-                <span><i class="fa-solid fa-camera-retro"></i> Змінити фото</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-bio-btn">
-                <span><i class="fa-solid fa-pen-to-square"></i> Опис профілю</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-tariff-btn">
-                <span><i class="fa-solid fa-hryvnia-sign"></i> Встановити тариф</span>
-            </button>
-             <button class="menu-item" id="show-driver-settings-schedule-btn">
-                <span><i class="fa-solid fa-calendar-days"></i> Налаштувати графік</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-routes-btn">
-                <span><i class="fa-solid fa-map-location-dot"></i> Заплановані маршрути</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-payment-btn">
-                <span><i class="fa-solid fa-credit-card"></i> Онлайн-платежі</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-phone-btn">
-                <span><i class="fa-solid fa-mobile-screen-button"></i> Змінити номер</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-status-btn"> <span><i class="fa-solid fa-retweet"></i> Змінити статус</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-privacy-btn"> <span><i class="fa-solid fa-user-shield"></i> Конфіденційність</span>
-            </button>
-            <button class="menu-item" id="show-driver-settings-delete-btn" style="color: var(--md-error);">
-                <span><i class="fa-solid fa-trash-can"></i> Видалити профіль</span>
-            </button>
-        </nav>
-    </main>
-</div>
-
-
-        </div>
-        <div id="driver-settings-photo-screen" class="screen hidden">
+            <div id="driver-settings-screen" class="screen hidden">
             <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Змінити фото</h2>
+                <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Налаштування</h2>
                 <div class="header-placeholder"></div>
             </header>
             <main>
-                <p>Тут буде функціонал для завантаження та зміни фото профілю.</p>
+                <nav class="main-menu">
+                    <button class="menu-item" id="show-driver-settings-photo-btn">
+                        <span><i class="fa-solid fa-camera-retro"></i> Змінити фото</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-bio-btn">
+                        <span><i class="fa-solid fa-pen-to-square"></i> Опис профілю</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-tariff-btn">
+                        <span><i class="fa-solid fa-hryvnia-sign"></i> Встановити тариф</span>
+                    </button>
+                     <button class="menu-item" id="show-driver-settings-schedule-btn">
+                        <span><i class="fa-solid fa-calendar-days"></i> Налаштувати графік</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-routes-btn">
+                        <span><i class="fa-solid fa-map-location-dot"></i> Заплановані маршрути</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-payment-btn">
+                        <span><i class="fa-solid fa-credit-card"></i> Онлайн-платежі</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-phone-btn">
+                        <span><i class="fa-solid fa-mobile-screen-button"></i> Змінити номер</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-status-btn"> <span><i class="fa-solid fa-retweet"></i> Змінити статус</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-privacy-btn"> <span><i class="fa-solid fa-user-shield"></i> Конфіденційність</span>
+                    </button>
+                    <button class="menu-item" id="show-driver-settings-delete-btn" style="color: var(--md-error);">
+                        <span><i class="fa-solid fa-trash-can"></i> Видалити профіль</span>
+                    </button>
+                </nav>
             </main>
         </div>
 
-        <div id="driver-settings-bio-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Опис профілю</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для редагування біографії водія.</p>
-            </main>
-        </div>
-
-        <div id="driver-settings-tariff-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Встановити тариф</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде калькулятор або форма для встановлення тарифу.</p>
-            </main>
-        </div>
+        <div id="driver-settings-photo-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити фото</h2><div class="header-placeholder"></div></header><main><p>Тут буде функціонал для завантаження та зміни фото профілю.</p></main></div>
+        <div id="driver-settings-bio-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Опис профілю</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для редагування біографії водія.</p></main></div>
+        <div id="driver-settings-tariff-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Встановити тариф</h2><div class="header-placeholder"></div></header><main><p>Тут буде калькулятор або форма для встановлення тарифу.</p></main></div>
         
         <div id="driver-settings-schedule-screen" class="screen hidden">
             <header>
@@ -1066,12 +543,8 @@
                 <div class="header-placeholder"></div>
             </header>
             <main class="main-form">
-                <p class="form-help-text">Вкажіть свій робочий графік (необов'язково). Це допоможе пасажирам розуміти, коли ви доступні.</p>
-                
-                <div id="schedule-days-list" class="schedule-days-list">
-                    <!-- Дні тижня будуть додані через JS -->
-                </div>
-
+                <p class="form-help-text">Вкажіть свій робочий графік (необов'язково).</p>
+                <div id="schedule-days-list" class="schedule-days-list"></div>
                 <button id="save-schedule-btn" class="btn-main-action accept">Зберегти графік</button>
                 <button id="clear-schedule-btn" class="btn-main-action decline">Очистити графік</button>
             </main>
@@ -1084,789 +557,382 @@
                 <div class="header-placeholder"></div>
             </header>
             <main class="main-form">
-                <p class="form-help-text">Створіть до 3 постійних маршрутів, які повторюються щотижня.</p>
-                
-                <div id="planned-routes-list" class="planned-routes-edit-list">
-                    <!-- Маршрути будуть додані через JS -->
-                </div>
-
-                <button id="add-planned-route-btn" class="btn-main-action accept" style="margin-top: 16px;">
-                    <i class="fa-solid fa-plus"></i> Додати маршрут
-                </button>
+                <p class="form-help-text">Створіть до 3 постійних маршрутів.</p>
+                <div id="planned-routes-list" class="planned-routes-edit-list"></div>
+                <button id="add-planned-route-btn" class="btn-main-action accept" style="margin-top: 16px;"><i class="fa-solid fa-plus"></i> Додати маршрут</button>
             </main>
         </div>
 
         <div id="driver-create-planned-route-screen" class="screen hidden">
             <header>
                 <button class="btn-back" data-target="driver-settings-routes-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Новий запланований маршрут</h2>
+                <h2>Новий маршрут</h2>
                 <div class="header-placeholder"></div>
             </header>
             <main class="main-form">
                 <div class="form-step">
                     <label class="section-label">Маршрут</label>
-                    <div class="form-group">
-                        <input type="text" id="planned-route-from" class="form-input" placeholder="Звідки (напр. Валки)">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="planned-route-to" class="form-input" placeholder="Куди (напр. Харків)">
-                    </div>
+                    <div class="form-group"><input type="text" id="planned-route-from" class="form-input" placeholder="Звідки"></div>
+                    <div class="form-group"><input type="text" id="planned-route-to" class="form-input" placeholder="Куди"></div>
                 </div>
-
                 <div class="form-step">
                     <label class="section-label">Дні тижня</label>
-                    <div id="planned-route-days" class="weekday-selector">
-                        <!-- Дні будуть додані через JS -->
-                    </div>
+                    <div id="planned-route-days" class="weekday-selector"></div>
                 </div>
-
                 <div class="form-step">
-                    <label class="section-label">Час відправлення</label>
-                    <div class="form-group">
-                        <input type="time" id="planned-route-time" class="form-input">
-                    </div>
+                    <label class="section-label">Час</label>
+                    <div class="form-group"><input type="time" id="planned-route-time" class="form-input"></div>
                 </div>
-
                 <div class="form-step">
-                    <label class="section-label">Кількість місць</label>
+                    <label class="section-label">Місця</label>
                     <div class="seat-counter">
                         <button type="button" id="planned-route-minus-btn" class="seat-counter-btn">-</button>
                         <span id="planned-route-seats-display" class="seat-counter-display">3</span>
                         <button type="button" id="planned-route-plus-btn" class="seat-counter-btn">+</button>
                     </div>
                 </div>
-
                 <button id="save-planned-route-btn" class="btn-main-action accept">Зберегти маршрут</button>
             </main>
         </div>
         
-        <div id="driver-settings-payment-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Онлайн-платежі</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для додавання банківської картки.</p>
-            </main>
-        </div>
+        <div id="driver-settings-payment-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Онлайн-платежі</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для додавання банківської картки.</p></main></div>
+        <div id="driver-settings-history-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Історія поїздок</h2><div class="header-placeholder"></div></header><main><p>Тут буде архів усіх поїздок водія.</p></main></div>
+        <div id="driver-settings-phone-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити номер</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для зміни номеру телефону.</p></main></div>
+        <div id="driver-settings-help-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Довідка</h2><div class="header-placeholder"></div></header><main><p>Тут будуть відповіді на популярні запитання.</p></main></div>
+        <div id="driver-settings-support-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки.</p></main></div>
+        <div id="driver-settings-delete-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Видалити профіль</h2><div class="header-placeholder"></div></header><main><p>Тут буде підтвердження видалення профілю.</p></main></div>
 
-        <div id="driver-settings-history-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Історія поїздок</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде архів усіх поїздок водія.</p>
-            </main>
-        </div>
-
-        <div id="driver-settings-phone-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Змінити номер</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для зміни номеру телефону.</p>
-            </main>
-        </div>
-        
-        <div id="driver-settings-help-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Довідка</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут будуть відповіді на популярні запитання для водіїв.</p>
-            </main>
-        </div>
-
-        <div id="driver-settings-support-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Підтримка</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде лінк на бота підтримки.</p>
-            </main>
-        </div>
-
-        <div id="driver-settings-delete-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Видалити профіль</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде підтвердження видалення профілю.</p>
-            </main>
-        </div>
-
-<div id="quick-order-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Створення замовлення</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <div id="quick-order-summary-card" class="order-summary-card hidden">
-            <h4>Ваше замовлення:</h4>
-            <div class="summary-item" id="summary-driver-container" style="display: none;">
-                <span><i class="fa-solid fa-user-tie"></i> Водій:</span>
-                <strong id="summary-driver"></strong>
-            </div>
-            <div class="summary-item" id="summary-from-container" style="display: none;">
-                <span><i class="fa-solid fa-circle-dot from-icon"></i> Звідки:</span>
-                <strong id="summary-from"></strong>
-            </div>
-            <div class="summary-item" id="summary-to-container" style="display: none;">
-                <span><i class="fa-solid fa-location-dot to-icon"></i> Куди:</span>
-                <strong id="summary-to"></strong>
-            </div>
-            <div class="summary-item" id="summary-time-container" style="display: none;">
-                <span><i class="fa-solid fa-clock when-icon"></i> Коли:</span>
-                <strong id="summary-time"></strong>
-            </div>
-        </div>
-
-        <div id="address-step" class="step-container active">
-            <div class="address-block">
-                <label class="section-label">Звідки</label>
-                <div class="settlement-choice">
-                    <button class="btn-settlement active" data-group="from" data-type="valky">Валки</button>
-                    <button class="btn-settlement" data-group="from" data-type="village">Інший н.п.</button>
-                </div>
-                <div id="from-village-container" class="form-group" style="display: none;">
-                    <select id="from-village-select" class="form-input">
-                        <option selected disabled>Оберіть населений пункт...</option>
-                         <option>Харків</option>
-                <option>Ков'яги</option>
-                <option>Шарівка</option>
-                <option>Костів</option>
-                <option>Ясеневе</option>
-                <option>Високопілля</option>
-                <option>Сидоренкове</option>
-                <option>Сніжків</option>
-                <option>Баранове</option>
-                <option>Чутово</option>
-                <option>Полтава</option>
-                <option>Нова Водолага</option>
-                        </select>
-                </div>
-                <div id="from-address-container" class="form-group">
-                    <div class="input-with-icon">
-                        <input type="text" id="from-address" class="form-input" placeholder="Введіть вулицю або місце">
-                        <i class="fa-solid fa-location-crosshairs input-icon"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="address-block">
-                <label class="section-label">Куди</label>
-                <div class="settlement-choice">
-                    <button class="btn-settlement active" data-group="to" data-type="valky">Валки</button>
-                    <button class="btn-settlement" data-group="to" data-type="village">Інший н.п.</button>
-                </div>
-                <div id="to-village-container" class="form-group" style="display: none;">
-                    <select id="to-village-select" class="form-input">
-                        <option selected disabled>Оберіть населений пункт...</option>
-                         <option>Харків</option>
-                <option>Ков'яги</option>
-                <option>Шарівка</option>
-                <option>Костів</option>
-                <option>Ясеневе</option>
-                <option>Високопілля</option>
-                <option>Сидоренкове</option>
-                <option>Сніжків</option>
-                <option>Баранове</option>
-                <option>Чутово</option>
-                <option>Полтава</option>
-                <option>Нова Водолага</option>
-                        </select>
-                </div>
-                <div id="to-address-container" class="form-group">
-                    <input type="text" id="to-address" class="form-input" placeholder="Введіть вулицю або місце">
-                </div>
-            </div>
-            <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
-        </div>
-
-        <div id="time-step" class="step-container">
-            <label class="section-label">Коли?</label>
-            <div id="time-choice-container" class="button-group-vertical">
-                <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
-                <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
-                <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
-            </div>
-            <div id="time-result-container" class="time-result" style="display: none;">
-                <span id="time-result-text"></span>
-                <button id="edit-time-btn" class="btn-icon-action"><i class="fa-solid fa-pen-to-square"></i></button>
-            </div>
-            <input type="text" id="datetime-picker" class="form-input" style="display: none;">
-            <div class="form-group">
-                <label for="comment">Коментар (необов'язково)</label>
-                <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
-            </div>
-            <button id="time-next-btn" class="btn-main-action">Далі</button>
-        </div>
-
-        <div id="payment-step" class="step-container">
-            <label class="section-label">Спосіб оплати</label>
-            <div class="button-group-vertical">
-                <button type="button" id="payment-cash-btn" class="btn-segment" data-payment-choice="cash"><i class="fa-solid fa-money-bill-wave"></i> Готівка</button>
-                <button type="button" id="payment-card-btn" class="btn-segment" data-payment-choice="card"><i class="fa-solid fa-credit-card"></i> Картка</button>
-            </div>
-            <div id="card-payment-note" style="display: none; font-size: 13px; text-align: center; color: var(--md-on-surface-variant);">
-                 <i class="fa-solid fa-circle-info"></i> Оплата буде списана з вашої картки після завершення поїздки.
-            </div>
-            <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
-        </div>
-    </main>
-</div>
-
-<div id="order-confirmation-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-xmark"></i></button>
-        <div class="header-placeholder"></div>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="content-center">
-        <div class="confirmation-card">
-            <h3 class="conf-title">Замовлення прийнято!</h3>
-            <p class="conf-text">⚡️ Вже шукаємо для вас вільних водіїв! Очікуйте на сповіщення.</p>
-            
-            <div class="spinner-container">
-                <div class="spinner"></div>
-            </div>
-
-            <p class="conf-note">
-                <i class="fa-solid fa-circle-info"></i> Ви можете відслідковувати статус у розділі «Мої поїздки».
-            </p>
-            
-            <button id="go-to-my-orders-btn" class="btn-main-action">Мої поїздки</button>
-        </div>
-    </main>
-</div>
-
-
-        <div id="help-screen" class="screen hidden">
+        <div id="quick-order-screen" class="screen hidden">
             <header>
                 <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Довідка</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main class="help-content">
-                <h3>Шо це таке?</h3>
-                <p>яЇду — це локальний сервіс для пошуку попутників та виклику таксі.</p>
-                <h3>Як це працює?</h3>
-                <p><strong>⚡️ Швидке замовлення</strong></p>
-                <p><strong>🔍 Знайти водія</strong></p>
-                <h3>А шо з оплатою?</h3>
-                <p>Поки що всі розрахунки відбуваються напряму з водієм.</p>
-            </main>
-        </div>
-        <!-- Тут у нас екран Валки-Харків -->
-<div id="passenger-valky-kharkiv-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Поїздка: Валки-Харків</h2>
-        <div class="header-placeholder"></div>
-    </header>
-   <main class="list-view-main">
-        <!-- НОВІ КАРТКИ-ШАБЛОНИ -->
-        <div class="template-cards-container">
-            <button class="template-card" data-template="vk">
-                <div class="template-card-icon">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <div class="template-card-content">
-                    <h4>Валки → Харків</h4>
-                    <small>Швидке створення запиту</small>
-                </div>
-            </button>
-
-            <button class="template-card" data-template="kv">
-                <div class="template-card-icon">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </div>
-                <div class="template-card-content">
-                    <h4>Харків → Валки</h4>
-                    <small>Швидке створення запиту</small>
-                </div>
-            </button>
-
-            <button class="template-card" data-template="custom">
-                <div class="template-card-icon">
-                    <i class="fa-solid fa-route"></i>
-                </div>
-                <div class="template-card-content">
-                    <h4>Інші маршрути</h4>
-                    <small>Створити власний запит</small>
-                </div>
-            </button>
-        </div>
-
-        <div class="list-header" style="margin-top: 24px;">
-            <h4><i class="fa-solid fa-car-on"></i> Актуальні пропозиції від водіїв</h4>
-        </div>
-        
-        <div class="filter-group">
-            <button class="btn-filter active" data-direction="all">Всі</button>
-            <button class="btn-filter" data-direction="vk">Валки → Харків</button>
-            <button class="btn-filter" data-direction="kv">Харків → Валки</button>
-        </div>
-
-        <ul id="vh-driver-list" class="driver-list">
-            <p class="list-placeholder">Наразі немає активних водіїв за цим маршрутом. Створіть свій запит, і водії його побачать!</p>
-        </ul>
-    </main>
-</div>
-
-<div id="vh-passenger-form-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="passenger-valky-kharkiv-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Створити запит</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="main-form">
-        <div class="form-step">
-            <label class="section-label">Напрямок</label>
-            <div class="route-swap-container">
-                <div class="route-display-field" id="vh-from-location">
-                    <i class="fa-solid fa-circle-dot"></i>
-                    <span>Валки</span>
-                </div>
-                <button id="vh-swap-route-btn" class="btn-icon-action">
-                    <i class="fa-solid fa-right-left"></i>
-                </button>
-                <div class="route-display-field" id="vh-to-location">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>Харків</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-step">
-            <label class="section-label">Місце (необов'язково)</label>
-            <div class="form-group">
-                <input type="text" id="vh-form-from-address-specific" class="form-input" placeholder="Звідки конкретно? (напр. Помідорчик)">
-            </div>
-            <div class="form-group">
-                <input type="text" id="vh-form-to-address-specific" class="form-input" placeholder="Куди конкретно? (напр. м. Холодна Гора)">
-            </div>
-        </div>
-
-        <div class="form-step">
-            <label class="section-label">Коли?</label>
-            <div class="button-group-vertical">
-                <button class="btn-segment" data-time-choice="now">Зараз</button>
-                <button class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
-                <button class="btn-segment" data-time-choice="date">Обрати дату</button>
-            </div>
-            <input type="text" id="vh-form-datetime-picker-specific" class="form-input" style="display: none;">
-        </div>
-        
-        <div class="form-step">
-            <label class="section-label">Кількість місць</label>
-            <div class="seat-counter">
-                <button type="button" id="vh-pass-minus-btn" class="seat-counter-btn">-</button>
-                <span id="vh-pass-seats-display" class="seat-counter-display">1</span>
-                <button type="button" id="vh-pass-plus-btn" class="seat-counter-btn">+</button>
-            </div>
-        </div>
-        <button id="vh-form-submit-btn-specific" class="btn-main-action accept">Опублікувати запит</button>
-    </main>
-</div>
-
-
-
-        <div id="passenger-bus-schedule-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Розклад автобусів</h2>
+                <h2>Створення замовлення</h2>
                 <div class="header-placeholder"></div>
             </header>
             <main>
-                <p>Тут буде актуальний розклад автобусів.</p>
-            </main>
-        </div>
-        <div id="passenger-profile-screen" class="screen hidden">
-        <header>
-            <button class="btn-back" data-target="passenger-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2>Профіль</h2>
-            <div class="header-placeholder"></div>
-        </header>
-        <main class="profile-main">
-    <div class="profile-content-wrapper">
-        <div class="details-card profile-header-card">
-            <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-            <h3 id="profile-passenger-name">Віта Б.</h3>
-            <div class="profile-rating-summary">
-                <span><i class="fa-solid fa-route"></i> <strong id="profile-passenger-trips">27</strong> поїздок</span>
-                <span id="passenger-feedback-placeholder"><i class="fa-solid fa-thumbs-up"></i> <strong>...</strong></span>
-            </div>
-            <button id="show-full-passenger-profile-btn" class="btn-main-action accept" style="width: 100%; margin-top: 16px;">Переглянути профіль</button>
-        </div>
-    </div>
-    <nav class="main-menu" style="margin-top: 16px;">
-        <button class="menu-item" id="show-passenger-settings-btn-from-profile">
-            <span><i class="fa-solid fa-gear"></i> Налаштування</span>
-        </button>
-        <button class="menu-item" id="show-help-btn-from-profile">
-            <span><i class="fa-solid fa-circle-question"></i> Нічого не розумію</span>
-        </button>
-        <button class="menu-item" id="show-passenger-support-btn-from-profile">
-            <span><i class="fa-solid fa-headset"></i> Підтримка</span>
-        </button>
-    </nav>
-</main>
-
-    </div>
-
-    <div id="passenger-full-profile-screen" class="screen hidden">
-        <header>
-            <button class="btn-back" data-target="passenger-profile-screen"><i class="fa-solid fa-arrow-left"></i></button> <h2 id="profile-passenger-name-header">Мій профіль</h2>
-            <div class="header-placeholder"></div>
-        </header>
-        <main class="profile-main">
-            <div class="profile-content-wrapper">
-                <div class="details-card profile-header-card">
-                    <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-                    <h3 id="profile-passenger-name-full">Віта Б.</h3> <div class="profile-rating-summary">
-                        <span id="profile-passenger-trips-full">...</span> <span id="passenger-feedback-placeholder-full">...</span> </div>
+                <div id="quick-order-summary-card" class="order-summary-card hidden">
+                    <h4>Ваше замовлення:</h4>
+                    <div class="summary-item" id="summary-driver-container" style="display: none;"><span><i class="fa-solid fa-user-tie"></i> Водій:</span><strong id="summary-driver"></strong></div>
+                    <div class="summary-item" id="summary-from-container" style="display: none;"><span><i class="fa-solid fa-circle-dot from-icon"></i> Звідки:</span><strong id="summary-from"></strong></div>
+                    <div class="summary-item" id="summary-to-container" style="display: none;"><span><i class="fa-solid fa-location-dot to-icon"></i> Куди:</span><strong id="summary-to"></strong></div>
+                    <div class="summary-item" id="summary-time-container" style="display: none;"><span><i class="fa-solid fa-clock when-icon"></i> Коли:</span><strong id="summary-time"></strong></div>
                 </div>
 
-                <div class="details-section">
-                    <h4><i class="fa-solid fa-circle-info"></i> Про мене</h4>
-                    <div class="details-card">
-                        <p id="profile-passenger-bio">Люблю подорожувати з комфортом та гарною музикою.</p>
+                <div id="address-step" class="step-container active">
+                    <div class="address-block">
+                        <label class="section-label">Звідки</label>
+                        <div class="settlement-choice">
+                            <button class="btn-settlement active" data-group="from" data-type="valky">Валки</button>
+                            <button class="btn-settlement" data-group="from" data-type="village">Інший н.п.</button>
+                        </div>
+                        <div id="from-village-container" class="form-group" style="display: none;">
+                            <select id="from-village-select" class="form-input">
+                                <option selected disabled>Оберіть населений пункт...</option>
+                                <option>Харків</option><option>Ков'яги</option><option>Шарівка</option><option>Костів</option>
+                                <option>Ясеневе</option><option>Високопілля</option><option>Сидоренкове</option><option>Сніжків</option>
+                                <option>Баранове</option><option>Чутово</option><option>Полтава</option><option>Нова Водолага</option>
+                            </select>
+                        </div>
+                        <div id="from-address-container" class="form-group">
+                            <div class="input-with-icon">
+                                <input type="text" id="from-address" class="form-input" placeholder="Введіть вулицю або місце">
+                                <i class="fa-solid fa-location-crosshairs input-icon"></i>
+                            </div>
+                        </div>
                     </div>
-                </div>
-    
-                <div class="details-section">
-                    <h4><i class="fa-solid fa-comments"></i> Відгуки водіїв</h4>
-                    <div class="review-list">
-                        <p class="no-reviews-placeholder">Відгуків поки що немає.</p>
+                    <div class="address-block">
+                        <label class="section-label">Куди</label>
+                        <div class="settlement-choice">
+                            <button class="btn-settlement active" data-group="to" data-type="valky">Валки</button>
+                            <button class="btn-settlement" data-group="to" data-type="village">Інший н.п.</button>
+                        </div>
+                        <div id="to-village-container" class="form-group" style="display: none;">
+                            <select id="to-village-select" class="form-input">
+                                <option selected disabled>Оберіть населений пункт...</option>
+                                <option>Харків</option><option>Ков'яги</option><option>Шарівка</option><option>Костів</option>
+                                <option>Ясеневе</option><option>Високопілля</option><option>Сидоренкове</option><option>Сніжків</option>
+                                <option>Баранове</option><option>Чутово</option><option>Полтава</option><option>Нова Водолага</option>
+                            </select>
+                        </div>
+                        <div id="to-address-container" class="form-group">
+                            <input type="text" id="to-address" class="form-input" placeholder="Введіть вулицю або місце">
+                        </div>
                     </div>
+                    <button id="address-next-btn" class="btn-main-action disabled">Далі</button>
                 </div>
-            </div>
 
-            <div class="profile-action-button">
-                 <button id="edit-passenger-profile-btn" class="btn-main-action">Редагувати профіль</button>
-            </div>
-        </main>
-    </div>
+                <div id="time-step" class="step-container">
+                    <label class="section-label">Коли?</label>
+                    <div id="time-choice-container" class="button-group-vertical">
+                        <button type="button" class="btn-segment" data-time-choice="now">Зараз</button>
+                        <button type="button" class="btn-segment" data-time-choice="today">Пізніше сьогодні</button>
+                        <button type="button" class="btn-segment" data-time-choice="date">Обрати дату</button>
+                    </div>
+                    <div id="time-result-container" class="time-result" style="display: none;">
+                        <span id="time-result-text"></span>
+                        <button id="edit-time-btn" class="btn-icon-action"><i class="fa-solid fa-pen-to-square"></i></button>
+                    </div>
+                    <input type="text" id="datetime-picker" class="form-input" style="display: none;">
+                    <div class="form-group">
+                        <label for="comment">Коментар (необов'язково)</label>
+                        <textarea id="comment" class="form-input" rows="2" placeholder="Наприклад: 'буду з дитиною'"></textarea>
+                    </div>
+                    <button id="time-next-btn" class="btn-main-action">Далі</button>
+                </div>
 
-
-        <div id="passenger-settings-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Налаштування</h2>
-                <div class="header-placeholder"></div>
-            </header>
-                                    <main>
-                <nav class="main-menu">
-                    <button class="menu-item" id="show-passenger-settings-photo-btn">
-                        <span><i class="fa-solid fa-camera-retro"></i> Змінити фото</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-settings-bio-btn">
-                        <span><i class="fa-solid fa-pen-to-square"></i> Опис профілю</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-settings-payment-btn">
-                        <span><i class="fa-solid fa-credit-card"></i> Онлайн-платежі</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-settings-phone-btn">
-                        <span><i class="fa-solid fa-mobile-screen-button"></i> Змінити номер</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-settings-status-btn">
-                        <span><i class="fa-solid fa-retweet"></i> Змінити статус</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-settings-privacy-btn">
-                        <span><i class="fa-solid fa-user-shield"></i> Конфіденційність</span>
-                    </button>
-                    <button class="menu-item" id="show-passenger-settings-delete-btn" style="color: var(--md-error);">
-                        <span><i class="fa-solid fa-trash-can"></i> Видалити профіль</span>
-                    </button>
-                </nav>
-            </main>
-
-        </div>
-        <div id="passenger-settings-photo-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Змінити фото</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде функціонал для завантаження та зміни фото профілю.</p>
+                <div id="payment-step" class="step-container">
+                    <label class="section-label">Спосіб оплати</label>
+                    <div class="button-group-vertical">
+                        <button type="button" id="payment-cash-btn" class="btn-segment" data-payment-choice="cash"><i class="fa-solid fa-money-bill-wave"></i> Готівка</button>
+                        <button type="button" id="payment-card-btn" class="btn-segment" data-payment-choice="card"><i class="fa-solid fa-credit-card"></i> Картка</button>
+                    </div>
+                    <div id="card-payment-note" style="display: none; font-size: 13px; text-align: center; color: var(--md-on-surface-variant);">
+                         <i class="fa-solid fa-circle-info"></i> Оплата буде списана з вашої картки після завершення поїздки.
+                    </div>
+                    <button id="submit-order-btn" class="btn-main-action">Відправити замовлення</button>
+                </div>
             </main>
         </div>
 
-        <div id="passenger-settings-bio-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Опис профілю</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для редагування біографії пасажира.</p>
-            </main>
-        </div>
 
-        <div id="passenger-settings-payment-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Онлайн-платежі</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для додавання банківської картки.</p>
-            </main>
-        </div>
-
-        <div id="passenger-settings-history-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Історія поїздок</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде архів усіх поїздок пасажира.</p>
-            </main>
-        </div>
-
-        <div id="passenger-settings-phone-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Змінити номер</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для зміни номеру телефону.</p>
-            </main>
-        </div>
-
-        <div id="passenger-settings-status-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Змінити статус</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде форма для зміни статусу з пасажира на водія.</p>
-            </main>
-        </div>
-
-        <div id="passenger-settings-privacy-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Конфіденційність</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут будуть налаштування конфіденційності.</p>
-            </main>
-        </div>
-
-        <div id="passenger-settings-support-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Підтримка</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде лінк на бота підтримки.</p>
-            </main>
-        </div>
-
-        <div id="passenger-settings-delete-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Видалити профіль</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде підтвердження видалення профілю.</p>
-            </main>
-        </div>
+        <div id="passenger-settings-photo-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити фото</h2><div class="header-placeholder"></div></header><main><p>Тут буде функціонал для завантаження та зміни фото профілю.</p></main></div>
+        <div id="passenger-settings-bio-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Опис профілю</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для редагування біографії пасажира.</p></main></div>
+        <div id="passenger-settings-payment-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Онлайн-платежі</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для додавання банківської картки.</p></main></div>
+        <div id="passenger-settings-history-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Історія поїздок</h2><div class="header-placeholder"></div></header><main><p>Тут буде архів усіх поїздок пасажира.</p></main></div>
+        <div id="passenger-settings-phone-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити номер</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для зміни номеру телефону.</p></main></div>
+        <div id="passenger-settings-status-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити статус</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для зміни статусу з пасажира на водія.</p></main></div>
+        <div id="passenger-settings-privacy-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Конфіденційність</h2><div class="header-placeholder"></div></header><main><p>Тут будуть налаштування конфіденційності.</p></main></div>
+        <div id="passenger-settings-support-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки.</p></main></div>
+        <div id="passenger-settings-delete-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Видалити профіль</h2><div class="header-placeholder"></div></header><main><p>Тут буде підтвердження видалення профілю.</p></main></div>
         
-                <div id="driver-support-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Підтримка</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде лінк на бота підтримки для водіїв.</p>
-            </main>
-        </div>
-
-        <div id="driver-help-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Нічого не розумію</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут будуть відповіді на популярні запитання для водіїв.</p>
-            </main>
-        </div>
-
-        <div id="passenger-support-screen" class="screen hidden">
-            <header>
-                <button class="btn-back" data-target="passenger-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2>Підтримка</h2>
-                <div class="header-placeholder"></div>
-            </header>
-            <main>
-                <p>Тут буде лінк на бота підтримки для пасажирів.</p>
-            </main>
-        </div>
+        <div id="driver-support-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки для водіїв.</p></main></div>
+        <div id="driver-help-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Нічого не розумію</h2><div class="header-placeholder"></div></header><main><p>Тут будуть відповіді на популярні запитання для водіїв.</p></main></div>
+        <div id="passenger-support-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-profile-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки для пасажирів.</p></main></div>
 
         <div id="notifications-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Сповіщення</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <ul id="notification-list" class="notification-list">
-            <p class="list-placeholder">У вас немає нових сповіщень.</p>
-        </ul>
-    </main>
-</div>
-<div id="driver-vh-confirmation-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="notifications-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Нове замовлення</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main>
-        <div class="details-card driver">
-            <div class="passenger-info">
-                <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
-                <div class="passenger-details">
-                    <strong id="vh-confirm-passenger-name">Ім'я пасажира</strong>
-                    <span id="vh-confirm-passenger-rating">Рейтинг</span>
+            <header>
+                <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Сповіщення</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <ul id="notification-list" class="notification-list">
+                    <p class="list-placeholder">У вас немає нових сповіщень.</p>
+                </ul>
+            </main>
+        </div>
+
+        <div id="driver-vh-confirmation-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="notifications-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Нове замовлення</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <div class="details-card driver">
+                    <div class="passenger-info">
+                        <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong id="vh-confirm-passenger-name">...</strong>
+                            <span id="vh-confirm-passenger-rating">...</span>
+                        </div>
+                    </div>
+                    <div class="order-route-info" style="margin-top: 16px;">
+                        <div class="address-line">
+                            <i class="fa-solid fa-route start-address-icon"></i>
+                            <span id="vh-confirm-direction">Напрямок</span>
+                        </div>
+                        <div class="address-line">
+                            <i class="fa-solid fa-location-dot end-address-icon"></i>
+                            <span id="vh-confirm-specifics">Точки посадки/висадки</span>
+                        </div>
+                         <div class="address-line">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="vh-confirm-time">Час</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <button id="vh-decline-btn" class="btn-main-action decline">Відхилити</button>
+                    <button id="vh-confirm-btn" class="btn-main-action accept">Підтвердити</button>
+                </div>
+            </main>
+        </div>
+
+        <div id="driver-confirm-ride-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Підтвердити вибір?</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="content-center">
+                <div class="details-card" style="width: 100%; text-align: center;">
+                    <p style="margin-bottom: 16px;">Ви замовляєте поїздку з цим водієм:</p>
+                    <div class="avatar-convex large" style="margin: 0 auto 12px auto;"><i class="fa-solid fa-user-tie"></i></div>
+                    <h3 id="confirm-ride-driver-name">...</h3>
+                    <p id="confirm-ride-driver-car" style="color: var(--md-on-surface-variant); margin-top: 4px;">...</p>
+                    <div class="order-actions" style="margin-top: 24px;">
+                        <button id="cancel-ride-btn" class="btn-main-action decline">Скасувати</button>
+                        <button id="confirm-ride-with-driver-btn" class="btn-main-action accept">Так, замовити</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+                <div id="passenger-settings-photo-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити фото</h2><div class="header-placeholder"></div></header><main><p>Тут буде функціонал для завантаження та зміни фото профілю.</p></main></div>
+        <div id="passenger-settings-bio-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Опис профілю</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для редагування біографії пасажира.</p></main></div>
+        <div id="passenger-settings-payment-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Онлайн-платежі</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для додавання банківської картки.</p></main></div>
+        <div id="passenger-settings-history-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Історія поїздок</h2><div class="header-placeholder"></div></header><main><p>Тут буде архів усіх поїздок пасажира.</p></main></div>
+        <div id="passenger-settings-phone-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити номер</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для зміни номеру телефону.</p></main></div>
+        <div id="passenger-settings-status-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Змінити статус</h2><div class="header-placeholder"></div></header><main><p>Тут буде форма для зміни статусу з пасажира на водія.</p></main></div>
+        <div id="passenger-settings-privacy-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Конфіденційність</h2><div class="header-placeholder"></div></header><main><p>Тут будуть налаштування конфіденційності.</p></main></div>
+        <div id="passenger-settings-support-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки.</p></main></div>
+        <div id="passenger-settings-delete-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-settings-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Видалити профіль</h2><div class="header-placeholder"></div></header><main><p>Тут буде підтвердження видалення профілю.</p></main></div>
+        
+        <div id="driver-support-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки для водіїв.</p></main></div>
+        <div id="driver-help-screen" class="screen hidden"><header><button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Нічого не розумію</h2><div class="header-placeholder"></div></header><main><p>Тут будуть відповіді на популярні запитання для водіїв.</p></main></div>
+        <div id="passenger-support-screen" class="screen hidden"><header><button class="btn-back" data-target="passenger-profile-screen"><i class="fa-solid fa-arrow-left"></i></button><h2>Підтримка</h2><div class="header-placeholder"></div></header><main><p>Тут буде лінк на бота підтримки для пасажирів.</p></main></div>
+
+        <div id="notifications-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-home-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Сповіщення</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <ul id="notification-list" class="notification-list">
+                    <p class="list-placeholder">У вас немає нових сповіщень.</p>
+                </ul>
+            </main>
+        </div>
+
+        <div id="driver-vh-confirmation-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="notifications-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Нове замовлення</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main>
+                <div class="details-card driver">
+                    <div class="passenger-info">
+                        <div class="avatar-convex large"><i class="fa-solid fa-user"></i></div>
+                        <div class="passenger-details">
+                            <strong id="vh-confirm-passenger-name">...</strong>
+                            <span id="vh-confirm-passenger-rating">...</span>
+                        </div>
+                    </div>
+                    <div class="order-route-info" style="margin-top: 16px;">
+                        <div class="address-line">
+                            <i class="fa-solid fa-route start-address-icon"></i>
+                            <span id="vh-confirm-direction">Напрямок</span>
+                        </div>
+                        <div class="address-line">
+                            <i class="fa-solid fa-location-dot end-address-icon"></i>
+                            <span id="vh-confirm-specifics">Точки посадки/висадки</span>
+                        </div>
+                         <div class="address-line">
+                            <i class="fa-solid fa-clock"></i>
+                            <span id="vh-confirm-time">Час</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <button id="vh-decline-btn" class="btn-main-action decline">Відхилити</button>
+                    <button id="vh-confirm-btn" class="btn-main-action accept">Підтвердити</button>
+                </div>
+            </main>
+        </div>
+
+        <div id="driver-confirm-ride-screen" class="screen hidden">
+            <header>
+                <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Підтвердити вибір?</h2>
+                <div class="header-placeholder"></div>
+            </header>
+            <main class="content-center">
+                <div class="details-card" style="width: 100%; text-align: center;">
+                    <p style="margin-bottom: 16px;">Ви замовляєте поїздку з цим водієм:</p>
+                    <div class="avatar-convex large" style="margin: 0 auto 12px auto;"><i class="fa-solid fa-user-tie"></i></div>
+                    <h3 id="confirm-ride-driver-name">...</h3>
+                    <p id="confirm-ride-driver-car" style="color: var(--md-on-surface-variant); margin-top: 4px;">...</p>
+                    <div class="order-actions" style="margin-top: 24px;">
+                        <button id="cancel-ride-btn" class="btn-main-action decline">Скасувати</button>
+                        <button id="confirm-ride-with-driver-btn" class="btn-main-action accept">Так, замовити</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <nav id="passenger-tab-bar" class="tab-bar hidden">
+            <button class="tab-item active" data-target="passenger-home-screen">
+                <i class="fa-solid fa-house"></i>
+                <span>Головна</span>
+            </button>
+            <button class="tab-item" data-target="passenger-find-driver-screen">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Знайти</span>
+            </button>
+            <button class="tab-item fab" data-target="quick-order-screen">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Замовити</span>
+            </button>
+            <button class="tab-item" data-target="passenger-valky-kharkiv-screen">
+                <i class="fa-solid fa-route"></i>
+                <span>Попутка</span>
+            </button>
+            <button class="tab-item" data-target="passenger-profile-screen">
+                <i class="fa-solid fa-user"></i>
+                <span>Профіль</span>
+            </button>
+        </nav>
+
+        <nav id="driver-tab-bar" class="tab-bar hidden">
+            <button class="tab-item active" data-target="driver-home-screen">
+                <i class="fa-solid fa-house"></i>
+                <span>Головна</span>
+            </button>
+            <button class="tab-item" data-target="driver-find-passengers-screen">
+                <i class="fa-solid fa-users"></i>
+                <span>Замовлення</span>
+            </button>
+            <button class="tab-item fab" id="driver-fab-btn">
+                <div class="fab-content-wrapper">
+                    <i class="fa-solid fa-car fab-icon" id="fab-icon-initial"></i>
+                    <i class="fa-solid fa-plus fab-icon" id="fab-icon-online"></i>
+                </div>
+            </button>
+            <button class="tab-item" data-target="driver-valky-kharkiv-screen">
+                <i class="fa-solid fa-route"></i>
+                <span>Попутка</span>
+            </button>
+            <button class="tab-item" data-target="driver-profile-screen">
+                <i class="fa-solid fa-user"></i>
+                <span>Профіль</span>
+            </button>
+        </nav>
+
+        <div id="popup-overlay" class="hidden"></div>
+
+        <div id="profile-popup" class="details-card">
+            <div class="popup-header">
+                <div class="avatar-convex"><i id="popup-avatar-icon" class="fa-solid fa-user"></i></div>
+                <div class="popup-user-info">
+                    <h4 id="popup-user-name">...</h4>
+                    <span id="popup-user-details">...</span>
                 </div>
             </div>
-            <div class="order-route-info" style="margin-top: 16px;">
-                <div class="address-line">
-                    <i class="fa-solid fa-route start-address-icon"></i>
-                    <span id="vh-confirm-direction">Напрямок</span>
-                </div>
-                <div class="address-line">
-                    <i class="fa-solid fa-location-dot end-address-icon"></i>
-                    <span id="vh-confirm-specifics">Точки посадки/висадки</span>
-                </div>
-                 <div class="address-line">
-                    <i class="fa-solid fa-clock"></i>
-                    <span id="vh-confirm-time">Час</span>
-                </div>
-            </div>
+            <button id="popup-view-profile-btn" class="btn-main-action accept">Переглянути профіль</button>
         </div>
-
-        <div class="order-actions">
-            <button id="vh-decline-btn" class="btn-main-action decline">Відхилити</button>
-            <button id="vh-confirm-btn" class="btn-main-action accept">Підтвердити</button>
-        </div>
-    </main>
-</div>
-<div id="driver-confirm-ride-screen" class="screen hidden">
-    <header>
-        <button class="btn-back" data-target="driver-profile-screen"><i class="fa-solid fa-arrow-left"></i></button>
-        <h2>Підтвердити вибір?</h2>
-        <div class="header-placeholder"></div>
-    </header>
-    <main class="content-center">
-        <div class="details-card" style="width: 100%; text-align: center;">
-            <p style="margin-bottom: 16px;">Ви замовляєте поїздку з цим водієм:</p>
-            <div class="avatar-convex large" style="margin: 0 auto 12px auto;"><i class="fa-solid fa-user-tie"></i></div>
-            <h3 id="confirm-ride-driver-name">Ім'я Водія</h3>
-            <p id="confirm-ride-driver-car" style="color: var(--md-on-surface-variant); margin-top: 4px;">Автомобіль</p>
-            <div class="order-actions" style="margin-top: 24px;">
-                <button id="cancel-ride-btn" class="btn-main-action decline">Скасувати</button>
-                <button id="confirm-ride-with-driver-btn" class="btn-main-action accept">Так, замовити</button>
-            </div>
-        </div>
-    </main>
-</div>
-<!-- TAB-BAR пасажира -->
-<nav id="passenger-tab-bar" class="tab-bar hidden">
-    <button class="tab-item active" data-target="passenger-home-screen">
-        <i class="fa-solid fa-house"></i>
-        <span>Головна</span>
-    </button>
-    <button class="tab-item" data-target="passenger-find-driver-screen">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <span>Знайти</span>
-    </button>
-    <button class="tab-item fab" data-target="quick-order-screen">
-        <i class="fa-solid fa-bolt"></i>
-        <span>Замовити</span>
-    </button>
-    <button class="tab-item" data-target="passenger-valky-kharkiv-screen">
-        <i class="fa-solid fa-route"></i>
-        <span>Попутка</span>
-    </button>
-    <button class="tab-item" data-target="passenger-profile-screen">
-        <i class="fa-solid fa-user"></i>
-        <span>Профіль</span>
-    </button>
-</nav>
-<!-- TAB-BAR водія -->
-<nav id="driver-tab-bar" class="tab-bar hidden">
-    <button class="tab-item active" data-target="driver-home-screen">
-        <i class="fa-solid fa-house"></i>
-        <span>Головна</span>
-    </button>
-    <button class="tab-item" data-target="driver-find-passengers-screen">
-        <i class="fa-solid fa-users"></i>
-        <span>Замовлення</span>
-    </button>
-<button class="tab-item fab" id="driver-fab-btn">
-    <div class="fab-content-wrapper">
-        <i class="fa-solid fa-car fab-icon" id="fab-icon-initial"></i>
-        <i class="fa-solid fa-plus fab-icon" id="fab-icon-online"></i>
-    </div>
-</button>
-
-
-
-
-    <button class="tab-item" data-target="driver-valky-kharkiv-screen">
-        <i class="fa-solid fa-route"></i>
-        <span>Попутка</span>
-    </button>
-    <button class="tab-item" data-target="driver-profile-screen">
-        <i class="fa-solid fa-user"></i>
-        <span>Профіль</span>
-    </button>
-</nav>
-
-<div id="popup-overlay" class="hidden"></div>
-
-<div id="profile-popup" class="details-card">
-    <div class="popup-header">
-        <div class="avatar-convex"><i id="popup-avatar-icon" class="fa-solid fa-user"></i></div>
-        <div class="popup-user-info">
-            <h4 id="popup-user-name">Ім'я користувача</h4>
-            <span id="popup-user-details">Деталі акаунту</span>
-        </div>
-    </div>
-    <button id="popup-view-profile-btn" class="btn-main-action accept">Переглянути профіль</button>
-</div>
-
 
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <script src="data.js"></script>
+    
     <script src="ui.js"></script>
     <script src="displayLogic.js"></script>
-    <script src="handlers.js"></script> <script src="script.js"></script>
+    <script src="handlers.js"></script> 
+    <script src="script.js"></script>
 </body>
 </html>
