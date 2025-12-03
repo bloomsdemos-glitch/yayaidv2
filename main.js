@@ -6,58 +6,50 @@ import { state } from './state.js';
 // Запускаємо слухачі UI (анімації, теми)
 initUIListeners();
 
-// === ОБРОБНИКИ КНОПОК ВХОДУ (Entry Screens) ===
+// === ОБРОБНИКИ ГОЛОВНОГО ЕКРАНУ (Home Screen) ===
 
-// 1. Головний екран -> Вибір ролі
 const btnShowDriverLogin = document.getElementById('show-driver-login');
 const btnShowPassengerLogin = document.getElementById('show-passenger-login');
 
+// Логіка змінилась: тепер ми не відкриваємо екран входу, 
+// а зразу реєструємо/логінимо юзера з відповідною роллю.
+// Бот вже дав нам номер, тому це безпечно.
+
 if (btnShowDriverLogin) {
     btnShowDriverLogin.addEventListener('click', () => {
-        showScreen('login-screen-driver');
+        console.log("🚕 Обрано роль: Водій");
+        // Зразу пробуємо зареєструвати/увійти як водій
+        registerUser('driver'); 
     });
 }
 
 if (btnShowPassengerLogin) {
     btnShowPassengerLogin.addEventListener('click', () => {
-        showScreen('login-screen-passenger');
+        console.log("🚶 Обрано роль: Пасажир");
+        // Зразу пробуємо зареєструвати/увійти як пасажир
+        registerUser('passenger');
     });
 }
 
-// 2. Кнопки "Назад" (універсальні)
+// === УНІВЕРСАЛЬНІ КНОПКИ ===
+
+// Кнопки "Назад"
 document.querySelectorAll('.btn-back').forEach(btn => {
     btn.addEventListener('click', () => {
-        const targetId = btn.dataset.target; // Наприклад data-target="home-screen"
+        const targetId = btn.dataset.target; 
         if (targetId) {
             navigateTo(targetId);
         } else {
-            // Якщо не вказано куди, повертаємо на Home
             showScreen('home-screen');
         }
     });
 });
 
-// 3. Кнопки "Увійти через Telegram"
-// Для водія:
-const btnLoginDriver = document.querySelector('#login-screen-driver .btn-telegram-login');
-if (btnLoginDriver) {
-    btnLoginDriver.addEventListener('click', () => {
-        registerUser('driver');
-    });
-}
+// === МЕНЮ ТА НАВІГАЦІЯ ===
 
-// Для пасажира:
-const btnLoginPassenger = document.querySelector('#login-screen-passenger .btn-telegram-login');
-if (btnLoginPassenger) {
-    btnLoginPassenger.addEventListener('click', () => {
-        registerUser('passenger');
-    });
-}
-
-// 4. Тимчасові кнопки меню (Тільки перемикання екранів)
-// Це щоб ти міг ходити по меню, навіть якщо логіки ще немає
+// Тимчасові кнопки меню (для тестів переходів)
 const menuButtons = {
-    'show-find-passengers-btn': 'driver-find-passengers-screen', // Цього екрану може не бути в HTML, перевір ID
+    'show-find-passengers-btn': 'driver-find-passengers-screen',
     'show-driver-valky-kharkiv-btn': 'driver-valky-kharkiv-screen',
     'show-my-orders-btn': 'passenger-orders-screen',
     'show-quick-order-btn': 'quick-order-screen',
@@ -70,15 +62,13 @@ Object.keys(menuButtons).forEach(btnId => {
     const btn = document.getElementById(btnId);
     if (btn) {
         btn.addEventListener('click', () => {
-            // Тут пізніше додамо перевірки, чи можна відкривати
             navigateTo(menuButtons[btnId]);
         });
     }
 });
 
-// =========================================================
-// ЛОГІКА ТАБ-БАРУ (НИЖНЄ МЕНЮ)
-// =========================================================
+// === ТАБ-БАР (Нижнє меню) ===
+
 const allTabButtons = document.querySelectorAll('.tab-item');
 
 allTabButtons.forEach(tab => {
@@ -86,22 +76,21 @@ allTabButtons.forEach(tab => {
         // 1. Забираємо активний клас у всіх кнопок
         allTabButtons.forEach(t => t.classList.remove('active'));
         
-        // 2. Робимо активною натиснуту кнопку (через currentTarget, щоб зловити клік по іконці теж)
+        // 2. Робимо активною натиснуту кнопку
         const clickedTab = e.currentTarget;
         clickedTab.classList.add('active');
 
-        // 3. Дивимось, куди вона має вести
+        // 3. Перехід
         const targetScreenId = clickedTab.dataset.target;
         
         if (targetScreenId) {
-            console.log(`🔘 Tab Clicked: Go to ${targetScreenId}`);
             navigateTo(targetScreenId);
         } else {
-            console.warn("⚠️ Кнопка меню не має data-target!");
-            // Тимчасовий фікс для центральної кнопки водія (якщо вона без target)
+            // Центральна кнопка (FAB)
             if (clickedTab.id === 'driver-fab-btn') {
-                console.log("Fab button clicked");
-                // Тут можна викликати логіку створення поїздки
+                console.log("🚖 FAB Button Clicked (Створити поїздку)");
+                // Тут буде логіка створення поїздки пізніше
+                alert("Тут буде створення поїздки!"); 
             }
         }
     });
