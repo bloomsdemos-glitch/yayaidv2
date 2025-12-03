@@ -1589,6 +1589,5 @@ deleteAccountBtns.forEach(btn => {
                 });
         }
     });
-});
 
 }); // Кінець DOMContentLoaded
