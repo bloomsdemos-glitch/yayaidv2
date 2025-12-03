@@ -15,13 +15,25 @@ export function initApp() {
         setTempTelegramUser(tg.initDataUnsafe.user);
         console.log("📲 Telegram User Detected:", tempTelegramUser);
     } else {
-        // Для тестів на ПК можна розкоментувати:
+        // === 🔥 НОВА ЛОГІКА: ЯКЩО НЕМАЄ ДАНИХ ===
+        // Для тестів на ПК можна розкоментувати рядок нижче, щоб працювати без Телеграму:
         // setTempTelegramUser({ id: 999999, first_name: "Test", last_name: "User", username: "test_user" });
-        // console.warn("⚠️ Використовую тестового юзера!");
         
         if (!tempTelegramUser) {
-            alert("Помилка: Відкрийте додаток через Telegram!");
-            return; 
+            console.error("❌ No Telegram data found. Showing auth request.");
+            
+            // Ховаємо всі екрани
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            
+            // Показуємо наш екран помилки/авторизації
+            const errorScreen = document.getElementById('telegram-error-screen');
+            if (errorScreen) {
+                errorScreen.classList.remove('hidden');
+                errorScreen.style.display = 'block'; // Примусово показуємо
+            } else {
+                alert("Помилка: Відкрийте додаток через Telegram! (Error screen not found)");
+            }
+            return; // Зупиняємо скрипт, далі не йдемо!
         }
     }
 
@@ -43,7 +55,8 @@ export function initApp() {
             console.log("Юзер залогінений:", state.currentUser);
         } else {
             console.log("🆕 New User. Waiting for registration...");
-            // Показуємо екран вибору (Водій/Пасажир)
+            // Ховаємо лоадери/помилки і показуємо екран вибору (Водій/Пасажир)
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById('home-screen').classList.remove('hidden');
         }
     }).catch(error => {
@@ -62,34 +75,42 @@ export function registerUser(selectedRole) {
     const userId = tempTelegramUser.id.toString();
     const userRef = ref(db, 'users/' + userId);
 
-    const newUser = {
-        id: userId,
-        name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
-        username: tempTelegramUser.username || "",
-        photoUrl: tempTelegramUser.photo_url || null,
-        phone: "Не вказано",
-        role: selectedRole,
-        rating: 5.0,
-        trips: 0,
-        registrationDate: new Date().toISOString()
-    };
+    // Перевіряємо, чи вже є телефон в базі (записаний ботом)
+    get(userRef).then((snapshot) => {
+        let phone = "Не вказано";
+        if (snapshot.exists() && snapshot.val().phone) {
+            phone = snapshot.val().phone;
+        }
 
-    // Зберігаємо в базу
-    set(userRef, newUser).then(() => {
-        state.currentUser = newUser;
-        routeUserToScreen(); // Перекидаємо на головну
-    }).catch(error => {
-        console.error("Registration Error:", error);
-        alert("Помилка реєстрації. Спробуйте ще раз.");
+        const newUser = {
+            id: userId,
+            name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
+            username: tempTelegramUser.username || "",
+            photoUrl: tempTelegramUser.photo_url || null,
+            phone: phone, // Підтягуємо телефон, якщо бот вже записав
+            role: selectedRole,
+            rating: 5.0,
+            trips: 0,
+            registrationDate: new Date().toISOString()
+        };
+
+        // Зберігаємо/Оновлюємо профіль
+        update(userRef, newUser).then(() => {
+            state.currentUser = newUser;
+            routeUserToScreen(); // Перекидаємо на головну
+        }).catch(error => {
+            console.error("Registration Error:", error);
+            alert("Помилка реєстрації. Спробуйте ще раз.");
+        });
     });
 }
 
 // === МАРШРУТИЗАЦІЯ (КУДИ ЙТИ ПІСЛЯ ВХОДУ) ===
 function routeUserToScreen() {
-    // 1. Ховаємо екрани входу
-    document.getElementById('home-screen').classList.add('hidden');
-    document.getElementById('login-screen-driver').classList.add('hidden');
-    document.getElementById('login-screen-passenger').classList.add('hidden');
+    // 1. Ховаємо екрани входу і помилок
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    const errorScreen = document.getElementById('telegram-error-screen');
+    if (errorScreen) errorScreen.style.display = 'none';
 
     // 2. Дивимось роль і відкриваємо потрібний екран
     if (state.currentUser.role === 'driver') {
@@ -123,7 +144,7 @@ function updateUserInfoIfNeeded(userId, tgData) {
     }
 }
 
-// === UI ХЕЛПЕРИ (Щоб не лазити в ui.js зайвий раз) ===
+// === UI ХЕЛПЕРИ ===
 function updateHeaderWithAvatar(screenId) {
     const screen = document.getElementById(screenId);
     if (!screen) return;
@@ -136,8 +157,9 @@ function updateHeaderWithAvatar(screenId) {
         if (state.currentUser.photoUrl) {
             avatarContainer.innerHTML = `<img src="${state.currentUser.photoUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
             avatarContainer.style.background = 'none';
+            avatarContainer.style.display = 'flex';
+            avatarContainer.style.overflow = 'hidden';
         } else {
-            // Генерація аватарки з ініціалів
             const initials = getInitials(state.currentUser.name);
             const color = getUserColor(state.currentUser.id);
             avatarContainer.innerHTML = `<span style="color:white; font-weight:bold; font-size:18px;">${initials}</span>`;
