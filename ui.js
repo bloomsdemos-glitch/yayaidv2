@@ -1,7 +1,5 @@
 // ui.js (FULL VERSION)
-import { state } from './state.js';
-import { db } from './firebase-init.js';
-import { ref, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
 
 // Глобальні змінні DOM
 const screens = document.querySelectorAll('.screen');
@@ -10,7 +8,7 @@ const screens = document.querySelectorAll('.screen');
 // 1. НАВІГАЦІЯ ТА ЕФЕКТИ
 // ==========================================
 
-export function showScreen(screenId) {
+ function showScreen(screenId) {
     screens.forEach(screen => {
         screen.classList.add('hidden');
         screen.classList.remove('active');
@@ -25,7 +23,7 @@ export function showScreen(screenId) {
     }
 }
 
-export function navigateTo(screenId) {
+ function navigateTo(screenId) {
     showScreen(screenId);
 }
 
@@ -45,7 +43,7 @@ function createRipple(event) {
     button.appendChild(circle);
 }
 
-export function initUIListeners() {
+ function initUIListeners() {
     // Ripple effect
     document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
         button.addEventListener("click", createRipple);
@@ -102,7 +100,7 @@ function swapPinIcons() {
 // 2. КАРТКИ (Drivers & Trips)
 // ==========================================
 
-export function createDriverOrderCard(order) {
+ function createDriverOrderCard(order) {
     const li = document.createElement('li');
     li.className = 'order-card driver-view';
     const timeIcon = order.time === 'Зараз' ? '<div class="status-dot online"></div>' : '<i class="fa-solid fa-clock"></i>';
@@ -114,7 +112,7 @@ export function createDriverOrderCard(order) {
     return li;
 }
 
-export function createActiveTripCardHTML(trip, userType) {
+ function createActiveTripCardHTML(trip, userType) {
     const isDriver = userType === 'driver';
     const title = 'Активна поїздка';
     const driver = state.drivers_database.find(d => d.id === trip.driverId);
@@ -148,7 +146,7 @@ export function createActiveTripCardHTML(trip, userType) {
 // 3. ПРОФІЛІ ТА ПОПАПИ
 // ==========================================
 
-export function displayDriverProfile(driverId) {
+ function displayDriverProfile(driverId) {
     const driver = state.drivers_database.find(d => d.id === driverId);
     if (!driver) return;
     
@@ -168,7 +166,7 @@ export function displayDriverProfile(driverId) {
     }
 }
 
-export function displayDriverFullProfile(driverId) {
+ function displayDriverFullProfile(driverId) {
     const driver = state.drivers_database.find(d => d.id === driverId);
     if (!driver) return;
 
@@ -220,7 +218,7 @@ export function displayDriverFullProfile(driverId) {
     displayDriverPlannedRoutes(driverId);
 }
 
-export function displayPassengerProfile(passengerId) {
+ function displayPassengerProfile(passengerId) {
     const passenger = state.passengers_database.find(p => p.id === passengerId);
     if (!passenger) return;
 
@@ -246,7 +244,7 @@ export function displayPassengerProfile(passengerId) {
     document.getElementById('profile-passenger-bio').textContent = passenger.bio || 'Інформація відсутня';
 }
 
-export function showProfilePopup(userData) {
+ function showProfilePopup(userData) {
     const popupAvatarIcon = document.getElementById('popup-avatar-icon');
     const popupUserName = document.getElementById('popup-user-name');
     const popupUserDetails = document.getElementById('popup-user-details');
@@ -263,7 +261,7 @@ export function showProfilePopup(userData) {
     profilePopup.classList.add('visible');
 }
 
-export function hideProfilePopup() {
+ function hideProfilePopup() {
     const profilePopup = document.getElementById('profile-popup');
     const popupOverlay = document.getElementById('popup-overlay');
     popupOverlay?.classList.add('hidden');
@@ -274,7 +272,7 @@ export function hideProfilePopup() {
 // 4. ШВИДКЕ ЗАМОВЛЕННЯ
 // ==========================================
 
-export function updateSummary() {
+ function updateSummary() {
     const summaryCard = document.getElementById('quick-order-summary-card');
     const sumFrom = document.getElementById('summary-from');
     const sumTo = document.getElementById('summary-to');
@@ -308,7 +306,7 @@ export function updateSummary() {
     }
 }
 
-export function goToStep(stepToShow) {
+ function goToStep(stepToShow) {
     const stepAddress = document.getElementById('address-step');
     const stepTime = document.getElementById('time-step');
     const stepPayment = document.getElementById('payment-step');
@@ -328,7 +326,7 @@ export function goToStep(stepToShow) {
     }
 }
 
-export function resetQuickOrder() {
+ function resetQuickOrder() {
     if (state.orderData) {
         for (const key in state.orderData) delete state.orderData[key];
     }
@@ -393,7 +391,7 @@ export function resetQuickOrder() {
     goToStep('address');
 }
 
-export function showTimeResult(text) {
+ function showTimeResult(text) {
     const timeChoiceCont = document.getElementById('time-choice-container');
     const timeResultCont = document.getElementById('time-result-container');
     const timeResText = document.getElementById('time-result-text');
@@ -405,7 +403,7 @@ export function showTimeResult(text) {
     timeResultCont.style.display = 'flex';
 }
 
-export function checkAddressInputs() {
+ function checkAddressInputs() {
     const fromBtn = document.querySelector('.btn-settlement[data-group="from"].active');
     const toBtn = document.querySelector('.btn-settlement[data-group="to"].active');
 
@@ -450,7 +448,7 @@ export function checkAddressInputs() {
     }
 }
 
-export function displayOrderDetails(order) {
+ function displayOrderDetails(order) {
     const detailsPassengerName = document.getElementById('details-passenger-name');
     const detailsPassengerRating = document.getElementById('details-passenger-rating');
     const detailsFromAddress = document.getElementById('details-from-address');
@@ -485,7 +483,7 @@ export function displayOrderDetails(order) {
 // 5. ГРАФІК РОБОТИ (Schedule)
 // ==========================================
 
-export function renderScheduleEditor() {
+ function renderScheduleEditor() {
     const container = document.getElementById('schedule-days-list');
     if (!container) return;
     
@@ -532,7 +530,7 @@ export function renderScheduleEditor() {
     });
 }
 
-export function displayDriverSchedule(driverId) {
+ function displayDriverSchedule(driverId) {
     const driver = state.drivers_database.find(d => d.id == driverId) || 
                   (state.currentUser && state.currentUser.id == driverId ? state.currentUser : null);
     
@@ -567,7 +565,7 @@ export function displayDriverSchedule(driverId) {
 // 6. ЗАПЛАНОВАНІ МАРШРУТИ
 // ==========================================
 
-export function renderPlannedRoutesEditor() {
+ function renderPlannedRoutesEditor() {
     const container = document.getElementById('planned-routes-list');
     if (!container) return;
     
@@ -624,7 +622,7 @@ export function renderPlannedRoutesEditor() {
     });
 }
 
-export function displayDriverPlannedRoutes(driverId) {
+ function displayDriverPlannedRoutes(driverId) {
     const driver = state.drivers_database.find(d => d.id == driverId) || 
                   (state.currentUser && state.currentUser.id == driverId ? state.currentUser : null);
     
@@ -660,7 +658,7 @@ export function displayDriverPlannedRoutes(driverId) {
     });
 }
 
-export function renderWeekdaySelector() {
+ function renderWeekdaySelector() {
     const container = document.getElementById('planned-route-days');
     if (!container) return;
     
@@ -694,7 +692,7 @@ export function renderWeekdaySelector() {
 // 7. СПОВІЩЕННЯ
 // ==========================================
 
-export function displayNotifications(notifications, userType) {
+ function displayNotifications(notifications, userType) {
     const listContainer = document.getElementById('notification-list');
     if(!listContainer) return;
     
@@ -730,3 +728,25 @@ export function displayNotifications(notifications, userType) {
         });
     }
 }
+// === ДОДАТИ В КІНЕЦЬ ui.js ===
+window.UI = {
+    displayNotifications,
+    displayDriverProfile,
+    displayPassengerProfile,
+    displayDriverFullProfile,
+    showProfilePopup,
+    hideProfilePopup,
+    resetQuickOrder,
+    goToStep,
+    displayOrderDetails, // Додай це, якщо така функція є
+    displayDriverSchedule, // Додай це
+    displayDriverPlannedRoutes // Додай це
+};
+
+// Робимо навігацію глобальною
+window.showScreen = showScreen;
+window.navigateTo = navigateTo;
+window.initUIListeners = initUIListeners;
+
+// Запускаємо слухачі
+document.addEventListener('DOMContentLoaded', initUIListeners);
