@@ -80,18 +80,64 @@ function initApp() {
     // Перевіряємо наявність юзера в базі
     const userId = tempTelegramUser.id.toString();
     const userRef = db.ref('users/' + userId);
-
+    
     userRef.once('value').then((snapshot) => {
         if (snapshot.exists()) {
-            console.log("✅ Auto-login...");
-            window.currentUser = snapshot.val(); // Оновлюємо глобальну змінну
-            updateUserInfoIfNeeded(userRef, tempTelegramUser);
-            routeUserToScreen();
-            startLiveUpdates();
+            const val = snapshot.val();
+            // 🔥 ПЕРЕВІРКА: Чи є у юзера роль?
+            if (val.role && (val.role === 'driver' || val.role === 'passenger')) {
+                console.log("✅ Auto-login (Role exists)...");
+                window.currentUser = val;
+                updateUserInfoIfNeeded(userRef, tempTelegramUser);
+                routeUserToScreen();
+                startLiveUpdates();
+            } else {
+                console.log("⚠️ User exists (phone saved), but NO ROLE selected.");
+                // Тут ми нічого не робимо — юзер бачить кнопки "Я водій / Пасажир" і обирає
+            }
         } else {
-            console.log("🆕 New User. Waiting for registration...");
-            // Тут нічого не робимо, бо кнопки "Я водій/Я пасажир" вже є в HTML
+            console.log("🆕 New User (Clean start).");
         }
+    });
+
+// ВСТАВИТИ ЦЕ ПІСЛЯ function initApp() { ... }
+
+function registerUser(selectedRole) {
+    if (!tempTelegramUser) {
+        // Якщо це тест в браузері без фейкового юзера
+        alert("Помилка: Немає даних Telegram! Перезапустіть сторінку.");
+        return;
+    }
+
+    const userId = tempTelegramUser.id.toString();
+    const userRef = db.ref('users/' + userId);
+
+    // 1. Читаємо поточні дані (щоб не стерти телефон)
+    userRef.once('value').then((snapshot) => {
+        const existingData = snapshot.val() || {};
+        
+        const newUser = {
+            id: userId,
+            name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
+            username: tempTelegramUser.username || "",
+            photoUrl: tempTelegramUser.photo_url || null,
+            // 🔥 Залишаємо телефон, якщо він вже є
+            phone: existingData.phone || "Не вказано",
+            role: selectedRole,
+            rating: existingData.rating || 5.0,
+            trips: existingData.trips || 0,
+            registrationDate: existingData.registrationDate || new Date().toISOString()
+        };
+
+        // 2. Оновлюємо профіль
+        userRef.update(newUser).then(() => {
+            window.currentUser = newUser; // Оновлюємо глобальну змінну
+            routeUserToScreen(); // Переходимо в додаток
+            startLiveUpdates();  // Вмикаємо оновлення
+        }).catch(error => {
+            console.error("Firebase Error:", error);
+            alert("Помилка реєстрації. Спробуйте ще раз.");
+        });
     });
 }
 
@@ -439,26 +485,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const profilePassengerTrips = document.getElementById('profile-passenger-trips');
     const profilePassengerBio = document.getElementById('profile-passenger-bio');
 
-    // --- Навігація (Auth) ---
-    showDriverLoginBtn?.addEventListener('click', () => navigateTo('login-screen-driver'));
-    showPassengerLoginBtn?.addEventListener('click', () => navigateTo('login-screen-passenger'));
+      // === ОБРОБНИКИ КНОПОК ГОЛОВНОГО ЕКРАНУ ===
+    const showDriverLoginBtn = document.getElementById('show-driver-login');
+    const showPassengerLoginBtn = document.getElementById('show-passenger-login');
 
-    // --- Логіка Входу/Реєстрації ---
-    driverTelegramLoginBtn?.addEventListener('click', () => {
-        if (currentUser) {
-            routeUserToScreen();
-        } else {
+    if (showDriverLoginBtn) {
+        showDriverLoginBtn.addEventListener('click', () => {
+            console.log("🚕 Обрано: Водій");
             registerUser('driver');
-        }
-    });
+        });
+    }
 
-    passengerTelegramLoginBtn?.addEventListener('click', () => {
-        if (currentUser) {
-            routeUserToScreen();
-        } else {
-            registerUser('passenger');
-        }
-    });
+    if (showPassengerLoginBtn) {
+        showPassengerLoginBtn.addEventListener('click', () => {
+             console.log("🚶 Обрано: Пасажир");
+             registerUser('passenger');
+        });
+    }
+
 
     // --- Навігація ПАСАЖИРА ---
     showMyOrdersBtn?.addEventListener('click', () => {
