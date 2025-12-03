@@ -1803,6 +1803,20 @@
 
     </div>
     
+    <div id="telegram-error-screen" class="screen hidden" style="background: var(--md-surface); z-index: 9999; text-align: center; padding: 20px; display: none;">
+    <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <i class="fa-brands fa-telegram" style="font-size: 64px; color: var(--md-primary); margin-bottom: 20px;"></i>
+        <h2 style="margin-bottom: 10px;">Потрібна авторизація</h2>
+        <p style="color: var(--md-on-surface-variant); margin-bottom: 30px; max-width: 300px;">
+            Спочатку авторизуйтесь в боті.
+        </p>
+        <a href="https://t.me/yayidubot?start=auth_request" class="btn-main-action accept" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">
+            <i class="fa-solid fa-arrow-right-to-bracket" style="margin-right: 8px;"></i> Авторизуватися
+        </a>
+    </div>
+</div>
+
+    
     <!-- ✅ НОВИЙ БЛОК СКРИПТІВ (Gemini's Brain Transplant) -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
