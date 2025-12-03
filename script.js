@@ -486,8 +486,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const profilePassengerBio = document.getElementById('profile-passenger-bio');
 
       // === ОБРОБНИКИ КНОПОК ГОЛОВНОГО ЕКРАНУ ===
-    const showDriverLoginBtn = document.getElementById('show-driver-login');
-    const showPassengerLoginBtn = document.getElementById('show-passenger-login');
 
     if (showDriverLoginBtn) {
         showDriverLoginBtn.addEventListener('click', () => {
