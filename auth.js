@@ -19,23 +19,28 @@ export function initApp() {
         // Для тестів на ПК можна розкоментувати рядок нижче, щоб працювати без Телеграму:
         // setTempTelegramUser({ id: 999999, first_name: "Test", last_name: "User", username: "test_user" });
         
-        if (!tempTelegramUser) {
+                if (!tempTelegramUser) {
             console.error("❌ No Telegram data found. Showing auth request.");
             
-            // Ховаємо всі екрани
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            // 1. Ховаємо взагалі всі екрани, щоб нічого не проглядало
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.add('hidden');
+                s.style.display = 'none'; 
+            });
             
-            // Показуємо наш екран помилки/авторизації
+            // 2. Знаходимо наш екран помилки
             const errorScreen = document.getElementById('telegram-error-screen');
             if (errorScreen) {
                 errorScreen.classList.remove('hidden');
-                errorScreen.style.display = 'block'; // Примусово показуємо
+                // Важливо: ставимо flex, щоб контент був по центру, як ми задумали в CSS
+                errorScreen.style.display = 'flex'; 
             } else {
-                alert("Помилка: Відкрийте додаток через Telegram! (Error screen not found)");
+                // Аварійний вихід, якщо раптом HTML не провантажився
+                alert("Помилка: Відкрийте додаток через Telegram бот!");
             }
-            return; // Зупиняємо скрипт, далі не йдемо!
+            return; // Все, далі скрипт не пускаємо
         }
-    }
+
 
     // 2. Перевіряємо, чи є юзер в базі
     const userId = tempTelegramUser.id.toString();
