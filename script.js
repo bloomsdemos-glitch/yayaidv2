@@ -1,26 +1,26 @@
-// === ГЛОБАЛЬНІ ЗМІННІ ===
-let currentUser = null; 
+// === ГЛОБАЛЬНІ ЗМІННІ (Тепер доступні для UI) ===
+window.currentUser = null; 
 let globalOrderStatus = 'idle'; 
 let driverStatus = 'offline';
 let currentOfferIdForConfirmation = null;
 
-// Статус оплати (вимкнено до підключення еквайрингу)
+// Статус оплати
 let userHasLinkedCard = false; 
 let driverAcceptsOnlinePayment = false; 
 
-// Тимчасові сховища даних (кеш)
-let orderData = {}; 
-let active_trips = [];
-let notifications_database = [];
-let vh_requests_database = [];
-let vh_offers_database = [];
-let driver_archive = [];
-let passenger_archive = [];
-let drivers_database = [];
-let passengers_database = [];
-let orders_database = [];
-let custom_trips_database = [];
-let active_trips_database = [];
+// Тимчасові сховища даних (кеш) - робимо глобальними
+window.orderData = {}; 
+window.active_trips = [];
+window.notifications_database = [];
+window.vh_requests_database = [];
+window.vh_offers_database = [];
+window.driver_archive = [];
+window.passenger_archive = [];
+window.drivers_database = [];
+window.passengers_database = [];
+window.orders_database = [];
+window.custom_trips_database = [];
+window.active_trips_database = [];
 
 // === 1. FIREBASE CONFIGURATION ===
 const firebaseConfig = {
@@ -45,7 +45,6 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 } else {
     console.error("❌ CRITICAL: Firebase SDK missing.");
 }
-
 // === 2. ГОЛОВНА ЛОГІКА СТАРТУ ===
 let tempTelegramUser = null; 
 
@@ -59,8 +58,22 @@ function initApp() {
         tempTelegramUser = tg.initDataUnsafe.user;
         console.log("📲 Telegram User Detected:", tempTelegramUser);
     } else {
-        // Якщо відкрито не в Telegram - блокуємо роботу
-        alert("Помилка: Відкрийте додаток через Telegram!");
+        // 🔥 ФІКС: Якщо не Телеграм — показуємо красивий екран замість алерту
+        console.error("❌ Not in Telegram");
+        
+        const errorScreen = document.getElementById('telegram-error-screen');
+        const appContainer = document.getElementById('app-container');
+
+        if (errorScreen) {
+            // Ховаємо додаток, щоб не миготів
+            if (appContainer) appContainer.style.display = 'none';
+            // Показуємо екран помилки
+            errorScreen.classList.remove('hidden');
+            errorScreen.style.display = 'flex'; 
+        } else {
+            // Про всяк випадок, якщо HTML не провантажився
+            alert("Помилка: Відкрийте додаток через Telegram!");
+        }
         return; 
     }
 
@@ -71,62 +84,17 @@ function initApp() {
     userRef.once('value').then((snapshot) => {
         if (snapshot.exists()) {
             console.log("✅ Auto-login...");
-            currentUser = snapshot.val();
+            window.currentUser = snapshot.val(); // Оновлюємо глобальну змінну
             updateUserInfoIfNeeded(userRef, tempTelegramUser);
             routeUserToScreen();
             startLiveUpdates();
         } else {
             console.log("🆕 New User. Waiting for registration...");
+            // Тут нічого не робимо, бо кнопки "Я водій/Я пасажир" вже є в HTML
         }
     });
 }
 
-function registerUser(selectedRole) {
-    if (!tempTelegramUser) {
-        alert("Помилка: Немає даних Telegram!");
-        return;
-    }
-
-    const userId = tempTelegramUser.id.toString();
-    const userRef = db.ref('users/' + userId);
-
-    const newUser = {
-        id: userId,
-        name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
-        username: tempTelegramUser.username || "",
-        photoUrl: tempTelegramUser.photo_url || null,
-        phone: "Не вказано",
-        role: selectedRole,
-        rating: 5.0, // Стартовий рейтинг
-        trips: 0,
-        registrationDate: new Date().toISOString()
-    };
-
-    userRef.set(newUser).then(() => {
-        currentUser = newUser;
-        routeUserToScreen();
-        startLiveUpdates();
-    }).catch(error => {
-        console.error("Firebase Error:", error);
-        alert("Помилка реєстрації. Спробуйте ще раз.");
-    });
-}
-
-function updateUserInfoIfNeeded(userRef, tgData) {
-    let updates = {};
-    const actualName = [tgData.first_name, tgData.last_name].join(' ').trim();
-    
-    if (currentUser.name !== actualName) {
-        currentUser.name = actualName;
-        updates.name = actualName;
-    }
-    if (currentUser.photoUrl !== (tgData.photo_url || null)) {
-        currentUser.photoUrl = tgData.photo_url || null;
-        updates.photoUrl = tgData.photo_url || null;
-    }
-    
-    if (Object.keys(updates).length > 0) userRef.update(updates);
-}
 
 function routeUserToScreen() {
     document.getElementById('home-screen').classList.add('hidden');
