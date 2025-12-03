@@ -1793,24 +1793,25 @@
 </div>
 
     
-    <!-- ✅ НОВИЙ БЛОК СКРИПТІВ (Gemini's Brain Transplant) -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
     <script type="module">
+        // Імпортуємо логіку
         import { initApp } from './auth.js';
         import { state } from './state.js';
-        import './main.js'; // Це підключить всі кнопки
+        
+        // Імпортуємо main.js, щоб він виконав свій код (івент лісенери кнопок)
+        import './main.js'; 
 
-        // Запускаємо систему
+        // Запускаємо шарманку
         window.addEventListener('load', () => {
-            console.log("🚀 System Launched (Brain Transplant Complete)");
+            console.log("🚀 System Launched via Module");
             initApp();
         });
 
-        // Для дебагу
+        // Для дебагу через консоль
         window.debugState = state;
     </script>
 </body>
 </html>
-
