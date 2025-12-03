@@ -100,8 +100,7 @@ function initApp() {
         }
     });
 
-// ВСТАВИТИ ЦЕ ПІСЛЯ function initApp() { ... }
-
+    {
 function registerUser(selectedRole) {
     if (!tempTelegramUser) {
         // Якщо це тест в браузері без фейкового юзера
