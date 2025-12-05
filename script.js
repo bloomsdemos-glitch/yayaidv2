@@ -209,8 +209,6 @@ function registerUser(selectedRole) {
 
 function routeUserToScreen() {
     document.getElementById('home-screen').classList.add('hidden');
-    document.getElementById('login-screen-driver').classList.add('hidden');
-    document.getElementById('login-screen-passenger').classList.add('hidden');
 
     if (currentUser.role === 'driver') {
         navigateTo('driver-home-screen');
