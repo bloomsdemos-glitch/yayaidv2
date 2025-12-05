@@ -1,12 +1,17 @@
-// auth.js
+// auth.js (ВИПРАВЛЕНА ВЕРСІЯ)
 import { db } from "./firebase-init.js";
-import { ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+import { ref, get, update } from "firebase/database"; // Залежить від версії Firebase
 import { state, setTempTelegramUser, tempTelegramUser } from "./state.js";
-import { navigateTo } from './ui.js';
 
 // === ГОЛОВНА ФУНКЦІЯ ЗАПУСКУ ===
 export function initApp() {
     const tg = window.Telegram.WebApp;
+    if (!tg) {
+        console.error("Telegram WebApp not found");
+        showTelegramError();
+        return;
+    }
+    
     tg.expand(); 
     tg.ready();
 
@@ -14,35 +19,24 @@ export function initApp() {
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
         setTempTelegramUser(tg.initDataUnsafe.user);
         console.log("📲 Telegram User Detected:", tempTelegramUser);
+        checkUserInDatabase();
     } else {
-        // === 🔥 НОВА ЛОГІКА: ЯКЩО НЕМАЄ ДАНИХ ===
-        // Для тестів на ПК можна розкоментувати рядок нижче, щоб працювати без Телеграму:
+        // Для тестів на ПК можна розкоментувати:
         // setTempTelegramUser({ id: 999999, first_name: "Test", last_name: "User", username: "test_user" });
+        // checkUserInDatabase();
+        // return;
         
-                if (!tempTelegramUser) {
-            console.error("❌ No Telegram data found. Showing auth request.");
-            
-            // 1. Ховаємо взагалі всі екрани, щоб нічого не проглядало
-            document.querySelectorAll('.screen').forEach(s => {
-                s.classList.add('hidden');
-                s.style.display = 'none'; 
-            });
-            
-            // 2. Знаходимо наш екран помилки
-            const errorScreen = document.getElementById('telegram-error-screen');
-            if (errorScreen) {
-                errorScreen.classList.remove('hidden');
-                // Важливо: ставимо flex, щоб контент був по центру, як ми задумали в CSS
-                errorScreen.style.display = 'flex'; 
-            } else {
-                // Аварійний вихід, якщо раптом HTML не провантажився
-                alert("Помилка: Відкрийте додаток через Telegram бот!");
-            }
-            return; // Все, далі скрипт не пускаємо
-        }
+        console.error("❌ No Telegram data found. Showing auth request.");
+        showTelegramError();
+    }
+}
 
+function checkUserInDatabase() {
+    if (!tempTelegramUser) {
+        showTelegramError();
+        return;
+    }
 
-    // 2. Перевіряємо, чи є юзер в базі
     const userId = tempTelegramUser.id.toString();
     const userRef = ref(db, 'users/' + userId);
 
@@ -51,7 +45,7 @@ export function initApp() {
             console.log("✅ Auto-login...");
             state.currentUser = snapshot.val();
             
-            // Оновлюємо дані, якщо в Телеграмі щось змінилось (ім'я/фото)
+            // Оновлюємо дані, якщо в Телеграмі щось змінилось
             updateUserInfoIfNeeded(userId, tempTelegramUser);
             
             // Запускаємо додаток для цього юзера
@@ -60,14 +54,34 @@ export function initApp() {
             console.log("Юзер залогінений:", state.currentUser);
         } else {
             console.log("🆕 New User. Waiting for registration...");
-            // Ховаємо лоадери/помилки і показуємо екран вибору (Водій/Пасажир)
+            // Показуємо екран вибору (Водій/Пасажир)
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById('home-screen').classList.remove('hidden');
+            const homeScreen = document.getElementById('home-screen');
+            if (homeScreen) {
+                homeScreen.classList.remove('hidden');
+            }
         }
     }).catch(error => {
         console.error("Firebase Error:", error);
         alert("Помилка з'єднання з базою даних.");
     });
+}
+
+function showTelegramError() {
+    // Ховаємо всі екрани
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.add('hidden');
+        s.style.display = 'none'; 
+    });
+    
+    // Показуємо екран помилки
+    const errorScreen = document.getElementById('telegram-error-screen');
+    if (errorScreen) {
+        errorScreen.classList.remove('hidden');
+        errorScreen.style.display = 'flex'; 
+    } else {
+        alert("Помилка: Відкрийте додаток через Telegram бот!");
+    }
 }
 
 // === РЕЄСТРАЦІЯ НОВОГО ЮЗЕРА ===
@@ -80,7 +94,7 @@ export function registerUser(selectedRole) {
     const userId = tempTelegramUser.id.toString();
     const userRef = ref(db, 'users/' + userId);
 
-    // Перевіряємо, чи вже є телефон в базі (записаний ботом)
+    // Перевіряємо, чи вже є телефон в базі
     get(userRef).then((snapshot) => {
         let phone = "Не вказано";
         if (snapshot.exists() && snapshot.val().phone) {
@@ -92,7 +106,7 @@ export function registerUser(selectedRole) {
             name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
             username: tempTelegramUser.username || "",
             photoUrl: tempTelegramUser.photo_url || null,
-            phone: phone, // Підтягуємо телефон, якщо бот вже записав
+            phone: phone,
             role: selectedRole,
             rating: 5.0,
             trips: 0,
@@ -119,12 +133,18 @@ function routeUserToScreen() {
 
     // 2. Дивимось роль і відкриваємо потрібний екран
     if (state.currentUser.role === 'driver') {
-        navigateTo('driver-home-screen');
-        document.getElementById('driver-tab-bar').classList.remove('hidden');
+        if (typeof navigateTo === 'function') {
+            navigateTo('driver-home-screen');
+        }
+        const driverTabBar = document.getElementById('driver-tab-bar');
+        if (driverTabBar) driverTabBar.classList.remove('hidden');
         updateHeaderWithAvatar('driver-home-screen');
     } else {
-        navigateTo('passenger-home-screen');
-        document.getElementById('passenger-tab-bar').classList.remove('hidden');
+        if (typeof navigateTo === 'function') {
+            navigateTo('passenger-home-screen');
+        }
+        const passengerTabBar = document.getElementById('passenger-tab-bar');
+        if (passengerTabBar) passengerTabBar.classList.remove('hidden');
         updateHeaderWithAvatar('passenger-home-screen');
     }
 }
@@ -152,7 +172,7 @@ function updateUserInfoIfNeeded(userId, tgData) {
 // === UI ХЕЛПЕРИ ===
 function updateHeaderWithAvatar(screenId) {
     const screen = document.getElementById(screenId);
-    if (!screen) return;
+    if (!screen || !state.currentUser) return;
 
     const nameEl = screen.querySelector('h3');
     if (nameEl) nameEl.textContent = state.currentUser.name;
@@ -192,3 +212,6 @@ function getUserColor(id) {
     }
     return colors[Math.abs(hash) % colors.length];
 }
+
+// Експортуємо додаткові функції, якщо потрібно
+export { routeUserToScreen, updateHeaderWithAvatar };
