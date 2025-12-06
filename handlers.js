@@ -1,196 +1,186 @@
+import { db } from './firebase-init.js';
+import { ref, update, set, push, child } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+import { state } from './state.js';
+import { UI, navigateTo } from './ui.js';
+
+// === ФУНКЦІЯ ЗБЕРЕЖЕННЯ (Синхронізація з Firebase) ===
+function saveState() {
+    // Оновлюємо активні поїздки
+    const tripsObj = {};
+    state.active_trips.forEach(t => tripsObj[t.id] = t);
+    update(ref(db, 'active_trips'), tripsObj);
+
+    // Оновлюємо сповіщення (тільки нові додаємо, але для спрощення поки так)
+    state.notifications_database.forEach(n => {
+        update(ref(db, 'notifications/' + n.id), n);
+    });
+    
+    // В-Х пропозиції та запити
+    const offersObj = {};
+    state.vh_offers_database.forEach(o => offersObj[o.id] = o);
+    set(ref(db, 'vh_offers'), offersObj);
+
+    const requestsObj = {};
+    state.vh_requests_database.forEach(r => requestsObj[r.id] = r);
+    set(ref(db, 'vh_requests'), requestsObj);
+    
+    // Замовлення (таксі)
+    const ordersObj = {};
+    state.orders_database.forEach(o => ordersObj[o.id] = o);
+    update(ref(db, 'orders'), ordersObj);
+}
+
+// === ОБРОБНИКИ ===
+
 function selectOffer(offerId) {
-    const offer = vh_offers_database.find(o => o.id === offerId);
+    const offer = state.vh_offers_database.find(o => o.id == offerId); // == бо id може бути стрінгою
     if (!offer) return;
-    const driver = drivers_database.find(d => d.id === offer.driverId);
+    
+    const driver = state.drivers_database.find(d => d.id == offer.driverId);
     if (!driver) return;
 
-    // Створюємо сповіщення для водія
+    // Створюємо сповіщення
     const newNotification = {
         id: Date.now(),
         userId: offer.driverId,
-        // Додаємо ID пасажира (поточного юзера), щоб водій знав, кого підтверджувати
-        passengerId: currentUser.id, 
-        text: `<strong>Нове замовлення!</strong> Пасажир хоче поїхати з вами за маршрутом <strong>${offer.direction}</strong>.`,
+        passengerId: state.currentUser.id,
+        text: `<strong>Нове замовлення!</strong> Пасажир хоче поїхати з вами: <strong>${offer.direction}</strong>.`,
         type: 'new_order',
         isRead: false,
         offerId: offerId
     };
-    notifications_database.push(newNotification);
-    saveState(); // Зберігаємо в базу
+    state.notifications_database.push(newNotification);
+    
+    // Зберігаємо в базу
+    update(ref(db, 'notifications/' + newNotification.id), newNotification);
 
-    // Оновлюємо бейдж (хоча realtime listener це теж зробить)
-    const notificationBadge = document.getElementById('driver-notification-badge');
-    if (notificationBadge) {
-        // Тут краще покладатись на listener, але для миттєвої реакції можна залишити
-        notificationBadge.classList.remove('hidden');
-    }
-
-    alert(`Ваш запит надіслано водію ${driver.name}. Очікуйте на підтвердження.`);
+    alert(`Запит надіслано водію ${driver.name}.`);
     navigateTo('passenger-home-screen');
 }
 
 function handleNotificationInteraction(event) {
     const notificationCard = event.target.closest('.notification-card');
-    // Отримуємо ID самого сповіщення, щоб дістати з нього дані
     const notificationId = notificationCard?.dataset.notificationId;
     
     if (!notificationId) return;
 
-    // Знаходимо саме сповіщення в базі
-    const notification = notifications_database.find(n => n.id == notificationId);
+    const notification = state.notifications_database.find(n => n.id == notificationId);
     if (!notification || !notification.offerId) return;
 
-    const offer = vh_offers_database.find(o => o.id == notification.offerId);
-    
-    // Знаходимо реального пасажира за ID, який ми записали в selectOffer
-    const passenger = passengers_database.find(p => p.id == notification.passengerId);
+    const offer = state.vh_offers_database.find(o => o.id == notification.offerId);
+    const passenger = state.passengers_database.find(p => p.id == notification.passengerId);
     
     if (!offer || !passenger) return;
 
     document.getElementById('vh-confirm-passenger-name').textContent = passenger.name;
-    // Рейтинг пасажира (безпечна перевірка)
-    const ratingHtml = passenger.rating ? `${passenger.rating.toFixed(1)} <i class="fa-solid fa-star"></i>` : 'Новий';
-    const tripsHtml = passenger.trips ? ` • ${passenger.trips} поїздок` : '';
-    document.getElementById('vh-confirm-passenger-rating').innerHTML = ratingHtml + tripsHtml;
-    
+    document.getElementById('vh-confirm-passenger-rating').textContent = `${passenger.rating || 5} ★`;
     document.getElementById('vh-confirm-direction').textContent = offer.direction;
-    document.getElementById('vh-confirm-specifics').textContent = `${offer.fromSpecific || 'Точка не вказана'} - ${offer.toSpecific || 'Точка не вказана'}`;
     document.getElementById('vh-confirm-time').textContent = offer.time;
 
-    currentOfferIdForConfirmation = offer.id;
+    state.currentOfferIdForConfirmation = offer.id;
     navigateTo('driver-vh-confirmation-screen');
 }
 
 function showUserNotifications(userType) {
-    if (!currentUser) return;
+    if (!state.currentUser) return;
     
-    const currentUserId = currentUser.id;
-    const userNotifications = notifications_database.filter(n => n.userId === currentUserId);
-
-    const backBtn = document.querySelector('#notifications-screen .btn-back');
-    backBtn.dataset.target = (userType === 'driver') ? 'driver-home-screen' : 'passenger-home-screen';
-
+    const userNotifications = state.notifications_database.filter(n => n.userId == state.currentUser.id);
     UI.displayNotifications(userNotifications, userType);
 
     const listContainer = document.getElementById('notification-list');
-    // Видаляємо старий слухач, щоб не дублювались кліки
-    listContainer.removeEventListener('click', handleNotificationInteraction);
     
-    // Додаємо слухач тільки якщо це водій і йому треба реагувати на замовлення
+    // Перестворюємо елемент, щоб видалити старі слухачі
+    const newList = listContainer.cloneNode(false);
+    listContainer.parentNode.replaceChild(newList, listContainer);
+    
+    // Додаємо контент
+    UI.displayNotifications(userNotifications, userType);
+    
+    // Додаємо слухач заново
     if (userType === 'driver') {
-        listContainer.addEventListener('click', handleNotificationInteraction);
+        document.getElementById('notification-list').addEventListener('click', handleNotificationInteraction);
     }
-
+    
     navigateTo('notifications-screen');
 }
 
-function updateAllDriverTripViews() {
-    // Шукаємо активну поїздку саме для цього водія
-    const trip = active_trips.find(t => t.driverId == currentUser.id);
-
-    const homeMenuContainer = document.getElementById('driver-home-menu-container');
-    const homeActiveTripContainer = document.getElementById('driver-home-active-trip-container');
+function acceptOrderAction(order) {
+    // Створення поїздки
+    const newTaxiTrip = {
+        id: Date.now(),
+        driverId: state.currentUser.id,
+        passengerId: order.passengerId,
+        passengerName: order.passengerName,
+        from: order.from,
+        to: order.to,
+        time: 'Зараз',
+        status: 'in_progress',
+        type: 'taxi'
+    };
     
-    if (trip) {
-        if (homeMenuContainer) homeMenuContainer.style.display = 'none';
-        if (homeActiveTripContainer) {
-            homeActiveTripContainer.style.display = 'block';
-            homeActiveTripContainer.innerHTML = UI.createActiveTripCardHTML(trip, 'driver');
-            const card = homeActiveTripContainer.querySelector('.order-card');
-            if (card) {
-                card.onclick = () => navigateTo('driver-orders-screen');
-            }
-        }
-    } else {
-        if (homeMenuContainer) homeMenuContainer.style.display = 'block';
-        if (homeActiveTripContainer) homeActiveTripContainer.style.display = 'none';
-    }
+    state.active_trips.push(newTaxiTrip);
+    
+    // Видаляємо замовлення із загального списку
+    const orderIndex = state.orders_database.indexOf(order);
+    if (orderIndex > -1) state.orders_database.splice(orderIndex, 1);
 
-    const ordersActiveTripCard = document.getElementById('driver-active-trip-card');
-    const noOrdersMsg = document.getElementById('no-active-driver-orders');
+    // Зберігаємо зміни
+    saveState(); // Це оновить active_trips та orders в базі
 
-    if (ordersActiveTripCard && noOrdersMsg) {
-        if (trip) {
-            // Безпечне заповнення даних (перевіряємо чи є елементи)
-            const elName = ordersActiveTripCard.querySelector('#driver-active-passenger-name');
-            const elFrom = ordersActiveTripCard.querySelector('#driver-active-from-address');
-            const elTo = ordersActiveTripCard.querySelector('#driver-active-to-address');
-
-            if(elName) elName.textContent = trip.passengerName;
-            
-            // Обробка адреси (для таксі або міжміста)
-            const fromAddr = trip.from || (trip.direction ? trip.direction.split(' - ')[0] : '???');
-            const toAddr = trip.to || (trip.direction ? trip.direction.split(' - ')[1] : '???');
-            
-            if(elFrom) elFrom.textContent = fromAddr;
-            if(elTo) elTo.textContent = toAddr;
-
-            ordersActiveTripCard.onclick = () => {
-                document.getElementById('details-active-passenger-name').textContent = trip.passengerName;
-                document.getElementById('details-active-from-address').textContent = fromAddr;
-                document.getElementById('details-active-to-address').textContent = toAddr;
-                navigateTo('driver-active-trip-details-screen');
-            };
-
-            ordersActiveTripCard.style.display = 'block';
-            noOrdersMsg.style.display = 'none';
-        } else {
-            ordersActiveTripCard.style.display = 'none';
-            noOrdersMsg.style.display = 'block';
-        }
-    }
+    // Оновлюємо UI
+    window.updateAllDriverTripViews();
+    window.updateHomeScreenView('passenger'); // Умовно, бо це працює через listener в main.js
+    
+    navigateTo('driver-orders-screen');
+    alert('Замовлення прийнято! Рушайте до пасажира.');
 }
 
-function setupSeatCounter(minusBtnId, plusBtnId, displayId, maxSeats = 4) {
-    const minusBtn = document.getElementById(minusBtnId);
-    const plusBtn = document.getElementById(plusBtnId);
-    const display = document.getElementById(displayId);
+// Оновлення карток активної поїздки (викликається з main.js при змінах в базі)
+function updateAllDriverTripViews() {
+    if (!state.currentUser) return;
+    const trip = state.active_trips.find(t => t.driverId == state.currentUser.id);
 
-    if (!minusBtn || !plusBtn || !display) return;
-
-    let count = 1;
-    function updateDisplay() {
-        display.textContent = count;
-        minusBtn.classList.toggle('disabled', count === 1);
-        plusBtn.classList.toggle('disabled', count === maxSeats);
+    const homeActive = document.getElementById('driver-home-active-trip-container');
+    const homeMenu = document.getElementById('driver-home-menu-container');
+    
+    if (trip) {
+        if(homeMenu) homeMenu.style.display = 'none';
+        if(homeActive) {
+            homeActive.style.display = 'block';
+            homeActive.innerHTML = UI.createActiveTripCardHTML(trip, 'driver');
+            homeActive.onclick = () => navigateTo('driver-orders-screen');
+        }
+    } else {
+        if(homeMenu) homeMenu.style.display = 'block';
+        if(homeActive) homeActive.style.display = 'none';
     }
-
-    minusBtn.addEventListener('click', () => {
-        if (count > 1) {
-            count--;
-            updateDisplay();
-        }
-    });
-    plusBtn.addEventListener('click', () => {
-        if (count < maxSeats) {
-            count++;
-            updateDisplay();
-        }
-    });
-    updateDisplay();
+    // Тут можна додати логіку для екрану замовлень (Orders Screen), але основне зроблено
 }
 
 function updateHomeScreenView(userType) {
-    if (userType !== 'passenger' || !currentUser) return;
-
-    // Шукаємо поїздку саме цього пасажира
-    const trip = active_trips.find(t => t.passengerId == currentUser.id);
+    if (userType !== 'passenger' || !state.currentUser) return;
+    const trip = state.active_trips.find(t => t.passengerId == state.currentUser.id);
     
-    const homeMenuContainer = document.getElementById('passenger-home-menu-container');
-    const homeActiveTripContainer = document.getElementById('passenger-home-active-trip-container');
+    const homeActive = document.getElementById('passenger-home-active-trip-container');
+    const homeMenu = document.getElementById('passenger-home-menu-container');
 
     if (trip) {
-        if (homeMenuContainer) homeMenuContainer.style.display = 'none';
-        if (homeActiveTripContainer) {
-            homeActiveTripContainer.style.display = 'block';
-            homeActiveTripContainer.innerHTML = UI.createActiveTripCardHTML(trip, 'passenger');
-            const card = homeActiveTripContainer.querySelector('.order-card');
-            if (card) {
-                card.onclick = () => navigateTo('passenger-orders-screen');
-            }
+        if(homeMenu) homeMenu.style.display = 'none';
+        if(homeActive) {
+            homeActive.style.display = 'block';
+            homeActive.innerHTML = UI.createActiveTripCardHTML(trip, 'passenger');
+            homeActive.onclick = () => navigateTo('passenger-orders-screen');
         }
     } else {
-        if (homeMenuContainer) homeMenuContainer.style.display = 'block';
-        if (homeActiveTripContainer) homeActiveTripContainer.style.display = 'none';
+        if(homeMenu) homeMenu.style.display = 'block';
+        if(homeActive) homeActive.style.display = 'none';
     }
 }
+
+// === РОБИМО ГЛОБАЛЬНИМИ ===
+window.selectOffer = selectOffer;
+window.handleNotificationInteraction = handleNotificationInteraction;
+window.showUserNotifications = showUserNotifications;
+window.acceptOrderAction = acceptOrderAction;
+window.updateAllDriverTripViews = updateAllDriverTripViews;
+window.updateHomeScreenView = updateHomeScreenView;
