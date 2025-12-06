@@ -12,11 +12,9 @@ const firebaseConfig = {
   appId: "1:330892131306:web:9b8f63ec738177c06e5093"
 };
 
-// Ініціалізуємо
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 console.log("🔥 Firebase Module: Connected!");
 
-// Експортуємо базу, щоб інші файли могли нею користуватись
 export { db, app };
