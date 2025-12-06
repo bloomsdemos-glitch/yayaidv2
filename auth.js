@@ -1,6 +1,6 @@
-// auth.js (ВИПРАВЛЕНА ВЕРСІЯ)
 import { db } from "./firebase-init.js";
-import { ref, get, update } from "firebase/database"; // Залежить від версії Firebase
+// Оновлений імпорт з повним посиланням:
+import { ref, get, update } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 import { state, setTempTelegramUser, tempTelegramUser } from "./state.js";
 
 // === ГОЛОВНА ФУНКЦІЯ ЗАПУСКУ ===
@@ -21,10 +21,9 @@ export function initApp() {
         console.log("📲 Telegram User Detected:", tempTelegramUser);
         checkUserInDatabase();
     } else {
-        // Для тестів на ПК можна розкоментувати:
+        // Для тестів на ПК:
         // setTempTelegramUser({ id: 999999, first_name: "Test", last_name: "User", username: "test_user" });
         // checkUserInDatabase();
-        // return;
         
         console.error("❌ No Telegram data found. Showing auth request.");
         showTelegramError();
@@ -59,6 +58,7 @@ function checkUserInDatabase() {
             const homeScreen = document.getElementById('home-screen');
             if (homeScreen) {
                 homeScreen.classList.remove('hidden');
+                homeScreen.classList.add('active'); // Важливо додати active для CSS
             }
         }
     }).catch(error => {
@@ -68,19 +68,15 @@ function checkUserInDatabase() {
 }
 
 function showTelegramError() {
-    // Ховаємо всі екрани
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.add('hidden');
-        s.style.display = 'none'; 
+        s.classList.remove('active');
     });
     
-    // Показуємо екран помилки
     const errorScreen = document.getElementById('telegram-error-screen');
     if (errorScreen) {
         errorScreen.classList.remove('hidden');
         errorScreen.style.display = 'flex'; 
-    } else {
-        alert("Помилка: Відкрийте додаток через Telegram бот!");
     }
 }
 
@@ -94,7 +90,6 @@ export function registerUser(selectedRole) {
     const userId = tempTelegramUser.id.toString();
     const userRef = ref(db, 'users/' + userId);
 
-    // Перевіряємо, чи вже є телефон в базі
     get(userRef).then((snapshot) => {
         let phone = "Не вказано";
         if (snapshot.exists() && snapshot.val().phone) {
@@ -113,10 +108,9 @@ export function registerUser(selectedRole) {
             registrationDate: new Date().toISOString()
         };
 
-        // Зберігаємо/Оновлюємо профіль
         update(userRef, newUser).then(() => {
             state.currentUser = newUser;
-            routeUserToScreen(); // Перекидаємо на головну
+            routeUserToScreen();
         }).catch(error => {
             console.error("Registration Error:", error);
             alert("Помилка реєстрації. Спробуйте ще раз.");
@@ -124,32 +118,29 @@ export function registerUser(selectedRole) {
     });
 }
 
-// === МАРШРУТИЗАЦІЯ (КУДИ ЙТИ ПІСЛЯ ВХОДУ) ===
+// === МАРШРУТИЗАЦІЯ ===
 function routeUserToScreen() {
-    // 1. Ховаємо екрани входу і помилок
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.add('hidden');
+        s.classList.remove('active');
+    });
+    
     const errorScreen = document.getElementById('telegram-error-screen');
     if (errorScreen) errorScreen.style.display = 'none';
 
-    // 2. Дивимось роль і відкриваємо потрібний екран
     if (state.currentUser.role === 'driver') {
-        if (typeof navigateTo === 'function') {
-            navigateTo('driver-home-screen');
-        }
+        if (window.navigateTo) window.navigateTo('driver-home-screen');
         const driverTabBar = document.getElementById('driver-tab-bar');
         if (driverTabBar) driverTabBar.classList.remove('hidden');
         updateHeaderWithAvatar('driver-home-screen');
     } else {
-        if (typeof navigateTo === 'function') {
-            navigateTo('passenger-home-screen');
-        }
+        if (window.navigateTo) window.navigateTo('passenger-home-screen');
         const passengerTabBar = document.getElementById('passenger-tab-bar');
         if (passengerTabBar) passengerTabBar.classList.remove('hidden');
         updateHeaderWithAvatar('passenger-home-screen');
     }
 }
 
-// === ОНОВЛЕННЯ ДАНИХ (SYNC) ===
 function updateUserInfoIfNeeded(userId, tgData) {
     const userRef = ref(db, 'users/' + userId);
     let updates = {};
@@ -164,12 +155,10 @@ function updateUserInfoIfNeeded(userId, tgData) {
     
     if (Object.keys(updates).length > 0) {
         update(userRef, updates);
-        // Оновлюємо локальний стейт теж
         state.currentUser = { ...state.currentUser, ...updates };
     }
 }
 
-// === UI ХЕЛПЕРИ ===
 function updateHeaderWithAvatar(screenId) {
     const screen = document.getElementById(screenId);
     if (!screen || !state.currentUser) return;
@@ -182,17 +171,15 @@ function updateHeaderWithAvatar(screenId) {
         if (state.currentUser.photoUrl) {
             avatarContainer.innerHTML = `<img src="${state.currentUser.photoUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
             avatarContainer.style.background = 'none';
-            avatarContainer.style.display = 'flex';
-            avatarContainer.style.overflow = 'hidden';
         } else {
             const initials = getInitials(state.currentUser.name);
             const color = getUserColor(state.currentUser.id);
             avatarContainer.innerHTML = `<span style="color:white; font-weight:bold; font-size:18px;">${initials}</span>`;
             avatarContainer.style.background = color;
-            avatarContainer.style.display = 'flex';
-            avatarContainer.style.alignItems = 'center';
-            avatarContainer.style.justifyContent = 'center';
         }
+        avatarContainer.style.display = 'flex';
+        avatarContainer.style.alignItems = 'center';
+        avatarContainer.style.justifyContent = 'center';
     }
 }
 
@@ -212,6 +199,3 @@ function getUserColor(id) {
     }
     return colors[Math.abs(hash) % colors.length];
 }
-
-// Експортуємо додаткові функції, якщо потрібно
-export { routeUserToScreen, updateHeaderWithAvatar };
