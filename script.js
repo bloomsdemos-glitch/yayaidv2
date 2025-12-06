@@ -103,40 +103,59 @@ function initApp() {
     
 function registerUser(selectedRole) {
     if (!tempTelegramUser) {
-        // Якщо це тест в браузері без фейкового юзера
-        alert("Помилка: Немає даних Telegram! Перезапустіть сторінку.");
+        alert("Помилка: Немає даних Telegram. Зайдіть через бота.");
         return;
     }
 
     const userId = tempTelegramUser.id.toString();
-    const userRef = db.ref('users/' + userId);
+    const userRef = firebase.database().ref('users/' + userId);
 
-    // 1. Читаємо поточні дані (щоб не стерти телефон)
-    userRef.once('value').then((snapshot) => {
-        const existingData = snapshot.val() || {};
+    // Формуємо справжнє ім'я
+    const realName = [tempTelegramUser.first_name, tempTelegramUser.last_name].filter(Boolean).join(' ');
+
+    const newUser = {
+        id: userId,
+        name: realName || "Користувач", // Твоє ім'я з ТГ!
+        username: tempTelegramUser.username || "",
+        role: selectedRole,
+        phone: "Не вказано", // Тут можна додати запит телефону пізніше
+        rating: 5.0,
+        trips: 0,
+        last_login: new Date().toISOString()
+    };
+
+    // Зберігаємо в базу
+    userRef.update(newUser).then(() => {
+        console.log("✅ Успішна реєстрація/Вхід!");
         
-        const newUser = {
-            id: userId,
-            name: [tempTelegramUser.first_name, tempTelegramUser.last_name].join(' ').trim() || "Користувач",
-            username: tempTelegramUser.username || "",
-            photoUrl: tempTelegramUser.photo_url || null,
-            // 🔥 Залишаємо телефон, якщо він вже є
-            phone: existingData.phone || "Не вказано",
-            role: selectedRole,
-            rating: existingData.rating || 5.0,
-            trips: existingData.trips || 0,
-            registrationDate: existingData.registrationDate || new Date().toISOString()
-        };
+        // 1. Оновлюємо глобальну змінну
+        window.currentUser = newUser;
+        
+        // 2. ОНОВЛЮЄМО ІНТЕРФЕЙС ПРЯМО ЗАРАЗ
+        if (selectedRole === 'passenger') {
+            // Прибираємо "Віту Б." і ставимо твоє ім'я
+            const nameEl = document.getElementById('profile-passenger-name');
+            const headerNameEl = document.getElementById('profile-passenger-name-header');
+            if(nameEl) nameEl.textContent = newUser.name;
+            if(headerNameEl) headerNameEl.textContent = `Привіт, ${newUser.name}`;
+            
+            updateHeaderWithAvatar('passenger-home-screen');
+            navigateTo('passenger-home-screen');
+        } else {
+            // Те саме для водія
+            const nameEl = document.getElementById('profile-driver-name');
+            if(nameEl) nameEl.textContent = newUser.name;
+            
+            updateHeaderWithAvatar('driver-home-screen');
+            navigateTo('driver-home-screen');
+        }
+        
+        // 3. Запускаємо прослуховування бази
+        startLiveUpdates();
 
-        // 2. Оновлюємо профіль
-        userRef.update(newUser).then(() => {
-            window.currentUser = newUser; // Оновлюємо глобальну змінну
-            routeUserToScreen(); // Переходимо в додаток
-            startLiveUpdates();  // Вмикаємо оновлення
-        }).catch(error => {
-            console.error("Firebase Error:", error);
-            alert("Помилка реєстрації. Спробуйте ще раз.");
-        });
+    }).catch((error) => {
+        console.error("Помилка входу:", error);
+        alert("Помилка бази даних: " + error.message);
     });
 }
 
@@ -373,6 +392,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const choiceCreateTripBtn = document.getElementById('choice-create-trip');
     const choiceFindPassengersBtn = document.getElementById('choice-find-    passengers');
 
+// === 🔥 ФІКС: ГОЛОВНІ КНОПКИ ВОДІЯ ===
+    if (choiceCreateTripBtn) {
+        choiceCreateTripBtn.addEventListener('click', () => {
+            navigateTo('driver-create-trip-choice-screen');
+        });
+    }
+
+    if (choiceFindPassengersBtn) {
+        choiceFindPassengersBtn.addEventListener('click', () => {
+            // Переходимо на екран пошуку і одразу завантажуємо замовлення
+            navigateTo('driver-find-passengers-screen');
+            if (typeof displayDriverOrders === 'function') {
+                displayDriverOrders();
+            }
+        });
+    }
+
     // =======================================================
     // == ЛОГІКА ДЛЯ FAB-КНОПКИ ВОДІЯ ==
     // =======================================================
@@ -445,6 +481,47 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const paymentCashBtn = document.getElementById('payment-cash-btn');
     const paymentCardBtn = document.getElementById('payment-card-btn');
+
+// === 🔥 ФІКС: КНОПКИ НАСЕЛЕНИХ ПУНКТІВ (ПАСАЖИР) ===
+    const passSettlementBtns = document.querySelectorAll('#quick-order-screen .btn-settlement');
+    
+    passSettlementBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const group = btn.dataset.group; // 'from' або 'to'
+            const type = btn.dataset.type;   // 'valky' або 'village'
+
+            // 1. Перемикання активного класу кнопок
+            document.querySelectorAll(`#quick-order-screen .btn-settlement[data-group="${group}"]`)
+                .forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 2. Показуємо/ховаємо відповідні поля
+            const inputContainer = document.getElementById(`${group}-address-container`);
+            const villageContainer = document.getElementById(`${group}-village-container`);
+            
+            // Очищаємо дані перед зміною типу
+            if (group === 'from') orderData.from = '';
+            if (group === 'to') orderData.to = '';
+
+            if (type === 'valky') {
+                if(inputContainer) inputContainer.style.display = 'block';
+                if(villageContainer) villageContainer.style.display = 'none';
+                // Скидаємо селект
+                const select = document.getElementById(`${group}-village-select`);
+                if(select) select.selectedIndex = 0;
+            } else {
+                if(inputContainer) inputContainer.style.display = 'none';
+                if(villageContainer) villageContainer.style.display = 'block';
+                // Очищаємо інпут
+                const input = document.getElementById(`${group}-address`);
+                if(input) input.value = '';
+            }
+
+            // 3. Перевіряємо, чи можна йти далі (оновлюємо кнопку "Далі")
+            if(window.UI && UI.checkAddressInputs) UI.checkAddressInputs();
+        });
+    });
+
 
 // === 🔥 ФІКС 1: СЛУХАЧІ ДЛЯ АДРЕСИ ===
     const addressInputs = [fromAddressInput, toAddressInput, fromVillageSelect, toVillageSelect];
