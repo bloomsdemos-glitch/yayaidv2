@@ -99,74 +99,8 @@ function initApp() {
             console.log("🆕 New User (Clean start).");
         }
     });
+  }
     
-    // === ДОДАТИ В КІНЕЦЬ script.js ===
-
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("🚀 DOM Loaded via script.js");
-
-    const btnDriver = document.getElementById('show-driver-login');
-    const btnPassenger = document.getElementById('show-passenger-login');
-
-    if (btnDriver) {
-        btnDriver.addEventListener('click', () => {
-            console.log("🚕 Клік: Я Водій");
-            // Тут ми поки просто викликаємо логіку реєстрації, яку допишемо нижче
-            handleRoleSelection('driver');
-        });
-    } else {
-        console.error("❌ Кнопка 'show-driver-login' не знайдена в HTML");
-    }
-
-    if (btnPassenger) {
-        btnPassenger.addEventListener('click', () => {
-            console.log("🚶 Клік: Я Пасажир");
-            handleRoleSelection('passenger');
-        });
-    }
-    
-    // Запускаємо ініціалізацію Телеграму і бази
-    initApp();
-});
-
-function handleRoleSelection(role) {
-    console.log("⚙️ Обробка ролі:", role);
-    
-    if (!tempTelegramUser) {
-        alert("Помилка: Немає даних Telegram. Зайдіть через бота.");
-        return;
-    }
-
-    // Зберігаємо юзера в базу з обраною роллю
-    const userId = tempTelegramUser.id.toString();
-    const userRef = db.ref('users/' + userId);
-
-    const userData = {
-        id: userId,
-        first_name: tempTelegramUser.first_name || '',
-        username: tempTelegramUser.username || '',
-        role: role,
-        phone_linked: true, // Вважаємо, що раз зайшов - номер є (спрощення)
-        last_login: new Date().toISOString()
-    };
-
-    userRef.update(userData).then(() => {
-        console.log("✅ Роль збережено в БД! Перенаправляємо...");
-        window.currentUser = userData;
-        // Тут має бути функція переходу на екран, поки просто перезавантажимо або покажемо алерт
-        alert("Роль обрано: " + role + ". Оновлюю...");
-        // В ідеалі тут має бути routeUserToScreen(), якщо вона у тебе є в script.js
-        if (typeof routeUserToScreen === 'function') {
-            routeUserToScreen();
-        }
-    }).catch((error) => {
-        console.error("❌ Помилка збереження:", error);
-        alert("Помилка бази даних: " + error.message);
-    });
-}
-
-
-    {
 function registerUser(selectedRole) {
     if (!tempTelegramUser) {
         // Якщо це тест в браузері без фейкового юзера
