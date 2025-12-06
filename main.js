@@ -2,7 +2,7 @@
 
 // 1. Імпортуємо модулі
 import { initApp, registerUser } from './auth.js';
-import { initUIListeners, showScreen, navigateTo, UI } from './ui.js'; // Додали UI в імпорт
+import { initUIListeners, showScreen, navigateTo, UI } from './ui.js';
 import { state } from './state.js';
 
 // 2. Імпортуємо логіку та обробники
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Пасажир
     setupNav('show-full-passenger-profile-btn', 'passenger-full-profile-screen', () => {
-        // Тут можна додати displayPassengerFullProfile, якщо буде готова
+        // UI.displayPassengerFullProfile(state.currentUser.id); // Якщо буде готова
     });
     setupNav('show-passenger-settings-btn-from-profile', 'passenger-settings-screen');
     setupNav('show-help-btn-from-profile', 'help-screen');
@@ -97,14 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const driverFabBtn = document.getElementById('driver-fab-btn');
     if (driverFabBtn) {
         driverFabBtn.addEventListener('click', () => {
-            // Перевіряємо статус з state
             if (state.driverStatus === 'offline') {
                 state.driverStatus = 'online';
-                // Візуальні зміни
                 driverFabBtn.classList.add('is-online');
                 driverFabBtn.classList.remove('is-pulsing');
                 
-                // Оновлюємо індикатор в хедері
                 const statusInd = document.getElementById('driver-status-indicator-home');
                 if(statusInd) {
                     statusInd.style.display = 'flex';
@@ -118,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- ПОПАП ПРОФІЛЮ (клік на аватарку в хедері) ---
+    // --- ПОПАП ПРОФІЛЮ ---
     const profileBadges = document.querySelectorAll('.profile-badge');
     profileBadges.forEach(badge => {
         badge.addEventListener('click', () => {
@@ -150,7 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Закриття попапа
     const popupOverlay = document.getElementById('popup-overlay');
     if (popupOverlay) popupOverlay.addEventListener('click', UI.hideProfilePopup);
 
@@ -163,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- ТАБ-БАР (Розумна навігація) ---
+    // --- ТАБ-БАР ---
     document.querySelectorAll('.tab-item').forEach(tab => {
         tab.addEventListener('click', (e) => {
             const parentBar = tab.closest('.tab-bar');
@@ -172,12 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const clickedTab = e.currentTarget;
             clickedTab.classList.add('active');
 
-            // Якщо це FAB - виходимо, бо у неї свій слухач вище
             if (clickedTab.classList.contains('fab')) return;
 
             const target = tab.dataset.target;
             if (target) {
-                // Оновлюємо дані перед переходом
                 if (state.currentUser) {
                     if (target === 'driver-profile-screen') UI.displayDriverProfile(state.currentUser.id);
                     if (target === 'passenger-profile-screen') UI.displayPassengerProfile(state.currentUser.id);
@@ -193,4 +187,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    console.log("✅ Listen
+    console.log("✅ Listeners initialized");
+});
+
+// Допоміжна функція для навігації
+function setupNav(btnId, screenId, callback) {
+    const btn = document.getElementById(btnId);
+    if (btn) {
+        btn.addEventListener('click', () => {
+            if (callback) callback();
+            navigateTo(screenId);
+        });
+    }
+}
