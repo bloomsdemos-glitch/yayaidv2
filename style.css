@@ -2307,3 +2307,19 @@ body.dark-theme .screen:not(#home-screen) .main-menu .menu-item {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Додай або онови цей блок у style.css */
+main {
+    /* Інші стилі, які там вже є, не чіпай */
+    padding-bottom: 100px; /* Відступ знизу, щоб таб-бар не перекривав кнопки */
+    overflow-y: auto;      /* Дозволяє скрол */
+    -webkit-overflow-scrolling: touch; /* Плавний скрол на iPhone */
+}
+
+.screen {
+    /* Переконайся, що екран займає всю висоту */
+    height: 100vh;
+    overflow: hidden; /* Скролиться тільки main всередині */
+    display: flex;
+    flex-direction: column;
+}
