@@ -158,8 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigateTo(target);
         });
     });
-
-    // --- ТАБ-БАР ---
+// --- ТАБ-БАР ---
     document.querySelectorAll('.tab-item').forEach(tab => {
         tab.addEventListener('click', (e) => {
             const parentBar = tab.closest('.tab-bar');
@@ -186,12 +185,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // --- ВИДАЛЕННЯ ПРОФІЛЮ (РЕАЛЬНЕ) ---
+    const deleteBtns = ['show-driver-settings-delete-btn', 'show-passenger-settings-delete-btn'];
+    
+    deleteBtns.forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', async () => {
+                if (confirm("Ви точно хочете видалити свій профіль? Всі дані та рейтинг будуть втрачені назавжди.")) {
+                    if (state.currentUser) {
+                        try {
+                            // Динамічно імпортуємо інструменти для видалення
+                            const { ref, remove } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js");
+                            const { db } = await import("./firebase-init.js");
+
+                            // Видаляємо юзера з бази
+                            await remove(ref(db, 'users/' + state.currentUser.id));
+                            
+                            alert("Ваш профіль успішно видалено.");
+                            // Перезавантажуємо сторінку, щоб скинути стан додатку
+                            window.location.reload(); 
+                        } catch (error) {
+                            console.error(error);
+                            alert("Помилка видалення: " + error.message);
+                        }
+                    }
+                }
+            });
+        }
+    });
     
     // --- ДЗВІНОЧКИ (СПОВІЩЕННЯ) ---
     const notifBtns = [
         { btn: 'driver-notifications-btn-home', type: 'driver' },
         { btn: 'passenger-notifications-btn-home', type: 'passenger' },
-        // Якщо є кнопки дзвіночків на інших екранах, додай їх сюди
     ];
 
     notifBtns.forEach(item => {
