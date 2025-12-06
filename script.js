@@ -1,4 +1,4 @@
-// === ГЛОБАЛЬНІ ЗМІННІ (Тепер доступні для UI) ===
+// === ГЛОБАЛЬНІ ЗМІННІ ===
 window.currentUser = null; 
 let globalOrderStatus = 'idle'; 
 let driverStatus = 'offline';
@@ -8,7 +8,7 @@ let currentOfferIdForConfirmation = null;
 let userHasLinkedCard = false; 
 let driverAcceptsOnlinePayment = false; 
 
-// Тимчасові сховища даних (кеш) - робимо глобальними
+// Тимчасові сховища даних (кеш)
 window.orderData = {}; 
 window.active_trips = [];
 window.notifications_database = [];
@@ -45,6 +45,7 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 } else {
     console.error("❌ CRITICAL: Firebase SDK missing.");
 }
+
 // === 2. ГОЛОВНА ЛОГІКА СТАРТУ ===
 let tempTelegramUser = null; 
 
@@ -58,21 +59,17 @@ function initApp() {
         tempTelegramUser = tg.initDataUnsafe.user;
         console.log("📲 Telegram User Detected:", tempTelegramUser);
     } else {
-        // 🔥 ФІКС: Якщо не Телеграм — показуємо красивий екран замість алерту
         console.error("❌ Not in Telegram");
+        // Для тестів на ПК можна розкоментувати:
+        // tempTelegramUser = { id: 12345, first_name: "Test", last_name: "User" };
         
         const errorScreen = document.getElementById('telegram-error-screen');
         const appContainer = document.getElementById('app-container');
 
         if (errorScreen) {
-            // Ховаємо додаток, щоб не миготів
-            if (appContainer) appContainer.style.display = 'none';
-            // Показуємо екран помилки
-            errorScreen.classList.remove('hidden');
-            errorScreen.style.display = 'flex'; 
-        } else {
-            // Про всяк випадок, якщо HTML не провантажився
-            alert("Помилка: Відкрийте додаток через Telegram!");
+             if (appContainer) appContainer.style.display = 'none';
+             errorScreen.classList.remove('hidden');
+             errorScreen.style.display = 'flex'; 
         }
         return; 
     }
@@ -84,26 +81,26 @@ function initApp() {
     userRef.once('value').then((snapshot) => {
         if (snapshot.exists()) {
             const val = snapshot.val();
-            // 🔥 ПЕРЕВІРКА: Чи є у юзера роль?
-            if (val.role && (val.role === 'driver' || val.role === 'passenger')) {
-                console.log("✅ Auto-login (Role exists)...");
+            // Якщо роль вже є - автологін
+            if (val.role === 'driver' || val.role === 'passenger') {
+                console.log("✅ Auto-login:", val.role);
                 window.currentUser = val;
-                updateUserInfoIfNeeded(userRef, tempTelegramUser);
+                
+                // Запускаємо додаток
                 routeUserToScreen();
-                startLiveUpdates();
+                if(typeof startLiveUpdates === 'function') startLiveUpdates();
             } else {
-                console.log("⚠️ User exists (phone saved), but NO ROLE selected.");
-                // Тут ми нічого не робимо — юзер бачить кнопки "Я водій / Пасажир" і обирає
+                console.log("⚠️ User exists but NO ROLE.");
             }
         } else {
             console.log("🆕 New User (Clean start).");
         }
     });
-  }
+}
     
 function registerUser(selectedRole) {
     if (!tempTelegramUser) {
-        alert("Помилка: Немає даних Telegram. Зайдіть через бота.");
+        alert("Помилка: Немає даних Telegram.");
         return;
     }
 
@@ -115,10 +112,10 @@ function registerUser(selectedRole) {
 
     const newUser = {
         id: userId,
-        name: realName || "Користувач", // Твоє ім'я з ТГ!
+        name: realName || "Користувач",
         username: tempTelegramUser.username || "",
         role: selectedRole,
-        phone: "Не вказано", // Тут можна додати запит телефону пізніше
+        phone: "Не вказано",
         rating: 5.0,
         trips: 0,
         last_login: new Date().toISOString()
@@ -126,32 +123,23 @@ function registerUser(selectedRole) {
 
     // Зберігаємо в базу
     userRef.update(newUser).then(() => {
-        console.log("✅ Успішна реєстрація/Вхід!");
-        
-        // 1. Оновлюємо глобальну змінну
+        console.log("✅ Реєстрація успішна!");
         window.currentUser = newUser;
         
-        // 2. ОНОВЛЮЄМО ІНТЕРФЕЙС ПРЯМО ЗАРАЗ
+        // Оновлюємо інтерфейс миттєво (щоб не було Віти Б.)
         if (selectedRole === 'passenger') {
-            // Прибираємо "Віту Б." і ставимо твоє ім'я
             const nameEl = document.getElementById('profile-passenger-name');
             const headerNameEl = document.getElementById('profile-passenger-name-header');
             if(nameEl) nameEl.textContent = newUser.name;
             if(headerNameEl) headerNameEl.textContent = `Привіт, ${newUser.name}`;
-            
-            updateHeaderWithAvatar('passenger-home-screen');
-            navigateTo('passenger-home-screen');
         } else {
-            // Те саме для водія
             const nameEl = document.getElementById('profile-driver-name');
             if(nameEl) nameEl.textContent = newUser.name;
-            
-            updateHeaderWithAvatar('driver-home-screen');
-            navigateTo('driver-home-screen');
         }
         
-        // 3. Запускаємо прослуховування бази
-        startLiveUpdates();
+        // Переходимо
+        routeUserToScreen();
+        if(typeof startLiveUpdates === 'function') startLiveUpdates();
 
     }).catch((error) => {
         console.error("Помилка входу:", error);
@@ -159,24 +147,38 @@ function registerUser(selectedRole) {
     });
 }
 
-
 function routeUserToScreen() {
-    document.getElementById('home-screen').classList.add('hidden');
+    // Ховаємо екран вибору
+    const homeScreen = document.getElementById('home-screen');
+    if(homeScreen) {
+        homeScreen.classList.add('hidden');
+        homeScreen.classList.remove('active');
+    }
 
     if (currentUser.role === 'driver') {
         navigateTo('driver-home-screen');
-        document.getElementById('driver-tab-bar').classList.remove('hidden');
+        // 🔥 ПРИМУСОВО ВМИКАЄМО ТАБ-БАР ВОДІЯ
+        const driverTab = document.getElementById('driver-tab-bar');
+        if (driverTab) {
+            driverTab.classList.remove('hidden');
+            driverTab.style.display = 'flex';
+        }
         updateHeaderWithAvatar('driver-home-screen');
     } else {
         navigateTo('passenger-home-screen');
-        document.getElementById('passenger-tab-bar').classList.remove('hidden');
+        // 🔥 ПРИМУСОВО ВМИКАЄМО ТАБ-БАР ПАСАЖИРА
+        const passengerTab = document.getElementById('passenger-tab-bar');
+        if (passengerTab) {
+            passengerTab.classList.remove('hidden');
+            passengerTab.style.display = 'flex';
+        }
         updateHeaderWithAvatar('passenger-home-screen');
     }
 }
 
 function updateHeaderWithAvatar(screenId) {
     const screen = document.getElementById(screenId);
-    if (!screen) return;
+    if (!screen || !currentUser) return;
 
     const nameEl = screen.querySelector('h3');
     if (nameEl) nameEl.textContent = currentUser.name;
@@ -186,18 +188,15 @@ function updateHeaderWithAvatar(screenId) {
         if (currentUser.photoUrl) {
             avatarContainer.innerHTML = `<img src="${currentUser.photoUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
             avatarContainer.style.background = 'none';
-            avatarContainer.style.display = 'flex';
-            avatarContainer.style.overflow = 'hidden';
         } else {
             const initials = getInitials(currentUser.name);
             const color = getUserColor(currentUser.id);
-            
             avatarContainer.innerHTML = `<span style="color:white; font-weight:bold; font-size:18px;">${initials}</span>`;
             avatarContainer.style.background = color;
-            avatarContainer.style.display = 'flex';
-            avatarContainer.style.alignItems = 'center';
-            avatarContainer.style.justifyContent = 'center';
         }
+        avatarContainer.style.display = 'flex';
+        avatarContainer.style.alignItems = 'center';
+        avatarContainer.style.justifyContent = 'center';
     }
 }
 
@@ -522,6 +521,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+// Функція перевірки адреси (Локальна версія для надійності)
+function localCheckAddressInputs() {
+    const fromBtn = document.querySelector('.btn-settlement[data-group="from"].active');
+    const toBtn = document.querySelector('.btn-settlement[data-group="to"].active');
+
+    if (!fromBtn || !toBtn) return;
+
+    const fromType = fromBtn.dataset.type;
+    const toType = toBtn.dataset.type;
+
+    let isFromValid = false;
+    if (fromType === 'valky') {
+        // Для Валок просто має бути обрано кнопку
+        isFromValid = true; 
+    } else {
+        // Для села - має бути щось обрано в селекті
+        const val = document.getElementById('from-village-select').value;
+        isFromValid = val && val !== 'Оберіть населений пункт...';
+    }
+
+    let isToValid = false;
+    if (toType === 'valky') {
+        isToValid = true;
+    } else {
+        const val = document.getElementById('to-village-select').value;
+        isToValid = val && val !== 'Оберіть населений пункт...';
+    }
+
+    const nextBtn = document.getElementById('address-next-btn');
+    if (nextBtn) {
+        if (isFromValid && isToValid) {
+            nextBtn.classList.remove('disabled');
+        } else {
+            nextBtn.classList.add('disabled');
+        }
+    }
+}
 
 // === 🔥 ФІКС 1: СЛУХАЧІ ДЛЯ АДРЕСИ ===
     const addressInputs = [fromAddressInput, toAddressInput, fromVillageSelect, toVillageSelect];
