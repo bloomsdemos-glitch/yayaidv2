@@ -1798,12 +1798,12 @@
 </div>
 
     
-               <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- Зовнішні бібліотеки -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
-    <script src="ui.js?v=fix_exports"></script>
-
-    <script src="script.js?v=fix_exports"></script>
-
-    </body>
+    <!-- ✅ ЄДИНИЙ ТОЧКА ВХОДУ (Модуль) -->
+    <!-- Ми прибрали script.js, ui.js та інші старі посилання. Тепер всім керує main.js -->
+    <script type="module" src="main.js"></script>
+</body>
 </html>
