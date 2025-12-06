@@ -1,5 +1,4 @@
 // state.js
-
 export const state = {
     currentUser: null,
     globalOrderStatus: 'idle',
@@ -10,7 +9,7 @@ export const state = {
     userHasLinkedCard: false,
     driverAcceptsOnlinePayment: false,
 
-    // Кеш даних
+    // Кеш даних (ініціалізуємо порожніми масивами, щоб не було помилок)
     orderData: {},
     active_trips: [],
     notifications_database: [],
