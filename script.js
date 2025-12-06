@@ -446,6 +446,76 @@ document.addEventListener('DOMContentLoaded', () => {
     const paymentCashBtn = document.getElementById('payment-cash-btn');
     const paymentCardBtn = document.getElementById('payment-card-btn');
 
+// === 🔥 ФІКС 1: СЛУХАЧІ ДЛЯ АДРЕСИ ===
+    const addressInputs = [fromAddressInput, toAddressInput, fromVillageSelect, toVillageSelect];
+    
+    if (typeof addressInputs !== 'undefined') {
+        addressInputs.forEach(input => {
+            if (input) {
+                input.addEventListener('input', () => {
+                    if (input === fromAddressInput) orderData.from = input.value;
+                    if (input === toAddressInput) orderData.to = input.value;
+                    if (input === fromVillageSelect) orderData.from = input.value;
+                    if (input === toVillageSelect) orderData.to = input.value;
+                    if(window.UI && UI.checkAddressInputs) UI.checkAddressInputs(); 
+                });
+                input.addEventListener('change', () => {
+                    if (input === fromVillageSelect) orderData.from = input.value;
+                    if (input === toVillageSelect) orderData.to = input.value;
+                    if(window.UI && UI.checkAddressInputs) UI.checkAddressInputs();
+                });
+            }
+        });
+    }
+
+    if (addressNextBtn) {
+        addressNextBtn.addEventListener('click', () => {
+            if (!addressNextBtn.classList.contains('disabled')) {
+                if(window.UI && UI.goToStep) UI.goToStep('time');
+                if(window.UI && UI.updateSummary) UI.updateSummary();
+            }
+        });
+    }
+
+    // === 🔥 ФІКС 2: ЛОГІКА ЧАСУ ===
+    if (typeof timeChoiceButtons !== 'undefined') {
+        timeChoiceButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                timeChoiceButtons.forEach(btn => btn.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+
+                const choice = e.currentTarget.dataset.timeChoice;
+
+                if (choice === 'now') {
+                    orderData.time = 'Зараз';
+                    if(typeof pickerInput !== 'undefined' && pickerInput) pickerInput.style.display = 'none';
+                    if(typeof timeResultContainer !== 'undefined' && timeResultContainer) timeResultContainer.style.display = 'none';
+                    if(typeof timeChoiceContainer !== 'undefined' && timeChoiceContainer) timeChoiceContainer.style.display = 'flex';
+                } else {
+                    if(typeof pickerInput !== 'undefined' && pickerInput) pickerInput.style.display = 'block';
+                    
+                    let pickerOptions = {
+                        enableTime: true, minDate: "today", time_24hr: true, disableMobile: "true",
+                        onClose: (selectedDates, dateStr) => {
+                            if (dateStr) {
+                                orderData.time = dateStr;
+                                if(window.UI && UI.showTimeResult) UI.showTimeResult(dateStr); 
+                            } else {
+                               e.currentTarget.classList.remove('active');
+                               orderData.time = null;
+                            }
+                        }
+                    };
+                    if (choice === 'today') { pickerOptions.noCalendar = true; pickerOptions.dateFormat = "H:i"; } 
+                    else { pickerOptions.dateFormat = "d.m.Y H:i"; }
+                    
+                    if(typeof flatpickr !== 'undefined' && pickerInput) flatpickr(pickerInput, pickerOptions).open();
+                }
+                if(window.UI && UI.updateSummary) UI.updateSummary();
+            });
+        });
+    }
+
     // Елементи деталей замовлення (для водія)
     const detailsPassengerName = document.getElementById('details-passenger-name');
     const detailsPassengerRating = document.getElementById('details-passenger-rating');
@@ -590,25 +660,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const passengerTabBar = document.getElementById('passenger-tab-bar');
     const passengerTabItems = passengerTabBar?.querySelectorAll('.tab-item');
 
+// === 🔥 ФІКС 3: БЕЗПЕЧНА НАВІГАЦІЯ (Тільки ця функція) ===
     function handleTabClick(clickedItem) {
         passengerTabItems.forEach(item => item.classList.remove('active'));
         clickedItem.classList.add('active');
+        
         const targetScreen = clickedItem.dataset.target;
         
-        if (targetScreen === 'passenger-profile-screen') {
-            if (currentUser) UI.displayPassengerProfile(currentUser.id);
-            navigateTo('passenger-profile-screen');
-        } else if (targetScreen === 'passenger-home-screen') {
-            updateHomeScreenView('passenger');
-            navigateTo('passenger-home-screen');
-        } else if (targetScreen === 'passenger-valky-kharkiv-screen') {
-            displayVhOffers();
-            navigateTo('passenger-valky-kharkiv-screen');
-        } else if (targetScreen === 'passenger-find-driver-screen') {
-            displayAvailableDrivers();
-            navigateTo(targetScreen);
-        } else if (targetScreen) {
-            navigateTo(targetScreen);
+        try {
+            if (targetScreen === 'passenger-profile-screen') {
+                if (currentUser && window.UI && UI.displayPassengerProfile) {
+                    UI.displayPassengerProfile(currentUser.id);
+                }
+                navigateTo('passenger-profile-screen');
+                
+            } else if (targetScreen === 'passenger-home-screen') {
+                if (typeof updateHomeScreenView === 'function') {
+                    updateHomeScreenView('passenger');
+                }
+                navigateTo('passenger-home-screen');
+                
+            } else if (targetScreen === 'passenger-valky-kharkiv-screen') {
+                if (typeof displayVhOffers === 'function') {
+                    displayVhOffers();
+                }
+                navigateTo('passenger-valky-kharkiv-screen');
+                
+            } else if (targetScreen === 'passenger-find-driver-screen') {
+                if (typeof displayAvailableDrivers === 'function') {
+                    displayAvailableDrivers();
+                }
+                navigateTo(targetScreen);
+                
+            } else if (targetScreen) {
+                navigateTo(targetScreen);
+            }
+        } catch (error) {
+            console.error("Navigation Error:", error);
+            if (targetScreen) navigateTo(targetScreen);
         }
     }
 
