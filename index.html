@@ -18,36 +18,7 @@
 </head>
 
 <body class="light-theme">
-    <!-- Тимчасова консоль для відлову помилок -->
-<div id="debug-log" style="position: fixed; top: 0; left: 0; width: 100%; height: 150px; background: rgba(0,0,0,0.85); color: #00ff00; font-family: monospace; font-size: 10px; overflow-y: scroll; z-index: 10000; padding: 5px; pointer-events: none; border-bottom: 2px solid red;">
-    CONSOLE LOG:<br>
-</div>
-
-<script>
-    (function(){
-        var logDiv = document.getElementById('debug-log');
-        function printLog(msg, color) {
-            var div = document.createElement('div');
-            div.textContent = "> " + msg;
-            div.style.color = color || '#00ff00';
-            logDiv.appendChild(div);
-        }
-
-        // Перехоплення помилок
-        window.onerror = function(message, source, lineno, colno, error) {
-            printLog("ERROR: " + message + " at " + source + ":" + lineno, '#ff4444');
-        };
-
-        // Перехоплення звичайних логів
-        var oldLog = console.log;
-        console.log = function(message) {
-            printLog(message);
-            oldLog.apply(console, arguments);
-        };
-        
-        console.log("Debugger started...");
-    })();
-</script>
+   
 
     <div id="app-container">
 
