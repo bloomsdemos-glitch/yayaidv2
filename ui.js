@@ -1,5 +1,3 @@
-// ui.js (FULL VERSION)
-
 
 // Глобальні змінні DOM
 const screens = document.querySelectorAll('.screen');
