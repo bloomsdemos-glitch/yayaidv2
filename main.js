@@ -61,21 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- КНОПКИ ПРОФІЛЮ ТА НАЛАШТУВАНЬ ---
     
-    // Водій
+    // Водій: Перехід на повний профіль
     setupNav('show-full-driver-profile-btn', 'driver-full-profile-screen', () => {
-         if (state.currentUser) UI.displayDriverFullProfile(state.currentUser.id);
+         console.log("👤 Відкриваємо повний профіль водія...");
+         if (state.currentUser) {
+             UI.displayDriverFullProfile(state.currentUser.id);
+         }
     });
-    setupNav('show-driver-settings-btn-from-profile', 'driver-settings-screen');
-    setupNav('show-driver-help-btn-from-profile', 'driver-help-screen');
-    setupNav('show-driver-support-btn-from-profile', 'driver-support-screen');
-    
-    // Пасажир
+
+    // Пасажир: Перехід на повний профіль
     setupNav('show-full-passenger-profile-btn', 'passenger-full-profile-screen', () => {
-        // UI.displayPassengerFullProfile(state.currentUser.id); // Якщо буде готова
+        console.log("👤 Відкриваємо повний профіль пасажира...");
+        if (state.currentUser) {
+            UI.displayPassengerProfile(state.currentUser.id); // Використовуємо універсальну функцію
+        }
     });
-    setupNav('show-passenger-settings-btn-from-profile', 'passenger-settings-screen');
-    setupNav('show-help-btn-from-profile', 'help-screen');
-    setupNav('show-passenger-support-btn-from-profile', 'passenger-support-screen');
 
     // Внутрішні налаштування (Водій)
     setupNav('show-driver-settings-photo-btn', 'driver-settings-photo-screen');
@@ -185,6 +185,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo(target);
             }
         });
+    });
+    
+    // --- ДЗВІНОЧКИ (СПОВІЩЕННЯ) ---
+    const notifBtns = [
+        { btn: 'driver-notifications-btn-home', type: 'driver' },
+        { btn: 'passenger-notifications-btn-home', type: 'passenger' },
+        // Якщо є кнопки дзвіночків на інших екранах, додай їх сюди
+    ];
+
+    notifBtns.forEach(item => {
+        const btnEl = document.getElementById(item.btn);
+        if (btnEl) {
+            btnEl.addEventListener('click', () => {
+                // Приховуємо бейдж
+                const badge = document.getElementById(`${item.type}-notification-badge-home`);
+                if (badge) badge.classList.add('hidden');
+                
+                // Показуємо екран
+                if (window.showUserNotifications) window.showUserNotifications(item.type);
+                navigateTo('notifications-screen');
+            });
+        }
     });
     
     console.log("✅ Listeners initialized");
