@@ -1,12 +1,15 @@
+import { state } from './state.js';
+import { db } from './firebase-init.js';
+import { ref, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
 // Глобальні змінні DOM
-const screens = document.querySelectorAll('.screen');
+export const screens = document.querySelectorAll('.screen');
 
 // ==========================================
 // 1. НАВІГАЦІЯ ТА ЕФЕКТИ
 // ==========================================
 
- function showScreen(screenId) {
+export function showScreen(screenId) {
     screens.forEach(screen => {
         screen.classList.add('hidden');
         screen.classList.remove('active');
@@ -21,7 +24,7 @@ const screens = document.querySelectorAll('.screen');
     }
 }
 
- function navigateTo(screenId) {
+export function navigateTo(screenId) {
     showScreen(screenId);
 }
 
@@ -41,7 +44,7 @@ function createRipple(event) {
     button.appendChild(circle);
 }
 
- function initUIListeners() {
+ export function initUIListeners() {
     // Ripple effect
     document.querySelectorAll(".btn-main, .menu-item").forEach(button => {
         button.addEventListener("click", createRipple);
@@ -726,8 +729,8 @@ function swapPinIcons() {
         });
     }
 }
-// === ДОДАТИ В КІНЕЦЬ ui.js ===
-window.UI = {
+// === ЕКСПОРТ ОБ'ЄКТА UI ===
+export const UI = {
     displayNotifications,
     displayDriverProfile,
     displayPassengerProfile,
@@ -736,15 +739,17 @@ window.UI = {
     hideProfilePopup,
     resetQuickOrder,
     goToStep,
-    displayOrderDetails, // Додай це, якщо така функція є
-    displayDriverSchedule, // Додай це
-    displayDriverPlannedRoutes // Додай це
+    displayOrderDetails,
+    displayDriverSchedule,
+    displayDriverPlannedRoutes,
+    createDriverOrderCard, // Додано
+    createActiveTripCardHTML, // Додано
+    updateSummary, // Додано
+    checkAddressInputs, // Додано
+    showTimeResult // Додано
 };
 
-// Робимо навігацію глобальною
+// Робимо навігацію глобальною (для HTML onclick)
 window.showScreen = showScreen;
 window.navigateTo = navigateTo;
-window.initUIListeners = initUIListeners;
-
-// Запускаємо слухачі
-document.addEventListener('DOMContentLoaded', initUIListeners);
+window.UI = UI; // Для сумісності
